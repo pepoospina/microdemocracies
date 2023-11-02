@@ -16,8 +16,8 @@ import { VoicePropose } from './voice/VoicePropose';
 import { VoiceSendContext } from '../contexts/VoiceSendContext';
 import { Box } from 'grommet';
 import { useNetwork, useSwitchNetwork } from 'wagmi';
-import { appConfig } from '../config';
 import { AllVouches } from './vouches/AllVouches';
+import { CHAIN_ID } from '../config/appConfig';
 
 export const RouteNames = {
   Base: `/`,
@@ -42,8 +42,8 @@ export const MainPage = () => {
     chainId: 137,
   });
 
-  if (switchNetwork && chain && chain.id !== appConfig.CHAIN.id) {
-    switchNetwork(appConfig.CHAIN.id);
+  if (switchNetwork && chain && chain.id !== CHAIN_ID) {
+    switchNetwork(CHAIN_ID);
   }
 
   return (

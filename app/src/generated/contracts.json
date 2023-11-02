@@ -1,11 +1,11 @@
 {
-  "137": {
-    "polygon": {
-      "name": "polygon",
-      "chainId": "137",
+  "1337": {
+    "localhost": {
+      "name": "localhost",
+      "chainId": "1337",
       "contracts": {
         "Registry": {
-          "address": "0x502DfDFF5c0Eb31f2426cD401526475421252084",
+          "address": "0xc5c1d14E16db598DE2C9fc1f3cd9D17b90946585",
           "abi": [
             {
               "inputs": [

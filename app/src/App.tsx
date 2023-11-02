@@ -1,23 +1,12 @@
-import { WagmiConfig, configureChains, createConfig } from 'wagmi';
-import { alchemyProvider } from 'wagmi/providers/alchemy';
+import { WagmiConfig } from 'wagmi';
+import { QueryClient, QueryClientProvider } from 'react-query';
 
 import { GlobalStyles } from './components/styles/GlobalStyles';
-
 import { MainPage } from './pages/MainPage';
 import { ResponsiveApp, ThemedApp } from './components/app';
 import { RegistryContext } from './contexts/RegistryContext';
-import { QueryClient, QueryClientProvider } from 'react-query';
-import { appConfig } from './config';
 
-const { publicClient, webSocketPublicClient } = configureChains(
-  [appConfig.CHAIN],
-  [alchemyProvider({ apiKey: appConfig.ALCHEMY_KEY })]
-);
-
-const config = createConfig({
-  publicClient,
-  webSocketPublicClient,
-});
+import { config } from './wagmi/client';
 
 const queryClient = new QueryClient();
 

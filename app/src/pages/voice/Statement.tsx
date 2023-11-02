@@ -2,7 +2,7 @@ import { Anchor, Box, Spinner, Text } from 'grommet';
 import { AppButton, AppCardProps } from '../../ui-components';
 import { useMutation, useQuery } from 'react-query';
 import { StatementRead, AppStatementBacking, SignedObject } from '../../types';
-import { appConfig } from '../../config';
+import { FUNCTIONS_BASE } from '../../config/appConfig';
 import { useConnectedAccount } from '../../contexts/ConnectedAccountContext';
 import { useCallback } from 'react';
 import { useSignMessage } from 'wagmi';
@@ -35,7 +35,7 @@ export const Statement = (props: IStatement) => {
   });
 
   const { mutateAsync: sendBack } = useMutation(async (backing: SignedObject<AppStatementBacking>) => {
-    return fetch(appConfig.FUNCTIONS_BASE + '/voice/statement/back', {
+    return fetch(FUNCTIONS_BASE + '/voice/statement/back', {
       method: 'post',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(backing),
