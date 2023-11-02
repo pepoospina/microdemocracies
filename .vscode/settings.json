@@ -1,0 +1,65 @@
+{
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/.DS_Store": true,
+    "**/Thumbs.db": true,
+    "**/.cache": true,
+    "**/.vs/": true,
+    "**/*.cs": true,
+    "**/*.orig": true,
+    "**/bin/": true,
+    "**/build/": false,
+    "**/build/**/*": false,
+    "**/debug/": true,
+    "**/dist/": false,
+    "**/node_modules/": true,
+    "**/obj": true,
+    "yarn-error.log": true,
+    "**/yarn-error.log": true,
+    "**/.yalc": true,
+    "firebase/functions/lib": true
+  },
+  "search.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/.DS_Store": true,
+    "**/Thumbs.db": true,
+    "**/.cache": true,
+    "**/.vs/": true,
+    "**/*.cs": true,
+    "**/*.orig": true,
+    "**/bin/": true,
+    "**/build/": true,
+    "**/build/**/*": true,
+    "**/debug/": true,
+    "**/dist/": true,
+    "**/obj": true,
+    "node_modules": true,
+    "node_modules/*/**": true,
+    "**/node_modules": true,
+    "yarn-error.log": true,
+    "**/yarn-error.log": true,
+    "**/.yalc": true,
+    "**/.yarn": true
+  },
+  "explorerExclude.backup": null,
+  "eslint.workingDirectories": [
+    { "directory": "packages/contracts", "changeProcessCWD": true },
+    { "directory": "packages/core", "changeProcessCWD": true },
+    { "directory": "packages/frontend", "changeProcessCWD": true },
+    { "directory": "packages/oracle-node", "changeProcessCWD": true }
+  ],
+  "solidity.packageDefaultDependenciesDirectory": "packages/contracts/node_modules",
+  "editor.formatOnSave": true,
+  "editor.formatOnSaveMode": "file",
+  "solidity.formatter": "prettier", // This is the default so it might be missing.
+  "[solidity]": {
+    "editor.defaultFormatter": "JuanBlanco.solidity"
+  },
+  "solidity.defaultCompiler": "localNodeModule"
+}

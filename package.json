@@ -1,0 +1,15 @@
+{
+  "name": "@microrevolutions/monorepo",
+  "version": "0.0.0",
+  "keywords": [],
+  "private": true,
+  "scripts": {
+    "reset-yarn": "yarn delete-yarn && yarn install",
+    "delete-yarn": "yarn delete-node-modules && yarn delete-yarn-lock",
+    "delete-node-modules": "find . -name 'node_modules' -type d -prune -exec rm -rf '{}' +",
+    "delete-yarn-lock": "find . -name 'yarn.lock' -type f -prune -exec rm -rf '{}' +"
+  },
+  "workspaces": [],
+  "packageManager": "yarn@3.2.0",
+  "devDependencies": {}
+}
