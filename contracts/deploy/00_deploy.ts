@@ -4,8 +4,6 @@ import { DeployFunction } from 'hardhat-deploy/types';
 import { getDeployer } from '../utils/utils';
 import { prepareFounders } from '../utils/prepare.founders';
 
-global.ReadableStream = require('web-streams-polyfill').ReadableStream;
-
 const deployEntryPoint: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const { deployer } = await getDeployer(hre, 0);
   const founders = await prepareFounders();

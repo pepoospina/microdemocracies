@@ -28,8 +28,8 @@ export interface PlatformAccount {
 
 export interface PAP {
   person: {
-    personal: PersonDetails;
-    platforms: PlatformAccount[];
+    personal?: PersonDetails;
+    platforms?: PlatformAccount[];
   };
   account: string;
 }

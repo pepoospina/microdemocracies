@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import stringify from 'canonical-json';
 import contractsJson from '../generated/contracts.json';
-import { CHAIN_ID, CHAIN_NAME } from '../config/appConfig';
+import { appConfig } from '../config';
 
 function addressOnChain(chainId: number): `0x{string}` {
   const json = (contractsJson as any)[chainId.toString()];
@@ -1146,8 +1146,8 @@ const RegistryAbi = [
   },
 ] as const;
 
-const chainIDStr = CHAIN_ID.toString();
-const refAbi = stringify(((contractsJson as any)[chainIDStr][CHAIN_NAME]['contracts']['Registry'] as any).abi);
+const chainIDStr = appConfig.CHAIN.id.toString();
+const refAbi = stringify(((contractsJson as any)[chainIDStr][appConfig.CHAIN.id]['contracts']['Registry'] as any).abi);
 
 if (stringify(RegistryAbi) !== refAbi) {
   throw new Error('Unexpected ABI, manually updated it to be a const');
@@ -1193,6 +1193,6 @@ const ChallengeEventAbi = {
   type: 'event',
 } as const;
 
-const registryAddress = addressOnChain(CHAIN_ID);
+const registryAddress = addressOnChain(appConfig.CHAIN.id);
 
 export { RegistryAbi, VouchEventAbi, ChallengeEventAbi, registryAddress };

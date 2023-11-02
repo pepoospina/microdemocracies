@@ -7,7 +7,7 @@ import { AppConnect } from '../../components/app/AppConnect';
 import { isAddress } from 'viem';
 import { StatusGood } from 'grommet-icons';
 import { HexStr } from '../../types';
-import { CHAIN_ID } from '../../config/appConfig';
+import { appConfig } from '../../config';
 
 export interface IAccountSelector extends BoxExtendedProps {
   onSelected: (account?: string) => any;
@@ -83,7 +83,7 @@ export const AppAccountSelector = (props: IAccountSelector) => {
             <Text size="large">Account chosen!</Text>
           </Box>
           <Box align="center" justify="center" style={{ margin: '16px 0px' }}>
-            <Address address={chosenAddress} chainId={CHAIN_ID}></Address>
+            <Address address={chosenAddress} chainId={appConfig.CHAIN.id}></Address>
           </Box>
           <Box>
             <AppButton label="REMOVE SELECTION" onClick={() => cancel()}></AppButton>

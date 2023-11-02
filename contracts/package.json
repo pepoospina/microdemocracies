@@ -4,7 +4,7 @@
   "private": true,
   "license": "MIT",
   "engines": {
-    "node": ">=16"
+    "node": ">=20"
   },
   "scripts": {
     "chain": "hardhat node --network hardhat --export-all generated/contracts.json",

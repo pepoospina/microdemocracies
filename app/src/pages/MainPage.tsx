@@ -16,16 +16,16 @@ import { VoicePropose } from './voice/VoicePropose';
 import { VoiceSendContext } from '../contexts/VoiceSendContext';
 import { Box } from 'grommet';
 import { useNetwork, useSwitchNetwork } from 'wagmi';
-import { CHAIN_ID } from '../config/appConfig';
+import { appConfig } from '../config';
 import { AllVouches } from './vouches/AllVouches';
 
 export const RouteNames = {
   Base: `/`,
   Join: `/join`,
-  Vouch: `/vouch`,
-  VouchAccount: (hash: string) => `/vouch/${hash}`,
-  MyVouches: `/vouches`,
-  VouchesAll: `/allvouches`,
+  Vouch: `/invite`,
+  VouchAccount: (hash: string) => `/invite/${hash}`,
+  MyVouches: `/invites`,
+  VouchesAll: `/allnew`,
   Challenges: `/challenges`,
   Account: (id: number) => `/account/${id}`,
   AccountChallenge: (id: number) => `/account/${id}/challenge`,
@@ -42,8 +42,8 @@ export const MainPage = () => {
     chainId: 137,
   });
 
-  if (switchNetwork && chain && chain.id !== CHAIN_ID) {
-    switchNetwork(CHAIN_ID);
+  if (switchNetwork && chain && chain.id !== appConfig.CHAIN.id) {
+    switchNetwork(appConfig.CHAIN.id);
   }
 
   return (

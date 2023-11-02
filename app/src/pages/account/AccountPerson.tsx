@@ -4,7 +4,7 @@ import { Address, AppCard, AppHeading, TwoColumns } from '../../ui-components';
 import React from 'react';
 import { platforms } from '../join/NetworkSelector';
 import { PlatformUrl } from './PlatformUrl';
-import { CHAIN_ID } from '../../config/appConfig';
+import { appConfig } from '../../config';
 
 interface IAccountPerson extends BoxExtendedProps {
   pap?: PAP;
@@ -57,7 +57,7 @@ export const AccountPerson = (props: IAccountPerson) => {
       </Box>
       <Box align="center" justify="center" style={{ margin: '16px 0px' }}>
         <AppHeading level="3">Account: </AppHeading>
-        <Address digits={8} address={props.pap.account as HexStr} chainId={CHAIN_ID}></Address>
+        <Address digits={8} address={props.pap.account as HexStr} chainId={appConfig.CHAIN.id}></Address>
       </Box>
     </AppCard>
   ) : (

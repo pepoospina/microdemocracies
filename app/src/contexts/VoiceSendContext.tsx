@@ -5,7 +5,7 @@ import { useSignMessage } from 'wagmi';
 import stringify from 'canonical-json';
 
 import { ConnectedAccountContext, useConnectedAccount } from './ConnectedAccountContext';
-import { FUNCTIONS_BASE } from '../config/appConfig';
+import { appConfig } from '../config';
 import { AppStatementCreate, SignedObject } from '../types';
 
 export type VoiceSendContextType = {
@@ -23,7 +23,7 @@ export const VoiceSendContext = (props: IVoiceSendContext) => {
   const { signMessageAsync } = useSignMessage();
 
   const { mutateAsync: sendStatement } = useMutation(async (statement: SignedObject<AppStatementCreate>) => {
-    return fetch(FUNCTIONS_BASE + '/voice/statement', {
+    return fetch(appConfig.FUNCTIONS_BASE + '/voice/statement', {
       method: 'post',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(statement),
