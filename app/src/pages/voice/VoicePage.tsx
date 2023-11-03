@@ -1,7 +1,7 @@
 import { Box, Spinner, Text } from 'grommet';
 import { AppCard } from '../../ui-components';
-import { AppFormScreen, BottomButtons } from '../../ui-components/AppFormScreen';
-import { RouteNames } from '../MainPage';
+import { AppScreen, BottomButtons } from '../../ui-components/AppFormScreen';
+import { ProjectRouteNames } from '../MainProjectPage';
 import { useNavigate } from 'react-router-dom';
 import { useVoiceRead } from '../../contexts/VoiceReadContext';
 import { Statement } from './Statement';
@@ -12,7 +12,7 @@ export const VoicePage = (): JSX.Element => {
   const navigate = useNavigate();
 
   return (
-    <AppFormScreen label="Community Voice">
+    <AppScreen label="Community Voice">
       <Box>
         <Box pad="large">
           {statements !== undefined ? (
@@ -39,13 +39,13 @@ export const VoicePage = (): JSX.Element => {
         </Box>
       </Box>
       <BottomButtons
-        left={{ label: 'home', primary: false, action: () => navigate(RouteNames.Base) }}
+        left={{ label: 'home', primary: false, action: () => navigate(ProjectRouteNames.Base) }}
         right={{
           icon: <Add />,
           label: 'propose new',
           primary: true,
-          action: () => navigate(RouteNames.VoicePropose),
+          action: () => navigate(ProjectRouteNames.VoicePropose),
         }}></BottomButtons>
-    </AppFormScreen>
+    </AppScreen>
   );
 };

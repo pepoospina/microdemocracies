@@ -1,10 +1,12 @@
+import React from 'react';
 import { Box, BoxExtendedProps, ResponsiveContext, Spinner } from 'grommet';
+
 import { HexStr, PAP } from '../../types';
 import { Address, AppCard, AppHeading, TwoColumns } from '../../ui-components';
-import React from 'react';
-import { platforms } from '../join/NetworkSelector';
 import { PlatformUrl } from './PlatformUrl';
 import { CHAIN_ID } from '../../config/appConfig';
+import { BoxCentered } from '../../ui-components/BoxCentered';
+import { platforms } from '../../utils/platforms';
 
 interface IAccountPerson extends BoxExtendedProps {
   pap?: PAP;
@@ -55,10 +57,10 @@ export const AccountPerson = (props: IAccountPerson) => {
           return <DetailField key={JSON.stringify(user)} field={field} />;
         })}
       </Box>
-      <Box align="center" justify="center" style={{ margin: '16px 0px' }}>
+      <BoxCentered style={{ margin: '16px 0px' }}>
         <AppHeading level="3">Account: </AppHeading>
         <Address digits={8} address={props.pap.account as HexStr} chainId={CHAIN_ID}></Address>
-      </Box>
+      </BoxCentered>
     </AppCard>
   ) : (
     <Spinner></Spinner>

@@ -11,8 +11,8 @@ import { AppAccountSelector } from './AccountSelector';
 import { PAPShare } from './PAPShare';
 import { PAP, PersonDetails, PlatformAccount } from '../../types';
 import { PAPEntry } from './PAPEntry';
-import { RouteNames } from '../MainPage';
-import { AppFormScreen, BottomButtons } from '../../ui-components/AppFormScreen';
+import { ProjectRouteNames } from '../MainProjectPage';
+import { AppScreen, BottomButtons } from '../../ui-components/AppFormScreen';
 import { Intro } from './Intro';
 import { AppPersonalDetails } from './PersonalDetails';
 
@@ -60,7 +60,7 @@ export const Join = () => {
   };
 
   const pages: React.ReactNode[] = [
-    <AppFormScreen key="0" label="Let's start!">
+    <AppScreen key="0" label="Let's start!">
       <Box>
         <Intro style={{ flexShrink: 0 }}></Intro>
         <Box pad="large" style={{ flexShrink: 0 }}>
@@ -73,11 +73,11 @@ export const Join = () => {
         </Box>
       </Box>
       <BottomButtons
-        left={{ label: 'home', primary: false, action: () => navigate(RouteNames.Base) }}
+        left={{ label: 'home', primary: false, action: () => navigate(ProjectRouteNames.Base) }}
         right={{ label: 'next', primary: true, action: nextPage }}></BottomButtons>
-    </AppFormScreen>,
+    </AppScreen>,
 
-    <AppFormScreen key="1" label="Existing Platforms">
+    <AppScreen key="1" label="Existing Platforms">
       <Box>
         <Box pad="large" style={{ flexShrink: 0 }}>
           <AppCard margin={{ bottom: 'medium' }}>
@@ -91,9 +91,9 @@ export const Join = () => {
       <BottomButtons
         left={{ label: 'back', primary: false, action: prevPage }}
         right={{ label: 'next', primary: true, action: nextPage }}></BottomButtons>
-    </AppFormScreen>,
+    </AppScreen>,
 
-    <AppFormScreen key="3" label="Personal">
+    <AppScreen key="3" label="Personal">
       <Box>
         <Box style={{ flexShrink: 0 }}>
           <AppPersonalDetails onChange={(d) => setPersonal(d)}></AppPersonalDetails>
@@ -108,25 +108,25 @@ export const Join = () => {
           action: review,
           disabled: !account,
         }}></BottomButtons>
-    </AppFormScreen>,
+    </AppScreen>,
 
-    <AppFormScreen key="4" label="Review">
+    <AppScreen key="4" label="Review">
       <Box style={{ width: '100%' }}>
         <PAPEntry pap={pap}></PAPEntry>
       </Box>
       <BottomButtons
         left={{ label: 'back', primary: false, action: prevPage }}
         right={{ label: 'share', primary: true, action: nextPage }}></BottomButtons>
-    </AppFormScreen>,
+    </AppScreen>,
 
-    <AppFormScreen key="5" label="Scan to vouch">
+    <AppScreen key="5" label="Scan to vouch">
       <Box fill>
         <PAPShare pap={pap}></PAPShare>
       </Box>
       <BottomButtons
         left={{ label: 'back', primary: false, action: prevPage }}
-        right={{ label: 'done', primary: true, action: () => navigate(RouteNames.Base) }}></BottomButtons>
-    </AppFormScreen>,
+        right={{ label: 'done', primary: true, action: () => navigate(ProjectRouteNames.Base) }}></BottomButtons>
+    </AppScreen>,
   ];
 
   return (

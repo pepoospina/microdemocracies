@@ -6,11 +6,11 @@ import { FormPrevious } from 'grommet-icons';
 import { getEntity } from '../../utils/store';
 import { Entity, HexStr, PAP } from '../../types';
 import { AppButton, AppCard } from '../../ui-components';
-import { RouteNames } from '../MainPage';
+import { ProjectRouteNames } from '../MainProjectPage';
 import { useTokenAccount } from '../../contexts/AccountContext';
 import { useVouch } from '../../contexts/VouchContext';
 import { useRegistry } from '../../contexts/RegistryContext';
-import { AppFormScreen } from '../../ui-components/AppFormScreen';
+import { AppScreen } from '../../ui-components/AppFormScreen';
 import { AccountPerson } from '../account/AccountPerson';
 import { useConnectedAccount } from '../../contexts/ConnectedAccountContext';
 import { BottomButton } from '../common/BottomButton';
@@ -84,7 +84,7 @@ export const VouchAccount = () => {
   const alreadyVouched = vouchedAccount && vouchedAccount.valid;
 
   return (
-    <AppFormScreen label="Vouch for New Member">
+    <AppScreen label="Vouch for New Member">
       <Box pad="large" fill>
         {pap ? (
           <Box>
@@ -122,7 +122,7 @@ export const VouchAccount = () => {
                   <Anchor
                     onClick={() => {
                       if (vouchedTokenId) {
-                        navigate(RouteNames.Account(vouchedTokenId));
+                        navigate(ProjectRouteNames.Account(vouchedTokenId));
                       }
                     }}>
                     {COMMUNITY_MEMBER} #{vouchedTokenId}
@@ -137,7 +137,10 @@ export const VouchAccount = () => {
           </Box>
         )}
       </Box>
-      <BottomButton icon={<FormPrevious />} label="home" onClick={() => navigate(RouteNames.Base)}></BottomButton>
-    </AppFormScreen>
+      <BottomButton
+        icon={<FormPrevious />}
+        label="home"
+        onClick={() => navigate(ProjectRouteNames.Base)}></BottomButton>
+    </AppScreen>
   );
 };

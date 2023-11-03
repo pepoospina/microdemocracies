@@ -8,8 +8,8 @@ import { AccountChallenge } from '../challenges/AccountChallenge';
 import { AccountContext } from '../../contexts/AccountContext';
 
 import { ChallengeContext } from '../../contexts/CurrentChallengeContext';
-import { AppFormScreen } from '../../ui-components/AppFormScreen';
-import { RouteNames } from '../MainPage';
+import { AppScreen } from '../../ui-components/AppFormScreen';
+import { ProjectRouteNames } from '../MainProjectPage';
 import { BottomButton } from '../common/BottomButton';
 import { AccountCircles } from './AccountCircles';
 import { COMMUNITY_MEMBER } from '../../config/community';
@@ -23,7 +23,7 @@ export const AccountPage = () => {
   }
 
   return (
-    <AppFormScreen label={`${COMMUNITY_MEMBER} #${tokenId}`}>
+    <AppScreen label={`${COMMUNITY_MEMBER} #${tokenId}`}>
       <Box pad={{ top: '0', left: 'large', right: 'large' }} style={{ overflowY: 'auto' }}>
         <AccountContext tokenId={+tokenId}>
           <Box margin={{ top: 'large' }} style={{ flexShrink: 0 }}>
@@ -35,7 +35,10 @@ export const AccountPage = () => {
           </ChallengeContext>
         </AccountContext>
       </Box>
-      <BottomButton icon={<FormPrevious />} label="home" onClick={() => navigate(RouteNames.Base)}></BottomButton>
-    </AppFormScreen>
+      <BottomButton
+        icon={<FormPrevious />}
+        label="home"
+        onClick={() => navigate(ProjectRouteNames.Base)}></BottomButton>
+    </AppScreen>
   );
 };

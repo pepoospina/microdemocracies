@@ -1,76 +1,42 @@
-import { Anchor, Box, Text } from 'grommet';
+import { Box, Text } from 'grommet';
+import { appName } from '../../config/community';
 import { AppButton } from '../../ui-components';
 import { useNavigate } from 'react-router-dom';
-import { RouteNames } from '../MainPage';
-import { useRegistry } from '../../contexts/RegistryContext';
-import { MyNetworkWidget } from '../mynetwork/MyNetworkWidget';
-import { useConnectedAccount } from '../../contexts/ConnectedAccountContext';
-import { AppConnect } from '../../components/app/AppConnect';
-import { COMMUNITY_MEMBER, COMMUNITY_NAME } from '../../config/community';
+import { LandingRouteNames } from '../MainLandingPage';
 
-export interface ILandingPageProps {
-  dum?: any;
-}
-
-export const LandingPage = (props: ILandingPageProps) => {
-  const { isConnected } = useRegistry();
+export const LandingPage = () => {
   const navigate = useNavigate();
-  const { nMembers } = useRegistry();
-  const { tokenId } = useConnectedAccount();
+
+  const textStyle: React.CSSProperties = { marginBottom: '40px', fontSize: '24px' };
 
   return (
-    <Box style={{ flexGrow: '1', width: '100%', overflowY: 'auto' }} align="center" id="LandingPageContainer">
+    <Box fill align="center">
       <Box justify="center" align="center" style={{ flexShrink: '0', marginTop: '6vh' }}>
-        <Text size="48px" weight="bold">
-          {COMMUNITY_NAME}
+        <Text size="42px" weight="bold">
+          {appName}
         </Text>
-        {tokenId ? (
-          <Box>
-            <Text size="xlarge">
-              <Anchor onClick={() => navigate(RouteNames.VouchesAll)}>Population: {nMembers}</Anchor>
-            </Text>
-          </Box>
-        ) : (
-          <></>
-        )}
-      </Box>
-      <Box justify="center" align="center" style={{ flexGrow: 1, flexShrink: '0', marginBottom: '16px' }}>
-        {!tokenId ? (
-          <>
-            <Box>
-              <Text size="110px">{nMembers}</Text>
-            </Box>
-            <Box>
-              <Anchor onClick={() => navigate(RouteNames.VouchesAll)}>{COMMUNITY_MEMBER}s</Anchor>
-            </Box>
-          </>
-        ) : (
-          <>
-            <Box>
-              <Text size="xlarge">Welcome</Text>
-            </Box>
-            <Box></Box>
-            <Box>
-              <Text size="48px">
-                {COMMUNITY_MEMBER} #{tokenId}
-              </Text>
-            </Box>
-          </>
-        )}
       </Box>
 
-      <Box style={{ flexGrow: '2', width: '200px', flexShrink: '0' }} justify="center">
-        {!tokenId ? (
-          <AppButton onClick={() => navigate(RouteNames.Join)} label="JOIN" primary style={{ marginBottom: '15px' }} />
-        ) : (
-          <></>
-        )}
-        <AppButton onClick={() => navigate(RouteNames.Vouch)} label="VOUCH" style={{ marginBottom: '15px' }} />
-        <AppButton onClick={() => navigate(RouteNames.Voice)} label="VOICE" style={{ marginBottom: '15px' }} />
+      <Box style={{ flexGrow: '2', width: '100%', flexShrink: '0' }} justify="center" align="center">
+        <Text style={textStyle}>
+          It's <span style={{ fontWeight: '600' }}>time</span>
+        </Text>
+        <Text style={textStyle}>
+          for <span style={{ fontWeight: '600' }}>you</span>
+        </Text>
+        <Text style={textStyle}>
+          to <span style={{ fontWeight: '600' }}>do</span> something
+        </Text>
+        <AppButton
+          primary
+          onClick={() => navigate(LandingRouteNames.Start)}
+          label="Start now"
+          style={{ margin: '12px 0px', width: '200px' }}
+        />
       </Box>
 
-      <Box style={{ width: '100%', flexShrink: '0' }} pad="large" justify="center" align="center">
-        {isConnected ? <MyNetworkWidget></MyNetworkWidget> : <AppConnect primary style={{ width: '200px' }} />}
+      <Box justify="center" align="center" style={{ flexShrink: '0', marginBottom: '6vh' }}>
+        <AppButton onClick={() => navigate(LandingRouteNames.More)} label="Learn more" style={{ width: '200px' }} />
       </Box>
     </Box>
   );

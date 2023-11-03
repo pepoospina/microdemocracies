@@ -10,6 +10,7 @@ import { ChallengeVote } from '../challenges/ChallengeVote';
 import { useTokenAccount } from '../../contexts/AccountContext';
 import { useEffect, useState } from 'react';
 import { WaitingTransaction } from '../common/WaitingTransaction';
+import { BoxCentered } from '../../ui-components/BoxCentered';
 
 interface IAccountChallenge extends BoxExtendedProps {
   cardStyle?: React.CSSProperties;
@@ -56,9 +57,9 @@ export const AccountChallenge = (props: IAccountChallenge) => {
   /** loading */
   if (accountRead === undefined || challengeRead === undefined) {
     return (
-      <Box fill align="center" justify="center">
+      <BoxCentered fill>
         <Spinner></Spinner>
-      </Box>
+      </BoxCentered>
     );
   }
 

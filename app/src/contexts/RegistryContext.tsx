@@ -5,9 +5,11 @@ import { useAccount, useConnect, useContractRead, useDisconnect, usePublicClient
 import { RegistryAbi, VouchEventAbi, registryAddress } from '../utils/contracts.json';
 import { ConnectedAccountContext } from './ConnectedAccountContext';
 import { AppVouch, HexStr } from '../types';
-import { connect, disconnect } from '@wagmi/core';
 
 export type RegistryContextType = {
+  setProjectId: (projectId: string) => void;
+  projectId?: string;
+  projectName?: string;
   nMembers?: number;
   refetch: (options?: { throwOnError: boolean; cancelRefetch: boolean }) => Promise<any>;
   isLoading: boolean;
@@ -32,6 +34,12 @@ export const RegistryContext = (props: IRegistryContext) => {
   const { isConnected, address: connectedAddress } = useAccount();
 
   const publicClient = usePublicClient();
+
+  const [projectId, _setProjectId] = useState<string>();
+
+  const setProjectId = (projectId: string) => {
+    _setProjectId(projectId);
+  };
 
   // all vouches
   const { data: vouchEvents } = useQuery(['allVoucheEvents'], async () => {
@@ -76,6 +84,9 @@ export const RegistryContext = (props: IRegistryContext) => {
   return (
     <RegistryContextValue.Provider
       value={{
+        setProjectId,
+        projectId,
+        projectName: 'Test',
         nMembers: nMembers !== undefined ? Number(nMembers) : undefined,
         refetch,
         isLoading,

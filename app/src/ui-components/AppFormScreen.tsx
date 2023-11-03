@@ -9,7 +9,7 @@ export interface IAppFormScreen extends BoxExtendedProps {
   label?: string;
 }
 
-export const AppFormScreen = (props: IAppFormScreen) => {
+export const AppScreen = (props: IAppFormScreen) => {
   if (!props.children) {
     throw new Error('Two children');
   }

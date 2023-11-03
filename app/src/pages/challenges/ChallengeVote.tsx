@@ -7,6 +7,7 @@ import { useConnectedAccount } from '../../contexts/ConnectedAccountContext';
 import { useEffect, useState } from 'react';
 import { WaitingTransaction } from '../common/WaitingTransaction';
 import { COMMUNITY_MEMBER } from '../../config/community';
+import { BoxCentered } from '../../ui-components/BoxCentered';
 
 export const ChallengeVote = () => {
   const {
@@ -53,9 +54,9 @@ export const ChallengeVote = () => {
   /** loading canVote information */
   if (canVote === undefined) {
     return (
-      <Box fill align="center" justify="center" style={{ height: '100px' }}>
+      <BoxCentered fill style={{ height: '100px' }}>
         <Spinner></Spinner>
-      </Box>
+      </BoxCentered>
     );
   }
 
@@ -88,8 +89,8 @@ export const ChallengeVote = () => {
       )}
     </Box>
   ) : (
-    <Box fill align="center" justify="center">
+    <BoxCentered fill>
       <Spinner></Spinner>
-    </Box>
+    </BoxCentered>
   );
 };

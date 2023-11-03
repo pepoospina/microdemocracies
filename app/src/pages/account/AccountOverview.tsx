@@ -4,6 +4,7 @@ import { useTokenAccount } from '../../contexts/AccountContext';
 import { AccountPerson } from './AccountPerson';
 import { AppCard } from '../../ui-components';
 import { COMMUNITY_MEMBER } from '../../config/community';
+import { BoxCentered } from '../../ui-components/BoxCentered';
 
 export const AccountOverview = () => {
   const { accountPapRead, accountRead } = useTokenAccount();
@@ -33,8 +34,8 @@ export const AccountOverview = () => {
       <AccountPerson pap={accountPapRead.object}></AccountPerson>
     </Box>
   ) : (
-    <Box fill align="center" justify="center">
+    <BoxCentered fill>
       <Spinner></Spinner>
-    </Box>
+    </BoxCentered>
   );
 };

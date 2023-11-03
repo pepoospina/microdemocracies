@@ -1,7 +1,7 @@
 import { Anchor, Box, Text } from 'grommet';
 import { useConnectedAccount } from '../../contexts/ConnectedAccountContext';
 import { useNavigate } from 'react-router-dom';
-import { RouteNames } from '../MainPage';
+import { ProjectRouteNames } from '../MainProjectPage';
 import { AppCard } from '../../ui-components';
 
 export const MyNetworkWidget = () => {
@@ -9,12 +9,12 @@ export const MyNetworkWidget = () => {
   const navigate = useNavigate();
 
   const goToMyVouches = () => {
-    navigate(RouteNames.MyVouches);
+    navigate(ProjectRouteNames.MyVouches);
   };
 
   const goToAccount = () => {
     if (tokenId) {
-      navigate(RouteNames.Account(tokenId));
+      navigate(ProjectRouteNames.Account(tokenId));
     }
   };
 

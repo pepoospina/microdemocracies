@@ -1,9 +1,9 @@
 import { Box } from 'grommet';
 import { SubtractCircle } from 'grommet-icons';
 import { AppButton } from '../../ui-components';
-import { platforms } from '../join/NetworkSelector';
 import { PlatformAccount } from '../../types';
 import { PlatformUrl } from './PlatformUrl';
+import { platforms } from '../../utils/platforms';
 
 export interface IAccountPlatforms {
   users?: PlatformAccount[];

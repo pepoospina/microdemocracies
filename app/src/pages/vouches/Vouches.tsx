@@ -1,9 +1,9 @@
 import { Box } from 'grommet';
-import { RouteNames } from '../MainPage';
+import { ProjectRouteNames } from '../MainProjectPage';
 import { useNavigate } from 'react-router-dom';
 import { FormPrevious } from 'grommet-icons';
 
-import { AppFormScreen } from '../../ui-components/AppFormScreen';
+import { AppScreen } from '../../ui-components/AppFormScreen';
 import { useConnectedAccount } from '../../contexts/ConnectedAccountContext';
 import { VoucheCard } from './VouchCard';
 import { AppConnect } from '../../components/app/AppConnect';
@@ -14,7 +14,7 @@ export const Vouches = (): JSX.Element => {
   const { myVouches, isConnected } = useConnectedAccount();
 
   return (
-    <AppFormScreen label="My Vouches">
+    <AppScreen label="My Vouches">
       <Box pad="large">
         {isConnected ? (
           <Box>
@@ -30,7 +30,10 @@ export const Vouches = (): JSX.Element => {
           <AppConnect />
         )}
       </Box>
-      <BottomButton icon={<FormPrevious />} label="home" onClick={() => navigate(RouteNames.Base)}></BottomButton>
-    </AppFormScreen>
+      <BottomButton
+        icon={<FormPrevious />}
+        label="home"
+        onClick={() => navigate(ProjectRouteNames.Base)}></BottomButton>
+    </AppScreen>
   );
 };

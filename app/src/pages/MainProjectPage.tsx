@@ -1,7 +1,7 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 // import { TestComponent } from './TestComponent';
-import { LandingPage } from './landing/LandingPage';
+import { ProjectHome } from './project/ProjectPage';
 import { Join } from './join/Join';
 import { VouchPage } from './vouch/Vouch';
 import { Challenges } from './challenges/Challenges';
@@ -14,12 +14,13 @@ import { VoicePage } from './voice/VoicePage';
 import { VoiceReadContext } from '../contexts/VoiceReadContext';
 import { VoicePropose } from './voice/VoicePropose';
 import { VoiceSendContext } from '../contexts/VoiceSendContext';
-import { Box } from 'grommet';
-import { useNetwork, useSwitchNetwork } from 'wagmi';
-import { AllVouches } from './vouches/AllVouches';
-import { CHAIN_ID } from '../config/appConfig';
 
-export const RouteNames = {
+import { AllVouches } from './vouches/AllVouches';
+import { ViewportContainer } from '../components/styles/LayoutComponents.styled';
+import { useEffect } from 'react';
+import { useRegistry } from '../contexts/RegistryContext';
+
+export const ProjectRouteNames = {
   Base: `/`,
   Join: `/join`,
   Vouch: `/invite`,
@@ -35,28 +36,18 @@ export const RouteNames = {
 
 export const MAX_WIDTH_LANDING = 1600;
 
-export const MainPage = () => {
-  const { chain } = useNetwork();
+export const MainProjectPage = (props: { projectId: string }) => {
+  const { setProjectId } = useRegistry();
 
-  const { switchNetwork } = useSwitchNetwork({
-    chainId: 137,
-  });
-
-  if (switchNetwork && chain && chain.id !== CHAIN_ID) {
-    switchNetwork(CHAIN_ID);
-  }
+  useEffect(() => {
+    if (props.projectId) {
+      setProjectId(props.projectId);
+    }
+  }, [props.projectId, setProjectId]);
 
   return (
     <BrowserRouter>
-      <Box
-        style={{
-          height: '100vh',
-          width: '100vw',
-          overflow: 'hidden',
-          maxWidth: `${MAX_WIDTH_LANDING}px`,
-          margin: '0 auto',
-        }}
-        id="MainPageRoutesWrapper">
+      <ViewportContainer>
         <Routes>
           <Route path={`account/:tokenId/*`} element={<AccountPage />}></Route>
           <Route
@@ -68,35 +59,35 @@ export const MainPage = () => {
                 </AccountContext>
               </VouchContext>
             }></Route>
-          <Route path={RouteNames.Join} element={<Join />}></Route>
+          <Route path={ProjectRouteNames.Join} element={<Join />}></Route>
           <Route
-            path={RouteNames.Vouch}
+            path={ProjectRouteNames.Vouch}
             element={
               <VouchContext>
                 <VouchPage />
               </VouchContext>
             }></Route>
-          <Route path={RouteNames.MyVouches} element={<Vouches />}></Route>
-          <Route path={RouteNames.VouchesAll} element={<AllVouches />}></Route>
-          <Route path={RouteNames.Challenges} element={<Challenges />}></Route>
-          {/* <Route path={RouteNames.Base} element={<TestComponent />}></Route> */}
-          <Route path={RouteNames.Base} element={<LandingPage />}></Route>
+          <Route path={ProjectRouteNames.MyVouches} element={<Vouches />}></Route>
+          <Route path={ProjectRouteNames.VouchesAll} element={<AllVouches />}></Route>
+          <Route path={ProjectRouteNames.Challenges} element={<Challenges />}></Route>
+          {/* <Route path={ProjectRouteNames.Base} element={<TestComponent />}></Route> */}
+          <Route path={ProjectRouteNames.Base} element={<ProjectHome />}></Route>
           <Route
-            path={RouteNames.VoicePropose}
+            path={ProjectRouteNames.VoicePropose}
             element={
               <VoiceSendContext>
                 <VoicePropose />
               </VoiceSendContext>
             }></Route>
           <Route
-            path={RouteNames.Voice}
+            path={ProjectRouteNames.Voice}
             element={
               <VoiceReadContext>
                 <VoicePage />
               </VoiceReadContext>
             }></Route>
         </Routes>
-      </Box>
+      </ViewportContainer>
     </BrowserRouter>
   );
 };

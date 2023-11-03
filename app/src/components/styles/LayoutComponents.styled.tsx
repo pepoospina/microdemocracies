@@ -11,13 +11,20 @@ import {
 import { ReactNode } from 'react';
 import { IElement, useThemeContext } from '../app';
 
+export const MAX_WIDTH_LANDING = 1600;
+
 export const ViewportContainer = (props: IElement) => {
   return (
-    <div style={{ height: '100vh' }}>
-      <Box fill align="center" justify="center">
-        {props.children}
-      </Box>
-    </div>
+    <Box
+      style={{
+        height: '100vh',
+        width: '100vw',
+        overflow: 'hidden',
+        maxWidth: `${MAX_WIDTH_LANDING}px`,
+        margin: '0 auto',
+      }}>
+      {props.children}
+    </Box>
   );
 };
 

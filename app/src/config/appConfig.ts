@@ -1,5 +1,3 @@
-import { localhost, polygon } from 'wagmi/chains';
-
 export const DEBUG = true;
 
 // export const CHALLENGE_PERIOD = 60;
@@ -15,4 +13,4 @@ export const WEB3_STORAGE_KEY =
 export const FUNCTIONS_BASE = 'https://europe-west1-network-state-registry.cloudfunctions.net';
 
 export const CHAIN_ID = 1337;
-export const CHAIN = localhost;
+export const CHAIN_NAME = 'localhost';

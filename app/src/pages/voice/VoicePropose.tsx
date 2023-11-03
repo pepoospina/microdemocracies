@@ -2,11 +2,11 @@ import { Box, Text } from 'grommet';
 import { useState } from 'react';
 
 import { AppButton, AppCard, AppTextArea } from '../../ui-components';
-import { AppFormScreen } from '../../ui-components/AppFormScreen';
+import { AppScreen } from '../../ui-components/AppFormScreen';
 import { useVoiceSend } from '../../contexts/VoiceSendContext';
 import { useRegistry } from '../../contexts/RegistryContext';
 import { AppConnect } from '../../components/app/AppConnect';
-import { RouteNames } from '../MainPage';
+import { ProjectRouteNames } from '../MainProjectPage';
 import { useNavigate } from 'react-router-dom';
 import { BottomButton } from '../common/BottomButton';
 import { FormPrevious } from 'grommet-icons';
@@ -37,7 +37,7 @@ export const VoicePropose = (): JSX.Element => {
   console.log({ isConnected, input, proposeStatement, done });
 
   return (
-    <AppFormScreen label="Propose Statement">
+    <AppScreen label="Propose Statement">
       <Box pad="large">
         {!done ? (
           <>
@@ -82,7 +82,10 @@ export const VoicePropose = (): JSX.Element => {
           <AppCard>Statement Proposed!</AppCard>
         )}
       </Box>
-      <BottomButton label="Back" icon={<FormPrevious />} onClick={() => navigate(RouteNames.Voice)}></BottomButton>
-    </AppFormScreen>
+      <BottomButton
+        label="Back"
+        icon={<FormPrevious />}
+        onClick={() => navigate(ProjectRouteNames.Voice)}></BottomButton>
+    </AppScreen>
   );
 };
