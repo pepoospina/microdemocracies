@@ -1,13 +1,32 @@
 import { Box } from 'grommet';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import ReactQuill, { Quill } from 'react-quill';
 import 'react-quill/dist/quill.bubble.css';
 import './statements.css';
 import { useThemeContext } from '../../components/app';
 
-export const StatementEditable = (props: { placeholder?: string }) => {
+export interface IStatementEditable {
+  placeholder?: string;
+  editable?: boolean;
+  value?: string;
+  onChanged?: (value?: string) => void;
+}
+
+export const StatementEditable = (props: IStatementEditable) => {
   const { constants } = useThemeContext();
   const [text, setText] = useState<string>();
+
+  const editable = props.editable !== undefined && props.editable;
+
+  useEffect(() => {
+    if (props.onChanged) {
+      props.onChanged(text);
+    }
+  }, [text, props.onChanged]);
+
+  useEffect(() => {
+    setText(props.value);
+  }, [props.value]);
 
   useEffect(() => {
     const LinkBlot = Quill.import('formats/link');
@@ -52,7 +71,7 @@ export const StatementEditable = (props: { placeholder?: string }) => {
           modules={modules}
           value={text}
           onChange={setText}
-          readOnly={false}
+          readOnly={!editable}
         />
       </Box>
     </Box>

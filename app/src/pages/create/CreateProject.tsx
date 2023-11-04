@@ -1,15 +1,26 @@
 import { Box, Text } from 'grommet';
 import { FormNext, FormPrevious, StatusGood } from 'grommet-icons';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ReactSimplyCarousel from 'react-simply-carousel';
 
 import { appName } from '../../config/community';
 import { StatementEditable } from '../voice/StatementEditable';
 import { AppButton } from '../../ui-components';
-import { DetailsSelector } from './DetailsSelector';
+import { DetailsSelector, SelectedDetails } from './DetailsSelector';
+import { DetailsSelectedSummary } from './DetailsSelectedSummary';
+
+const NPAGES = 3;
 
 export const CreateProject = () => {
-  const [formIndex, setFormIndex] = useState(1);
+  const [formIndex, setFormIndex] = useState(0);
+
+  const [whoStatement, setWhoStatement] = useState<string>();
+  const [whatStatement, setWhatStatement] = useState<string>();
+  const [details, setDetails] = useState<SelectedDetails>();
+
+  const [sending, setSending] = useState<boolean>(false);
+  const [error, setError] = useState<boolean>();
+  const { setProjectParams, sendCreate, isErrorSending, errorSending, isSuccess } = useCreateProject();
 
   const boxStyle: React.CSSProperties = { width: '100vw', height: 'calc(100vh - 60px - 50px)', overflowY: 'auto' };
 
@@ -18,15 +29,46 @@ export const CreateProject = () => {
     display: 'none',
   };
 
+  const createProject = () => {};
+
+  useEffect(() => {
+    // console.log('useEffect isSuccess', { isSuccess });
+    if (isSuccess) {
+      setSending(false);
+      setError(undefined);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isSuccess]);
+
+  useEffect(() => {
+    // console.log('useEffect isErrorSending', { isErrorSending, errorSending });
+    if (isErrorSending) {
+      setSending(false);
+      setError((errorSending as any).shortMessage);
+    }
+  }, [isErrorSending, errorSending]);
+
   const nextPage = () => {
-    setFormIndex(formIndex + 1);
+    if (formIndex < NPAGES - 1) {
+      setFormIndex(formIndex + 1);
+    }
+
+    if (formIndex === NPAGES - 1) {
+      createProject();
+    }
   };
 
   const prevPage = () => {
-    setFormIndex(formIndex - 1);
+    if (formIndex > 0) {
+      setFormIndex(formIndex - 1);
+    }
   };
 
-  const nextStr = formIndex === 1 ? 'review' : 'next';
+  const nextStr = (() => {
+    if (formIndex === 1) return 'review';
+    if (formIndex === 2) return 'create';
+    return 'next';
+  })();
 
   return (
     <Box fill align="center">
@@ -73,7 +115,10 @@ export const CreateProject = () => {
               </Text>
             </Box>
             <Box>
-              <StatementEditable placeholder="What..."></StatementEditable>
+              <StatementEditable
+                placeholder="What..."
+                editable
+                onChanged={(value) => setWhatStatement(value)}></StatementEditable>
             </Box>
           </Box>
 
@@ -98,12 +143,15 @@ export const CreateProject = () => {
               </Text>
             </Box>
             <Box>
-              <StatementEditable placeholder="Who..."></StatementEditable>
+              <StatementEditable
+                onChanged={(value) => setWhoStatement(value)}
+                editable
+                placeholder="Who..."></StatementEditable>
             </Box>
           </Box>
 
           <Box style={{ width: '100%', flexShrink: 0, overflowY: 'auto' }} pad="large">
-            <DetailsSelector></DetailsSelector>
+            <DetailsSelector onChanged={(details) => setDetails(details)}></DetailsSelector>
           </Box>
         </Box>
 
@@ -111,16 +159,26 @@ export const CreateProject = () => {
           <Box style={{ width: '100%', flexShrink: 0 }} pad="large">
             <Box style={{ marginBottom: '12px', fontSize: '10px', fontWeight: '300', flexShrink: 0 }}>
               <Text>
-                Can participate anyone <span style={{ fontWeight: '400' }}>who</span>:
+                <span style={{ fontWeight: '400' }}>What</span> we want to achieve:
               </Text>
             </Box>
             <Box>
-              <StatementEditable value={}></StatementEditable>
+              <StatementEditable value={whatStatement}></StatementEditable>
+            </Box>
+
+            <Box style={{ margin: '36px 0 12px 0', fontSize: '10px', fontWeight: '300', flexShrink: 0 }}>
+              <Text>
+                <span style={{ fontWeight: '400' }}>Who</span> can participate:
+              </Text>
+            </Box>
+            <Box>
+              <StatementEditable value={whoStatement}></StatementEditable>
             </Box>
           </Box>
 
-          <Box style={{ width: '100%', flexShrink: 0, overflowY: 'auto' }} pad="large">
-            <DetailsSelector></DetailsSelector>
+          <Box pad="large">
+            <Text>Particinats will be asked to provied:</Text>
+            <DetailsSelectedSummary selected={details}></DetailsSelectedSummary>
           </Box>
         </Box>
       </ReactSimplyCarousel>

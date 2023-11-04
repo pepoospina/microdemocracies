@@ -2,11 +2,11 @@ import { Box, Text } from 'grommet';
 import { StatusGood } from 'grommet-icons';
 import { AppButton } from '../../ui-components';
 import { useThemeContext } from '../../components/app';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { PlatformDetails, platforms } from '../../utils/platforms';
 import { PlatformId } from '../../types';
 
-interface SelectedDetails {
+export interface SelectedDetails {
   personal: {
     firstName: boolean;
     lastName: boolean;
@@ -48,7 +48,7 @@ enum Options {
   IDNumber = 'IDNumber',
 }
 
-export const DetailsSelector = () => {
+export const DetailsSelector = (props: { onChanged: (seleted: SelectedDetails) => void }) => {
   const { constants } = useThemeContext();
 
   const [details, setDetails] = useState<SelectedDetails>(detailsInit);
@@ -66,6 +66,12 @@ export const DetailsSelector = () => {
     return selected;
   }, []);
   const platformsSelectedText = platformsSelected.length ? platformsSelected.join(' and ') : 'Social';
+
+  useEffect(() => {
+    if (props.onChanged) {
+      props.onChanged(details);
+    }
+  }, [details, props.onChanged]);
 
   const select = (option: Options) => {
     if (option === Options.NameAndLastame) {
