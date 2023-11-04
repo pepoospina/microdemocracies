@@ -1146,9 +1146,112 @@ const RegistryAbi = [
   },
 ] as const;
 
-const refAbi = stringify(((contractsJson as any)[CHAIN_ID.toString()][CHAIN_NAME]['contracts']['Registry'] as any).abi);
+const RegistryFactoryAbi = [
+  {
+    inputs: [
+      {
+        internalType: 'address payable',
+        name: '_master',
+        type: 'address',
+      },
+    ],
+    stateMutability: 'nonpayable',
+    type: 'constructor',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: 'address',
+        name: 'creator',
+        type: 'address',
+      },
+      {
+        indexed: false,
+        internalType: 'address',
+        name: 'newRegistry',
+        type: 'address',
+      },
+      {
+        indexed: false,
+        internalType: 'bytes32',
+        name: 'salt',
+        type: 'bytes32',
+      },
+    ],
+    name: 'RegistryCreated',
+    type: 'event',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'bytes32',
+        name: 'salt',
+        type: 'bytes32',
+      },
+    ],
+    name: 'contractAddress',
+    outputs: [
+      {
+        internalType: 'address',
+        name: '',
+        type: 'address',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'string',
+        name: '__symbol',
+        type: 'string',
+      },
+      {
+        internalType: 'string',
+        name: '__name',
+        type: 'string',
+      },
+      {
+        internalType: 'address[]',
+        name: 'addresses',
+        type: 'address[]',
+      },
+      {
+        internalType: 'string[]',
+        name: 'foundersCids',
+        type: 'string[]',
+      },
+      {
+        internalType: 'bytes32',
+        name: 'salt',
+        type: 'bytes32',
+      },
+    ],
+    name: 'create',
+    outputs: [
+      {
+        internalType: 'address payable',
+        name: 'proxy',
+        type: 'address',
+      },
+    ],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+] as const;
 
+const refAbi = stringify(((contractsJson as any)[CHAIN_ID.toString()][CHAIN_NAME]['contracts']['Registry'] as any).abi);
 if (stringify(RegistryAbi) !== refAbi) {
+  throw new Error('Unexpected ABI, manually updated it to be a const');
+}
+
+const refAbiFact = stringify(
+  ((contractsJson as any)[CHAIN_ID.toString()][CHAIN_NAME]['contracts']['RegistryFactory'] as any).abi
+);
+if (stringify(RegistryFactoryAbi) !== refAbiFact) {
   throw new Error('Unexpected ABI, manually updated it to be a const');
 }
 
@@ -1194,4 +1297,4 @@ const ChallengeEventAbi = {
 
 const registryAddress = addressOnChain(CHAIN_ID);
 
-export { RegistryAbi, VouchEventAbi, ChallengeEventAbi, registryAddress };
+export { RegistryAbi, RegistryFactoryAbi, VouchEventAbi, ChallengeEventAbi, registryAddress };
