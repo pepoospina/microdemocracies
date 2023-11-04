@@ -3,8 +3,8 @@ import { ethers } from 'hardhat';
 
 import { constants, BigNumber, Event } from 'ethers';
 
-import { Registry } from '../typechain';
-import { SECONDS_IN_DAY, deployRegistry, fastForwardToTimestamp, getDeployEvents, getTimestamp, registryFrom, shouldFail } from './support';
+import { Registry, RegistryFactory } from '../typechain';
+import { SECONDS_IN_DAY, deployRegistry, deployRegistryFactory, fastForwardToTimestamp, getEvents, getTimestamp, registryFrom, shouldFail } from './support';
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import { deriveEntity, hashObject } from '@app/utils/cid-hash';
 import { Entity, PAP } from '@app/types';
@@ -63,6 +63,9 @@ const personCidHelper = async (registry: Registry, tokenId: number) => {
 
 describe('Registry', () => {
   let registry: Registry;
+  let factory: RegistryFactory;
+  let counter = 0;
+  let deployTxHash: string;
 
   let deployer: SignerWithAddress;
 
@@ -105,7 +108,7 @@ describe('Registry', () => {
 
     [f0, f1, f2, f3, v11, v12, v13, v111, v112, v113, v1131, v1132, c1, v31, v32, v33, v34, v35] = await Promise.all(
       signers.map(async (s, ix) => {
-        const pap: PAP = { person: { firstName: `personOfSigner${ix}` }, account: s.address };
+        const pap: PAP = { person: { personal: { firstName: `personOfSigner${ix}` } }, account: s.address };
         const personEntity = await deriveEntity(pap);
         return { s, tokenId: WRONG_TOKEN_ID, person: personEntity };
       })
@@ -116,11 +119,25 @@ describe('Registry', () => {
     const addresses = founders.map((f) => (f.person && f.person.object.account) as string);
     const personCids = founders.map((f) => (f.person && f.person.cid) as string);
 
-    registry = await deployRegistry(addresses, personCids, deployer);
+    /** */
+    const master = await deployRegistry(deployer);
+    factory = await deployRegistryFactory(master.address, deployer);
+    const tx = await factory.create('ABC', 'Test Community', addresses, personCids, ethers.utils.keccak256(ethers.utils.toUtf8Bytes(counter.toString())));
+    counter++;
+    const rec = await tx.wait();
+
+    const createdEvent = rec.events?.find((e) => e.event === 'RegistryCreated');
+    expect(createdEvent).to.exist;
+
+    if (!createdEvent || !createdEvent.args) throw new Error('Event not found');
+    const address = createdEvent?.args.newRegistry;
+    registry = await ethers.getContractAt('Registry', address);
+
+    deployTxHash = rec.transactionHash;
   });
 
   it('was deployed with founders', async () => {
-    const events = await getDeployEvents(registry);
+    const events = await getEvents(deployTxHash, registry);
     const vouchEvents = events.filter((e) => e.name === 'VouchEvent');
     const transferEvents = events.filter((e) => e.name === 'Transfer');
 

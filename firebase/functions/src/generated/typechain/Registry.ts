@@ -63,6 +63,7 @@ export interface RegistryInterface extends utils.Interface {
     "getTokenVouch(uint256)": FunctionFragment;
     "getTotalVoters(uint256)": FunctionFragment;
     "getVoucherVouchesNumber(uint256)": FunctionFragment;
+    "initRegistry(string,string,address[],string[])": FunctionFragment;
     "invalidateInvalidVoucher(uint256)": FunctionFragment;
     "invalidateVote(uint256,uint256)": FunctionFragment;
     "isApprovedForAll(address,address)": FunctionFragment;
@@ -154,6 +155,10 @@ export interface RegistryInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "getVoucherVouchesNumber",
     values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "initRegistry",
+    values: [string, string, string[], string[]]
   ): string;
   encodeFunctionData(
     functionFragment: "invalidateInvalidVoucher",
@@ -274,6 +279,10 @@ export interface RegistryInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "initRegistry",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "invalidateInvalidVoucher",
     data: BytesLike
   ): Result;
@@ -322,6 +331,7 @@ export interface RegistryInterface extends utils.Interface {
     "ApprovalForAll(address,address,bool)": EventFragment;
     "ChallengeEvent(uint256)": EventFragment;
     "ChallengeExecuted(uint256,int8)": EventFragment;
+    "Initialized(uint8)": EventFragment;
     "InvalidatedAccountEvent(uint256)": EventFragment;
     "InvalidatedByChallenge(uint256)": EventFragment;
     "InvalidatedByInvalidVoucher(uint256)": EventFragment;
@@ -336,6 +346,7 @@ export interface RegistryInterface extends utils.Interface {
   getEvent(nameOrSignatureOrTopic: "ApprovalForAll"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "ChallengeEvent"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "ChallengeExecuted"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "Initialized"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "InvalidatedAccountEvent"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "InvalidatedByChallenge"): EventFragment;
   getEvent(
@@ -376,6 +387,10 @@ export type ChallengeExecutedEvent = TypedEvent<
 
 export type ChallengeExecutedEventFilter =
   TypedEventFilter<ChallengeExecutedEvent>;
+
+export type InitializedEvent = TypedEvent<[number], { version: number }>;
+
+export type InitializedEventFilter = TypedEventFilter<InitializedEvent>;
 
 export type InvalidatedAccountEventEvent = TypedEvent<
   [BigNumber],
@@ -575,6 +590,14 @@ export interface Registry extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
 
+    initRegistry(
+      __symbol: string,
+      __name: string,
+      addresses: string[],
+      foundersCids: string[],
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     invalidateInvalidVoucher(
       tokenId: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -764,6 +787,14 @@ export interface Registry extends BaseContract {
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
+  initRegistry(
+    __symbol: string,
+    __name: string,
+    addresses: string[],
+    foundersCids: string[],
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   invalidateInvalidVoucher(
     tokenId: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
@@ -944,6 +975,14 @@ export interface Registry extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    initRegistry(
+      __symbol: string,
+      __name: string,
+      addresses: string[],
+      foundersCids: string[],
+      overrides?: CallOverrides
+    ): Promise<void>;
+
     invalidateInvalidVoucher(
       tokenId: BigNumberish,
       overrides?: CallOverrides
@@ -1060,6 +1099,9 @@ export interface Registry extends BaseContract {
       tokenId?: null,
       outcome?: null
     ): ChallengeExecutedEventFilter;
+
+    "Initialized(uint8)"(version?: null): InitializedEventFilter;
+    Initialized(version?: null): InitializedEventFilter;
 
     "InvalidatedAccountEvent(uint256)"(
       tokenId?: BigNumberish | null
@@ -1219,6 +1261,14 @@ export interface Registry extends BaseContract {
     getVoucherVouchesNumber(
       voucherTokenId: BigNumberish,
       overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    initRegistry(
+      __symbol: string,
+      __name: string,
+      addresses: string[],
+      foundersCids: string[],
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     invalidateInvalidVoucher(
@@ -1399,6 +1449,14 @@ export interface Registry extends BaseContract {
     getVoucherVouchesNumber(
       voucherTokenId: BigNumberish,
       overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    initRegistry(
+      __symbol: string,
+      __name: string,
+      addresses: string[],
+      foundersCids: string[],
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     invalidateInvalidVoucher(

@@ -8,14 +8,19 @@ const deployEntryPoint: DeployFunction = async function (hre: HardhatRuntimeEnvi
   const { deployer } = await getDeployer(hre, 0);
   const founders = await prepareFounders();
 
-  const ret = await hre.deployments.deploy('Registry', {
+  const master = await hre.deployments.deploy('Registry', {
     from: deployer.address,
-    args: ['NSR', 'Network Citizenship Registry', founders.addresses, founders.personsCids],
-    gasLimit: 5e6,
-    deterministicDeployment: true,
+    args: [],
+    log: true,
   });
 
-  console.log('== Registry Address ==', ret.address);
+  const res = await hre.deployments.deploy('RegistryFactory', {
+    from: deployer.address,
+    args: [master.address],
+    log: true,
+  });
+
+  console.log('== RegistryFactory Address ==', res.address);
 };
 
 export default deployEntryPoint;

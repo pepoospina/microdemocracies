@@ -1,7 +1,7 @@
 import { LogDescription } from '@ethersproject/abi';
 import { BigNumber, Contract, Signer, Event } from 'ethers';
 import { ethers } from 'hardhat';
-import { Registry, Registry__factory } from 'typechain';
+import { Registry, RegistryFactory, RegistryFactory__factory, Registry__factory } from 'typechain';
 
 export const numOf = (str: string): string => {
   return str.replace(/\s/g, '');
@@ -52,14 +52,20 @@ export async function fastForwardToTimestamp(toTimestamp: BigNumber): Promise<vo
   await ethers.provider.send('evm_mine', []);
 }
 
-export const deployRegistry = async (addresses: string[], personsCids: string[], signer: Signer): Promise<Registry> => {
+export const deployRegistry = async (signer: Signer): Promise<Registry> => {
   const deployer = await ethers.getContractFactory<Registry__factory>('Registry', signer);
-  const registry = await deployer.deploy('NSR', 'NetworkState Registry', addresses, personsCids);
+  const registry = await deployer.deploy();
   return await registry.deployed();
 };
 
-export const getDeployEvents = async (contract: Contract): Promise<LogDescription[]> => {
-  const receipt = await ethers.provider.getTransactionReceipt(contract.deployTransaction.hash);
+export const deployRegistryFactory = async (masterAddress: string, signer: Signer): Promise<RegistryFactory> => {
+  const factoryDeployer = await ethers.getContractFactory<RegistryFactory__factory>('RegistryFactory', signer);
+  const factory = await factoryDeployer.deploy(masterAddress);
+  return await factory.deployed();
+};
+
+export const getEvents = async (hash: string, contract: Contract): Promise<LogDescription[]> => {
+  const receipt = await ethers.provider.getTransactionReceipt(hash);
   const events = receipt.logs
     .map((log) => {
       try {

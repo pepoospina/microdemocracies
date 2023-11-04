@@ -7,20 +7,23 @@ import "@openzeppelin/contracts/utils/Context.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/IERC721Metadata.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/IERC721Enumerable.sol";
+import "@openzeppelin/contracts/proxy/utils/Initializable.sol";
+
+// import "hardhat/console.sol";
 
 /**
  * @title Registry
  */
 
-contract Registry is Context, IERC721, IERC721Metadata {
+contract Registry is Context, IERC721, IERC721Metadata, Initializable {
     using PRBMathUD60x18 for uint256;
 
-    uint256 public PENDING_PERIOD = 180 days;
-    uint256 public VOTING_PERIOD = 15 days;
-    uint256 public QUIET_ENDING_PERIOD = 2 days;
+    uint256 public constant PENDING_PERIOD = 180 days;
+    uint256 public constant VOTING_PERIOD = 15 days;
+    uint256 public constant QUIET_ENDING_PERIOD = 2 days;
 
-    uint256 public FOUNDERS_VOUCHER = type(uint256).max;
-    string internal baseURI = "ipfs://";
+    uint256 public constant FOUNDERS_VOUCHER = type(uint256).max;
+    string internal constant baseURI = "ipfs://";
     string internal _symbol;
     string internal _name;
 
@@ -96,14 +99,13 @@ contract Registry is Context, IERC721, IERC721Metadata {
     error AccountAlreadyOwnsOneToken();
     error UnexpectedExecutedCondition();
 
-    /***************
-    EXTERNAL FUNCTIONS
-    ***************/
-    constructor(string memory __symbol, string memory __name, address[] memory addresses, string[] memory foundersCids) {
+    /** Constructor */
+    function initRegistry (string memory __symbol, string memory __name, address[] memory addresses, string[] memory foundersCids) external initializer {
         _symbol = __symbol;
         _name = __name;
         __totalSupply = 0;
         _nEntries = 0;
+
         for (uint8 ix = 0; ix < addresses.length; ix++) {
             /** special case of founder vouchers being a dumb token ID */
             accounts[FOUNDERS_VOUCHER].valid = true;
@@ -111,6 +113,9 @@ contract Registry is Context, IERC721, IERC721Metadata {
         }
     }
 
+    /***************
+    EXTERNAL FUNCTIONS
+    ***************/
     /** 
      * The msgSender must be a valid account in the registry and vouch
      * for the provided account and personCid pair
