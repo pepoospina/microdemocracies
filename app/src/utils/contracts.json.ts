@@ -16,32 +16,6 @@ function addressOnChain(chainId: number): `0x{string}` {
 
 const RegistryAbi = [
   {
-    inputs: [
-      {
-        internalType: 'string',
-        name: '__symbol',
-        type: 'string',
-      },
-      {
-        internalType: 'string',
-        name: '__name',
-        type: 'string',
-      },
-      {
-        internalType: 'address[]',
-        name: 'addresses',
-        type: 'address[]',
-      },
-      {
-        internalType: 'string[]',
-        name: 'foundersCids',
-        type: 'string[]',
-      },
-    ],
-    stateMutability: 'nonpayable',
-    type: 'constructor',
-  },
-  {
     inputs: [],
     name: 'AccountAlreadyOwnsOneToken',
     type: 'error',
@@ -233,6 +207,19 @@ const RegistryAbi = [
       },
     ],
     name: 'ChallengeExecuted',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: 'uint8',
+        name: 'version',
+        type: 'uint8',
+      },
+    ],
+    name: 'Initialized',
     type: 'event',
   },
   {
@@ -825,6 +812,34 @@ const RegistryAbi = [
       },
     ],
     stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'string',
+        name: '__symbol',
+        type: 'string',
+      },
+      {
+        internalType: 'string',
+        name: '__name',
+        type: 'string',
+      },
+      {
+        internalType: 'address[]',
+        name: 'addresses',
+        type: 'address[]',
+      },
+      {
+        internalType: 'string[]',
+        name: 'foundersCids',
+        type: 'string[]',
+      },
+    ],
+    name: 'initRegistry',
+    outputs: [],
+    stateMutability: 'nonpayable',
     type: 'function',
   },
   {

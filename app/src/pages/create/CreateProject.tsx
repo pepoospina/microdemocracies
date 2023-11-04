@@ -1,26 +1,31 @@
 import { Box, Text } from 'grommet';
-import { FormNext, FormPrevious, StatusGood } from 'grommet-icons';
+import { FormNext, FormPrevious } from 'grommet-icons';
 import { useEffect, useState } from 'react';
 import ReactSimplyCarousel from 'react-simply-carousel';
 
 import { appName } from '../../config/community';
 import { StatementEditable } from '../voice/StatementEditable';
-import { AppButton } from '../../ui-components';
+import { AppButton, AppHeading } from '../../ui-components';
 import { DetailsSelector, SelectedDetails } from './DetailsSelector';
 import { DetailsSelectedSummary } from './DetailsSelectedSummary';
+import { useCreateProject } from '../../contexts/CreateProjectContext';
+import { DetailsForm } from '../join/DetailsForm';
+import { AppAccountSelector } from '../join/AccountSelector';
+import { HexStr } from '../../types';
 
-const NPAGES = 3;
+const NPAGES = 5;
 
 export const CreateProject = () => {
   const [formIndex, setFormIndex] = useState(0);
 
+  const [account, setAccount] = useState<string>();
   const [whoStatement, setWhoStatement] = useState<string>();
   const [whatStatement, setWhatStatement] = useState<string>();
-  const [details, setDetails] = useState<SelectedDetails>();
+  const [selectedDetails, setDetails] = useState<SelectedDetails>();
 
   const [sending, setSending] = useState<boolean>(false);
   const [error, setError] = useState<boolean>();
-  const { setProjectParams, sendCreate, isErrorSending, errorSending, isSuccess } = useCreateProject();
+  const { setCreateParams, sendCreateProject, isErrorSending, errorSending, isSuccess } = useCreateProject();
 
   const boxStyle: React.CSSProperties = { width: '100vw', height: 'calc(100vh - 60px - 50px)', overflowY: 'auto' };
 
@@ -65,8 +70,9 @@ export const CreateProject = () => {
   };
 
   const nextStr = (() => {
-    if (formIndex === 1) return 'review';
-    if (formIndex === 2) return 'create';
+    if (formIndex === 2) return 'next';
+    if (formIndex === 3) return 'review';
+    if (formIndex === 4) return 'create';
     return 'next';
   })();
 
@@ -157,6 +163,31 @@ export const CreateProject = () => {
 
         <Box style={boxStyle}>
           <Box style={{ width: '100%', flexShrink: 0 }} pad="large">
+            <Box style={{ marginBottom: '24px' }}>
+              <AppHeading>Your Details</AppHeading>
+              <Box>
+                <Text>All members of the commuity are expected to provide their details. Including you :)</Text>
+              </Box>
+            </Box>
+            <DetailsForm selected={selectedDetails}></DetailsForm>
+          </Box>
+        </Box>
+
+        <Box style={boxStyle}>
+          <Box style={{ width: '100%', flexShrink: 0 }} pad="large">
+            <Box pad="large" style={{ flexShrink: 0 }}>
+              <AppHeading level="2" style={{ marginBottom: '16px' }}>
+                Select the account
+              </AppHeading>
+              <AppAccountSelector
+                onSelected={(account) => setAccount(account)}
+                style={{ marginBottom: '30px' }}></AppAccountSelector>
+            </Box>
+          </Box>
+        </Box>
+
+        <Box style={boxStyle}>
+          <Box style={{ width: '100%', flexShrink: 0 }} pad="large">
             <Box style={{ marginBottom: '12px', fontSize: '10px', fontWeight: '300', flexShrink: 0 }}>
               <Text>
                 <span style={{ fontWeight: '400' }}>What</span> we want to achieve:
@@ -178,7 +209,8 @@ export const CreateProject = () => {
 
           <Box pad="large">
             <Text>Particinats will be asked to provied:</Text>
-            <DetailsSelectedSummary selected={details}></DetailsSelectedSummary>
+            <DetailsSelectedSummary selected={selectedDetails}></DetailsSelectedSummary>
+            {/* <AccountPerson pap={founderPap}></AccountPerson> */}
           </Box>
         </Box>
       </ReactSimplyCarousel>

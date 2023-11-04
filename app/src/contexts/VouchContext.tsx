@@ -1,45 +1,46 @@
 import { createContext, ReactNode, useCallback, useContext, useState } from 'react';
 import { useContractWrite, usePrepareContractWrite, useWaitForTransaction } from 'wagmi';
+import { WriteContractResult } from '@wagmi/core';
 
-import { registryAddress, RegistryFactoryAbi } from '../utils/contracts.json';
+import { registryAddress, RegistryAbi } from '../utils/contracts.json';
 import { HexStr } from '../types';
 
-export type CreateProjectContextType = {
-  setCreateParams: (founder: HexStr) => void;
-  sendCreateProject: (() => void) | undefined;
+export type VouchContextType = {
+  setVouchParams: (account: HexStr, personCid: string) => void;
+  sendVouch: (() => Promise<WriteContractResult>) | undefined;
   isSending: boolean;
   isErrorSending: boolean;
   errorSending: Error | null;
   isSuccess: boolean;
 };
 
-const CreateProjectContextValue = createContext<CreateProjectContextType | undefined>(undefined);
+const VouchContextValue = createContext<VouchContextType | undefined>(undefined);
 
-export interface CreateProjectContextProps {
+export interface VouchContextProps {
   children: ReactNode;
 }
 
-export const CreateProjectContext = (props: CreateProjectContextProps) => {
+export const VouchContext = (props: VouchContextProps) => {
   /** Vouch */
-  const [createParamsInternal, setCreateParamsInternal] = useState<[HexStr]>();
+  const [vouchParamsInternal, setVouchParamsInternal] = useState<[HexStr, string]>();
 
-  const setCreateParams = useCallback((founder: HexStr) => {
-    setCreateParamsInternal([founder]);
+  const setVouchParams = useCallback((account: HexStr, personCid: string) => {
+    setVouchParamsInternal([account, personCid]);
   }, []);
 
-  const { config: createConfig } = usePrepareContractWrite({
+  const { config: vouchConfig } = usePrepareContractWrite({
     address: registryAddress,
-    abi: RegistryFactoryAbi,
-    args: createParamsInternal,
-    functionName: 'createRegistry',
+    abi: RegistryAbi,
+    args: vouchParamsInternal,
+    functionName: 'vouch',
   });
 
   const {
     data: transaction,
-    write: sendCreateProject,
+    writeAsync: sendVouch,
     isError: _isErrorWriting,
     error: _errorWriting,
-  } = useContractWrite(createConfig);
+  } = useContractWrite(vouchConfig);
 
   const {
     isLoading: isSending,
@@ -54,22 +55,22 @@ export const CreateProjectContext = (props: CreateProjectContextProps) => {
   const errorSending = _errorWriting ? _errorWriting : _errorWaiting ? _errorWaiting : null;
 
   return (
-    <CreateProjectContextValue.Provider
+    <VouchContextValue.Provider
       value={{
-        setCreateParams,
-        sendCreateProject,
+        setVouchParams,
+        sendVouch,
         isSending,
         isErrorSending,
         errorSending,
         isSuccess,
       }}>
       {props.children}
-    </CreateProjectContextValue.Provider>
+    </VouchContextValue.Provider>
   );
 };
 
-export const useCreateProject = (): CreateProjectContextType => {
-  const context = useContext(CreateProjectContextValue);
+export const useVouch = (): VouchContextType => {
+  const context = useContext(VouchContextValue);
   if (!context) throw Error('context not found');
   return context;
 };

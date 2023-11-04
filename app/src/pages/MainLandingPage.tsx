@@ -4,6 +4,7 @@ import { ViewportContainer } from '../components/styles/LayoutComponents.styled'
 import { LandingPage } from './landing/LandingPage';
 import { LearnMore } from './landing/LearnMore';
 import { CreateProject } from './create/CreateProject';
+import { CreateProjectContext } from '../contexts/CreateProjectContext';
 
 export const LandingRouteNames = {
   Base: `/`,
@@ -18,7 +19,13 @@ export const MainLandingPage = () => {
         <Routes>
           <Route path={LandingRouteNames.Base} element={<LandingPage />}></Route>
           <Route path={LandingRouteNames.More} element={<LearnMore />}></Route>
-          <Route path={LandingRouteNames.Start} element={<CreateProject />}></Route>
+          <Route
+            path={LandingRouteNames.Start}
+            element={
+              <CreateProjectContext>
+                <CreateProject />
+              </CreateProjectContext>
+            }></Route>
         </Routes>
       </ViewportContainer>
     </BrowserRouter>
