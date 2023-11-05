@@ -4,6 +4,7 @@ import { useAccount, useConnect, useContractRead, useDisconnect, usePublicClient
 
 import { registryAddress, RegistryAbi, VouchEventAbi } from '../utils/contracts.json';
 import { AppAccount, AppChallenge, AppVouch, HexStr } from '../types';
+import { DedicatedWalletConnector } from '@magiclabs/wagmi-connector';
 
 export type ConnectedAccountContextType = {
   connect: ReturnType<typeof useConnect>['connect'];
@@ -30,11 +31,13 @@ export const ConnectedAccountContext = (props: ConnectedAccountContextProps) => 
   const { connect: _connect, connectors, error, isLoading, pendingConnector } = useConnect();
   const { disconnect } = useDisconnect();
 
-  console.log({ connector, connectors });
+  const magic = connectors.find((c) => c instanceof DedicatedWalletConnector);
+
+  console.log({ magic });
 
   const connect = () => {
-    if (connectors) {
-      _connect({ connector: (connectors as any)[0] });
+    if (magic) {
+      _connect({ connector: magic });
     }
   };
 
