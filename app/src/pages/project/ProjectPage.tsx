@@ -13,10 +13,9 @@ export interface IProjectHome {
 }
 
 export const ProjectHome = (props: IProjectHome) => {
-  const { isConnected } = useRegistry();
   const navigate = useNavigate();
   const { nMembers } = useRegistry();
-  const { tokenId } = useConnectedAccount();
+  const { tokenId, isConnected } = useConnectedAccount();
 
   return (
     <Box style={{ flexGrow: '1', width: '100%', overflowY: 'auto' }} align="center" id="LandingPageContainer">

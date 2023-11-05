@@ -1,10 +1,10 @@
-import { useRegistry } from '../../contexts/RegistryContext';
 import { AppButton, IButton } from '../../ui-components';
+import { useConnectedAccount } from '../../contexts/ConnectedAccountContext';
 
 interface IAppConectAnd extends IButton {}
 
 export const AppConnect = (props: IAppConectAnd) => {
-  const { isConnected, connect, connectedAddress } = useRegistry();
+  const { connect, address, isConnected } = useConnectedAccount();
 
   const clicked = () => {
     if (!isConnected) {
@@ -12,7 +12,5 @@ export const AppConnect = (props: IAppConectAnd) => {
     }
   };
 
-  return (
-    <AppButton label={isConnected ? connectedAddress : 'CONNECT'} {...props} onClick={() => clicked()}></AppButton>
-  );
+  return <AppButton label={isConnected ? address : 'CONNECT'} {...props} onClick={() => clicked()}></AppButton>;
 };

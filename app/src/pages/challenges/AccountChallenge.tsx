@@ -1,7 +1,6 @@
 import { Box, BoxExtendedProps, Spinner, Text } from 'grommet';
 
 import { useCurrentChallenge } from '../../contexts/CurrentChallengeContext';
-import { useRegistry } from '../../contexts/RegistryContext';
 import { AppConnect } from '../../components/app/AppConnect';
 import { AppButton, AppCard } from '../../ui-components';
 
@@ -11,13 +10,14 @@ import { useTokenAccount } from '../../contexts/AccountContext';
 import { useEffect, useState } from 'react';
 import { WaitingTransaction } from '../common/WaitingTransaction';
 import { BoxCentered } from '../../ui-components/BoxCentered';
+import { useConnectedAccount } from '../../contexts/ConnectedAccountContext';
 
 interface IAccountChallenge extends BoxExtendedProps {
   cardStyle?: React.CSSProperties;
 }
 
 export const AccountChallenge = (props: IAccountChallenge) => {
-  const { isConnected } = useRegistry();
+  const { isConnected } = useConnectedAccount();
 
   const { accountRead } = useTokenAccount();
   const { refetchChallenge, sendChallenge, challengeRead, isErrorSending, errorSending, isSuccess } =

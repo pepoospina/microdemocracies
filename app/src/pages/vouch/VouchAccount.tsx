@@ -26,7 +26,7 @@ export const VouchAccount = () => {
   const [sending, setSending] = useState<boolean>(false);
   const [error, setError] = useState<boolean>();
 
-  const { connect, isConnected } = useRegistry();
+  const { connect, isConnected } = useConnectedAccount();
 
   const { setVouchParams, sendVouch, isErrorSending, errorSending, isSuccess } = useVouch();
   const {

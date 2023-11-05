@@ -25,8 +25,7 @@ export const ChallengeVote = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [error, setError] = useState<boolean>();
 
-  const { tokenId } = useConnectedAccount();
-  const { isConnected } = useRegistry();
+  const { tokenId, isConnected } = useConnectedAccount();
   const alreadyVoted = myVote !== undefined;
 
   /** when success, reset errors and refetch */

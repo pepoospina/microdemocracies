@@ -1,10 +1,9 @@
 import { createContext, useContext, useEffect, useState } from 'react';
-import { InjectedConnector } from 'wagmi/connectors/injected';
 import { useAccount, useConnect, useContractRead, useDisconnect, usePublicClient, useQuery } from 'wagmi';
 
 import { RegistryAbi, VouchEventAbi, registryAddress } from '../utils/contracts.json';
 import { ConnectedAccountContext } from './ConnectedAccountContext';
-import { AppVouch, HexStr } from '../types';
+import { AppVouch } from '../types';
 
 export type RegistryContextType = {
   setProjectId: (projectId: string) => void;
@@ -13,10 +12,6 @@ export type RegistryContextType = {
   nMembers?: number;
   refetch: (options?: { throwOnError: boolean; cancelRefetch: boolean }) => Promise<any>;
   isLoading: boolean;
-  connect: ReturnType<typeof useConnect>['connect'];
-  disconnect: ReturnType<typeof useDisconnect>['disconnect'];
-  isConnected: boolean;
-  connectedAddress?: HexStr;
   allVouches?: AppVouch[];
 };
 
@@ -27,9 +22,7 @@ interface IRegistryContext {
 const RegistryContextValue = createContext<RegistryContextType | undefined>(undefined);
 
 export const RegistryContext = (props: IRegistryContext) => {
-  const { connect } = useConnect({
-    connector: new InjectedConnector(),
-  });
+  const { connect } = useConnect();
   const { disconnect } = useDisconnect();
   const { isConnected, address: connectedAddress } = useAccount();
 
@@ -90,10 +83,6 @@ export const RegistryContext = (props: IRegistryContext) => {
         nMembers: nMembers !== undefined ? Number(nMembers) : undefined,
         refetch,
         isLoading,
-        connect,
-        disconnect,
-        isConnected,
-        connectedAddress,
         allVouches,
       }}>
       <ConnectedAccountContext>{props.children}</ConnectedAccountContext>

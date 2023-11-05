@@ -2,19 +2,19 @@ import { Box, BoxExtendedProps, Text } from 'grommet';
 
 import { Address, AppButton, AppFormField, AppInput, FieldLabel } from '../../ui-components';
 import { useEffect, useState } from 'react';
-import { useRegistry } from '../../contexts/RegistryContext';
 import { AppConnect } from '../../components/app/AppConnect';
 import { isAddress } from 'viem';
 import { StatusGood } from 'grommet-icons';
 import { HexStr } from '../../types';
 import { CHAIN_ID } from '../../config/appConfig';
+import { useConnectedAccount } from '../../contexts/ConnectedAccountContext';
 
 export interface IAccountSelector extends BoxExtendedProps {
   onSelected: (account?: string) => any;
 }
 
 export const AppAccountSelector = (props: IAccountSelector) => {
-  const { connectedAddress } = useRegistry();
+  const { address: connectedAddress } = useConnectedAccount();
 
   const [cancelled, setCancelled] = useState<boolean>(true);
   const [inputAddress, setInputAddress] = useState<HexStr>();

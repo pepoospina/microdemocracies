@@ -4,7 +4,6 @@ import { useState } from 'react';
 import { AppButton, AppCard, AppTextArea } from '../../ui-components';
 import { AppScreen } from '../../ui-components/AppFormScreen';
 import { useVoiceSend } from '../../contexts/VoiceSendContext';
-import { useRegistry } from '../../contexts/RegistryContext';
 import { AppConnect } from '../../components/app/AppConnect';
 import { ProjectRouteNames } from '../MainProjectPage';
 import { useNavigate } from 'react-router-dom';
@@ -14,9 +13,8 @@ import { Statement } from './Statement';
 import { useConnectedAccount } from '../../contexts/ConnectedAccountContext';
 
 export const VoicePropose = (): JSX.Element => {
-  const { tokenId } = useConnectedAccount();
+  const { tokenId, isConnected } = useConnectedAccount();
   const { proposeStatement } = useVoiceSend();
-  const { isConnected } = useRegistry();
   const [done, setDone] = useState<boolean>(false);
   const navigate = useNavigate();
 

@@ -1,12 +1,15 @@
 import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
-import { useAccount, useContractRead, usePublicClient } from 'wagmi';
+import { useAccount, useConnect, useContractRead, useDisconnect, usePublicClient } from 'wagmi';
 
 import { registryAddress, RegistryAbi, VouchEventAbi } from '../utils/contracts.json';
-import { AppAccount, AppChallenge, AppVouch } from '../types';
+import { AppAccount, AppChallenge, AppVouch, HexStr } from '../types';
 
 export type ConnectedAccountContextType = {
+  connect: ReturnType<typeof useConnect>['connect'];
+  disconnect: ReturnType<typeof useDisconnect>['disconnect'];
   isConnected: boolean;
+  address?: HexStr;
   tokenId?: number;
   account?: AppAccount;
   myVouches?: AppVouch[];
@@ -22,7 +25,18 @@ export interface ConnectedAccountContextProps {
 export const ConnectedAccountContext = (props: ConnectedAccountContextProps) => {
   const publicClient = usePublicClient();
 
-  const { address, isConnected } = useAccount();
+  const { address, isConnected, connector } = useAccount();
+
+  const { connect: _connect, connectors, error, isLoading, pendingConnector } = useConnect();
+  const { disconnect } = useDisconnect();
+
+  console.log({ connector, connectors });
+
+  const connect = () => {
+    if (connectors) {
+      _connect({ connector: (connectors as any)[0] });
+    }
+  };
 
   const { data: tokenId } = useContractRead({
     address: registryAddress,
@@ -118,7 +132,10 @@ export const ConnectedAccountContext = (props: ConnectedAccountContextProps) => 
         account,
         myChallenge,
         myVouches,
+        connect,
+        disconnect,
         isConnected,
+        address,
       }}>
       {props.children}
     </ConnectedAccountContextValue.Provider>

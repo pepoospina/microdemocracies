@@ -1256,6 +1256,19 @@ const RegistryFactoryAbi = [
     stateMutability: 'nonpayable',
     type: 'function',
   },
+  {
+    inputs: [],
+    name: 'mrCounter',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
 ] as const;
 
 const refAbi = stringify(((contractsJson as any)[CHAIN_ID.toString()][CHAIN_NAME]['contracts']['Registry'] as any).abi);
