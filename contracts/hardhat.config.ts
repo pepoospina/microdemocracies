@@ -66,6 +66,12 @@ const config: HardhatUserConfig = {
         mnemonic: getMnemonic(),
       },
     },
+    basegoerli: {
+      url: `https://base-goerli.g.alchemy.com/v2/${process.env.BASE_GOERLY}`,
+      accounts: {
+        mnemonic: getMnemonic(),
+      },
+    },
     mumbai: {
       url: `https://polygon-mumbai.g.alchemy.com/v2/${process.env.ALCHEMY_MUMBAI_KEY}`,
       accounts: {
