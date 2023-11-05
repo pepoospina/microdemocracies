@@ -11,7 +11,6 @@ import { DetailsSelectedSummary } from './DetailsSelectedSummary';
 import { useCreateProject } from '../../contexts/CreateProjectContext';
 import { DetailsForm } from '../join/DetailsForm';
 import { AppAccountSelector } from '../join/AccountSelector';
-import { HexStr } from '../../types';
 
 const NPAGES = 5;
 

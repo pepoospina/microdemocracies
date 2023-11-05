@@ -1,11 +1,11 @@
 {
-  "1337": {
-    "localhost": {
-      "name": "localhost",
-      "chainId": "1337",
+  "5": {
+    "goerli": {
+      "name": "goerli",
+      "chainId": "5",
       "contracts": {
         "Registry": {
-          "address": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+          "address": "0xF9415f121F91aceA937Ffb566F3aAc02eb55b23B",
           "abi": [
             {
               "inputs": [],
@@ -1154,7 +1154,7 @@
           ]
         },
         "RegistryFactory": {
-          "address": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+          "address": "0xf9EB0D3F7E2C73aB6Cc87f5E485BBed0Bd356b11",
           "abi": [
             {
               "inputs": [
@@ -1248,6 +1248,19 @@
                 }
               ],
               "stateMutability": "nonpayable",
+              "type": "function"
+            },
+            {
+              "inputs": [],
+              "name": "mrCounter",
+              "outputs": [
+                {
+                  "internalType": "uint256",
+                  "name": "",
+                  "type": "uint256"
+                }
+              ],
+              "stateMutability": "view",
               "type": "function"
             }
           ]

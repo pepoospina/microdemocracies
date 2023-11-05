@@ -6,7 +6,7 @@ import { MainProjectPage } from './pages/MainProjectPage';
 import { ResponsiveApp, ThemedApp } from './components/app';
 import { RegistryContext } from './contexts/RegistryContext';
 
-import { config } from './wagmi/client';
+import { config } from './wallet/wagmi.client';
 import { MainLandingPage } from './pages/MainLandingPage';
 
 const queryClient = new QueryClient();

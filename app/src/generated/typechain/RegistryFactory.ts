@@ -21,6 +21,7 @@ export interface RegistryFactoryInterface extends utils.Interface {
   functions: {
     "contractAddress(bytes32)": FunctionFragment;
     "create(string,string,address[],string[],bytes32)": FunctionFragment;
+    "mrCounter()": FunctionFragment;
   };
 
   encodeFunctionData(
@@ -31,12 +32,14 @@ export interface RegistryFactoryInterface extends utils.Interface {
     functionFragment: "create",
     values: [string, string, string[], string[], BytesLike]
   ): string;
+  encodeFunctionData(functionFragment: "mrCounter", values?: undefined): string;
 
   decodeFunctionResult(
     functionFragment: "contractAddress",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "create", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "mrCounter", data: BytesLike): Result;
 
   events: {
     "RegistryCreated(address,address,bytes32)": EventFragment;
@@ -93,6 +96,8 @@ export interface RegistryFactory extends BaseContract {
       salt: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
+
+    mrCounter(overrides?: CallOverrides): Promise<[BigNumber]>;
   };
 
   contractAddress(salt: BytesLike, overrides?: CallOverrides): Promise<string>;
@@ -105,6 +110,8 @@ export interface RegistryFactory extends BaseContract {
     salt: BytesLike,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
+
+  mrCounter(overrides?: CallOverrides): Promise<BigNumber>;
 
   callStatic: {
     contractAddress(
@@ -120,6 +127,8 @@ export interface RegistryFactory extends BaseContract {
       salt: BytesLike,
       overrides?: CallOverrides
     ): Promise<string>;
+
+    mrCounter(overrides?: CallOverrides): Promise<BigNumber>;
   };
 
   filters: {
@@ -149,6 +158,8 @@ export interface RegistryFactory extends BaseContract {
       salt: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
+
+    mrCounter(overrides?: CallOverrides): Promise<BigNumber>;
   };
 
   populateTransaction: {
@@ -165,5 +176,7 @@ export interface RegistryFactory extends BaseContract {
       salt: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
+
+    mrCounter(overrides?: CallOverrides): Promise<PopulatedTransaction>;
   };
 }
