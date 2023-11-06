@@ -10,14 +10,19 @@ import { DetailsSelector, SelectedDetails } from './DetailsSelector';
 import { DetailsSelectedSummary } from './DetailsSelectedSummary';
 import { useCreateProject } from '../../contexts/CreateProjectContext';
 import { DetailsForm } from '../join/DetailsForm';
-import { AppAccountSelector } from '../join/AccountSelector';
+import { AppConnectButton } from '../../components/app/AppConnectButton';
+import { AppConnect } from '../../components/app/AppConnect';
+import { ProjectSummary } from './ProjectSummary';
+import { DetailsAndPlatforms, PAP, PersonDetails } from '../../types';
+import { useConnectedAccount } from '../../contexts/ConnectedAccountContext';
 
 const NPAGES = 5;
 
 export const CreateProject = () => {
   const [formIndex, setFormIndex] = useState(0);
 
-  const [account, setAccount] = useState<string>();
+  const { address } = useConnectedAccount();
+  const [founderDetails, setFounderDetails] = useState<DetailsAndPlatforms>();
   const [whoStatement, setWhoStatement] = useState<string>();
   const [whatStatement, setWhatStatement] = useState<string>();
   const [selectedDetails, setDetails] = useState<SelectedDetails>();
@@ -25,6 +30,14 @@ export const CreateProject = () => {
   const [sending, setSending] = useState<boolean>(false);
   const [error, setError] = useState<boolean>();
   const { setCreateParams, sendCreateProject, isErrorSending, errorSending, isSuccess } = useCreateProject();
+
+  const founderPap: PAP | undefined =
+    address && founderDetails
+      ? {
+          account: address,
+          person: founderDetails,
+        }
+      : undefined;
 
   const boxStyle: React.CSSProperties = { width: '100vw', height: 'calc(100vh - 60px - 50px)', overflowY: 'auto' };
 
@@ -84,6 +97,7 @@ export const CreateProject = () => {
       </Box>
 
       <ReactSimplyCarousel
+        disableSwipeByMouse
         infinite={false}
         activeSlideIndex={formIndex}
         onRequestChange={setFormIndex}
@@ -168,7 +182,7 @@ export const CreateProject = () => {
                 <Text>All members of the commuity are expected to provide their details. Including you :)</Text>
               </Box>
             </Box>
-            <DetailsForm selected={selectedDetails}></DetailsForm>
+            <DetailsForm selected={selectedDetails} onChange={(details) => setFounderDetails(details)}></DetailsForm>
           </Box>
         </Box>
 
@@ -176,41 +190,19 @@ export const CreateProject = () => {
           <Box style={{ width: '100%', flexShrink: 0 }} pad="large">
             <Box pad="large" style={{ flexShrink: 0 }}>
               <AppHeading level="2" style={{ marginBottom: '16px' }}>
-                Select the account
+                Your account
               </AppHeading>
-              <AppAccountSelector
-                onSelected={(account) => setAccount(account)}
-                style={{ marginBottom: '30px' }}></AppAccountSelector>
+              <AppConnect></AppConnect>
             </Box>
           </Box>
         </Box>
 
         <Box style={boxStyle}>
-          <Box style={{ width: '100%', flexShrink: 0 }} pad="large">
-            <Box style={{ marginBottom: '12px', fontSize: '10px', fontWeight: '300', flexShrink: 0 }}>
-              <Text>
-                <span style={{ fontWeight: '400' }}>What</span> we want to achieve:
-              </Text>
-            </Box>
-            <Box>
-              <StatementEditable value={whatStatement}></StatementEditable>
-            </Box>
-
-            <Box style={{ margin: '36px 0 12px 0', fontSize: '10px', fontWeight: '300', flexShrink: 0 }}>
-              <Text>
-                <span style={{ fontWeight: '400' }}>Who</span> can participate:
-              </Text>
-            </Box>
-            <Box>
-              <StatementEditable value={whoStatement}></StatementEditable>
-            </Box>
-          </Box>
-
-          <Box pad="large">
-            <Text>Particinats will be asked to provied:</Text>
-            <DetailsSelectedSummary selected={selectedDetails}></DetailsSelectedSummary>
-            {/* <AccountPerson pap={founderPap}></AccountPerson> */}
-          </Box>
+          <ProjectSummary
+            selectedDetails={selectedDetails}
+            whatStatement={whatStatement}
+            whoStatement={whoStatement}
+            founderPap={founderPap}></ProjectSummary>
         </Box>
       </ReactSimplyCarousel>
 

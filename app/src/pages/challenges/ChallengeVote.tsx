@@ -2,7 +2,7 @@ import { Box, Spinner, Text } from 'grommet';
 import { AppButton, AppHeading } from '../../ui-components';
 import { useCurrentChallenge } from '../../contexts/CurrentChallengeContext';
 import { useRegistry } from '../../contexts/RegistryContext';
-import { AppConnect } from '../../components/app/AppConnect';
+import { AppConnectButton } from '../../components/app/AppConnectButton';
 import { useConnectedAccount } from '../../contexts/ConnectedAccountContext';
 import { useEffect, useState } from 'react';
 import { WaitingTransaction } from '../common/WaitingTransaction';
@@ -47,7 +47,7 @@ export const ChallengeVote = () => {
   }, [isErrorSendingVote, errorSendingVote]);
 
   if (!isConnected) {
-    return <AppConnect label="Connect and vote" style={{ margin: '16px 0 8px 0' }}></AppConnect>;
+    return <AppConnectButton label="Connect and vote" style={{ margin: '16px 0 8px 0' }}></AppConnectButton>;
   }
 
   /** loading canVote information */

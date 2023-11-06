@@ -21,8 +21,8 @@ export interface SelectedDetails {
 
 const detailsInit: SelectedDetails = {
   personal: {
-    firstName: false,
-    lastName: false,
+    firstName: true,
+    lastName: true,
     placeOfBirth: false,
     dateOfBirth: false,
     nationality: false,
@@ -100,6 +100,7 @@ export const DetailsSelector = (props: { onChanged: (seleted: SelectedDetails) =
   const togglePlatform = (platformId: PlatformId) => {
     details.platform[platformId] = !details.platform[platformId];
     setDetails({ ...details });
+    setShowSelectPlatform(false);
   };
 
   return (

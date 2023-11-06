@@ -8,7 +8,7 @@ import { useCallback } from 'react';
 import { useSignMessage } from 'wagmi';
 import { getStatementBackers, isStatementBacker } from '../../firestore/getters';
 import { useThemeContext } from '../../components/app';
-import { AppConnect } from '../../components/app/AppConnect';
+import { AppConnectButton } from '../../components/app/AppConnectButton';
 import { COMMUNITY_MEMBER } from '../../config/community';
 
 interface IStatement extends AppCardProps {
@@ -139,12 +139,7 @@ export const Statement = (props: IStatement) => {
         <Box direction="row" justify="end">
           {isConnected ? (
             !isBacker ? (
-              <AppButton
-                label="back"
-                disabled={!canBack}
-                style={{ padding: '6px 32px' }}
-                primary
-                onClick={() => back()}></AppButton>
+              <AppButton label="back" disabled={!canBack} style={{ padding: '6px 32px' }} primary onClick={() => back()}></AppButton>
             ) : (
               <Box
                 style={{
@@ -158,7 +153,7 @@ export const Statement = (props: IStatement) => {
               </Box>
             )
           ) : (
-            <AppConnect label="connect to back" style={{ padding: '6px 32px' }}></AppConnect>
+            <AppConnectButton label="connect to back" style={{ padding: '6px 32px' }}></AppConnectButton>
           )}
         </Box>
       ) : (

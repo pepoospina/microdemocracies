@@ -5,7 +5,7 @@ import { ProjectRouteNames } from '../MainProjectPage';
 import { useRegistry } from '../../contexts/RegistryContext';
 import { MyNetworkWidget } from '../mynetwork/MyNetworkWidget';
 import { useConnectedAccount } from '../../contexts/ConnectedAccountContext';
-import { AppConnect } from '../../components/app/AppConnect';
+import { AppConnectButton } from '../../components/app/AppConnectButton';
 import { COMMUNITY_MEMBER, COMMUNITY_NAME } from '../../config/community';
 
 export interface IProjectHome {
@@ -59,22 +59,13 @@ export const ProjectHome = (props: IProjectHome) => {
       </Box>
 
       <Box style={{ flexGrow: '2', width: '200px', flexShrink: '0' }} justify="center">
-        {!tokenId ? (
-          <AppButton
-            onClick={() => navigate(ProjectRouteNames.Join)}
-            label="JOIN"
-            primary
-            style={{ marginBottom: '15px' }}
-          />
-        ) : (
-          <></>
-        )}
+        {!tokenId ? <AppButton onClick={() => navigate(ProjectRouteNames.Join)} label="JOIN" primary style={{ marginBottom: '15px' }} /> : <></>}
         <AppButton onClick={() => navigate(ProjectRouteNames.Vouch)} label="VOUCH" style={{ marginBottom: '15px' }} />
         <AppButton onClick={() => navigate(ProjectRouteNames.Voice)} label="VOICE" style={{ marginBottom: '15px' }} />
       </Box>
 
       <Box style={{ width: '100%', flexShrink: '0' }} pad="large" justify="center" align="center">
-        {isConnected ? <MyNetworkWidget></MyNetworkWidget> : <AppConnect primary style={{ width: '200px' }} />}
+        {isConnected ? <MyNetworkWidget></MyNetworkWidget> : <AppConnectButton primary style={{ width: '200px' }} />}
       </Box>
     </Box>
   );

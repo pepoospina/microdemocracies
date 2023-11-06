@@ -26,11 +26,13 @@ export interface PlatformAccount {
   proofUrl?: string;
 }
 
+export interface DetailsAndPlatforms {
+  personal?: PersonDetails;
+  platforms?: PlatformAccount[];
+}
+
 export interface PAP {
-  person: {
-    personal?: PersonDetails;
-    platforms?: PlatformAccount[];
-  };
+  person: DetailsAndPlatforms;
   account: string;
 }
 

@@ -6,7 +6,7 @@ import { FormPrevious } from 'grommet-icons';
 import { AppScreen } from '../../ui-components/AppFormScreen';
 import { useConnectedAccount } from '../../contexts/ConnectedAccountContext';
 import { VoucheCard } from './VouchCard';
-import { AppConnect } from '../../components/app/AppConnect';
+import { AppConnectButton } from '../../components/app/AppConnectButton';
 import { BottomButton } from '../common/BottomButton';
 
 export const Vouches = (): JSX.Element => {
@@ -27,7 +27,7 @@ export const Vouches = (): JSX.Element => {
             })}
           </Box>
         ) : (
-          <AppConnect />
+          <AppConnectButton />
         )}
       </Box>
       <BottomButton

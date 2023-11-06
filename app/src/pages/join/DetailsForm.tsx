@@ -1,16 +1,39 @@
-import { Box } from 'grommet';
-import { AppFormField, AppInput, FieldLabel } from '../../ui-components';
+import { AppForm, AppFormField, AppInput, FieldLabel } from '../../ui-components';
 import { SelectedDetails } from '../create/DetailsSelector';
 import { PlatformDetails, platforms } from '../../utils/platforms';
-import { PlatformId } from '../../types';
+import { DetailsAndPlatforms, PersonDetails, PlatformAccount, PlatformId } from '../../types';
+import { useState, useEffect } from 'react';
 
-export const DetailsForm = (props: { selected?: SelectedDetails }) => {
+export const DetailsForm = (props: { selected?: SelectedDetails; onChange: (values: DetailsAndPlatforms) => void }) => {
+  const [formValues, setFormValuesState] = useState<any>({});
+
+  useEffect(() => {
+    const personDetails: PersonDetails = {
+      firstName: formValues.firstName,
+      lastName: formValues.lastName,
+      nationalID: formValues.nationalID,
+    };
+
+    const userPlatforms: PlatformAccount[] = Object.keys(platforms)
+      .map((platformId): PlatformAccount => {
+        return { platform: platformId as PlatformId, username: formValues[platformId] };
+      })
+      .filter((e) => !!e);
+
+    const details: DetailsAndPlatforms = {
+      personal: personDetails,
+      platforms: userPlatforms,
+    };
+
+    props.onChange(details);
+  }, [formValues]);
+
   const localConstants = {
     marginBottom: '16px',
   };
 
   return (
-    <Box>
+    <AppForm value={formValues} onChange={setFormValuesState} style={{ height: '100%', width: '100%' }}>
       {props.selected?.personal.firstName ? (
         <AppFormField
           name="firstName"
@@ -58,6 +81,6 @@ export const DetailsForm = (props: { selected?: SelectedDetails }) => {
           );
         }
       })}
-    </Box>
+    </AppForm>
   );
 };

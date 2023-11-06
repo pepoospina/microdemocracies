@@ -7,7 +7,6 @@ import React from 'react';
 
 import { AppHeading, AppCard } from '../../ui-components';
 import { AppPlatformsSelector } from './PlatformsSelector';
-import { AppAccountSelector } from './AccountSelector';
 import { PAPShare } from './PAPShare';
 import { PAP, PersonDetails, PlatformAccount } from '../../types';
 import { PAPEntry } from './PAPEntry';
@@ -15,6 +14,8 @@ import { ProjectRouteNames } from '../MainProjectPage';
 import { AppScreen, BottomButtons } from '../../ui-components/AppFormScreen';
 import { Intro } from './Intro';
 import { AppPersonalDetails } from './PersonalDetails';
+import { AppConnect } from '../../components/app/AppConnect';
+import { useConnectedAccount } from '../../contexts/ConnectedAccountContext';
 
 export interface IJoinProps {
   dum?: any;
@@ -25,7 +26,7 @@ export const Join = () => {
 
   const [pageIx, setPageIx] = useState<number>(0);
 
-  const [account, setAccount] = useState<string>();
+  const { address: account } = useConnectedAccount();
   const [platforms, setPlatforms] = useState<PlatformAccount[]>([]);
   const [personal, setPersonal] = useState<PersonDetails>({});
 
@@ -67,9 +68,7 @@ export const Join = () => {
           <AppHeading level="2" style={{ marginBottom: '16px' }}>
             Select the account
           </AppHeading>
-          <AppAccountSelector
-            onSelected={(account) => setAccount(account)}
-            style={{ marginBottom: '30px' }}></AppAccountSelector>
+          <AppConnect></AppConnect>
         </Box>
       </Box>
       <BottomButtons

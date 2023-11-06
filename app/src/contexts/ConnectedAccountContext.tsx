@@ -1,10 +1,11 @@
 import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
 import { useAccount, useConnect, useContractRead, useDisconnect, usePublicClient } from 'wagmi';
+import { DedicatedWalletConnector } from '@magiclabs/wagmi-connector';
 
 import { registryAddress, RegistryAbi, VouchEventAbi } from '../utils/contracts.json';
 import { AppAccount, AppChallenge, AppVouch, HexStr } from '../types';
-import { DedicatedWalletConnector } from '@magiclabs/wagmi-connector';
+import { InjectedConnector } from '@wagmi/core';
 
 export type ConnectedAccountContextType = {
   connect: ReturnType<typeof useConnect>['connect'];
@@ -28,18 +29,8 @@ export const ConnectedAccountContext = (props: ConnectedAccountContextProps) => 
 
   const { address, isConnected, connector } = useAccount();
 
-  const { connect: _connect, connectors, error, isLoading, pendingConnector } = useConnect();
+  const { connect, connectors, error, isLoading, pendingConnector } = useConnect();
   const { disconnect } = useDisconnect();
-
-  const magic = connectors.find((c) => c instanceof DedicatedWalletConnector);
-
-  console.log({ magic });
-
-  const connect = () => {
-    if (magic) {
-      _connect({ connector: magic });
-    }
-  };
 
   const { data: tokenId } = useContractRead({
     address: registryAddress,

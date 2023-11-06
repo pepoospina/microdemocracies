@@ -3,7 +3,7 @@ import { appName } from '../../config/community';
 import { AppButton } from '../../ui-components';
 import { useNavigate } from 'react-router-dom';
 import { LandingRouteNames } from '../MainLandingPage';
-import { AppConnect } from '../../components/app/AppConnect';
+import { AppConnectButton } from '../../components/app/AppConnectButton';
 
 export const LandingPage = () => {
   const navigate = useNavigate();
@@ -38,7 +38,7 @@ export const LandingPage = () => {
 
       <Box justify="center" align="center" style={{ flexShrink: '0', marginBottom: '6vh' }}>
         <AppButton onClick={() => navigate(LandingRouteNames.More)} label="Learn more" style={{ width: '200px' }} />
-        <AppConnect style={{ width: '200px' }} />
+        <AppConnectButton style={{ width: '200px' }} />
       </Box>
     </Box>
   );

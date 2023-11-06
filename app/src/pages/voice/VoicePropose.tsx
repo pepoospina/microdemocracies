@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { AppButton, AppCard, AppTextArea } from '../../ui-components';
 import { AppScreen } from '../../ui-components/AppFormScreen';
 import { useVoiceSend } from '../../contexts/VoiceSendContext';
-import { AppConnect } from '../../components/app/AppConnect';
+import { AppConnectButton } from '../../components/app/AppConnectButton';
 import { ProjectRouteNames } from '../MainProjectPage';
 import { useNavigate } from 'react-router-dom';
 import { BottomButton } from '../common/BottomButton';
@@ -53,11 +53,7 @@ export const VoicePropose = (): JSX.Element => {
                 }}></Statement>
             </Box>
 
-            <AppTextArea
-              autoResize
-              onChange={(event) => handleInput(event.target.value)}
-              placeholder="new statement..."
-              name="statement"></AppTextArea>
+            <AppTextArea autoResize onChange={(event) => handleInput(event.target.value)} placeholder="new statement..." name="statement"></AppTextArea>
 
             <Box direction="row" justify="center" style={{ margin: '36px 0', width: '100%' }}>
               {isConnected ? (
@@ -72,7 +68,7 @@ export const VoicePropose = (): JSX.Element => {
                   <></>
                 )
               ) : (
-                <AppConnect label="Connect to propose"></AppConnect>
+                <AppConnectButton label="Connect to propose"></AppConnectButton>
               )}
             </Box>
           </>
@@ -80,10 +76,7 @@ export const VoicePropose = (): JSX.Element => {
           <AppCard>Statement Proposed!</AppCard>
         )}
       </Box>
-      <BottomButton
-        label="Back"
-        icon={<FormPrevious />}
-        onClick={() => navigate(ProjectRouteNames.Voice)}></BottomButton>
+      <BottomButton label="Back" icon={<FormPrevious />} onClick={() => navigate(ProjectRouteNames.Voice)}></BottomButton>
     </AppScreen>
   );
 };

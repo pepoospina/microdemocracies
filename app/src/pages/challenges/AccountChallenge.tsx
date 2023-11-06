@@ -1,7 +1,7 @@
 import { Box, BoxExtendedProps, Spinner, Text } from 'grommet';
 
 import { useCurrentChallenge } from '../../contexts/CurrentChallengeContext';
-import { AppConnect } from '../../components/app/AppConnect';
+import { AppConnectButton } from '../../components/app/AppConnectButton';
 import { AppButton, AppCard } from '../../ui-components';
 
 import { ChallengeStatus } from '../challenges/ChallengeStatus';
@@ -88,7 +88,7 @@ export const AccountChallenge = (props: IAccountChallenge) => {
           )}
           <Box style={{ marginTop: '16px' }}>
             {!isConnected ? (
-              <AppConnect label="Connect to Challenge" />
+              <AppConnectButton label="Connect to Challenge" />
             ) : canChallenge ? (
               sending ? (
                 <WaitingTransaction></WaitingTransaction>

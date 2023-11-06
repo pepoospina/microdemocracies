@@ -51,6 +51,7 @@ export const AccountPerson = (props: IAccountPerson) => {
       </Box>
       <Box align="center">
         {props.pap.person?.platforms?.map((user) => {
+          if (!user.platform || !user.username) return <></>;
           const platform = platforms[user.platform];
           const platformName = platform ? platform.name : 'custom';
           const field = { label: platformName, value: <PlatformUrl user={user} /> };

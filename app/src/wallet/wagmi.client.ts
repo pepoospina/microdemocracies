@@ -1,8 +1,10 @@
 import { goerli } from 'wagmi/chains';
 import { configureChains, createConfig } from 'wagmi';
 import { alchemyProvider } from 'wagmi/providers/alchemy';
-import { ALCHEMY_KEY, MAGIC_API_KEY } from '../config/appConfig';
+import { InjectedConnector } from 'wagmi/connectors/injected';
 import { DedicatedWalletConnector } from '@magiclabs/wagmi-connector';
+
+import { ALCHEMY_KEY, MAGIC_API_KEY } from '../config/appConfig';
 
 // const { publicClient, webSocketPublicClient } = configureChains([CHAIN], [alchemyProvider({ apiKey: ALCHEMY_KEY })]);
 const { publicClient, webSocketPublicClient, chains } = configureChains(
@@ -14,6 +16,13 @@ export const config = createConfig({
   publicClient,
   webSocketPublicClient,
   connectors: [
+    new InjectedConnector({
+      chains,
+      options: {
+        name: 'Injected',
+        shimDisconnect: true,
+      },
+    }),
     new DedicatedWalletConnector({
       chains,
       options: {
