@@ -1,4 +1,3 @@
-import { WagmiConfig } from 'wagmi';
 import { QueryClient, QueryClientProvider } from 'react-query';
 
 import { GlobalStyles } from './components/styles/GlobalStyles';
@@ -6,8 +5,8 @@ import { MainProjectPage } from './pages/MainProjectPage';
 import { ResponsiveApp, ThemedApp } from './components/app';
 import { RegistryContext } from './contexts/RegistryContext';
 
-import { config } from './wallet/wagmi.client';
 import { MainLandingPage } from './pages/MainLandingPage';
+import { ProviderContext } from './wallet/ProviderContext';
 
 const queryClient = new QueryClient();
 
@@ -19,7 +18,7 @@ function App() {
 
   return (
     <div className="App">
-      <WagmiConfig config={config}>
+      <ProviderContext>
         <GlobalStyles />
         <ThemedApp>
           <ResponsiveApp>
@@ -34,7 +33,7 @@ function App() {
             </QueryClientProvider>
           </ResponsiveApp>
         </ThemedApp>
-      </WagmiConfig>
+      </ProviderContext>
     </div>
   );
 }

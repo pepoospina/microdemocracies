@@ -1,11 +1,9 @@
 import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
 import { useAccount, useConnect, useContractRead, useDisconnect, usePublicClient } from 'wagmi';
-import { DedicatedWalletConnector } from '@magiclabs/wagmi-connector';
 
 import { registryAddress, RegistryAbi, VouchEventAbi } from '../utils/contracts.json';
 import { AppAccount, AppChallenge, AppVouch, HexStr } from '../types';
-import { InjectedConnector } from '@wagmi/core';
 
 export type ConnectedAccountContextType = {
   connect: ReturnType<typeof useConnect>['connect'];

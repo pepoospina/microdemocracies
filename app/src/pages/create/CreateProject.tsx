@@ -7,21 +7,19 @@ import { appName } from '../../config/community';
 import { StatementEditable } from '../voice/StatementEditable';
 import { AppButton, AppHeading } from '../../ui-components';
 import { DetailsSelector, SelectedDetails } from './DetailsSelector';
-import { DetailsSelectedSummary } from './DetailsSelectedSummary';
 import { useCreateProject } from '../../contexts/CreateProjectContext';
 import { DetailsForm } from '../join/DetailsForm';
-import { AppConnectButton } from '../../components/app/AppConnectButton';
 import { AppConnect } from '../../components/app/AppConnect';
 import { ProjectSummary } from './ProjectSummary';
-import { DetailsAndPlatforms, PAP, PersonDetails } from '../../types';
-import { useConnectedAccount } from '../../contexts/ConnectedAccountContext';
+import { DetailsAndPlatforms, PAP } from '../../types';
+import { useProviderContext } from '../../wallet/ProviderContext';
 
 const NPAGES = 5;
 
 export const CreateProject = () => {
   const [formIndex, setFormIndex] = useState(0);
 
-  const { address } = useConnectedAccount();
+  const { aaProvider, aaAddress } = useProviderContext();
   const [founderDetails, setFounderDetails] = useState<DetailsAndPlatforms>();
   const [whoStatement, setWhoStatement] = useState<string>();
   const [whatStatement, setWhatStatement] = useState<string>();
@@ -32,9 +30,9 @@ export const CreateProject = () => {
   const { setCreateParams, sendCreateProject, isErrorSending, errorSending, isSuccess } = useCreateProject();
 
   const founderPap: PAP | undefined =
-    address && founderDetails
+    aaAddress && founderDetails
       ? {
-          account: address,
+          account: aaAddress,
           person: founderDetails,
         }
       : undefined;
