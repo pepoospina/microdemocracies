@@ -2,8 +2,9 @@ import { createContext, ReactNode, useCallback, useContext, useState } from 'rea
 import { useContractWrite, usePrepareContractWrite, useWaitForTransaction } from 'wagmi';
 import { WriteContractResult } from '@wagmi/core';
 
-import { registryAddress, RegistryAbi } from '../utils/contracts.json';
+import { RegistryAbi } from '../utils/contracts.json';
 import { HexStr } from '../types';
+import { useRegistry } from './RegistryContext';
 
 export type VouchContextType = {
   setVouchParams: (account: HexStr, personCid: string) => void;
@@ -22,6 +23,7 @@ export interface VouchContextProps {
 
 export const VouchContext = (props: VouchContextProps) => {
   /** Vouch */
+  const { registryAddress } = useRegistry();
   const [vouchParamsInternal, setVouchParamsInternal] = useState<[HexStr, string]>();
 
   const setVouchParams = useCallback((account: HexStr, personCid: string) => {

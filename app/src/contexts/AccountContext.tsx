@@ -1,10 +1,11 @@
 import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
 import { useContractRead } from 'wagmi';
 
-import { registryAddress, RegistryAbi } from '../utils/contracts.json';
+import { RegistryAbi } from '../utils/contracts.json';
 import { AppAccount, AppVouch, Entity, HexStr, PAP } from '../types';
 import { useQuery } from 'react-query';
 import { getEntity } from '../utils/store';
+import { useRegistry } from './RegistryContext';
 
 export type AccountContextType = {
   refetch: (options?: { throwOnError: boolean; cancelRefetch: boolean }) => Promise<any>;
@@ -33,6 +34,8 @@ export interface AccountContextProps {
  * registry and IPFS. TokenId can be a property or set with setTokenId
  */
 export const AccountContext = (props: AccountContextProps) => {
+  const { registryAddress } = useRegistry();
+
   /** Read Account */
   const _tokenIdProp = props.tokenId !== undefined ? BigInt(props.tokenId) : undefined;
   const _addressProp = props.address;

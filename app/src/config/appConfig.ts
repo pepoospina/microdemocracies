@@ -4,7 +4,8 @@ export const DEBUG = true;
 // export const ACTIVE_DURATION = 60;
 // export const ACTIVATION_PERIOD = 60 * 3;
 
-export const ALCHEMY_KEY = 'Eyet5sov46M7EA1DcnHEQMqKQ3zSnlG-';
+export const ALCHEMY_KEY = 'PqJFwspFfccXZHYcXSm5t8QQ1V-z86P0';
+// base goerli 'Eyet5sov46M7EA1DcnHEQMqKQ3zSnlG-';
 // polygon '9_KaUJ0DnMqDMpe9Jt1d_eXx554ooAtG';
 export const MAGIC_API_KEY = 'pk_live_5BF359361B5DB7B0';
 

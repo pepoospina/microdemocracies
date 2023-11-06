@@ -1,9 +1,10 @@
 import { createContext, ReactNode, useCallback, useContext, useState } from 'react';
 import { useContractWrite, usePrepareContractWrite, useWaitForTransaction } from 'wagmi';
 
-import { registryAddress, RegistryFactoryAbi } from '../utils/contracts.json';
+import { RegistryFactoryAbi } from '../utils/contracts.json';
 import { HexStr } from '../types';
 import { utils } from 'ethers';
+import { useRegistry } from './RegistryContext';
 
 interface Founder {
   address: HexStr;
@@ -26,6 +27,8 @@ export interface CreateProjectContextProps {
 }
 
 export const CreateProjectContext = (props: CreateProjectContextProps) => {
+  const { registryAddress } = useRegistry();
+
   /** Vouch */
   const [createParamsInternal, setCreateParamsInternal] =
     useState<[string, string, readonly `0x${string}`[], readonly string[], `0x${string}`]>();

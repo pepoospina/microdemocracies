@@ -3,15 +3,16 @@
 import stringify from 'canonical-json';
 import contractsJson from '../generated/contracts.json';
 import { CHAIN_NAME, CHAIN_ID } from '../config/appConfig';
+import { getContract } from 'viem';
 
-function addressOnChain(chainId: number): `0x{string}` {
+function addressOnChain(chainId: number, contractName: string): `0x{string}` {
   const json = (contractsJson as any)[chainId.toString()];
   if (json === undefined) throw new Error(`JSON of chain ${chainId} not found`);
 
   const chainName = Object.getOwnPropertyNames(json);
   if (chainName.length === 0) throw new Error(`JSON of chain ${chainId} not found`);
 
-  return json[chainName[0]]['contracts']['Registry'].address;
+  return json[chainName[0]]['contracts'][contractName].address;
 }
 
 const RegistryAbi = [
@@ -1323,6 +1324,6 @@ const ChallengeEventAbi = {
   type: 'event',
 } as const;
 
-const registryAddress = addressOnChain(CHAIN_ID);
+const registryFactoryAddress = addressOnChain(CHAIN_ID, 'RegistryFactory');
 
-export { RegistryAbi, RegistryFactoryAbi, VouchEventAbi, ChallengeEventAbi, registryAddress };
+export { RegistryAbi, RegistryFactoryAbi, VouchEventAbi, ChallengeEventAbi, registryFactoryAddress };

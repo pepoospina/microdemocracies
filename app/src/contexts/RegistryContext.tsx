@@ -1,11 +1,13 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { useAccount, useConnect, useContractRead, useDisconnect, usePublicClient, useQuery } from 'wagmi';
+import { constants } from 'ethers';
 
-import { RegistryAbi, VouchEventAbi, registryAddress } from '../utils/contracts.json';
+import { RegistryAbi, VouchEventAbi } from '../utils/contracts.json';
 import { ConnectedAccountContext } from './ConnectedAccountContext';
-import { AppVouch } from '../types';
+import { AppVouch, HexStr } from '../types';
 
 export type RegistryContextType = {
+  registryAddress?: HexStr;
   setProjectId: (projectId: string) => void;
   projectId?: string;
   projectName?: string;
@@ -22,6 +24,8 @@ interface IRegistryContext {
 const RegistryContextValue = createContext<RegistryContextType | undefined>(undefined);
 
 export const RegistryContext = (props: IRegistryContext) => {
+  const registryAddress = constants.AddressZero;
+
   const { connect } = useConnect();
   const { disconnect } = useDisconnect();
   const { isConnected, address: connectedAddress } = useAccount();
@@ -77,6 +81,7 @@ export const RegistryContext = (props: IRegistryContext) => {
   return (
     <RegistryContextValue.Provider
       value={{
+        registryAddress,
         setProjectId,
         projectId,
         projectName: 'Test',

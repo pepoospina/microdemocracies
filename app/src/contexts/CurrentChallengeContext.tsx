@@ -2,7 +2,7 @@ import { createContext, ReactNode, useContext } from 'react';
 import { useContractRead, useContractWrite, usePrepareContractWrite, useWaitForTransaction } from 'wagmi';
 import { WriteContractResult } from '@wagmi/core';
 
-import { registryAddress, RegistryAbi } from '../utils/contracts.json';
+import { RegistryAbi } from '../utils/contracts.json';
 import { AppChallenge, VoteOption } from '../types';
 import { useRegistry } from './RegistryContext';
 import { useConnectedAccount } from './ConnectedAccountContext';
@@ -34,6 +34,8 @@ export interface ChallengeContextProps {
 }
 
 export const ChallengeContext = (props: ChallengeContextProps) => {
+  const { registryAddress } = useRegistry();
+
   /** Vouch */
   const tokenIdInternal = props.tokenId !== undefined ? BigInt(props.tokenId) : undefined;
 

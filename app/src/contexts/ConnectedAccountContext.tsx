@@ -2,8 +2,9 @@ import { createContext, ReactNode, useContext, useEffect, useState } from 'react
 import { useQuery } from 'react-query';
 import { useAccount, useConnect, useContractRead, useDisconnect, usePublicClient } from 'wagmi';
 
-import { registryAddress, RegistryAbi, VouchEventAbi } from '../utils/contracts.json';
+import { RegistryAbi, VouchEventAbi } from '../utils/contracts.json';
 import { AppAccount, AppChallenge, AppVouch, HexStr } from '../types';
+import { useRegistry } from './RegistryContext';
 
 export type ConnectedAccountContextType = {
   connect: ReturnType<typeof useConnect>['connect'];
@@ -23,6 +24,7 @@ export interface ConnectedAccountContextProps {
 }
 
 export const ConnectedAccountContext = (props: ConnectedAccountContextProps) => {
+  const { registryAddress } = useRegistry();
   const publicClient = usePublicClient();
 
   const { address, isConnected, connector } = useAccount();

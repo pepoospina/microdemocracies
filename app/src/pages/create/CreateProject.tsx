@@ -11,8 +11,12 @@ import { useCreateProject } from '../../contexts/CreateProjectContext';
 import { DetailsForm } from '../join/DetailsForm';
 import { AppConnect } from '../../components/app/AppConnect';
 import { ProjectSummary } from './ProjectSummary';
-import { DetailsAndPlatforms, PAP } from '../../types';
+import { DetailsAndPlatforms, HexStr, PAP } from '../../types';
 import { useProviderContext } from '../../wallet/ProviderContext';
+import { RegistryFactoryAbi, registryFactoryAddress } from '../../utils/contracts.json';
+import { encodeFunctionData } from 'viem';
+import { deriveEntity } from '../../utils/cid-hash';
+import { utils } from 'ethers';
 
 const NPAGES = 5;
 
@@ -21,8 +25,8 @@ export const CreateProject = () => {
 
   const { aaProvider, aaAddress } = useProviderContext();
   const [founderDetails, setFounderDetails] = useState<DetailsAndPlatforms>();
-  const [whoStatement, setWhoStatement] = useState<string>();
-  const [whatStatement, setWhatStatement] = useState<string>();
+  const [whoStatement, setWhoStatement] = useState<string>('Only people I like');
+  const [whatStatement, setWhatStatement] = useState<string>('Change the world');
   const [selectedDetails, setDetails] = useState<SelectedDetails>();
 
   const [sending, setSending] = useState<boolean>(false);
@@ -44,7 +48,24 @@ export const CreateProject = () => {
     display: 'none',
   };
 
-  const createProject = () => {};
+  const createProject = async () => {
+    if (!aaAddress || !aaProvider || !founderPap) return;
+
+    const entity = await deriveEntity(founderPap);
+    const salt = utils.keccak256(utils.toUtf8Bytes(Date.now().toString())) as HexStr;
+
+    const callData = encodeFunctionData({
+      abi: RegistryFactoryAbi,
+      functionName: 'create',
+      args: ['MRS', 'Micro(r)evolutions ', [founderPap.account as HexStr], [entity.cid], salt],
+    });
+
+    const res = await aaProvider.sendUserOperation({
+      target: registryFactoryAddress,
+      data: callData,
+      value: BigInt(0),
+    });
+  };
 
   useEffect(() => {
     // console.log('useEffect isSuccess', { isSuccess });
@@ -133,9 +154,12 @@ export const CreateProject = () => {
             </Box>
             <Box>
               <StatementEditable
+                value={whatStatement}
                 placeholder="What..."
                 editable
-                onChanged={(value) => setWhatStatement(value)}></StatementEditable>
+                onChanged={(value) => {
+                  if (value) setWhatStatement(value);
+                }}></StatementEditable>
             </Box>
           </Box>
 
@@ -161,7 +185,10 @@ export const CreateProject = () => {
             </Box>
             <Box>
               <StatementEditable
-                onChanged={(value) => setWhoStatement(value)}
+                value={whoStatement}
+                onChanged={(value) => {
+                  if (value) setWhoStatement(value);
+                }}
                 editable
                 placeholder="Who..."></StatementEditable>
             </Box>
