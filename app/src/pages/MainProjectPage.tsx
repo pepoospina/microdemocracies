@@ -21,7 +21,7 @@ import { useEffect } from 'react';
 import { useRegistry } from '../contexts/RegistryContext';
 
 export const ProjectRouteNames = {
-  Base: `/`,
+  Base: `/home`,
   Join: `/join`,
   Vouch: `/invite`,
   VouchAccount: (hash: string) => `/invite/${hash}`,

@@ -2,6 +2,7 @@ import { Box, BoxExtendedProps } from 'grommet';
 import { CSSProperties } from 'react';
 import { getAddress } from '../utils/addresses';
 import { useThemeContext } from '../components/app';
+import { CHAIN_EXPLORER_BASE } from '../config/appConfig';
 
 interface IAddress extends BoxExtendedProps {
   address: `0x${string}` | undefined;
@@ -21,7 +22,7 @@ export const Address = (props: IAddress): JSX.Element => {
 
   const disableClick = props.disableClick !== undefined ? props.disableClick : false;
 
-  const exploreAddress = (address: `0x${string}` | undefined) => 'EXPLORER ADDRESS';
+  const exploreAddress = (address: `0x${string}` | undefined) => `${CHAIN_EXPLORER_BASE}/address/${address}`;
 
   const address = getAddress(props.address);
   const text = address ? `${address.slice(0, digits)}...${address.slice(address.length - digits, address.length)}` : '';

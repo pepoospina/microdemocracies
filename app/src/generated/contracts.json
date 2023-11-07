@@ -1,11 +1,11 @@
 {
-  "5": {
-    "goerli": {
-      "name": "goerli",
-      "chainId": "5",
+  "84531": {
+    "basegoerli": {
+      "name": "basegoerli",
+      "chainId": "84531",
       "contracts": {
         "Registry": {
-          "address": "0xF9415f121F91aceA937Ffb566F3aAc02eb55b23B",
+          "address": "0x53D9B16816b4327972179CFa29d9F8e15b1408fd",
           "abi": [
             {
               "inputs": [],
@@ -1154,7 +1154,7 @@
           ]
         },
         "RegistryFactory": {
-          "address": "0xf9EB0D3F7E2C73aB6Cc87f5E485BBed0Bd356b11",
+          "address": "0xDdd9b62b6d0d508139FB381566A80748FEF55145",
           "abi": [
             {
               "inputs": [
@@ -1183,10 +1183,10 @@
                   "type": "address"
                 },
                 {
-                  "indexed": false,
-                  "internalType": "bytes32",
-                  "name": "salt",
-                  "type": "bytes32"
+                  "indexed": true,
+                  "internalType": "uint256",
+                  "name": "number",
+                  "type": "uint256"
                 }
               ],
               "name": "RegistryCreated",

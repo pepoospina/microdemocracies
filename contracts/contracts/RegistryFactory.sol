@@ -13,7 +13,7 @@ contract RegistryFactory {
     Registry private master;
     uint256 public mrCounter;
 
-    event RegistryCreated(address creator, address newRegistry, bytes32 salt);
+    event RegistryCreated(address creator, address newRegistry, uint256 indexed number);
 
     constructor(address payable _master) {
         master = Registry(_master);
@@ -38,7 +38,7 @@ contract RegistryFactory {
 
         Registry(proxy).initRegistry(__symbol, name, addresses, foundersCids);
 
-        emit RegistryCreated(msg.sender, proxy, salt);
+        emit RegistryCreated(msg.sender, proxy, mrCounter);
 
         return proxy;
     }

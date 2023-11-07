@@ -1,3 +1,3 @@
-import { goerli } from 'wagmi/chains';
+import { baseGoerli } from 'wagmi/chains';
 
-export const chain = goerli;
+export const chain = baseGoerli;

@@ -4,6 +4,7 @@
 import {
   BaseContract,
   BigNumber,
+  BigNumberish,
   BytesLike,
   CallOverrides,
   ContractTransaction,
@@ -42,15 +43,15 @@ export interface RegistryFactoryInterface extends utils.Interface {
   decodeFunctionResult(functionFragment: "mrCounter", data: BytesLike): Result;
 
   events: {
-    "RegistryCreated(address,address,bytes32)": EventFragment;
+    "RegistryCreated(address,address,uint256)": EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: "RegistryCreated"): EventFragment;
 }
 
 export type RegistryCreatedEvent = TypedEvent<
-  [string, string, string],
-  { creator: string; newRegistry: string; salt: string }
+  [string, string, BigNumber],
+  { creator: string; newRegistry: string; number: BigNumber }
 >;
 
 export type RegistryCreatedEventFilter = TypedEventFilter<RegistryCreatedEvent>;
@@ -132,15 +133,15 @@ export interface RegistryFactory extends BaseContract {
   };
 
   filters: {
-    "RegistryCreated(address,address,bytes32)"(
+    "RegistryCreated(address,address,uint256)"(
       creator?: null,
       newRegistry?: null,
-      salt?: null
+      number?: BigNumberish | null
     ): RegistryCreatedEventFilter;
     RegistryCreated(
       creator?: null,
       newRegistry?: null,
-      salt?: null
+      number?: BigNumberish | null
     ): RegistryCreatedEventFilter;
   };
 

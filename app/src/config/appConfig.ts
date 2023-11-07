@@ -16,5 +16,6 @@ export const WEB3_STORAGE_KEY =
 // export const FUNCTIONS_BASE = 'http://127.0.0.1:5001/network-state-registry/europe-west1';
 export const FUNCTIONS_BASE = 'https://europe-west1-network-state-registry.cloudfunctions.net';
 
-export const CHAIN_ID = 5;
-export const CHAIN_NAME = 'goerli';
+export const CHAIN_ID = 84531;
+export const CHAIN_NAME = 'basegoerli';
+export const CHAIN_EXPLORER_BASE = 'https://goerli.basescan.org';

@@ -1,7 +1,9 @@
-import { Box, Text } from 'grommet';
+import { Box, Spinner, Text } from 'grommet';
 import { FormNext, FormPrevious } from 'grommet-icons';
 import { useEffect, useState } from 'react';
 import ReactSimplyCarousel from 'react-simply-carousel';
+import { encodeFunctionData } from 'viem';
+import { utils } from 'ethers';
 
 import { appName } from '../../config/community';
 import { StatementEditable } from '../voice/StatementEditable';
@@ -14,24 +16,20 @@ import { ProjectSummary } from './ProjectSummary';
 import { DetailsAndPlatforms, HexStr, PAP } from '../../types';
 import { useProviderContext } from '../../wallet/ProviderContext';
 import { RegistryFactoryAbi, registryFactoryAddress } from '../../utils/contracts.json';
-import { encodeFunctionData } from 'viem';
 import { deriveEntity } from '../../utils/cid-hash';
-import { utils } from 'ethers';
+import { BoxCentered } from '../../ui-components/BoxCentered';
+import { ProjectRouteNames } from '../MainProjectPage';
 
 const NPAGES = 5;
 
 export const CreateProject = () => {
   const [formIndex, setFormIndex] = useState(0);
 
-  const { aaProvider, aaAddress } = useProviderContext();
+  const { addUserOp, aaAddress, sendUserOps, isSuccess, isSending, error, events } = useProviderContext();
   const [founderDetails, setFounderDetails] = useState<DetailsAndPlatforms>();
   const [whoStatement, setWhoStatement] = useState<string>('Only people I like');
   const [whatStatement, setWhatStatement] = useState<string>('Change the world');
   const [selectedDetails, setDetails] = useState<SelectedDetails>();
-
-  const [sending, setSending] = useState<boolean>(false);
-  const [error, setError] = useState<boolean>();
-  const { setCreateParams, sendCreateProject, isErrorSending, errorSending, isSuccess } = useCreateProject();
 
   const founderPap: PAP | undefined =
     aaAddress && founderDetails
@@ -49,40 +47,36 @@ export const CreateProject = () => {
   };
 
   const createProject = async () => {
-    if (!aaAddress || !aaProvider || !founderPap) return;
+    if (!aaAddress || !founderPap || !addUserOp) return;
 
     const entity = await deriveEntity(founderPap);
     const salt = utils.keccak256(utils.toUtf8Bytes(Date.now().toString())) as HexStr;
 
-    const callData = encodeFunctionData({
+    // TODO weird encodedFunctionData asking for zero parameters
+    const callData = (encodeFunctionData as any)({
       abi: RegistryFactoryAbi,
       functionName: 'create',
-      args: ['MRS', 'Micro(r)evolutions ', [founderPap.account as HexStr], [entity.cid], salt],
+      args: ['MRS', 'micro(r)evolutions ', [founderPap.account as HexStr], [entity.cid], salt],
     });
 
-    const res = await aaProvider.sendUserOperation({
+    addUserOp({
       target: registryFactoryAddress,
       data: callData,
       value: BigInt(0),
     });
+
+    if (!sendUserOps) return;
+    sendUserOps();
   };
 
   useEffect(() => {
-    // console.log('useEffect isSuccess', { isSuccess });
-    if (isSuccess) {
-      setSending(false);
-      setError(undefined);
+    if (isSuccess && events) {
+      const event = events.find((e) => e.eventName === 'RegistryCreated');
+      if (event) {
+        navigate(ProjectRouteNames.Base(event.number));
+      }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isSuccess]);
-
-  useEffect(() => {
-    // console.log('useEffect isErrorSending', { isErrorSending, errorSending });
-    if (isErrorSending) {
-      setSending(false);
-      setError((errorSending as any).shortMessage);
-    }
-  }, [isErrorSending, errorSending]);
+  }, [isSuccess, events]);
 
   const nextPage = () => {
     if (formIndex < NPAGES - 1) {
@@ -115,6 +109,14 @@ export const CreateProject = () => {
         </Text>
       </Box>
 
+      {isSending ? (
+        <BoxCentered fill>
+          <Spinner></Spinner>{' '}
+        </BoxCentered>
+      ) : (
+        <></>
+      )}
+
       <ReactSimplyCarousel
         disableSwipeByMouse
         infinite={false}
@@ -141,6 +143,7 @@ export const CreateProject = () => {
         containerProps={{
           style: {
             height: '100%',
+            display: isSending ? 'none' : 'flex',
           },
         }}
         speed={400}
