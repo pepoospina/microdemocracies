@@ -1,10 +1,10 @@
 import { Anchor, Box, Spinner, Text } from 'grommet';
 import { AppVouch } from '../../types';
 import { AppButton, AppCard } from '../../ui-components';
-import { ProjectRouteNames } from '../MainProjectPage';
 import { useNavigate } from 'react-router-dom';
 import { DateManager } from '../../utils/date.manager';
 import { COMMUNITY_MEMBER } from '../../config/community';
+import { RouteNames } from '../../App';
 
 interface IVouchCard {
   vouch?: AppVouch;
@@ -16,7 +16,7 @@ export const VoucheCard = (props: IVouchCard): JSX.Element => {
 
   const goTo = () => {
     if (vouch) {
-      navigate(ProjectRouteNames.Account(vouch.to));
+      navigate(RouteNames.Member(vouch.to));
     }
   };
 

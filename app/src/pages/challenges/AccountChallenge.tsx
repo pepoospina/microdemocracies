@@ -6,18 +6,18 @@ import { AppButton, AppCard } from '../../ui-components';
 
 import { ChallengeStatus } from '../challenges/ChallengeStatus';
 import { ChallengeVote } from '../challenges/ChallengeVote';
-import { useTokenAccount } from '../../contexts/AccountContext';
 import { useEffect, useState } from 'react';
 import { WaitingTransaction } from '../common/WaitingTransaction';
 import { BoxCentered } from '../../ui-components/BoxCentered';
-import { useConnectedAccount } from '../../contexts/ConnectedAccountContext';
+import { useTokenAccount } from '../../contexts/MemberContext';
+import { useAccountContext } from '../../wallet/AccountContext';
 
 interface IAccountChallenge extends BoxExtendedProps {
   cardStyle?: React.CSSProperties;
 }
 
 export const AccountChallenge = (props: IAccountChallenge) => {
-  const { isConnected } = useConnectedAccount();
+  const { isConnected } = useAccountContext();
 
   const { accountRead } = useTokenAccount();
   const { refetchChallenge, sendChallenge, challengeRead, isErrorSending, errorSending, isSuccess } =

@@ -1,20 +1,21 @@
 import { Anchor, Box, Text } from 'grommet';
-import { useConnectedAccount } from '../../contexts/ConnectedAccountContext';
 import { useNavigate } from 'react-router-dom';
-import { ProjectRouteNames } from '../MainProjectPage';
+
+import { useConnectedMember } from '../../contexts/ConnectedAccountContext';
+import { RouteNames } from '../../App';
 import { AppCard } from '../../ui-components';
 
 export const MyNetworkWidget = () => {
-  const { myVouches, myChallenge, tokenId } = useConnectedAccount();
+  const { myVouches, myChallenge, tokenId } = useConnectedMember();
   const navigate = useNavigate();
 
   const goToMyVouches = () => {
-    navigate(ProjectRouteNames.MyVouches);
+    navigate(RouteNames.MyVouches);
   };
 
   const goToAccount = () => {
     if (tokenId) {
-      navigate(ProjectRouteNames.Account(tokenId));
+      navigate(RouteNames.Member(tokenId));
     }
   };
 

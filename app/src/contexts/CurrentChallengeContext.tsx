@@ -4,8 +4,9 @@ import { WriteContractResult } from '@wagmi/core';
 
 import { RegistryAbi } from '../utils/contracts.json';
 import { AppChallenge, VoteOption } from '../types';
-import { useRegistry } from './RegistryContext';
-import { useConnectedAccount } from './ConnectedAccountContext';
+import { useRegistry } from './ProjectContext';
+import { useConnectedMember } from './ConnectedAccountContext';
+import { useAccountContext } from '../wallet/AccountContext';
 
 export type ChallengeContextType = {
   tokenId?: number;
@@ -91,7 +92,7 @@ export const ChallengeContext = (props: ChallengeContextProps) => {
   const errorSending = _errorWriting ? _errorWriting : _errorWaiting ? _errorWaiting : null;
 
   /** can vote */
-  const { address: connectedAddress } = useConnectedAccount();
+  const { aaAddress: connectedAddress } = useAccountContext();
 
   const { data: tokenIdOfAddress } = useContractRead({
     address: registryAddress,

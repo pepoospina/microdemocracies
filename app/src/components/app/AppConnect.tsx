@@ -3,11 +3,13 @@ import { StatusGood } from 'grommet-icons';
 import { useAccount } from 'wagmi';
 import { AppButton, Address } from '../../ui-components';
 import { CHAIN_ID } from '../../config/appConfig';
-import { useProviderContext } from '../../wallet/ProviderContext';
+import { useAccountContext } from '../../wallet/AccountContext';
+import { useAppSigner } from '../../wallet/SignerContext';
 
 export const AppConnect = (props: {}) => {
   const { isConnected, address } = useAccount();
-  const { hasInjected, connectInjected, connectMagic, aaAddress } = useProviderContext();
+  const { aaAddress } = useAccountContext();
+  const { hasInjected, connectInjected, connectMagic } = useAppSigner();
 
   return !isConnected ? (
     <Box>

@@ -1,12 +1,12 @@
 import { Box } from 'grommet';
-import { ProjectRouteNames } from '../MainProjectPage';
+import { RouteNames } from '../../App';
 import { useNavigate } from 'react-router-dom';
 import { FormPrevious } from 'grommet-icons';
 
 import { AppScreen } from '../../ui-components/AppFormScreen';
 import { VoucheCard } from './VouchCard';
 import { BottomButton } from '../common/BottomButton';
-import { useRegistry } from '../../contexts/RegistryContext';
+import { useRegistry } from '../../contexts/ProjectContext';
 
 export const AllVouches = (): JSX.Element => {
   const navigate = useNavigate();
@@ -25,10 +25,7 @@ export const AllVouches = (): JSX.Element => {
           })}
         </Box>
       </Box>
-      <BottomButton
-        icon={<FormPrevious />}
-        label="home"
-        onClick={() => navigate(ProjectRouteNames.Base)}></BottomButton>
+      <BottomButton icon={<FormPrevious />} label="home" onClick={() => navigate(RouteNames.Base)}></BottomButton>
     </AppScreen>
   );
 };

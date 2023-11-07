@@ -4,7 +4,7 @@ import { WriteContractResult } from '@wagmi/core';
 
 import { RegistryAbi } from '../utils/contracts.json';
 import { HexStr } from '../types';
-import { useRegistry } from './RegistryContext';
+import { useRegistry } from './ProjectContext';
 
 export type VouchContextType = {
   setVouchParams: (account: HexStr, personCid: string) => void;

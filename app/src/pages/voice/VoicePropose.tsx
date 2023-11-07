@@ -5,15 +5,17 @@ import { AppButton, AppCard, AppTextArea } from '../../ui-components';
 import { AppScreen } from '../../ui-components/AppFormScreen';
 import { useVoiceSend } from '../../contexts/VoiceSendContext';
 import { AppConnectButton } from '../../components/app/AppConnectButton';
-import { ProjectRouteNames } from '../MainProjectPage';
+import { RouteNames } from '../../App';
 import { useNavigate } from 'react-router-dom';
 import { BottomButton } from '../common/BottomButton';
 import { FormPrevious } from 'grommet-icons';
 import { Statement } from './Statement';
-import { useConnectedAccount } from '../../contexts/ConnectedAccountContext';
+import { useConnectedMember } from '../../contexts/ConnectedAccountContext';
+import { useAccountContext } from '../../wallet/AccountContext';
 
 export const VoicePropose = (): JSX.Element => {
-  const { tokenId, isConnected } = useConnectedAccount();
+  const { isConnected } = useAccountContext();
+  const { tokenId } = useConnectedMember();
   const { proposeStatement } = useVoiceSend();
   const [done, setDone] = useState<boolean>(false);
   const navigate = useNavigate();
@@ -53,7 +55,11 @@ export const VoicePropose = (): JSX.Element => {
                 }}></Statement>
             </Box>
 
-            <AppTextArea autoResize onChange={(event) => handleInput(event.target.value)} placeholder="new statement..." name="statement"></AppTextArea>
+            <AppTextArea
+              autoResize
+              onChange={(event) => handleInput(event.target.value)}
+              placeholder="new statement..."
+              name="statement"></AppTextArea>
 
             <Box direction="row" justify="center" style={{ margin: '36px 0', width: '100%' }}>
               {isConnected ? (
@@ -76,7 +82,7 @@ export const VoicePropose = (): JSX.Element => {
           <AppCard>Statement Proposed!</AppCard>
         )}
       </Box>
-      <BottomButton label="Back" icon={<FormPrevious />} onClick={() => navigate(ProjectRouteNames.Voice)}></BottomButton>
+      <BottomButton label="Back" icon={<FormPrevious />} onClick={() => navigate(RouteNames.Voice)}></BottomButton>
     </AppScreen>
   );
 };

@@ -5,14 +5,13 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { AccountOverview } from './AccountOverview';
 import { AccountChallenge } from '../challenges/AccountChallenge';
 
-import { AccountContext } from '../../contexts/AccountContext';
-
+import { MemberContext } from '../../contexts/MemberContext';
 import { ChallengeContext } from '../../contexts/CurrentChallengeContext';
 import { AppScreen } from '../../ui-components/AppFormScreen';
-import { ProjectRouteNames } from '../MainProjectPage';
 import { BottomButton } from '../common/BottomButton';
 import { AccountCircles } from './AccountCircles';
 import { COMMUNITY_MEMBER } from '../../config/community';
+import { RouteNames } from '../../App';
 
 export const AccountPage = () => {
   const { tokenId } = useParams();
@@ -25,7 +24,7 @@ export const AccountPage = () => {
   return (
     <AppScreen label={`${COMMUNITY_MEMBER} #${tokenId}`}>
       <Box pad={{ top: '0', left: 'large', right: 'large' }} style={{ overflowY: 'auto' }}>
-        <AccountContext tokenId={+tokenId}>
+        <MemberContext tokenId={+tokenId}>
           <Box margin={{ top: 'large' }} style={{ flexShrink: 0 }}>
             <AccountOverview></AccountOverview>
           </Box>
@@ -33,12 +32,9 @@ export const AccountPage = () => {
           <ChallengeContext tokenId={+tokenId}>
             <AccountChallenge cardStyle={{ marginTop: '36px', marginBottom: '36px' }} />
           </ChallengeContext>
-        </AccountContext>
+        </MemberContext>
       </Box>
-      <BottomButton
-        icon={<FormPrevious />}
-        label="home"
-        onClick={() => navigate(ProjectRouteNames.Base)}></BottomButton>
+      <BottomButton icon={<FormPrevious />} label="home" onClick={() => navigate(RouteNames.Base)}></BottomButton>
     </AppScreen>
   );
 };

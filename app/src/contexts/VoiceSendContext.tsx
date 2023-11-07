@@ -4,7 +4,7 @@ import { useMutation } from 'react-query';
 import { useSignMessage } from 'wagmi';
 import stringify from 'canonical-json';
 
-import { ConnectedAccountContext, useConnectedAccount } from './ConnectedAccountContext';
+import { ConnectedMemberContext, useConnectedMember } from './ConnectedAccountContext';
 import { FUNCTIONS_BASE } from '../config/appConfig';
 import { AppStatementCreate, SignedObject } from '../types';
 
@@ -19,7 +19,7 @@ interface IVoiceSendContext {
 const VoiceSendContextValue = createContext<VoiceSendContextType | undefined>(undefined);
 
 export const VoiceSendContext = (props: IVoiceSendContext) => {
-  const { tokenId } = useConnectedAccount();
+  const { tokenId } = useConnectedMember();
   const { signMessageAsync } = useSignMessage();
 
   const { mutateAsync: sendStatement } = useMutation(async (statement: SignedObject<AppStatementCreate>) => {
@@ -52,7 +52,7 @@ export const VoiceSendContext = (props: IVoiceSendContext) => {
       value={{
         proposeStatement,
       }}>
-      <ConnectedAccountContext>{props.children}</ConnectedAccountContext>
+      <ConnectedMemberContext>{props.children}</ConnectedMemberContext>
     </VoiceSendContextValue.Provider>
   );
 };

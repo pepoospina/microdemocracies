@@ -5,7 +5,7 @@ import { RegistryAbi } from '../utils/contracts.json';
 import { AppAccount, AppVouch, Entity, HexStr, PAP } from '../types';
 import { useQuery } from 'react-query';
 import { getEntity } from '../utils/store';
-import { useRegistry } from './RegistryContext';
+import { useRegistry } from './ProjectContext';
 
 export type AccountContextType = {
   refetch: (options?: { throwOnError: boolean; cancelRefetch: boolean }) => Promise<any>;
@@ -33,7 +33,7 @@ export interface AccountContextProps {
  * from a tokenId or an address, read the data about it from the
  * registry and IPFS. TokenId can be a property or set with setTokenId
  */
-export const AccountContext = (props: AccountContextProps) => {
+export const MemberContext = (props: AccountContextProps) => {
   const { registryAddress } = useRegistry();
 
   /** Read Account */

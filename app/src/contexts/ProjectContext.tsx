@@ -3,10 +3,10 @@ import { useAccount, useConnect, useContractRead, useDisconnect, usePublicClient
 import { constants } from 'ethers';
 
 import { RegistryAbi, VouchEventAbi } from '../utils/contracts.json';
-import { ConnectedAccountContext } from './ConnectedAccountContext';
+import { ConnectedMemberContext } from './ConnectedAccountContext';
 import { AppVouch, HexStr } from '../types';
 
-export type RegistryContextType = {
+export type ProjectContextType = {
   registryAddress?: HexStr;
   setProjectId: (projectId: string) => void;
   projectId?: string;
@@ -17,13 +17,13 @@ export type RegistryContextType = {
   allVouches?: AppVouch[];
 };
 
-interface IRegistryContext {
+interface IProjectContext {
   children: React.ReactNode;
 }
 
-const RegistryContextValue = createContext<RegistryContextType | undefined>(undefined);
+const ProjectContextValue = createContext<ProjectContextType | undefined>(undefined);
 
-export const RegistryContext = (props: IRegistryContext) => {
+export const ProjectContext = (props: IProjectContext) => {
   const registryAddress = constants.AddressZero;
 
   const { connect } = useConnect();
@@ -79,7 +79,7 @@ export const RegistryContext = (props: IRegistryContext) => {
   });
 
   return (
-    <RegistryContextValue.Provider
+    <ProjectContextValue.Provider
       value={{
         registryAddress,
         setProjectId,
@@ -90,13 +90,13 @@ export const RegistryContext = (props: IRegistryContext) => {
         isLoading,
         allVouches,
       }}>
-      <ConnectedAccountContext>{props.children}</ConnectedAccountContext>
-    </RegistryContextValue.Provider>
+      {props.children}
+    </ProjectContextValue.Provider>
   );
 };
 
-export const useRegistry = (): RegistryContextType => {
-  const context = useContext(RegistryContextValue);
+export const useRegistry = (): ProjectContextType => {
+  const context = useContext(ProjectContextValue);
   if (!context) throw Error('context not found');
   return context;
 };

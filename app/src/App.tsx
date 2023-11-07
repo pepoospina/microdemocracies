@@ -2,23 +2,55 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import { alchemyProvider as wagmiAlchemyProvider } from 'wagmi/providers/alchemy';
 
 import { GlobalStyles } from './components/styles/GlobalStyles';
-import { MainProjectPage } from './pages/MainProjectPage';
 import { ResponsiveApp, ThemedApp } from './components/app';
-import { RegistryContext } from './contexts/RegistryContext';
+import { ProjectContext } from './contexts/ProjectContext';
 
-import { MainLandingPage } from './pages/MainLandingPage';
-import { ProviderContext } from './wallet/ProviderContext';
 import { chain } from './wallet/config';
 import { WagmiConfig, configureChains, createConfig } from 'wagmi';
 import { ALCHEMY_KEY } from './config/appConfig';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { ViewportContainer } from './components/styles/LayoutComponents.styled';
+import { CreateProjectContext } from './contexts/CreateProjectContext';
+import { VoiceReadContext } from './contexts/VoiceReadContext';
+import { VoiceSendContext } from './contexts/VoiceSendContext';
+import { VouchContext } from './contexts/VouchContext';
+import { AccountPage } from './pages/account/AccountPage';
+import { Challenges } from './pages/challenges/Challenges';
+import { CreateProject } from './pages/create/CreateProject';
+import { Join } from './pages/join/Join';
+import { LandingPage } from './pages/landing/LandingPage';
+import { LearnMore } from './pages/landing/LearnMore';
+import { ProjectHome } from './pages/project/ProjectHome';
+import { VoicePage } from './pages/voice/VoicePage';
+import { VoicePropose } from './pages/voice/VoicePropose';
+import { VouchPage } from './pages/vouch/Vouch';
+import { VouchAccount } from './pages/vouch/VouchAccount';
+import { AllVouches } from './pages/vouches/AllVouches';
+import { Vouches } from './pages/vouches/Vouches';
+import { ProjectBase } from './pages/project/ProjectBase';
+import { ConnectedMemberContext } from './contexts/ConnectedAccountContext';
+import { SignerContext } from './wallet/SignerContext';
 
 const queryClient = new QueryClient();
 
-function App() {
-  const parts = window.location.hostname.split('.');
-  const isSubdomain = parts.length >= 2; // Simple check for subdomain
+export const RouteNames = {
+  Base: `/`,
+  More: `/learn`,
+  Start: '/start',
+  ProjectHome: (projectId: string) => `/p/${projectId}`,
+  Join: `/join`,
+  Vouch: `/invite`,
+  VouchAccount: (hash: string) => `/invite/${hash}`,
+  MyVouches: `/invites`,
+  VouchesAll: `/allnew`,
+  Challenges: `/challenges`,
+  Member: (id: number) => `/member/${id}`,
+  MemberChallange: (id: number) => `/member/${id}/challenge`,
+  Voice: `/voice`,
+  VoicePropose: `/voice/propose`,
+};
 
-  /** WAGMI provider to read data */
+function App() {
   const { publicClient, webSocketPublicClient } = configureChains(
     [chain],
     [wagmiAlchemyProvider({ apiKey: ALCHEMY_KEY })]
@@ -32,22 +64,69 @@ function App() {
   return (
     <div className="App">
       <WagmiConfig config={config}>
-        <ProviderContext>
-          <GlobalStyles />
-          <ThemedApp>
-            <ResponsiveApp>
-              <QueryClientProvider client={queryClient}>
-                <RegistryContext>
-                  {isSubdomain ? (
-                    <MainProjectPage projectId={parts[0]}></MainProjectPage>
-                  ) : (
-                    <MainLandingPage></MainLandingPage>
-                  )}
-                </RegistryContext>
-              </QueryClientProvider>
-            </ResponsiveApp>
-          </ThemedApp>
-        </ProviderContext>
+        <SignerContext>
+          <ConnectedMemberContext>
+            <GlobalStyles />
+            <ThemedApp>
+              <ResponsiveApp>
+                <QueryClientProvider client={queryClient}>
+                  <BrowserRouter>
+                    <ViewportContainer>
+                      <Routes>
+                        {/* Landing and project create */}
+                        <Route path={RouteNames.Base} element={<LandingPage />}></Route>
+                        <Route path={RouteNames.More} element={<LearnMore />}></Route>
+                        <Route
+                          path={RouteNames.Start}
+                          element={
+                            <CreateProjectContext>
+                              <CreateProject />
+                            </CreateProjectContext>
+                          }></Route>
+
+                        {/* Project-Specific */}
+                        <Route
+                          path={`/p/:projectId`}
+                          element={
+                            <ProjectContext>
+                              <VouchContext>
+                                <ProjectBase />
+                              </VouchContext>
+                            </ProjectContext>
+                          }>
+                          <Route path={RouteNames.Base} element={<ProjectHome />}></Route>
+                          <Route path={`account/:tokenId/*`} element={<AccountPage />}></Route>
+                          <Route path={`vouch/:hash`} element={<VouchAccount />}></Route>
+                          <Route path={RouteNames.Join} element={<Join />}></Route>
+                          <Route path={RouteNames.Vouch} element={<VouchPage />}></Route>
+                          <Route path={RouteNames.MyVouches} element={<Vouches />}></Route>
+                          <Route path={RouteNames.VouchesAll} element={<AllVouches />}></Route>
+                          <Route path={RouteNames.Challenges} element={<Challenges />}></Route>
+                          {/* <Route path={ProjectRouteNames.Base} element={<TestComponent />}></Route> */}
+                          <Route path={RouteNames.Base} element={<ProjectHome />}></Route>
+                          <Route
+                            path={RouteNames.VoicePropose}
+                            element={
+                              <VoiceSendContext>
+                                <VoicePropose />
+                              </VoiceSendContext>
+                            }></Route>
+                          <Route
+                            path={RouteNames.Voice}
+                            element={
+                              <VoiceReadContext>
+                                <VoicePage />
+                              </VoiceReadContext>
+                            }></Route>
+                        </Route>
+                      </Routes>
+                    </ViewportContainer>
+                  </BrowserRouter>
+                </QueryClientProvider>
+              </ResponsiveApp>
+            </ThemedApp>
+          </ConnectedMemberContext>
+        </SignerContext>
       </WagmiConfig>
     </div>
   );

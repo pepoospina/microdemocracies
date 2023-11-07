@@ -4,7 +4,7 @@ import { useContractWrite, usePrepareContractWrite, useWaitForTransaction } from
 import { RegistryFactoryAbi } from '../utils/contracts.json';
 import { HexStr } from '../types';
 import { utils } from 'ethers';
-import { useRegistry } from './RegistryContext';
+import { useRegistry } from './ProjectContext';
 
 interface Founder {
   address: HexStr;

@@ -10,12 +10,13 @@ import { AppPlatformsSelector } from './PlatformsSelector';
 import { PAPShare } from './PAPShare';
 import { PAP, PersonDetails, PlatformAccount } from '../../types';
 import { PAPEntry } from './PAPEntry';
-import { ProjectRouteNames } from '../MainProjectPage';
+
 import { AppScreen, BottomButtons } from '../../ui-components/AppFormScreen';
 import { Intro } from './Intro';
 import { AppPersonalDetails } from './PersonalDetails';
 import { AppConnect } from '../../components/app/AppConnect';
-import { useConnectedAccount } from '../../contexts/ConnectedAccountContext';
+import { RouteNames } from '../../App';
+import { useAccountContext } from '../../wallet/AccountContext';
 
 export interface IJoinProps {
   dum?: any;
@@ -26,7 +27,8 @@ export const Join = () => {
 
   const [pageIx, setPageIx] = useState<number>(0);
 
-  const { address: account } = useConnectedAccount();
+  const { aaAddress: account } = useAccountContext();
+
   const [platforms, setPlatforms] = useState<PlatformAccount[]>([]);
   const [personal, setPersonal] = useState<PersonDetails>({});
 
@@ -72,7 +74,7 @@ export const Join = () => {
         </Box>
       </Box>
       <BottomButtons
-        left={{ label: 'home', primary: false, action: () => navigate(ProjectRouteNames.Base) }}
+        left={{ label: 'home', primary: false, action: () => navigate(RouteNames.Base) }}
         right={{ label: 'next', primary: true, action: nextPage }}></BottomButtons>
     </AppScreen>,
 
@@ -124,7 +126,7 @@ export const Join = () => {
       </Box>
       <BottomButtons
         left={{ label: 'back', primary: false, action: prevPage }}
-        right={{ label: 'done', primary: true, action: () => navigate(ProjectRouteNames.Base) }}></BottomButtons>
+        right={{ label: 'done', primary: true, action: () => navigate(RouteNames.Base) }}></BottomButtons>
     </AppScreen>,
   ];
 

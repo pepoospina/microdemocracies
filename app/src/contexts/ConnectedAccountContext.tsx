@@ -1,43 +1,37 @@
 import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
-import { useAccount, useConnect, useContractRead, useDisconnect, usePublicClient } from 'wagmi';
+import { useContractRead, usePublicClient } from 'wagmi';
 
 import { RegistryAbi, VouchEventAbi } from '../utils/contracts.json';
-import { AppAccount, AppChallenge, AppVouch, HexStr } from '../types';
-import { useRegistry } from './RegistryContext';
+import { AppAccount, AppChallenge, AppVouch } from '../types';
+import { useRegistry } from './ProjectContext';
+import { useAccountContext } from '../wallet/AccountContext';
 
-export type ConnectedAccountContextType = {
-  connect: ReturnType<typeof useConnect>['connect'];
-  disconnect: ReturnType<typeof useDisconnect>['disconnect'];
-  isConnected: boolean;
-  address?: HexStr;
+export type ConnectedMemberContextType = {
   tokenId?: number;
   account?: AppAccount;
   myVouches?: AppVouch[];
   myChallenge: AppChallenge | undefined | null;
 };
 
-const ConnectedAccountContextValue = createContext<ConnectedAccountContextType | undefined>(undefined);
+const ConnectedMemberContextValue = createContext<ConnectedMemberContextType | undefined>(undefined);
 
-export interface ConnectedAccountContextProps {
+export interface ConnectedMemberContextProps {
   children: ReactNode;
 }
 
-export const ConnectedAccountContext = (props: ConnectedAccountContextProps) => {
+export const ConnectedMemberContext = (props: ConnectedMemberContextProps) => {
   const { registryAddress } = useRegistry();
   const publicClient = usePublicClient();
 
-  const { address, isConnected, connector } = useAccount();
-
-  const { connect, connectors, error, isLoading, pendingConnector } = useConnect();
-  const { disconnect } = useDisconnect();
+  const { aaAddress } = useAccountContext();
 
   const { data: tokenId } = useContractRead({
     address: registryAddress,
     abi: RegistryAbi,
     functionName: 'tokenIdOf',
-    args: address ? [address] : undefined,
-    enabled: address !== undefined,
+    args: aaAddress ? [aaAddress] : undefined,
+    enabled: aaAddress !== undefined,
   });
 
   const { data: _accountRead } = useContractRead({
@@ -120,24 +114,20 @@ export const ConnectedAccountContext = (props: ConnectedAccountContextProps) => 
   })(_challengeRead);
 
   return (
-    <ConnectedAccountContextValue.Provider
+    <ConnectedMemberContextValue.Provider
       value={{
         tokenId: Number(tokenId),
         account,
         myChallenge,
         myVouches,
-        connect,
-        disconnect,
-        isConnected,
-        address,
       }}>
       {props.children}
-    </ConnectedAccountContextValue.Provider>
+    </ConnectedMemberContextValue.Provider>
   );
 };
 
-export const useConnectedAccount = (): ConnectedAccountContextType => {
-  const context = useContext(ConnectedAccountContextValue);
+export const useConnectedMember = (): ConnectedMemberContextType => {
+  const context = useContext(ConnectedMemberContextValue);
   if (!context) throw Error('context not found');
   return context;
 };

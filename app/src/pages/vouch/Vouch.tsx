@@ -3,7 +3,7 @@ import { QrScanner } from '@yudiel/react-qr-scanner';
 import { useState } from 'react';
 
 import { AppButton, AppCard } from '../../ui-components';
-import { ProjectRouteNames } from '../MainProjectPage';
+import { RouteNames } from '../../App';
 import { useNavigate } from 'react-router-dom';
 import { AppScreen } from '../../ui-components/AppFormScreen';
 import { FormPrevious } from 'grommet-icons';
@@ -14,7 +14,7 @@ export const VouchPage = (): JSX.Element => {
   const navigate = useNavigate();
 
   const setResult = (result: string) => {
-    navigate(ProjectRouteNames.VouchAccount(result));
+    navigate(RouteNames.VouchAccount(result));
   };
 
   return (
@@ -54,10 +54,7 @@ export const VouchPage = (): JSX.Element => {
         )}
         <AppButton label={!scan ? 'agree & scan' : 'cancel'} onClick={() => setScan(!scan)} primary></AppButton>
       </Box>
-      <BottomButton
-        icon={<FormPrevious />}
-        label="back"
-        onClick={() => navigate(ProjectRouteNames.Base)}></BottomButton>
+      <BottomButton icon={<FormPrevious />} label="back" onClick={() => navigate(RouteNames.Base)}></BottomButton>
     </AppScreen>
   );
 };

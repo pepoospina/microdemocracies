@@ -1,13 +1,13 @@
 import { Box, Spinner, Text } from 'grommet';
 import { AppButton, AppHeading } from '../../ui-components';
 import { useCurrentChallenge } from '../../contexts/CurrentChallengeContext';
-import { useRegistry } from '../../contexts/RegistryContext';
 import { AppConnectButton } from '../../components/app/AppConnectButton';
-import { useConnectedAccount } from '../../contexts/ConnectedAccountContext';
+import { useConnectedMember } from '../../contexts/ConnectedAccountContext';
 import { useEffect, useState } from 'react';
 import { WaitingTransaction } from '../common/WaitingTransaction';
 import { COMMUNITY_MEMBER } from '../../config/community';
 import { BoxCentered } from '../../ui-components/BoxCentered';
+import { useAccountContext } from '../../wallet/AccountContext';
 
 export const ChallengeVote = () => {
   const {
@@ -25,7 +25,8 @@ export const ChallengeVote = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [error, setError] = useState<boolean>();
 
-  const { tokenId, isConnected } = useConnectedAccount();
+  const { isConnected } = useAccountContext();
+  const { tokenId } = useConnectedMember();
   const alreadyVoted = myVote !== undefined;
 
   /** when success, reset errors and refetch */

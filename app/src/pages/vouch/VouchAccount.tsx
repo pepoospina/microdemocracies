@@ -6,16 +6,17 @@ import { FormPrevious } from 'grommet-icons';
 import { getEntity } from '../../utils/store';
 import { Entity, HexStr, PAP } from '../../types';
 import { AppButton, AppCard } from '../../ui-components';
-import { ProjectRouteNames } from '../MainProjectPage';
-import { useTokenAccount } from '../../contexts/AccountContext';
+import { RouteNames } from '../../App';
+import { useTokenAccount } from '../../contexts/MemberContext';
 import { useVouch } from '../../contexts/VouchContext';
-import { useRegistry } from '../../contexts/RegistryContext';
+import { useRegistry } from '../../contexts/ProjectContext';
 import { AppScreen } from '../../ui-components/AppFormScreen';
 import { AccountPerson } from '../account/AccountPerson';
-import { useConnectedAccount } from '../../contexts/ConnectedAccountContext';
+import { useConnectedMember } from '../../contexts/ConnectedAccountContext';
 import { BottomButton } from '../common/BottomButton';
 import { WaitingTransaction } from '../common/WaitingTransaction';
 import { COMMUNITY_MEMBER } from '../../config/community';
+import { useAccountContext } from '../../wallet/AccountContext';
 
 export const VouchAccount = () => {
   const navigate = useNavigate();
@@ -26,7 +27,7 @@ export const VouchAccount = () => {
   const [sending, setSending] = useState<boolean>(false);
   const [error, setError] = useState<boolean>();
 
-  const { connect, isConnected } = useConnectedAccount();
+  const { isConnected } = useAccountContext();
 
   const { setVouchParams, sendVouch, isErrorSending, errorSending, isSuccess } = useVouch();
   const {
@@ -35,7 +36,7 @@ export const VouchAccount = () => {
     setAddress: setVouchedAddress,
     refetch: refetchVouchedAccount,
   } = useTokenAccount();
-  const { account } = useConnectedAccount();
+  const { account } = useConnectedMember();
 
   // console.log({ isErrorSending, errorSending, isSuccess, vouchedTokenId, vouchedAccount });
 
@@ -70,10 +71,6 @@ export const VouchAccount = () => {
   }, [isErrorSending, errorSending]);
 
   const vouch = () => {
-    if (!isConnected) {
-      connect();
-      return;
-    }
     if (sendVouch) {
       setError(undefined);
       setSending(true);
@@ -122,7 +119,7 @@ export const VouchAccount = () => {
                   <Anchor
                     onClick={() => {
                       if (vouchedTokenId) {
-                        navigate(ProjectRouteNames.Account(vouchedTokenId));
+                        navigate(RouteNames.Member(vouchedTokenId));
                       }
                     }}>
                     {COMMUNITY_MEMBER} #{vouchedTokenId}
@@ -137,10 +134,7 @@ export const VouchAccount = () => {
           </Box>
         )}
       </Box>
-      <BottomButton
-        icon={<FormPrevious />}
-        label="home"
-        onClick={() => navigate(ProjectRouteNames.Base)}></BottomButton>
+      <BottomButton icon={<FormPrevious />} label="home" onClick={() => navigate(RouteNames.Base)}></BottomButton>
     </AppScreen>
   );
 };

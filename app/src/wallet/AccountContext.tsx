@@ -2,33 +2,32 @@ import { PropsWithChildren, createContext, useContext, useEffect, useState } fro
 
 import { AlchemyProvider } from '@alchemy/aa-alchemy';
 import { LightSmartContractAccount, getDefaultLightAccountFactoryAddress } from '@alchemy/aa-accounts';
-import { createMagicSigner } from './magic.signer';
 import { UserOperationCallData, WalletClientSigner } from '@alchemy/aa-core';
 import { HexStr } from '../types';
-import { createInjectedSigner } from './injected.signer';
 import { chain } from './config';
-import { InjectedConnector } from '@wagmi/core';
-import { useConnect, usePublicClient } from 'wagmi';
+import { usePublicClient } from 'wagmi';
 import { ALCHEMY_KEY } from '../config/appConfig';
 import { DecodeEventLogReturnType, decodeEventLog } from 'viem';
 import { RegistryFactoryAbi, registryFactoryAddress } from '../utils/contracts.json';
+import { useAppSigner } from './SignerContext';
 
-export type ProviderContextType = {
-  connectMagic: () => void;
-  connectInjected: () => void;
-  hasInjected: boolean;
+export type AccountContextType = {
+  isConnected: boolean;
   aaAddress?: HexStr;
   addUserOp?: (userOp: UserOperationCallData) => void;
   sendUserOps?: () => void;
+  reset: () => void;
   isSending: boolean;
   isSuccess: boolean;
-  error?: string;
+  error?: Error;
   events?: DecodeEventLogReturnType[];
 };
 
-const ProviderContextValue = createContext<ProviderContextType | undefined>(undefined);
+const AccountContextValue = createContext<AccountContextType | undefined>(undefined);
 
-export const ProviderContext = (props: PropsWithChildren) => {
+/** Manages the AA user ops and their execution */
+export const AccountContext = (props: PropsWithChildren) => {
+  const { signer } = useAppSigner();
   const publicClient = usePublicClient();
 
   /** ALCHEMY provider to send transactions using AA */
@@ -40,8 +39,7 @@ export const ProviderContext = (props: PropsWithChildren) => {
   const [error, setError] = useState<Error>();
   const [events, setEvents] = useState<DecodeEventLogReturnType[]>();
 
-  const [magicSigner, setMagicSigner] = useState<WalletClientSigner>();
-  const [injectedSigner, setInjectedSigner] = useState<WalletClientSigner>();
+  const isConnected = signer !== undefined;
 
   const reset = () => {
     setIsSuccess(false);
@@ -50,21 +48,6 @@ export const ProviderContext = (props: PropsWithChildren) => {
     setEvents(undefined);
     setUserOps([]);
   };
-
-  const { connectAsync } = useConnect({ connector: new InjectedConnector() });
-
-  const connectMagic = () => {
-    createMagicSigner().then((signer) => setMagicSigner(signer));
-  };
-
-  const connectInjected = () => {
-    connectAsync().then((res) => {
-      const signer = createInjectedSigner();
-      setInjectedSigner(signer);
-    });
-  };
-
-  const hasInjected = (window as any).ethereum !== undefined;
 
   const setProvider = (signer: WalletClientSigner) => {
     const provider = new AlchemyProvider({
@@ -82,16 +65,11 @@ export const ProviderContext = (props: PropsWithChildren) => {
     setAlchemyProviderAA(provider);
   };
 
-  /** keep the magic alchemy provider in sync with selected signer */
+  /** keep the alchemy provider in sync with selected signer */
   useEffect(() => {
-    if (!magicSigner) return;
-    setProvider(magicSigner);
-  }, [magicSigner]);
-
-  useEffect(() => {
-    if (!injectedSigner) return;
-    setProvider(injectedSigner);
-  }, [injectedSigner]);
+    if (!signer) return;
+    setProvider(signer);
+  }, [signer]);
 
   useEffect(() => {
     if (alchemyProviderAA) {
@@ -103,6 +81,7 @@ export const ProviderContext = (props: PropsWithChildren) => {
     ? (userOp: UserOperationCallData) => {
         if (!alchemyProviderAA) throw new Error(`alchemyProvider not defined`);
         if (isSending) throw new Error('Cannot add userOps while sending');
+        if (isSuccess) throw new Error('Please reset before adding userOps');
         setUserOps(userOps.concat(userOp));
       }
     : undefined;
@@ -137,25 +116,25 @@ export const ProviderContext = (props: PropsWithChildren) => {
       : undefined;
 
   return (
-    <ProviderContextValue.Provider
+    <AccountContextValue.Provider
       value={{
-        connectMagic,
+        isConnected,
         aaAddress,
-        connectInjected,
-        hasInjected,
         addUserOp,
         sendUserOps,
+        reset,
         isSuccess,
         isSending,
         events,
+        error,
       }}>
       {props.children}
-    </ProviderContextValue.Provider>
+    </AccountContextValue.Provider>
   );
 };
 
-export const useProviderContext = (): ProviderContextType => {
-  const context = useContext(ProviderContextValue);
+export const useAccountContext = (): AccountContextType => {
+  const context = useContext(AccountContextValue);
   if (!context) throw Error('context not found');
   return context;
 };

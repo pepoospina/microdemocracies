@@ -3,13 +3,14 @@ import { AppButton, AppCardProps } from '../../ui-components';
 import { useMutation, useQuery } from 'react-query';
 import { StatementRead, AppStatementBacking, SignedObject } from '../../types';
 import { FUNCTIONS_BASE } from '../../config/appConfig';
-import { useConnectedAccount } from '../../contexts/ConnectedAccountContext';
+import { useConnectedMember } from '../../contexts/ConnectedAccountContext';
 import { useCallback } from 'react';
 import { useSignMessage } from 'wagmi';
 import { getStatementBackers, isStatementBacker } from '../../firestore/getters';
 import { useThemeContext } from '../../components/app';
 import { AppConnectButton } from '../../components/app/AppConnectButton';
 import { COMMUNITY_MEMBER } from '../../config/community';
+import { useAccountContext } from '../../wallet/AccountContext';
 
 interface IStatement extends AppCardProps {
   statement?: StatementRead;
@@ -19,7 +20,8 @@ interface IStatement extends AppCardProps {
 
 export const Statement = (props: IStatement) => {
   const { constants } = useThemeContext();
-  const { tokenId, isConnected } = useConnectedAccount();
+  const { isConnected } = useAccountContext();
+  const { tokenId } = useConnectedMember();
   const { signMessageAsync } = useSignMessage();
 
   const { data: backers, refetch: _refetchBackers } = useQuery(['backers', props.statement?.id], () => {
@@ -139,7 +141,12 @@ export const Statement = (props: IStatement) => {
         <Box direction="row" justify="end">
           {isConnected ? (
             !isBacker ? (
-              <AppButton label="back" disabled={!canBack} style={{ padding: '6px 32px' }} primary onClick={() => back()}></AppButton>
+              <AppButton
+                label="back"
+                disabled={!canBack}
+                style={{ padding: '6px 32px' }}
+                primary
+                onClick={() => back()}></AppButton>
             ) : (
               <Box
                 style={{

@@ -1,6 +1,6 @@
 import { Box, Spinner } from 'grommet';
 
-import { useTokenAccount } from '../../contexts/AccountContext';
+import { useTokenAccount } from '../../contexts/MemberContext';
 import { AccountPerson } from './AccountPerson';
 import { AppCard } from '../../ui-components';
 import { COMMUNITY_MEMBER } from '../../config/community';

@@ -1,12 +1,13 @@
 import { Anchor, Box, Text } from 'grommet';
 import { AppButton } from '../../ui-components';
 import { useNavigate } from 'react-router-dom';
-import { ProjectRouteNames } from '../MainProjectPage';
-import { useRegistry } from '../../contexts/RegistryContext';
+import { useRegistry } from '../../contexts/ProjectContext';
 import { MyNetworkWidget } from '../mynetwork/MyNetworkWidget';
-import { useConnectedAccount } from '../../contexts/ConnectedAccountContext';
+import { useConnectedMember } from '../../contexts/ConnectedAccountContext';
 import { AppConnectButton } from '../../components/app/AppConnectButton';
 import { COMMUNITY_MEMBER, COMMUNITY_NAME } from '../../config/community';
+import { useAccountContext } from '../../wallet/AccountContext';
+import { RouteNames } from '../../App';
 
 export interface IProjectHome {
   dum?: any;
@@ -15,7 +16,9 @@ export interface IProjectHome {
 export const ProjectHome = (props: IProjectHome) => {
   const navigate = useNavigate();
   const { nMembers } = useRegistry();
-  const { tokenId, isConnected } = useConnectedAccount();
+
+  const { isConnected } = useAccountContext();
+  const { tokenId } = useConnectedMember();
 
   return (
     <Box style={{ flexGrow: '1', width: '100%', overflowY: 'auto' }} align="center" id="LandingPageContainer">
@@ -26,7 +29,7 @@ export const ProjectHome = (props: IProjectHome) => {
         {tokenId ? (
           <Box>
             <Text size="xlarge">
-              <Anchor onClick={() => navigate(ProjectRouteNames.VouchesAll)}>Population: {nMembers}</Anchor>
+              <Anchor onClick={() => navigate(RouteNames.VouchesAll)}>Population: {nMembers}</Anchor>
             </Text>
           </Box>
         ) : (
@@ -40,7 +43,7 @@ export const ProjectHome = (props: IProjectHome) => {
               <Text size="110px">{nMembers}</Text>
             </Box>
             <Box>
-              <Anchor onClick={() => navigate(ProjectRouteNames.VouchesAll)}>{COMMUNITY_MEMBER}s</Anchor>
+              <Anchor onClick={() => navigate(RouteNames.VouchesAll)}>{COMMUNITY_MEMBER}s</Anchor>
             </Box>
           </>
         ) : (
@@ -59,9 +62,13 @@ export const ProjectHome = (props: IProjectHome) => {
       </Box>
 
       <Box style={{ flexGrow: '2', width: '200px', flexShrink: '0' }} justify="center">
-        {!tokenId ? <AppButton onClick={() => navigate(ProjectRouteNames.Join)} label="JOIN" primary style={{ marginBottom: '15px' }} /> : <></>}
-        <AppButton onClick={() => navigate(ProjectRouteNames.Vouch)} label="VOUCH" style={{ marginBottom: '15px' }} />
-        <AppButton onClick={() => navigate(ProjectRouteNames.Voice)} label="VOICE" style={{ marginBottom: '15px' }} />
+        {!tokenId ? (
+          <AppButton onClick={() => navigate(RouteNames.Join)} label="JOIN" primary style={{ marginBottom: '15px' }} />
+        ) : (
+          <></>
+        )}
+        <AppButton onClick={() => navigate(RouteNames.Vouch)} label="VOUCH" style={{ marginBottom: '15px' }} />
+        <AppButton onClick={() => navigate(RouteNames.Voice)} label="VOICE" style={{ marginBottom: '15px' }} />
       </Box>
 
       <Box style={{ width: '100%', flexShrink: '0' }} pad="large" justify="center" align="center">

@@ -2,9 +2,7 @@ import { Box, Text } from 'grommet';
 import { appName } from '../../config/community';
 import { AppButton } from '../../ui-components';
 import { useNavigate } from 'react-router-dom';
-import { LandingRouteNames } from '../MainLandingPage';
-import { AppConnectButton } from '../../components/app/AppConnectButton';
-import { AppConnect } from '../../components/app/AppConnect';
+import { RouteNames } from '../../App';
 
 export const LandingPage = () => {
   const navigate = useNavigate();
@@ -31,14 +29,14 @@ export const LandingPage = () => {
         </Text>
         <AppButton
           primary
-          onClick={() => navigate(LandingRouteNames.Start)}
+          onClick={() => navigate(RouteNames.Start)}
           label="Start now"
           style={{ margin: '12px 0px', width: '200px' }}
         />
       </Box>
 
       <Box justify="center" align="center" style={{ flexShrink: '0', marginBottom: '6vh' }}>
-        <AppButton onClick={() => navigate(LandingRouteNames.More)} label="Learn more" style={{ width: '200px' }} />
+        <AppButton onClick={() => navigate(RouteNames.More)} label="Learn more" style={{ width: '200px' }} />
       </Box>
     </Box>
   );

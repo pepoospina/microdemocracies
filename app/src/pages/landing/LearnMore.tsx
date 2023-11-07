@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { Box, Button, Text } from 'grommet';
+import { Box, Text } from 'grommet';
 import ReactSimplyCarousel from 'react-simply-carousel';
 
+import { RouteNames } from '../../App';
 import { appName } from '../../config/community';
 import { BoxCentered } from '../../ui-components/BoxCentered';
-import { LandingRouteNames } from '../MainLandingPage';
 import { useNavigate } from 'react-router-dom';
 import { AppButton } from '../../ui-components';
 import { FormNext, FormPrevious } from 'grommet-icons';
@@ -122,12 +122,7 @@ export const LearnMore = () => {
       </Box>
 
       <BoxCentered style={{ flexShrink: '0', marginBottom: '6vh' }}>
-        <AppButton
-          primary
-          onClick={() => navigate(LandingRouteNames.Start)}
-          label="Start now"
-          style={{ width: '200px' }}
-        />
+        <AppButton primary onClick={() => navigate(RouteNames.Start)} label="Start now" style={{ width: '200px' }} />
       </BoxCentered>
     </Box>
   );

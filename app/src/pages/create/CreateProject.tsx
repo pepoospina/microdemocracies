@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import { Box, Spinner, Text } from 'grommet';
 import { FormNext, FormPrevious } from 'grommet-icons';
 import { useEffect, useState } from 'react';
@@ -9,23 +10,24 @@ import { appName } from '../../config/community';
 import { StatementEditable } from '../voice/StatementEditable';
 import { AppButton, AppHeading } from '../../ui-components';
 import { DetailsSelector, SelectedDetails } from './DetailsSelector';
-import { useCreateProject } from '../../contexts/CreateProjectContext';
 import { DetailsForm } from '../join/DetailsForm';
 import { AppConnect } from '../../components/app/AppConnect';
 import { ProjectSummary } from './ProjectSummary';
 import { DetailsAndPlatforms, HexStr, PAP } from '../../types';
-import { useProviderContext } from '../../wallet/ProviderContext';
 import { RegistryFactoryAbi, registryFactoryAddress } from '../../utils/contracts.json';
 import { deriveEntity } from '../../utils/cid-hash';
 import { BoxCentered } from '../../ui-components/BoxCentered';
-import { ProjectRouteNames } from '../MainProjectPage';
+import { RouteNames } from '../../App';
+import { useAccountContext } from '../../wallet/AccountContext';
 
 const NPAGES = 5;
 
 export const CreateProject = () => {
+  const navigate = useNavigate();
+
   const [formIndex, setFormIndex] = useState(0);
 
-  const { addUserOp, aaAddress, sendUserOps, isSuccess, isSending, error, events } = useProviderContext();
+  const { addUserOp, aaAddress, sendUserOps, isSuccess, isSending, error, events } = useAccountContext();
   const [founderDetails, setFounderDetails] = useState<DetailsAndPlatforms>();
   const [whoStatement, setWhoStatement] = useState<string>('Only people I like');
   const [whatStatement, setWhatStatement] = useState<string>('Change the world');
@@ -71,9 +73,9 @@ export const CreateProject = () => {
 
   useEffect(() => {
     if (isSuccess && events) {
-      const event = events.find((e) => e.eventName === 'RegistryCreated');
+      const event = events.find((e: any) => e.eventName === 'RegistryCreated');
       if (event) {
-        navigate(ProjectRouteNames.Base(event.number));
+        navigate(RouteNames.ProjectHome((event.args as any).number));
       }
     }
   }, [isSuccess, events]);
