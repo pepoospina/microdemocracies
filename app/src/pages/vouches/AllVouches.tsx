@@ -6,11 +6,11 @@ import { FormPrevious } from 'grommet-icons';
 import { AppScreen } from '../../ui-components/AppFormScreen';
 import { VoucheCard } from './VouchCard';
 import { BottomButton } from '../common/BottomButton';
-import { useRegistry } from '../../contexts/ProjectContext';
+import { useProjectContext } from '../../contexts/ProjectContext';
 
 export const AllVouches = (): JSX.Element => {
   const navigate = useNavigate();
-  const { allVouches } = useRegistry();
+  const { allVouches } = useProjectContext();
 
   return (
     <AppScreen label="Vouches">

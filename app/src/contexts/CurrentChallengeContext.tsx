@@ -4,7 +4,7 @@ import { WriteContractResult } from '@wagmi/core';
 
 import { RegistryAbi } from '../utils/contracts.json';
 import { AppChallenge, VoteOption } from '../types';
-import { useRegistry } from './ProjectContext';
+import { useProjectContext } from './ProjectContext';
 import { useConnectedMember } from './ConnectedAccountContext';
 import { useAccountContext } from '../wallet/AccountContext';
 
@@ -35,7 +35,7 @@ export interface ChallengeContextProps {
 }
 
 export const ChallengeContext = (props: ChallengeContextProps) => {
-  const { registryAddress } = useRegistry();
+  const { registryAddress } = useProjectContext();
 
   /** Vouch */
   const tokenIdInternal = props.tokenId !== undefined ? BigInt(props.tokenId) : undefined;

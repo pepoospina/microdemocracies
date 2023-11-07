@@ -1,9 +1,8 @@
 import { createContext, useContext, useEffect, useState } from 'react';
-import { useAccount, useConnect, useContractRead, useDisconnect, usePublicClient, useQuery } from 'wagmi';
+import { useContractRead, usePublicClient, useQuery } from 'wagmi';
 import { constants } from 'ethers';
 
 import { RegistryAbi, VouchEventAbi } from '../utils/contracts.json';
-import { ConnectedMemberContext } from './ConnectedAccountContext';
 import { AppVouch, HexStr } from '../types';
 
 export type ProjectContextType = {
@@ -25,10 +24,6 @@ const ProjectContextValue = createContext<ProjectContextType | undefined>(undefi
 
 export const ProjectContext = (props: IProjectContext) => {
   const registryAddress = constants.AddressZero;
-
-  const { connect } = useConnect();
-  const { disconnect } = useDisconnect();
-  const { isConnected, address: connectedAddress } = useAccount();
 
   const publicClient = usePublicClient();
 
@@ -95,7 +90,7 @@ export const ProjectContext = (props: IProjectContext) => {
   );
 };
 
-export const useRegistry = (): ProjectContextType => {
+export const useProjectContext = (): ProjectContextType => {
   const context = useContext(ProjectContextValue);
   if (!context) throw Error('context not found');
   return context;

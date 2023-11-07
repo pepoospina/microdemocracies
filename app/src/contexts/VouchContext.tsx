@@ -4,7 +4,7 @@ import { WriteContractResult } from '@wagmi/core';
 
 import { RegistryAbi } from '../utils/contracts.json';
 import { HexStr } from '../types';
-import { useRegistry } from './ProjectContext';
+import { useProjectContext } from './ProjectContext';
 
 export type VouchContextType = {
   setVouchParams: (account: HexStr, personCid: string) => void;
@@ -23,7 +23,7 @@ export interface VouchContextProps {
 
 export const VouchContext = (props: VouchContextProps) => {
   /** Vouch */
-  const { registryAddress } = useRegistry();
+  const { registryAddress } = useProjectContext();
   const [vouchParamsInternal, setVouchParamsInternal] = useState<[HexStr, string]>();
 
   const setVouchParams = useCallback((account: HexStr, personCid: string) => {

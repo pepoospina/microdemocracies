@@ -10,7 +10,6 @@ import { WagmiConfig, configureChains, createConfig } from 'wagmi';
 import { ALCHEMY_KEY } from './config/appConfig';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { ViewportContainer } from './components/styles/LayoutComponents.styled';
-import { CreateProjectContext } from './contexts/CreateProjectContext';
 import { VoiceReadContext } from './contexts/VoiceReadContext';
 import { VoiceSendContext } from './contexts/VoiceSendContext';
 import { VouchContext } from './contexts/VouchContext';
@@ -28,26 +27,27 @@ import { VouchAccount } from './pages/vouch/VouchAccount';
 import { AllVouches } from './pages/vouches/AllVouches';
 import { Vouches } from './pages/vouches/Vouches';
 import { ProjectBase } from './pages/project/ProjectBase';
-import { ConnectedMemberContext } from './contexts/ConnectedAccountContext';
 import { SignerContext } from './wallet/SignerContext';
+import { ConnectedMemberContext } from './contexts/ConnectedAccountContext';
+import { AccountContext } from './wallet/AccountContext';
 
 const queryClient = new QueryClient();
 
 export const RouteNames = {
-  Base: `/`,
+  Base: ``,
   More: `/learn`,
   Start: '/start',
   ProjectHome: (projectId: string) => `/p/${projectId}`,
-  Join: `/join`,
-  Vouch: `/invite`,
-  VouchAccount: (hash: string) => `/invite/${hash}`,
-  MyVouches: `/invites`,
-  VouchesAll: `/allnew`,
-  Challenges: `/challenges`,
-  Member: (id: number) => `/member/${id}`,
-  MemberChallange: (id: number) => `/member/${id}/challenge`,
-  Voice: `/voice`,
-  VoicePropose: `/voice/propose`,
+  Join: `join`,
+  Vouch: `invite`,
+  VouchAccount: (hash: string) => `invite/${hash}`,
+  MyVouches: `invites`,
+  VouchesAll: `allnew`,
+  Challenges: `challenges`,
+  Member: (id: number) => `member/${id}`,
+  MemberChallange: (id: number) => `member/${id}/challenge`,
+  Voice: `voice`,
+  VoicePropose: `voice/propose`,
 };
 
 function App() {
@@ -65,7 +65,7 @@ function App() {
     <div className="App">
       <WagmiConfig config={config}>
         <SignerContext>
-          <ConnectedMemberContext>
+          <AccountContext>
             <GlobalStyles />
             <ThemedApp>
               <ResponsiveApp>
@@ -76,22 +76,18 @@ function App() {
                         {/* Landing and project create */}
                         <Route path={RouteNames.Base} element={<LandingPage />}></Route>
                         <Route path={RouteNames.More} element={<LearnMore />}></Route>
-                        <Route
-                          path={RouteNames.Start}
-                          element={
-                            <CreateProjectContext>
-                              <CreateProject />
-                            </CreateProjectContext>
-                          }></Route>
+                        <Route path={RouteNames.Start} element={<CreateProject />}></Route>
 
                         {/* Project-Specific */}
                         <Route
                           path={`/p/:projectId`}
                           element={
                             <ProjectContext>
-                              <VouchContext>
-                                <ProjectBase />
-                              </VouchContext>
+                              <ConnectedMemberContext>
+                                <VouchContext>
+                                  <ProjectBase />
+                                </VouchContext>
+                              </ConnectedMemberContext>
                             </ProjectContext>
                           }>
                           <Route path={RouteNames.Base} element={<ProjectHome />}></Route>
@@ -125,7 +121,7 @@ function App() {
                 </QueryClientProvider>
               </ResponsiveApp>
             </ThemedApp>
-          </ConnectedMemberContext>
+          </AccountContext>
         </SignerContext>
       </WagmiConfig>
     </div>

@@ -9,7 +9,7 @@ import { AppButton, AppCard } from '../../ui-components';
 import { RouteNames } from '../../App';
 import { useTokenAccount } from '../../contexts/MemberContext';
 import { useVouch } from '../../contexts/VouchContext';
-import { useRegistry } from '../../contexts/ProjectContext';
+import { useProjectContext } from '../../contexts/ProjectContext';
 import { AppScreen } from '../../ui-components/AppFormScreen';
 import { AccountPerson } from '../account/AccountPerson';
 import { useConnectedMember } from '../../contexts/ConnectedAccountContext';
@@ -21,7 +21,7 @@ import { useAccountContext } from '../../wallet/AccountContext';
 export const VouchAccount = () => {
   const navigate = useNavigate();
   const { hash } = useParams();
-  const { refetch: refetchRegistry } = useRegistry();
+  const { refetch: refetchRegistry } = useProjectContext();
 
   const [pap, setPap] = useState<Entity<PAP>>();
   const [sending, setSending] = useState<boolean>(false);

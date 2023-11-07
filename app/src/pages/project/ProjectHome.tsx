@@ -1,7 +1,7 @@
 import { Anchor, Box, Text } from 'grommet';
 import { AppButton } from '../../ui-components';
 import { useNavigate } from 'react-router-dom';
-import { useRegistry } from '../../contexts/ProjectContext';
+import { useProjectContext } from '../../contexts/ProjectContext';
 import { MyNetworkWidget } from '../mynetwork/MyNetworkWidget';
 import { useConnectedMember } from '../../contexts/ConnectedAccountContext';
 import { AppConnectButton } from '../../components/app/AppConnectButton';
@@ -15,7 +15,7 @@ export interface IProjectHome {
 
 export const ProjectHome = (props: IProjectHome) => {
   const navigate = useNavigate();
-  const { nMembers } = useRegistry();
+  const { nMembers } = useProjectContext();
 
   const { isConnected } = useAccountContext();
   const { tokenId } = useConnectedMember();

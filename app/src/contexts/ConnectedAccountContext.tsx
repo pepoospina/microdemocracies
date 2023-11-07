@@ -4,7 +4,7 @@ import { useContractRead, usePublicClient } from 'wagmi';
 
 import { RegistryAbi, VouchEventAbi } from '../utils/contracts.json';
 import { AppAccount, AppChallenge, AppVouch } from '../types';
-import { useRegistry } from './ProjectContext';
+import { useProjectContext } from './ProjectContext';
 import { useAccountContext } from '../wallet/AccountContext';
 
 export type ConnectedMemberContextType = {
@@ -21,7 +21,7 @@ export interface ConnectedMemberContextProps {
 }
 
 export const ConnectedMemberContext = (props: ConnectedMemberContextProps) => {
-  const { registryAddress } = useRegistry();
+  const { registryAddress } = useProjectContext();
   const publicClient = usePublicClient();
 
   const { aaAddress } = useAccountContext();
