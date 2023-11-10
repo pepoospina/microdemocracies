@@ -5,13 +5,16 @@ import { verifySignedObject } from '../../../utils/signatures';
 import { setStatement } from '../../../db/setters';
 
 import { statementValidationScheme } from './voice.schemas';
+import { AppStatement, SignedObject } from 'src/@app/types';
 
 export const createStatementController: RequestHandler = async (
   request,
   response
 ) => {
   // console.log('validate', request.body);
-  const statement = await statementValidationScheme.validate(request.body);
+  const statement = (await statementValidationScheme.validate(
+    request.body
+  )) as SignedObject<AppStatement>;
 
   // verify signature is from the author address in the registry
   const id = await verifySignedObject(statement, statement.object.author);

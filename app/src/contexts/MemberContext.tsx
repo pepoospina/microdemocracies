@@ -1,7 +1,7 @@
 import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
 import { useContractRead } from 'wagmi';
 
-import { RegistryAbi } from '../utils/contracts.json';
+import { registryABI } from '../utils/contracts.json';
 import { AppAccount, AppVouch, Entity, HexStr, PAP } from '../types';
 import { useQuery } from 'react-query';
 import { getEntity } from '../utils/store';
@@ -68,7 +68,7 @@ export const MemberContext = (props: AccountContextProps) => {
     refetch: refetchTokenIdOfAddress,
   } = useContractRead({
     address: registryAddress,
-    abi: RegistryAbi,
+    abi: registryABI,
     functionName: 'tokenIdOf',
     args: address ? [address] : undefined,
     enabled: address !== undefined,
@@ -87,7 +87,7 @@ export const MemberContext = (props: AccountContextProps) => {
     isLoading: isLoadingAccount,
   } = useContractRead({
     address: registryAddress,
-    abi: RegistryAbi,
+    abi: registryABI,
     functionName: 'getAccount',
     args: tokenId ? [tokenId] : tokenIdOfAddress ? [tokenIdOfAddress] : undefined,
     enabled: tokenId !== undefined || tokenIdOfAddress !== undefined,
@@ -97,7 +97,7 @@ export const MemberContext = (props: AccountContextProps) => {
 
   const { data: accountVouch } = useContractRead({
     address: registryAddress,
-    abi: RegistryAbi,
+    abi: registryABI,
     functionName: 'getTokenVouch',
     args: tokenId ? [tokenId] : undefined,
     enabled: tokenId !== undefined,
@@ -105,7 +105,7 @@ export const MemberContext = (props: AccountContextProps) => {
 
   const { data: voucherVouch } = useContractRead({
     address: registryAddress,
-    abi: RegistryAbi,
+    abi: registryABI,
     functionName: 'getTokenVouch',
     args: _accountRead !== undefined ? [_accountRead.voucher] : undefined,
     enabled: _accountRead !== undefined,

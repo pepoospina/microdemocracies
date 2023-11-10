@@ -113,7 +113,7 @@ export interface AppStatementBacking {
 
 export interface SignedObject<T> {
   object: T;
-  signature: string;
+  signature: HexStr;
 }
 
 export type StatementRead = SignedObject<AppStatement> & { id: string };

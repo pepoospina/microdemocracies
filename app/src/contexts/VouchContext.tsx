@@ -2,7 +2,7 @@ import { createContext, ReactNode, useCallback, useContext, useState } from 'rea
 import { useContractWrite, usePrepareContractWrite, useWaitForTransaction } from 'wagmi';
 import { WriteContractResult } from '@wagmi/core';
 
-import { RegistryAbi } from '../utils/contracts.json';
+import { registryABI } from '../utils/contracts.json';
 import { HexStr } from '../types';
 import { useProjectContext } from './ProjectContext';
 
@@ -32,7 +32,7 @@ export const VouchContext = (props: VouchContextProps) => {
 
   const { config: vouchConfig } = usePrepareContractWrite({
     address: registryAddress,
-    abi: RegistryAbi,
+    abi: registryABI,
     args: vouchParamsInternal,
     functionName: 'vouch',
   });

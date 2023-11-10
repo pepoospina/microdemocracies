@@ -23,7 +23,7 @@
     "composite": true,
     "preserveSymlinks": true
   },
-  "include": ["types", "scripts", "test", "build/abis.ts", "helpers", "./hardhat.config.ts", "./deploy", "./test/scenarios.json", "@app", "utils"],
+  "include": ["types", "scripts", "test", "export/abis.ts", "helpers", "./hardhat.config.ts", "./deploy", "./test/scenarios.json", "@app", "utils"],
   "exclude": ["**/node_modules", ".husky", "./src/styles/css", "./tailwind.config.js"],
   "files": ["./hardhat.config.ts", "helpers/types/__global.ts"]
 }

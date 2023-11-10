@@ -14,13 +14,14 @@ import { DetailsForm } from '../join/DetailsForm';
 import { AppConnect } from '../../components/app/AppConnect';
 import { ProjectSummary } from './ProjectSummary';
 import { DetailsAndPlatforms, HexStr, PAP, SelectedDetails } from '../../types';
-import { RegistryFactoryAbi, registryFactoryAddress } from '../../utils/contracts.json';
+import { getFactoryAddress, registryFactoryABI } from '../../utils/contracts.json';
 import { deriveEntity } from '../../utils/cid-hash';
 import { BoxCentered } from '../../ui-components/BoxCentered';
 import { RouteNames } from '../../App';
 import { useAccountContext } from '../../wallet/AccountContext';
 import { postStatement } from '../../utils/statements';
 import { postProject } from '../../utils/project';
+import { RegistryCreatedEvent } from '../../utils/viem.types';
 
 const NPAGES = 5;
 
@@ -58,10 +59,12 @@ export const CreateProject = () => {
 
     // TODO weird encodedFunctionData asking for zero parameters
     const callData = (encodeFunctionData as any)({
-      abi: RegistryFactoryAbi,
+      abi: registryFactoryABI,
       functionName: 'create',
       args: ['MRS', 'micro(r)evolutions ', [founderPap.account as HexStr], [entity.cid], salt],
     });
+
+    const registryFactoryAddress = await getFactoryAddress();
 
     addUserOp({
       target: registryFactoryAddress,
@@ -96,7 +99,7 @@ export const CreateProject = () => {
 
   useEffect(() => {
     if (isSuccess && events) {
-      const event = events.find((e: any) => e.eventName === 'RegistryCreated') as RegistryCreatedEvent | undefined;
+      const event = events.find((e) => e.eventName === 'RegistryCreated') as RegistryCreatedEvent | undefined;
       if (event) {
         registerProject(event);
       }
@@ -198,7 +201,8 @@ export const CreateProject = () => {
             </Box>
             <Box style={{ marginTop: '0px' }}>
               <Text style={{ fontSize: '24px', lineHeight: '150%', fontWeight: '300' }}>
-                Try to make it <span style={{ fontWeight: '400' }}>small</span>, <span style={{ fontWeight: '400' }}>achievable</span> and{' '}
+                Try to make it <span style={{ fontWeight: '400' }}>small</span>,{' '}
+                <span style={{ fontWeight: '400' }}>achievable</span> and{' '}
                 <span style={{ fontWeight: '400' }}>close to you</span>.
               </Text>
             </Box>
@@ -251,7 +255,11 @@ export const CreateProject = () => {
         </Box>
 
         <Box style={boxStyle}>
-          <ProjectSummary selectedDetails={selectedDetails} whatStatement={whatStatement} whoStatement={whoStatement} founderPap={founderPap}></ProjectSummary>
+          <ProjectSummary
+            selectedDetails={selectedDetails}
+            whatStatement={whatStatement}
+            whoStatement={whoStatement}
+            founderPap={founderPap}></ProjectSummary>
         </Box>
       </ReactSimplyCarousel>
 

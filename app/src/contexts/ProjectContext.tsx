@@ -2,8 +2,9 @@ import { createContext, useContext, useEffect, useState } from 'react';
 import { useContractRead, usePublicClient, useQuery } from 'wagmi';
 import { constants } from 'ethers';
 
-import { RegistryAbi, VouchEventAbi } from '../utils/contracts.json';
+import { registryABI } from '../utils/contracts.json';
 import { AppVouch, HexStr } from '../types';
+import { getContract } from 'viem';
 
 export type ProjectContextType = {
   registryAddress?: HexStr;
@@ -35,12 +36,14 @@ export const ProjectContext = (props: IProjectContext) => {
 
   // all vouches
   const { data: vouchEvents } = useQuery(['allVoucheEvents'], async () => {
-    const logs = await (publicClient as any).getLogs({
+    const contract = getContract({
       address: registryAddress,
-      event: VouchEventAbi,
-      fromBlock: 'earliest',
-      toBlock: 'latest',
+      abi: registryABI,
+      publicClient,
     });
+
+    /** all vouch events */
+    const logs = await contract.getEvents.VouchEvent({}, { fromBlock: 'earliest', toBlock: 'latest' });
 
     return logs;
   });
@@ -69,7 +72,7 @@ export const ProjectContext = (props: IProjectContext) => {
     isLoading,
   } = useContractRead({
     address: registryAddress,
-    abi: RegistryAbi,
+    abi: registryABI,
     functionName: 'totalSupply',
   });
 

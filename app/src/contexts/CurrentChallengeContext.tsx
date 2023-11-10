@@ -2,10 +2,9 @@ import { createContext, ReactNode, useContext } from 'react';
 import { useContractRead, useContractWrite, usePrepareContractWrite, useWaitForTransaction } from 'wagmi';
 import { WriteContractResult } from '@wagmi/core';
 
-import { RegistryAbi } from '../utils/contracts.json';
+import { registryABI } from '../utils/contracts.json';
 import { AppChallenge, VoteOption } from '../types';
 import { useProjectContext } from './ProjectContext';
-import { useConnectedMember } from './ConnectedAccountContext';
 import { useAccountContext } from '../wallet/AccountContext';
 
 export type ChallengeContextType = {
@@ -49,7 +48,7 @@ export const ChallengeContext = (props: ChallengeContextProps) => {
     error: errorChallengeRead,
   } = useContractRead({
     address: registryAddress,
-    abi: RegistryAbi,
+    abi: registryABI,
     functionName: 'getChallenge',
     args: tokenIdInternal ? [tokenIdInternal] : undefined,
     enabled: tokenIdInternal !== undefined,
@@ -57,7 +56,7 @@ export const ChallengeContext = (props: ChallengeContextProps) => {
 
   const { data: totalVoters } = useContractRead({
     address: registryAddress,
-    abi: RegistryAbi,
+    abi: registryABI,
     functionName: 'getTotalVoters',
     args: tokenIdInternal ? [tokenIdInternal] : undefined,
     enabled: tokenIdInternal !== undefined,
@@ -65,7 +64,7 @@ export const ChallengeContext = (props: ChallengeContextProps) => {
 
   const { config: configChallenge } = usePrepareContractWrite({
     address: registryAddress,
-    abi: RegistryAbi,
+    abi: registryABI,
     args: tokenIdInternal ? [tokenIdInternal] : undefined,
     functionName: 'challenge',
     onError(error) {
@@ -96,7 +95,7 @@ export const ChallengeContext = (props: ChallengeContextProps) => {
 
   const { data: tokenIdOfAddress } = useContractRead({
     address: registryAddress,
-    abi: RegistryAbi,
+    abi: registryABI,
     functionName: 'tokenIdOf',
     args: connectedAddress ? [connectedAddress] : undefined,
     enabled: connectedAddress !== undefined,
@@ -104,7 +103,7 @@ export const ChallengeContext = (props: ChallengeContextProps) => {
 
   const { data: canVote } = useContractRead({
     address: registryAddress,
-    abi: RegistryAbi,
+    abi: registryABI,
     functionName: 'canVote',
     args: tokenIdOfAddress && tokenIdInternal ? [tokenIdOfAddress, tokenIdInternal] : undefined,
     enabled: tokenIdOfAddress !== undefined && tokenIdInternal !== undefined,
@@ -112,7 +111,7 @@ export const ChallengeContext = (props: ChallengeContextProps) => {
 
   const { data: _myVote } = useContractRead({
     address: registryAddress,
-    abi: RegistryAbi,
+    abi: registryABI,
     functionName: 'getChallengeVote',
     args: tokenIdOfAddress && tokenIdInternal ? [tokenIdInternal, tokenIdOfAddress] : undefined,
     enabled: tokenIdOfAddress !== undefined && tokenIdInternal !== undefined,
@@ -126,7 +125,7 @@ export const ChallengeContext = (props: ChallengeContextProps) => {
 
   const { config: configVoteRemove } = usePrepareContractWrite({
     address: registryAddress,
-    abi: RegistryAbi,
+    abi: registryABI,
     args: voteRemove,
     functionName: 'vote',
     onError(error) {
@@ -136,7 +135,7 @@ export const ChallengeContext = (props: ChallengeContextProps) => {
 
   const { config: configVoteKeep } = usePrepareContractWrite({
     address: registryAddress,
-    abi: RegistryAbi,
+    abi: registryABI,
     args: voteKeep,
     functionName: 'vote',
     onError(error) {
