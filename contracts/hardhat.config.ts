@@ -9,10 +9,10 @@
 // This adds support for typescript paths mappings
 import 'tsconfig-paths/register';
 
-import 'hardhat-deploy';
+import '@nomicfoundation/hardhat-ignition';
+import '@nomicfoundation/hardhat-viem';
 import 'solidity-coverage';
 import 'hardhat-gas-reporter';
-import '@nomicfoundation/hardhat-viem';
 
 import * as fs from 'fs';
 
