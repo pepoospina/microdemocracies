@@ -13,13 +13,12 @@ import { DetailsSelector } from './DetailsSelector';
 import { DetailsForm } from '../join/DetailsForm';
 import { AppConnect } from '../../components/app/AppConnect';
 import { ProjectSummary } from './ProjectSummary';
-import { DetailsAndPlatforms, HexStr, PAP, SelectedDetails } from '../../types';
+import { AppStatementCreate, DetailsAndPlatforms, HexStr, PAP, SelectedDetails } from '../../types';
 import { getFactoryAddress, registryFactoryABI } from '../../utils/contracts.json';
 import { deriveEntity } from '../../utils/cid-hash';
 import { BoxCentered } from '../../ui-components/BoxCentered';
 import { RouteNames } from '../../App';
 import { useAccountContext } from '../../wallet/AccountContext';
-import { postStatement } from '../../utils/statements';
 import { postProject } from '../../utils/project';
 import { RegistryCreatedEvent } from '../../utils/viem.types';
 
@@ -55,13 +54,18 @@ export const CreateProject = () => {
     if (!aaAddress || !founderPap || !addUserOp) return;
 
     const entity = await deriveEntity(founderPap);
+    const statement: AppStatementCreate = {
+      statement: whatStatement,
+      author: 0,
+    };
+    const statementEntity = await deriveEntity({ statement });
     const salt = utils.keccak256(utils.toUtf8Bytes(Date.now().toString())) as HexStr;
 
     // TODO weird encodedFunctionData asking for zero parameters
-    const callData = (encodeFunctionData as any)({
+    const callData = encodeFunctionData({
       abi: registryFactoryABI,
       functionName: 'create',
-      args: ['MRS', 'micro(r)evolutions ', [founderPap.account as HexStr], [entity.cid], salt],
+      args: ['MRS', 'micro(r)evolutions ', [founderPap.account as HexStr], [entity.cid], statementEntity.cid, salt],
     });
 
     const registryFactoryAddress = await getFactoryAddress();
@@ -81,7 +85,6 @@ export const CreateProject = () => {
     const address = event.args.newRegistry as HexStr;
 
     if (!selectedDetails) throw new Error('selectedDetails undefined');
-    if (!signMessage) throw new Error('signMessage undefined');
 
     /** sign the "what" of the project */
     await postProject({
@@ -91,8 +94,6 @@ export const CreateProject = () => {
       whoStatement,
       selectedDetails,
     });
-
-    await postStatement(1, whatStatement, signMessage);
 
     navigate(RouteNames.ProjectHome((event.args as any).number));
   };

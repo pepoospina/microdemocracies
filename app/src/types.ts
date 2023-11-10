@@ -68,15 +68,15 @@ export interface AppProjectCreate {
 
 export interface SelectedDetails {
   personal: {
-    firstName: boolean;
-    lastName: boolean;
-    placeOfBirth: boolean;
-    dateOfBirth: boolean;
-    nationality: boolean;
-    nationalID: boolean;
-    organization: boolean;
+    firstName?: boolean;
+    lastName?: boolean;
+    placeOfBirth?: boolean;
+    dateOfBirth?: boolean;
+    nationality?: boolean;
+    nationalID?: boolean;
+    organization?: boolean;
   };
-  platform: Record<PlatformId, boolean>;
+  platform: Partial<Record<PlatformId, boolean>>;
 }
 
 export interface AppVouch {

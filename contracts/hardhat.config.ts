@@ -116,8 +116,8 @@ const config: HardhatUserConfig = {
     ],
   },
   paths: {
-    cache: './generated/cache',
-    artifacts: './generated/artifacts',
+    cache: './build/cache',
+    artifacts: './build/artifacts',
   },
   mocha: {
     timeout: 3600000, // 1 hourd debugging :'(

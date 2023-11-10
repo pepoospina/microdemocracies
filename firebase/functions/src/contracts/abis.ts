@@ -788,6 +788,7 @@ export const registryABI = [
       { name: '__name', internalType: 'string', type: 'string' },
       { name: 'addresses', internalType: 'address[]', type: 'address[]' },
       { name: 'foundersCids', internalType: 'string[]', type: 'string[]' },
+      { name: '_statementCid', internalType: 'string', type: 'string' },
     ],
     name: 'initRegistry',
     outputs: [],
@@ -867,6 +868,7 @@ export const registryABI = [
     name: 'setApprovalForAll',
     outputs: [],
   },
+  { stateMutability: 'view', type: 'function', inputs: [], name: 'statementCid', outputs: [{ name: '', internalType: 'string', type: 'string' }] },
   {
     stateMutability: 'view',
     type: 'function',
@@ -954,6 +956,7 @@ export const registryFactoryABI = [
       { name: '__name', internalType: 'string', type: 'string' },
       { name: 'addresses', internalType: 'address[]', type: 'address[]' },
       { name: 'foundersCids', internalType: 'string[]', type: 'string[]' },
+      { name: '_statementCid', internalType: 'string', type: 'string' },
       { name: 'salt', internalType: 'bytes32', type: 'bytes32' },
     ],
     name: 'create',

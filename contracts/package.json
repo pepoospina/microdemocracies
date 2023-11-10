@@ -9,7 +9,8 @@
   "scripts": {
     "chain": "hardhat node --network hardhat",
     "test": "hardhat test --network hardhat",
-    "compile": "rm -rf ./generated && mkdir ./generated && hardhat compile --force && wagmi generate",
+    "compile": "rm -rf ./build && mkdir ./build && hardhat compile --force && yarn generate",
+    "generate": "wagmi generate",
     "export": "./export.generated.sh",
     "deploy": "npx hardhat ignition deploy ignition/modules/RegistryFactory.ts",
     "verify": "hardhat etherscan-verify",
