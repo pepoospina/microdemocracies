@@ -6,13 +6,16 @@ import { setStatementBacker } from '../../../db/setters';
 
 import { backStatementValidationScheme } from './voice.schemas';
 import { verifySignedObject } from '../../../utils/signatures';
+import { AppStatementBacking, SignedObject } from 'src/@app/types';
 
 export const backStatementController: RequestHandler = async (
   request,
   response
 ) => {
   // console.log('validate', request.body);
-  const backing = await backStatementValidationScheme.validate(request.body);
+  const backing = (await backStatementValidationScheme.validate(
+    request.body
+  )) as SignedObject<AppStatementBacking>;
 
   // verify signature is from the author address in the registry
   const id = await verifySignedObject(backing, backing.object.backer);

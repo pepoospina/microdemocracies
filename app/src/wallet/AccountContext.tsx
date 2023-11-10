@@ -8,9 +8,9 @@ import { chain } from './config';
 import { usePublicClient } from 'wagmi';
 import { ALCHEMY_KEY } from '../config/appConfig';
 import { DecodeEventLogReturnType, decodeEventLog } from 'viem';
-import { RegistryFactoryAbi, registryFactoryAddress } from '../utils/contracts.json';
 import { useAppSigner } from './SignerContext';
 import { MessageSigner } from '../utils/statements';
+import { getFactoryAddress, registryFactoryABI } from '../utils/contracts.json';
 
 export type AccountContextType = {
   isConnected: boolean;
@@ -100,14 +100,12 @@ export const AccountContext = (props: PropsWithChildren) => {
             const res = await alchemyProviderAA.sendUserOperation(userOps);
             const txHash = await alchemyProviderAA.waitForUserOperationTransaction(res.hash);
             const tx = await (publicClient as any).waitForTransactionReceipt({ hash: txHash });
+            const factoryAddress = await getFactoryAddress();
 
-            console.log({ registryFactoryAddress, txlogs: tx.logs });
-            const logs = tx.logs.filter(
-              (log: any) => log.address.toLowerCase() === registryFactoryAddress.toLowerCase()
-            );
+            const logs = tx.logs.filter((log: any) => log.address.toLowerCase() === factoryAddress.toLowerCase());
             console.log({ logs });
             const events = logs.map((log: any) => {
-              return (decodeEventLog as any)({ abi: RegistryFactoryAbi, data: log.data, topics: log.topics });
+              return (decodeEventLog as any)({ abi: registryFactoryABI, data: log.data, topics: log.topics });
             });
 
             console.log({ events });

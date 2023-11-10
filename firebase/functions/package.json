@@ -20,13 +20,15 @@
     "base58-js": "1.0.5",
     "canonical-json": "^0.0.4",
     "cors": "^2.8.5",
-    "ethers": "^6.8.1",
     "express": "^4.18.2",
     "firebase-admin": "^11.11.0",
     "firebase-functions": "^4.4.1",
     "js-sha256": "^0.10.1",
     "pino": "^8.16.1",
     "pino-pretty": "^10.2.3",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.2.2",
+    "viem": "^1.18.9",
     "yup": "^1.3.2"
   },
   "devDependencies": {
@@ -40,9 +42,7 @@
     "eslint-plugin-import": "^2.25.4",
     "firebase-functions-test": "^3.1.0",
     "mocha": "^10.2.0",
-    "supertest": "^6.3.3",
-    "ts-node": "^10.9.1",
-    "typescript": "^4.9.0"
+    "supertest": "^6.3.3"
   },
   "private": true
 }
