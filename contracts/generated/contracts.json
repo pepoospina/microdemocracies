@@ -1,0 +1,9 @@
+{
+  "1337": {
+    "hardhat": {
+      "name": "hardhat",
+      "chainId": "1337",
+      "contracts": {}
+    }
+  }
+}
