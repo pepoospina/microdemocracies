@@ -7,7 +7,7 @@ import { HexStr } from 'src/@app/types';
 
 // const getFactoryAddress = () => _factoryAddress(env.CHAIN_ID);
 const getFactoryAddress = (): HexStr =>
-  '0x106Eda2a0074E5dFb1722Fc41c300400dC70F478';
+  '0x2b18D3657f4B4129B36D74BCF5B2889C91fBa252';
 
 const publicClient = createPublicClient({
   chain: baseGoerli,

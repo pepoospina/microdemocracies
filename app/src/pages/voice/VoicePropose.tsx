@@ -50,7 +50,7 @@ export const VoicePropose = (): JSX.Element => {
                 preview
                 statement={{
                   object: { statement: input || '', author: tokenId ? tokenId : 0, backers: [] },
-                  signature: '',
+                  signature: '0x',
                   id: '',
                 }}></Statement>
             </Box>

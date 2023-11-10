@@ -29,6 +29,7 @@ contract RegistryFactory {
         string memory __name, 
         address[] memory addresses, 
         string[] memory foundersCids,
+        string memory _statementCid, 
         bytes32 salt
     ) external returns (address payable proxy) {
         proxy = payable(Clones.cloneDeterministic(address(master), salt));
@@ -36,7 +37,7 @@ contract RegistryFactory {
         mrCounter++;
         string memory name = string(abi.encodePacked(__name, Strings.toString(mrCounter)));
 
-        Registry(proxy).initRegistry(__symbol, name, addresses, foundersCids);
+        Registry(proxy).initRegistry(__symbol, name, addresses, foundersCids, _statementCid);
 
         emit RegistryCreated(msg.sender, proxy, mrCounter);
 

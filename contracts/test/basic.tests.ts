@@ -93,7 +93,10 @@ describe('Registry', () => {
     const addresses = founders.map((f) => (f.person && f.person.object.account) as HexStr);
     const personCids = founders.map((f) => (f.person && f.person.cid) as string);
 
-    const hash = await factory.write.create(['ABC', 'Test Community', addresses, personCids, keccak256(stringToBytes(counter.toString()))]);
+    const statement = keccak256(stringToBytes(counter.toString()));
+    const salt = keccak256(stringToBytes(counter.toString()));
+
+    const hash = await factory.write.create(['ABC', 'Test Community', addresses, personCids, statement, salt]);
     const factoryEvents = await getContractEventsFromHash('RegistryFactory', hash);
 
     const createdEvent = factoryEvents?.find((e) => e.eventName === 'RegistryCreated') as RegistryCreatedEvent;
