@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import stringify from 'canonical-json';
-import contractsJson from '../generated/contracts.json';
 import { CHAIN_NAME, CHAIN_ID } from '../config/appConfig';
 import { getContract } from 'viem';
 

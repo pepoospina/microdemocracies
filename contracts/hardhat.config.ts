@@ -118,23 +118,9 @@ const config: HardhatUserConfig = {
   paths: {
     cache: './generated/cache',
     artifacts: './generated/artifacts',
-    deployments: './generated/deployments',
   },
   mocha: {
     timeout: 3600000, // 1 hourd debugging :'(
   },
 };
 export default config;
-
-/*
-task('wallet', 'Create a wallet (pk) link', async (_, { ethers }) => {
-  const randomWallet = ethers.Wallet.createRandom();
-  const { privateKey } = randomWallet._signingKey();
-  console.log(`🔐 WALLET Generated as ${randomWallet.address}`);
-  console.log(`🔗 http://localhost:3000/pk#${privateKey}`);
-});
-
-task('reset', 'Get tx receipt').setAction(async (_, hre) => {
-  await hre.network.provider.send('hardhat_reset');
-});
-*/

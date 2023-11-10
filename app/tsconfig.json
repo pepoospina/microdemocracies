@@ -16,5 +16,5 @@
     "noEmit": true,
     "jsx": "react-jsx"
   },
-  "include": ["src", "src/generated/hardhat_contracts.json"]
+  "include": ["src", "src/build/hardhat_contracts.json"]
 }

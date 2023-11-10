@@ -1,9 +1,0 @@
-{
-  "1337": {
-    "localhost": {
-      "name": "localhost",
-      "chainId": "1337",
-      "contracts": {}
-    }
-  }
-}

@@ -1,14 +1,14 @@
 #!/bin/bash
 
-rm -rf ../app/src/generated
-rm -rf ../firebase/functions/src/generated
+rm -rf ../app/src/contracts
+rm -rf ../firebase/functions/src/contracts
 
-mkdir ../app/src/generated
-mkdir ../firebase/functions/src/generated
+mkdir ../app/src/contracts
+mkdir ../firebase/functions/src/contracts
 
-cp -rf ./generated/artifacts ../app/src/generated
-cp -rf ./generated/contracts.json ../app/src/generated
+cp -rf ./export/abis.ts ../app/src/contracts
+rsync -avm --include='*/' --include='deployed_addresses.json' --exclude='*' ./ignition/deployments ../app/src/contracts
 
-cp -rf ./generated/artifacts ../firebase/functions/src/generated
-cp -rf ./generated/contracts.json ../firebase/functions/src/generated
+cp -rf ./export/abis.ts ../firebase/functions/src/contracts
+rsync -avm --include='*/' --include='deployed_addresses.json' --exclude='*' ./ignition/deployments ../firebase/functions/src/contracts
 

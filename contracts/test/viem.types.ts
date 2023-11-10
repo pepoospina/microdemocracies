@@ -1,6 +1,6 @@
 import { PublicClient, Account, Chain, Transport, WalletClient, Log, decodeEventLog, GetContractReturnType } from 'viem';
 
-import { registryFactoryABI, registryABI } from './../generated/abis';
+import { registryFactoryABI, registryABI } from '../build/abis';
 
 export type TransactionReceipt = Awaited<ReturnType<PublicClient['waitForTransactionReceipt']>>;
 export type Signer = WalletClient<Transport, Chain, Account>;
