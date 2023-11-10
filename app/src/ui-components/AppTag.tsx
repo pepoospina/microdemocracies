@@ -1,0 +1,20 @@
+import { BoxExtendedProps, Box } from 'grommet';
+import { useThemeContext } from '../components/app';
+
+export const AppTag = (props: BoxExtendedProps): JSX.Element => {
+  const { constants } = useThemeContext();
+
+  return (
+    <Box
+      direction="row"
+      align="center"
+      style={{
+        borderRadius: '30px',
+        backgroundColor: constants.colors.backgroundLight,
+        padding: '6.5px 16px',
+        ...props.style,
+      }}>
+      {props.children}
+    </Box>
+  );
+};

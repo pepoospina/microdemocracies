@@ -1,0 +1,34 @@
+import { RequestHandler } from 'express';
+import { logger } from 'firebase-functions/v1';
+
+import { getStatement } from '../../../db/getters';
+import { setStatementBacker } from '../../../db/setters';
+
+import { backStatementValidationScheme } from './voice.schemas';
+import { verifySignedObject } from '../../../utils/signatures';
+
+export const backStatementController: RequestHandler = async (
+  request,
+  response
+) => {
+  // console.log('validate', request.body);
+  const backing = await backStatementValidationScheme.validate(request.body);
+
+  // verify signature is from the author address in the registry
+  const id = await verifySignedObject(backing, backing.object.backer);
+
+  // verify backer is not author
+  const statement = await getStatement(backing.object.statementId);
+
+  if (statement.object.author === backing.object.backer) {
+    throw new Error(`Author cannot back their statments`);
+  }
+
+  try {
+    await setStatementBacker(backing, id);
+    response.status(200).send({ success: true, id });
+  } catch (error: any) {
+    logger.error('error', error);
+    response.status(500).send({ success: false, error: error.message });
+  }
+};

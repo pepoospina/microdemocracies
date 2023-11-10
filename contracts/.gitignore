@@ -1,0 +1,7 @@
+/node_modules
+.env
+*.secret
+build/artifacts/build-info
+build/**/*.dbg.json
+build/cache
+/utils/founders

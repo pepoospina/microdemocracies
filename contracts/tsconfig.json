@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "types": ["node", "ethers"],
+    "allowJs": false,
+    "skipLibCheck": false,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "typeRoots": ["@app/types", "node_modules/@types"] /* List of folders to include type definitions from. */,
+    "forceConsistentCasingInFileNames": true,
+    "module": "commonjs",
+    "moduleResolution": "Node",
+    "incremental": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "rootDir": ".",
+    "baseUrl": ".",
+    "outDir": "dist",
+    "paths": {},
+    "composite": true,
+    "preserveSymlinks": true
+  },
+  "include": ["types", "scripts", "test", "build/abis.ts", "helpers", "./hardhat.config.ts", "./deploy", "./test/scenarios.json", "@app", "utils"],
+  "exclude": ["**/node_modules", ".husky", "./src/styles/css", "./tailwind.config.js"],
+  "files": ["./hardhat.config.ts", "helpers/types/__global.ts"]
+}
