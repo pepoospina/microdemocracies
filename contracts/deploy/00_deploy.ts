@@ -1,26 +1,16 @@
 import { HardhatRuntimeEnvironment } from 'hardhat/types';
 import { DeployFunction } from 'hardhat-deploy/types';
+import { viem } from 'hardhat';
 
-import { getDeployer } from '../utils/utils';
-import { prepareFounders } from '../utils/prepare.founders';
+import { getDeployEnv } from '../utils/utils';
 
 const deployEntryPoint: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
-  const { deployer } = await getDeployer(hre, 0);
-  const founders = await prepareFounders();
+  const { deployer } = await getDeployEnv();
 
-  const master = await hre.deployments.deploy('Registry', {
-    from: deployer.address,
-    args: [],
-    log: true,
-  });
+  const master = await viem.deployContract('Registry', [], { walletClient: deployer });
+  const factory = await viem.deployContract('RegistryFactory', [master.address], { walletClient: deployer });
 
-  const res = await hre.deployments.deploy('RegistryFactory', {
-    from: deployer.address,
-    args: [master.address],
-    log: true,
-  });
-
-  console.log('== RegistryFactory Address ==', res.address);
+  console.log('== RegistryFactory Address ==', factory.address);
 };
 
 export default deployEntryPoint;

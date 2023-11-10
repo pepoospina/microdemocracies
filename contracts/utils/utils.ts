@@ -1,25 +1,19 @@
-import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
-import { providers } from 'ethers';
+import { viem } from 'hardhat';
 import { HardhatRuntimeEnvironment } from 'hardhat/types';
+import { Signer } from 'test/viem.types';
+import { PublicClient } from 'viem';
 
-export const getDeployer = async (
-  hre: HardhatRuntimeEnvironment,
-  ix: number = 0
-): Promise<{
-  deployer: SignerWithAddress;
-  provider: providers.Provider;
-  network: providers.Network;
+export const getDeployEnv = async (): Promise<{
+  deployer: Signer;
+  client: PublicClient;
 }> => {
-  const signers = await hre.ethers.getSigners();
+  const signers = await viem.getWalletClients();
+  const client = await viem.getPublicClient();
 
   const deployer = signers[0];
-  if (deployer.provider === undefined) throw new Error('Undefined');
-
-  const network = await deployer.provider.getNetwork();
 
   return {
     deployer,
-    provider: deployer.provider,
-    network,
+    client,
   };
 };
