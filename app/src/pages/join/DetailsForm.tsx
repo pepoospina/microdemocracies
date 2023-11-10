@@ -1,7 +1,6 @@
 import { AppForm, AppFormField, AppInput, FieldLabel } from '../../ui-components';
-import { SelectedDetails } from '../create/DetailsSelector';
 import { PlatformDetails, platforms } from '../../utils/platforms';
-import { DetailsAndPlatforms, PersonDetails, PlatformAccount, PlatformId } from '../../types';
+import { DetailsAndPlatforms, PersonDetails, PlatformAccount, PlatformId, SelectedDetails } from '../../types';
 import { useState, useEffect } from 'react';
 
 const formInit = {

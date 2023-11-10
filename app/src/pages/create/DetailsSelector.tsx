@@ -4,20 +4,7 @@ import { AppButton } from '../../ui-components';
 import { useThemeContext } from '../../components/app';
 import { useEffect, useState } from 'react';
 import { PlatformDetails, platforms } from '../../utils/platforms';
-import { PlatformId } from '../../types';
-
-export interface SelectedDetails {
-  personal: {
-    firstName: boolean;
-    lastName: boolean;
-    placeOfBirth: boolean;
-    dateOfBirth: boolean;
-    nationality: boolean;
-    nationalID: boolean;
-    organization: boolean;
-  };
-  platform: Record<PlatformId, boolean>;
-}
+import { PlatformId, SelectedDetails } from '../../types';
 
 const detailsInit: SelectedDetails = {
   personal: {

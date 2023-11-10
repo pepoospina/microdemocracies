@@ -58,6 +58,27 @@ export interface AppAccount {
   voucher: number;
 }
 
+export interface AppProjectCreate {
+  projectId: number;
+  address: HexStr;
+  whatStatement: string;
+  whoStatement: string;
+  selectedDetails: SelectedDetails;
+}
+
+export interface SelectedDetails {
+  personal: {
+    firstName: boolean;
+    lastName: boolean;
+    placeOfBirth: boolean;
+    dateOfBirth: boolean;
+    nationality: boolean;
+    nationalID: boolean;
+    organization: boolean;
+  };
+  platform: Record<PlatformId, boolean>;
+}
+
 export interface AppVouch {
   from: number;
   to: number;
@@ -96,4 +117,6 @@ export interface SignedObject<T> {
 }
 
 export type StatementRead = SignedObject<AppStatement> & { id: string };
-export type StatementBackerRead = SignedObject<AppStatementBacking> & { id: string };
+export type StatementBackerRead = SignedObject<AppStatementBacking> & {
+  id: string;
+};

@@ -11,7 +11,7 @@
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "preserveSymlinks": true,
-    "typeRoots": ["./src/custom.d.ts", "./src/types", "node_modules/@types"]
+    "typeRoots": ["./src/types", "node_modules/@types"]
   },
   "compileOnSave": true,
   "include": ["src/index.ts"],

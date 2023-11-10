@@ -1,7 +1,6 @@
 import { Box, Text } from 'grommet';
-import { SelectedDetails } from './DetailsSelector';
 import { PlatformDetails, platforms } from '../../utils/platforms';
-import { PlatformId } from '../../types';
+import { PlatformId, SelectedDetails } from '../../types';
 
 export const DetailsSelectedSummary = (props: { selected?: SelectedDetails }) => {
   return (

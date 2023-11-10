@@ -9,16 +9,18 @@ import { utils } from 'ethers';
 import { appName } from '../../config/community';
 import { StatementEditable } from '../voice/StatementEditable';
 import { AppButton, AppHeading } from '../../ui-components';
-import { DetailsSelector, SelectedDetails } from './DetailsSelector';
+import { DetailsSelector } from './DetailsSelector';
 import { DetailsForm } from '../join/DetailsForm';
 import { AppConnect } from '../../components/app/AppConnect';
 import { ProjectSummary } from './ProjectSummary';
-import { DetailsAndPlatforms, HexStr, PAP } from '../../types';
+import { DetailsAndPlatforms, HexStr, PAP, SelectedDetails } from '../../types';
 import { RegistryFactoryAbi, registryFactoryAddress } from '../../utils/contracts.json';
 import { deriveEntity } from '../../utils/cid-hash';
 import { BoxCentered } from '../../ui-components/BoxCentered';
 import { RouteNames } from '../../App';
 import { useAccountContext } from '../../wallet/AccountContext';
+import { postStatement } from '../../utils/statements';
+import { postProject } from '../../utils/project';
 
 const NPAGES = 5;
 
@@ -27,7 +29,7 @@ export const CreateProject = () => {
 
   const [formIndex, setFormIndex] = useState(0);
 
-  const { addUserOp, aaAddress, sendUserOps, isSuccess, isSending, error, events } = useAccountContext();
+  const { addUserOp, aaAddress, sendUserOps, isSuccess, isSending, error, events, signMessage } = useAccountContext();
   const [founderDetails, setFounderDetails] = useState<DetailsAndPlatforms>();
   const [whoStatement, setWhoStatement] = useState<string>('Only people I like');
   const [whatStatement, setWhatStatement] = useState<string>('Change the world');
@@ -71,14 +73,35 @@ export const CreateProject = () => {
     sendUserOps();
   };
 
+  const registerProject = async (event: RegistryCreatedEvent) => {
+    const projectId = Number(event.args.number);
+    const address = event.args.newRegistry as HexStr;
+
+    if (!selectedDetails) throw new Error('selectedDetails undefined');
+    if (!signMessage) throw new Error('signMessage undefined');
+
+    /** sign the "what" of the project */
+    await postProject({
+      projectId,
+      address,
+      whatStatement,
+      whoStatement,
+      selectedDetails,
+    });
+
+    await postStatement(1, whatStatement, signMessage);
+
+    navigate(RouteNames.ProjectHome((event.args as any).number));
+  };
+
   useEffect(() => {
     if (isSuccess && events) {
-      const event = events.find((e: any) => e.eventName === 'RegistryCreated');
+      const event = events.find((e: any) => e.eventName === 'RegistryCreated') as RegistryCreatedEvent | undefined;
       if (event) {
-        navigate(RouteNames.ProjectHome((event.args as any).number));
+        registerProject(event);
       }
     }
-  }, [isSuccess, events]);
+  }, [isSuccess, events, navigate]);
 
   const nextPage = () => {
     if (formIndex < NPAGES - 1) {
@@ -103,6 +126,15 @@ export const CreateProject = () => {
     return 'next';
   })();
 
+  if (isSending) {
+    return (
+      <BoxCentered fill>
+        <Text>Creating your micro(r)evolution</Text>
+        <Spinner></Spinner>
+      </BoxCentered>
+    );
+  }
+
   return (
     <Box fill align="center">
       <Box justify="center" align="center" style={{ flexShrink: '0', height: '50px' }}>
@@ -110,14 +142,6 @@ export const CreateProject = () => {
           {appName}
         </Text>
       </Box>
-
-      {isSending ? (
-        <BoxCentered fill>
-          <Spinner></Spinner>{' '}
-        </BoxCentered>
-      ) : (
-        <></>
-      )}
 
       <ReactSimplyCarousel
         disableSwipeByMouse
@@ -174,8 +198,7 @@ export const CreateProject = () => {
             </Box>
             <Box style={{ marginTop: '0px' }}>
               <Text style={{ fontSize: '24px', lineHeight: '150%', fontWeight: '300' }}>
-                Try to make it <span style={{ fontWeight: '400' }}>small</span>,{' '}
-                <span style={{ fontWeight: '400' }}>achievable</span> and{' '}
+                Try to make it <span style={{ fontWeight: '400' }}>small</span>, <span style={{ fontWeight: '400' }}>achievable</span> and{' '}
                 <span style={{ fontWeight: '400' }}>close to you</span>.
               </Text>
             </Box>
@@ -228,11 +251,7 @@ export const CreateProject = () => {
         </Box>
 
         <Box style={boxStyle}>
-          <ProjectSummary
-            selectedDetails={selectedDetails}
-            whatStatement={whatStatement}
-            whoStatement={whoStatement}
-            founderPap={founderPap}></ProjectSummary>
+          <ProjectSummary selectedDetails={selectedDetails} whatStatement={whatStatement} whoStatement={whoStatement} founderPap={founderPap}></ProjectSummary>
         </Box>
       </ReactSimplyCarousel>
 

@@ -1,4 +1,5 @@
 import {
+  AppProjectCreate,
   AppStatementBacking,
   AppStatementCreate,
   SignedObject,
@@ -20,5 +21,19 @@ export const setStatement = async (
 ): Promise<string> => {
   const docRef = collections.statements.doc(id);
   await docRef.set(backing);
+  return docRef.id;
+};
+
+export const createProject = async (
+  project: AppProjectCreate
+): Promise<string> => {
+  const projectId = project.projectId.toString();
+  const ref = collections.projects.doc(projectId);
+  const doc = await ref.get();
+
+  if (doc.exists) throw new Error(`Project already exist`);
+
+  const docRef = collections.statements.doc();
+  await docRef.set(project);
   return docRef.id;
 };

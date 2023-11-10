@@ -9,17 +9,14 @@
 // This adds support for typescript paths mappings
 import 'tsconfig-paths/register';
 
-import '@typechain/hardhat';
-import '@nomiclabs/hardhat-waffle';
-import '@nomiclabs/hardhat-ethers';
 import 'hardhat-deploy';
 import 'solidity-coverage';
 import 'hardhat-gas-reporter';
-import '@nomiclabs/hardhat-etherscan';
+import '@nomicfoundation/hardhat-viem';
 
 import * as fs from 'fs';
 
-import { HardhatUserConfig, task } from 'hardhat/config';
+import { HardhatUserConfig } from 'hardhat/config';
 
 import { config as envConfig } from 'dotenv';
 envConfig({ path: './.env' });
@@ -122,9 +119,6 @@ const config: HardhatUserConfig = {
     cache: './generated/cache',
     artifacts: './generated/artifacts',
     deployments: './generated/deployments',
-  },
-  typechain: {
-    outDir: './typechain',
   },
   mocha: {
     timeout: 3600000, // 1 hourd debugging :'(

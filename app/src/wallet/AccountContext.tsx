@@ -10,6 +10,7 @@ import { ALCHEMY_KEY } from '../config/appConfig';
 import { DecodeEventLogReturnType, decodeEventLog } from 'viem';
 import { RegistryFactoryAbi, registryFactoryAddress } from '../utils/contracts.json';
 import { useAppSigner } from './SignerContext';
+import { MessageSigner } from '../utils/statements';
 
 export type AccountContextType = {
   isConnected: boolean;
@@ -21,6 +22,7 @@ export type AccountContextType = {
   isSuccess: boolean;
   error?: Error;
   events?: DecodeEventLogReturnType[];
+  signMessage?: MessageSigner;
 };
 
 const AccountContextValue = createContext<AccountContextType | undefined>(undefined);
@@ -40,6 +42,10 @@ export const AccountContext = (props: PropsWithChildren) => {
   const [events, setEvents] = useState<DecodeEventLogReturnType[]>();
 
   const isConnected = signer !== undefined;
+
+  const signMessage = alchemyProviderAA
+    ? (input: { message: string }) => alchemyProviderAA.signMessage(input.message)
+    : undefined;
 
   const reset = () => {
     setIsSuccess(false);
@@ -127,6 +133,7 @@ export const AccountContext = (props: PropsWithChildren) => {
         isSending,
         events,
         error,
+        signMessage,
       }}>
       {props.children}
     </AccountContextValue.Provider>

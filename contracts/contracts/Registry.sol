@@ -84,7 +84,6 @@ contract Registry is Context, IERC721, IERC721Metadata, Initializable {
     error ErrorAccountSolidified();
     error CantChallengeInvalidAccount();
     error ChallangeAlreadyActive();    
-    error ErrorVoteOnOwnChallenge();
     error ErrorChallangeAlreadyExecuted();
     error ErrorChallangeNotActive();
     error ErrorVotingPeriodEnded();

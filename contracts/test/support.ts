@@ -1,18 +1,25 @@
-import { LogDescription } from '@ethersproject/abi';
-import { BigNumber, Contract, Signer, Event } from 'ethers';
-import { ethers } from 'hardhat';
-import { Registry, RegistryFactory, RegistryFactory__factory, Registry__factory } from 'typechain';
+import { artifacts, viem } from 'hardhat';
+import { parseEther, parseUnits, TransactionReceipt, decodeEventLog } from 'viem';
+
+import { EventType, Registry, RegistryFactory, Signer, TransferEventType, VouchEventType } from './viem.types';
+import { Entity, HexStr, PAP } from '@app/types';
+
+export interface User {
+  s: Signer;
+  tokenId: bigint;
+  person: Entity<PAP>;
+}
 
 export const numOf = (str: string): string => {
   return str.replace(/\s/g, '');
 };
 
-export const toWei = (str: string): BigNumber => {
-  return ethers.utils.parseEther(numOf(str));
+export const toWei = (str: string) => {
+  return parseEther(numOf(str));
 };
 
-export const toBigNumber = (num: string, decimals: number): BigNumber => {
-  return ethers.utils.parseUnits(num, decimals);
+export const toBigInt = (num: string, decimals: number) => {
+  return parseUnits(num, decimals);
 };
 
 export const shouldFail = async (fun: () => any, expectedMsg?: string): Promise<void> => {
@@ -33,56 +40,138 @@ export const shouldFail = async (fun: () => any, expectedMsg?: string): Promise<
   }
 };
 
-export async function getTimestamp(block?: string): Promise<BigNumber> {
-  return ethers.BigNumber.from((await ethers.provider.getBlock(block == undefined ? 'latest' : block)).timestamp);
+export async function getTimestamp(blockHash?: HexStr) {
+  const client = await viem.getPublicClient();
+  const block = await client.getBlock(blockHash === undefined ? { blockTag: 'latest' } : { blockHash });
+  return block.timestamp;
 }
 
-export async function fastForwardFromBlock(block: string, seconds: BigNumber): Promise<void> {
+export async function fastForwardFromBlock(blockHash: HexStr, seconds: bigint): Promise<void> {
+  const client = await viem.getTestClient();
   const now = await getTimestamp();
-  const timeSinceTimemark = now.sub(await getTimestamp(block));
-  const fastforwardAmount = seconds.sub(timeSinceTimemark);
-  await ethers.provider.send('evm_increaseTime', [fastforwardAmount.toNumber()]);
-  await ethers.provider.send('evm_mine', []);
+  const timeSinceTimemark = now - (await getTimestamp(blockHash));
+  const fastforwardAmount = seconds - timeSinceTimemark;
+  await client.increaseTime({ seconds: Number(fastforwardAmount) });
+  await client.mine({ blocks: 1 });
 }
 
-export async function fastForwardToTimestamp(toTimestamp: BigNumber): Promise<void> {
+export async function fastForwardToTimestamp(toTimestamp: bigint): Promise<void> {
+  const client = await viem.getTestClient();
   const now = await getTimestamp();
-  const fastforwardAmount = toTimestamp.sub(now);
-  await ethers.provider.send('evm_increaseTime', [fastforwardAmount.toNumber()]);
-  await ethers.provider.send('evm_mine', []);
+  const fastforwardAmount = toTimestamp - now;
+  await client.increaseTime({ seconds: Number(fastforwardAmount) });
+  await client.mine({ blocks: 1 });
 }
 
 export const deployRegistry = async (signer: Signer): Promise<Registry> => {
-  const deployer = await ethers.getContractFactory<Registry__factory>('Registry', signer);
-  const registry = await deployer.deploy();
-  return await registry.deployed();
+  return viem.deployContract('Registry', []) as unknown as Registry;
 };
 
 export const deployRegistryFactory = async (masterAddress: string, signer: Signer): Promise<RegistryFactory> => {
-  const factoryDeployer = await ethers.getContractFactory<RegistryFactory__factory>('RegistryFactory', signer);
-  const factory = await factoryDeployer.deploy(masterAddress);
-  return await factory.deployed();
+  return viem.deployContract('RegistryFactory', [masterAddress], { walletClient: signer }) as unknown as RegistryFactory;
 };
 
-export const getEvents = async (hash: string, contract: Contract): Promise<LogDescription[]> => {
-  const receipt = await ethers.provider.getTransactionReceipt(hash);
-  const events = receipt.logs
+export const getContractEventsFromHash = async (contractName: string, hash: HexStr): Promise<EventType[]> => {
+  const client = await viem.getPublicClient();
+  const receipt = await client.waitForTransactionReceipt({ hash });
+  return getContractEventsFromReceipt(contractName, receipt);
+};
+
+export const getContractEventsFromReceipt = async (contractName: string, rec: TransactionReceipt): Promise<EventType[]> => {
+  const factoryArtifact = await artifacts.readArtifact(contractName);
+  if (!rec.logs) return [];
+  const events = rec.logs
     .map((log) => {
       try {
-        return contract.interface.parseLog(log);
-      } catch (error) {
-        return null;
+        const event = decodeEventLog({
+          abi: factoryArtifact.abi,
+          data: log.data,
+          topics: log.topics,
+          strict: false,
+        });
+        return event;
+      } catch (e) {
+        return undefined;
       }
     })
-    .filter((event) => event !== null);
+    .filter((e) => e !== undefined);
 
-  return events as LogDescription[];
+  return events as unknown as EventType[];
 };
 
-export const registryFrom = (address: string, signer: Signer): Registry => {
-  return Registry__factory.connect(address, signer);
+export const vouchHelper = async (registryAddress: HexStr, by: User, vouched: User) => {
+  const registry = await registryFrom(registryAddress, by.s);
+  const tx = await registry.write.vouch([vouched.s.account.address, vouched.person.cid]);
+  const client = await viem.getPublicClient();
+  const receipt = await client.waitForTransactionReceipt({ hash: tx });
+  const events = await getContractEventsFromReceipt('Registry', receipt);
+
+  const vouchEvent = events.find((e) => e.eventName === 'VouchEvent') as VouchEventType | undefined;
+  const transferEvent = events.find((e) => e.eventName === 'Transfer') as TransferEventType | undefined;
+
+  /** store the tokenId in the User object */
+  if (transferEvent) {
+    vouched.tokenId = transferEvent?.args?.tokenId;
+  }
+
+  return { vouchEvent, transferEvent, tokenId: vouched.tokenId, receipt };
 };
 
+export const voteHelper = async (registryAddress: HexStr, by: User, challengedTokenId: bigint, vote: 1 | -1) => {
+  const registry = await registryFrom(registryAddress, by.s);
+  const tx = await registry.write.vote([challengedTokenId, vote]);
+  const client = await viem.getPublicClient();
+  const receipt = await client.waitForTransactionReceipt({ hash: tx });
+  const events = await getContractEventsFromReceipt('Registry', receipt);
+
+  const voteEvent = events.find((e) => e.eventName === 'VoteEvent');
+  const invalidatedByChallengeEvent = events.find((e) => e.eventName === 'InvalidatedByChallenge');
+  const invalidatedByInvalidVoucherEvent = events.find((e) => e.eventName === 'InvalidatedByInvalidVoucherEvent');
+  const invalidatedAccountEvent = events.find((e) => e.eventName === 'InvalidatedAccountEvent');
+  const votingPeriodExtendedEvent = events.find((e) => e.eventName === 'VotingPeriodExtendedEvent');
+  const challengeExecuted = events.find((e) => e.eventName === 'ChallengeExecuted');
+
+  return {
+    voteEvent,
+    invalidatedAccountEvent,
+    invalidatedByChallengeEvent,
+    invalidatedByInvalidVoucherEvent,
+    votingPeriodExtendedEvent,
+    challengeExecuted,
+    receipt,
+  };
+};
+
+export const challengeHelper = async (registryAddress: HexStr, by: User, challengedTokenId: bigint) => {
+  const registry = await registryFrom(registryAddress, by.s);
+
+  const tx = await registry.write.challenge([challengedTokenId]);
+  const events = await getContractEventsFromHash('Registry', tx);
+
+  return events.find((e) => e.eventName === 'ChallengeEvent');
+};
+
+export const getChallengeParse = (returned: Awaited<ReturnType<Registry['read']['getChallenge']>>) => {
+  return {
+    creationDate: returned[0],
+    endDate: returned[1],
+    lastOutcome: returned[2],
+    nVoted: returned[3],
+    nFor: returned[4],
+    executed: returned[5],
+  };
+};
+
+export const personCidHelper = async (registry: Registry, tokenId: bigint) => {
+  const { personCid } = await registry.read.getTokenVouch([tokenId]);
+  return personCid;
+};
+
+export const registryFrom = (address: HexStr, signer: Signer): Promise<Registry> => {
+  return viem.getContractAt('Registry', address, { walletClient: signer }) as unknown as Promise<Registry>;
+};
+
+export const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
 export const ZERO_BYTES = '0x0000000000000000000000000000000000000000000000000000000000000000';
 export const SECONDS_IN_WEEK = 604800;
 export const SECONDS_IN_DAY = 86400;

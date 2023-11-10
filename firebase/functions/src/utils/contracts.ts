@@ -1,7 +1,9 @@
-import { providers } from 'ethers';
+import { createPublicClient } from 'viem';
+import { getContract } from 'viem';
+import { baseGoerli } from 'viem/chains';
 
 import contractsJson from '../generated/contracts.json';
-import { Registry__factory } from '../generated/typechain';
+import { env } from '../config/env';
 
 function addressOnChain(chainId: number): `0x{string}` {
   const json = (contractsJson as any)[chainId.toString()];
@@ -13,13 +15,17 @@ function addressOnChain(chainId: number): `0x{string}` {
 
   return json[chainName[0]]['contracts']['Registry'].address;
 }
-const registryAddress = addressOnChain(137);
+const registryAddress = addressOnChain(env.CHAIN_ID);
 
-const provider = new providers.AlchemyProvider(
-  'matic',
-  '9_KaUJ0DnMqDMpe9Jt1d_eXx554ooAtG'
-);
+const publicClient = createPublicClient({
+  chain: baseGoerli,
+  transport: http('https://eth-mainnet.g.alchemy.com/v2/<apiKey>'),
+});
 
-const registry = Registry__factory.connect(registryAddress, provider);
+const registry = getContract({
+  address: '0xFBA3912Ca04dd458c843e2EE08967fC04f3579c2',
+  abi: wagmiAbi,
+  publicClient,
+});
 
 export { registryAddress, registry };

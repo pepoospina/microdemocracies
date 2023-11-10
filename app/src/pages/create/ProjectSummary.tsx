@@ -1,9 +1,8 @@
-import { Box, Text } from 'grommet';
+import { Box } from 'grommet';
 import { StatementEditable } from '../voice/StatementEditable';
 import { DetailsSelectedSummary } from './DetailsSelectedSummary';
-import { SelectedDetails } from './DetailsSelector';
 import { AppHeading } from '../../ui-components';
-import { PAP } from '../../types';
+import { PAP, SelectedDetails } from '../../types';
 import { AccountPerson } from '../account/AccountPerson';
 
 export const ProjectSummary = (props: {
