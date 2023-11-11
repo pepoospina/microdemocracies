@@ -22,25 +22,25 @@ export interface ConnectedMemberContextProps {
 }
 
 export const ConnectedMemberContext = (props: ConnectedMemberContextProps) => {
-  const { registryAddress } = useProjectContext();
+  const { address: projectAddress } = useProjectContext();
   const publicClient = usePublicClient();
 
   const { aaAddress } = useAccountContext();
 
   const { data: tokenId } = useContractRead({
-    address: registryAddress,
+    address: projectAddress,
     abi: registryABI,
     functionName: 'tokenIdOf',
     args: aaAddress ? [aaAddress] : undefined,
-    enabled: aaAddress !== undefined,
+    enabled: aaAddress !== undefined && projectAddress !== undefined,
   });
 
   const { data: _accountRead } = useContractRead({
-    address: registryAddress,
+    address: projectAddress,
     abi: registryABI,
     functionName: 'getAccount',
     args: tokenId ? [tokenId] : undefined,
-    enabled: tokenId !== undefined,
+    enabled: tokenId !== undefined && projectAddress !== undefined,
   });
 
   const account = _accountRead && {
@@ -50,10 +50,10 @@ export const ConnectedMemberContext = (props: ConnectedMemberContextProps) => {
   };
 
   const { data: myVouchEvents } = useQuery(['myVoucheEvents', tokenId?.toString()], async () => {
-    if (tokenId && registryAddress) {
+    if (tokenId && projectAddress) {
       // TODO viem types issue
       const contract = (getContract as any)({
-        address: registryAddress,
+        address: projectAddress,
         abi: registryABI,
         publicClient,
       });
@@ -92,11 +92,11 @@ export const ConnectedMemberContext = (props: ConnectedMemberContextProps) => {
     isError: isErrorChallengeRead,
     error: errorChallengeRead,
   } = useContractRead({
-    address: registryAddress,
+    address: projectAddress,
     abi: registryABI,
     functionName: 'getChallenge',
     args: tokenId ? [tokenId] : undefined,
-    enabled: tokenId !== undefined,
+    enabled: tokenId !== undefined && projectAddress !== undefined,
   });
 
   const myChallenge: AppChallenge | undefined | null = ((_challengeRead) => {

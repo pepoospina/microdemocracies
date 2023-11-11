@@ -34,7 +34,7 @@ export interface AccountContextProps {
  * registry and IPFS. TokenId can be a property or set with setTokenId
  */
 export const MemberContext = (props: AccountContextProps) => {
-  const { registryAddress } = useProjectContext();
+  const { address: projectAddress } = useProjectContext();
 
   /** Read Account */
   const _tokenIdProp = props.tokenId !== undefined ? BigInt(props.tokenId) : undefined;
@@ -67,11 +67,11 @@ export const MemberContext = (props: AccountContextProps) => {
     isLoading: isLoadingTokenId,
     refetch: refetchTokenIdOfAddress,
   } = useContractRead({
-    address: registryAddress,
+    address: projectAddress,
     abi: registryABI,
     functionName: 'tokenIdOf',
     args: address ? [address] : undefined,
-    enabled: address !== undefined,
+    enabled: address !== undefined && projectAddress !== undefined,
   });
 
   /** if tokenIdOfAddress changes, update the account */
@@ -86,40 +86,40 @@ export const MemberContext = (props: AccountContextProps) => {
     data: _accountRead,
     isLoading: isLoadingAccount,
   } = useContractRead({
-    address: registryAddress,
+    address: projectAddress,
     abi: registryABI,
     functionName: 'getAccount',
     args: tokenId ? [tokenId] : tokenIdOfAddress ? [tokenIdOfAddress] : undefined,
-    enabled: tokenId !== undefined || tokenIdOfAddress !== undefined,
+    enabled: (tokenId !== undefined || tokenIdOfAddress !== undefined) && projectAddress !== undefined,
   });
 
   const refetch = tokenId ? refetchAccount : refetchTokenIdOfAddress;
 
   const { data: accountVouch } = useContractRead({
-    address: registryAddress,
+    address: projectAddress,
     abi: registryABI,
     functionName: 'getTokenVouch',
     args: tokenId ? [tokenId] : undefined,
-    enabled: tokenId !== undefined,
+    enabled: tokenId !== undefined && projectAddress !== undefined,
   });
 
   const { data: voucherVouch } = useContractRead({
-    address: registryAddress,
+    address: projectAddress,
     abi: registryABI,
     functionName: 'getTokenVouch',
     args: _accountRead !== undefined ? [_accountRead.voucher] : undefined,
-    enabled: _accountRead !== undefined,
+    enabled: _accountRead !== undefined && projectAddress !== undefined,
   });
 
   const { data: accountPapRead } = useQuery(['accountPap', accountVouch?.personCid], () => {
     if (accountVouch?.personCid) {
-      return getEntity(accountVouch?.personCid);
+      return getEntity<PAP>(accountVouch?.personCid);
     }
   });
 
   const { data: voucherPapRead } = useQuery(['voucherPap', voucherVouch?.personCid], () => {
     if (voucherVouch?.personCid) {
-      return getEntity(voucherVouch?.personCid);
+      return getEntity<PAP>(voucherVouch?.personCid);
     }
   });
 

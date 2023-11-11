@@ -1,6 +1,18 @@
-import { getDocs, where, query, and } from 'firebase/firestore';
+import { getDocs, where, query, and, getDoc } from 'firebase/firestore';
 import { collections } from './database';
-import { StatementBackerRead, StatementRead } from '../types';
+import { AppProject, StatementBackerRead, StatementRead } from '../types';
+
+export const getProject = async (projectId: number) => {
+  const ref = collections.project(projectId);
+  const doc = await getDoc(ref);
+
+  console.log({ doc, docData: doc.data(), docexist: doc.exists(), docId: doc.id });
+
+  return {
+    ...doc.data(),
+    id: doc.id,
+  } as unknown as AppProject;
+};
 
 export const getTopStatements = async () => {
   const statements = await getDocs(collections.statements);

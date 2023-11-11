@@ -33,7 +33,7 @@ export interface DetailsAndPlatforms {
 
 export interface PAP {
   person: DetailsAndPlatforms;
-  account: string;
+  account: HexStr;
 }
 
 export interface Page {
@@ -58,7 +58,7 @@ export interface AppAccount {
   voucher: number;
 }
 
-export interface AppProjectCreate {
+export interface AppProject {
   projectId: number;
   address: HexStr;
   whatStatement: string;
@@ -66,16 +66,20 @@ export interface AppProjectCreate {
   selectedDetails: SelectedDetails;
 }
 
+export type AppProjectCreate = AppProject;
+
+export enum PersonalDetailId {
+  firstName = 'firstName',
+  lastName = 'lastName',
+  placeOfBirth = 'placeOfBirth',
+  dateOfBirth = 'dateOfBirth',
+  nationality = 'nationality',
+  nationalID = 'nationalID',
+  organization = 'organization',
+}
+
 export interface SelectedDetails {
-  personal: {
-    firstName?: boolean;
-    lastName?: boolean;
-    placeOfBirth?: boolean;
-    dateOfBirth?: boolean;
-    nationality?: boolean;
-    nationalID?: boolean;
-    organization?: boolean;
-  };
+  personal: Partial<Record<PersonalDetailId, boolean>>;
   platform: Partial<Record<PlatformId, boolean>>;
 }
 

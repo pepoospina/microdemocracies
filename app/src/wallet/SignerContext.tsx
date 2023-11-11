@@ -5,21 +5,30 @@ import { WalletClientSigner } from '@alchemy/aa-core';
 import { createInjectedSigner } from './injected.signer';
 import { InjectedConnector } from '@wagmi/core';
 import { useConnect } from 'wagmi';
+import { HexStr } from '../types';
 
 export type SignerContextType = {
   connectMagic: () => void;
   connectInjected: () => void;
   hasInjected: boolean;
   signer?: WalletClientSigner;
+  address?: HexStr;
 };
 
 const ProviderContextValue = createContext<SignerContextType | undefined>(undefined);
 
 export const SignerContext = (props: PropsWithChildren) => {
+  const [address, setAddress] = useState<HexStr>();
   const [magicSigner, setMagicSigner] = useState<WalletClientSigner>();
   const [injectedSigner, setInjectedSigner] = useState<WalletClientSigner>();
 
   const signer = injectedSigner ? injectedSigner : magicSigner;
+
+  useEffect(() => {
+    if (signer) {
+      signer.getAddress().then((adr) => setAddress(adr));
+    }
+  }, [signer]);
 
   const { connectAsync } = useConnect({ connector: new InjectedConnector() });
 
@@ -43,6 +52,7 @@ export const SignerContext = (props: PropsWithChildren) => {
         connectInjected,
         hasInjected,
         signer,
+        address,
       }}>
       {props.children}
     </ProviderContextValue.Provider>

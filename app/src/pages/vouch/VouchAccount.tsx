@@ -42,7 +42,7 @@ export const VouchAccount = () => {
 
   useEffect(() => {
     if (hash) {
-      getEntity(hash).then((pap) => {
+      getEntity<PAP>(hash).then((pap) => {
         setPap(pap);
         setVouchParams(pap.object.account, pap.cid);
         setVouchedAddress(pap.object.account as HexStr);

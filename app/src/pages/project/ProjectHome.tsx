@@ -5,9 +5,10 @@ import { useProjectContext } from '../../contexts/ProjectContext';
 import { MyNetworkWidget } from '../mynetwork/MyNetworkWidget';
 import { useConnectedMember } from '../../contexts/ConnectedAccountContext';
 import { AppConnectButton } from '../../components/app/AppConnectButton';
-import { COMMUNITY_MEMBER, COMMUNITY_NAME } from '../../config/community';
+import { COMMUNITY_MEMBER } from '../../config/community';
 import { useAccountContext } from '../../wallet/AccountContext';
 import { RouteNames } from '../../App';
+import { StatementEditable } from '../voice/StatementEditable';
 
 export interface IProjectHome {
   dum?: any;
@@ -15,7 +16,7 @@ export interface IProjectHome {
 
 export const ProjectHome = (props: IProjectHome) => {
   const navigate = useNavigate();
-  const { nMembers } = useProjectContext();
+  const { nMembers, project } = useProjectContext();
 
   const { isConnected } = useAccountContext();
   const { tokenId } = useConnectedMember();
@@ -24,7 +25,7 @@ export const ProjectHome = (props: IProjectHome) => {
     <Box style={{ flexGrow: '1', width: '100%', overflowY: 'auto' }} align="center" id="LandingPageContainer">
       <Box justify="center" align="center" style={{ flexShrink: '0', marginTop: '6vh' }}>
         <Text size="48px" weight="bold">
-          {COMMUNITY_NAME}
+          <StatementEditable value={project?.whatStatement}></StatementEditable>
         </Text>
         {tokenId ? (
           <Box>

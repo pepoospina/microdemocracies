@@ -21,6 +21,7 @@ import { RouteNames } from '../../App';
 import { useAccountContext } from '../../wallet/AccountContext';
 import { postProject } from '../../utils/project';
 import { RegistryCreatedEvent } from '../../utils/viem.types';
+import { putObject } from '../../utils/store';
 
 const NPAGES = 5;
 
@@ -58,7 +59,7 @@ export const CreateProject = () => {
       statement: whatStatement,
       author: 0,
     };
-    const statementEntity = await deriveEntity({ statement });
+    const statementEntity = await putObject({ statement });
     const salt = utils.keccak256(utils.toUtf8Bytes(Date.now().toString())) as HexStr;
 
     // TODO weird encodedFunctionData asking for zero parameters

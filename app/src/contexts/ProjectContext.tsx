@@ -1,16 +1,17 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { useContractRead, usePublicClient, useQuery } from 'wagmi';
-import { constants } from 'ethers';
 
 import { registryABI } from '../utils/contracts.json';
-import { AppVouch, HexStr } from '../types';
+import { AppProject, AppStatement, AppVouch, Entity, HexStr } from '../types';
 import { getContract } from 'viem';
+import { getEntity } from '../utils/store';
+import { useParams } from 'react-router-dom';
+import { getProject } from '../firestore/getters';
 
 export type ProjectContextType = {
-  registryAddress?: HexStr;
-  setProjectId: (projectId: string) => void;
-  projectId?: string;
-  projectName?: string;
+  project?: AppProject;
+  projectId?: number;
+  address?: HexStr;
   nMembers?: number;
   refetch: (options?: { throwOnError: boolean; cancelRefetch: boolean }) => Promise<any>;
   isLoading: boolean;
@@ -24,28 +25,39 @@ interface IProjectContext {
 const ProjectContextValue = createContext<ProjectContextType | undefined>(undefined);
 
 export const ProjectContext = (props: IProjectContext) => {
-  const registryAddress = constants.AddressZero;
-
   const publicClient = usePublicClient();
+  const { projectId: routeProjectId } = useParams();
 
-  const [projectId, _setProjectId] = useState<string>();
+  const [projectId, _setProjectId] = useState<number>();
 
-  const setProjectId = (projectId: string) => {
-    _setProjectId(projectId);
-  };
+  /** from route param to projectId */
+  useEffect(() => {
+    if (routeProjectId) {
+      _setProjectId(Number(routeProjectId));
+    }
+  }, [routeProjectId]);
+
+  /** from projectId to project */
+  const { data: project } = useQuery(['project', projectId], () => {
+    if (projectId) {
+      return getProject(projectId);
+    }
+  });
 
   // all vouches
-  const { data: vouchEvents } = useQuery(['allVoucheEvents'], async () => {
-    const contract = getContract({
-      address: registryAddress,
-      abi: registryABI,
-      publicClient,
-    });
+  const { data: vouchEvents } = useQuery(['allVoucheEvents', project], async () => {
+    if (project) {
+      const contract = getContract({
+        address: project.address,
+        abi: registryABI,
+        publicClient,
+      });
 
-    /** all vouch events */
-    const logs = await contract.getEvents.VouchEvent({}, { fromBlock: 'earliest', toBlock: 'latest' });
+      /** all vouch events */
+      const logs = await contract.getEvents.VouchEvent({}, { fromBlock: 'earliest', toBlock: 'latest' });
 
-    return logs;
+      return logs;
+    }
   });
 
   const [allVouches, setAllVouches] = useState<AppVouch[]>();
@@ -55,7 +67,7 @@ export const ProjectContext = (props: IProjectContext) => {
 
     Promise.all(
       vouchEvents.map(async (e: any) => {
-        const block = await (publicClient as any).getBlock(e.blockNumber);
+        const block = await publicClient.getBlock(e.blockNumber);
         return {
           from: e.args.from.toString(),
           to: e.args.to.toString(),
@@ -71,18 +83,18 @@ export const ProjectContext = (props: IProjectContext) => {
     data: nMembers,
     isLoading,
   } = useContractRead({
-    address: registryAddress,
+    address: project?.address,
     abi: registryABI,
     functionName: 'totalSupply',
+    enabled: project !== undefined,
   });
 
   return (
     <ProjectContextValue.Provider
       value={{
-        registryAddress,
-        setProjectId,
-        projectId,
-        projectName: 'Test',
+        projectId: project?.projectId,
+        project,
+        address: project?.address,
         nMembers: nMembers !== undefined ? Number(nMembers) : undefined,
         refetch,
         isLoading,

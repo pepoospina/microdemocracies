@@ -3,28 +3,30 @@ import { appName } from '../../config/community';
 import { AppButton } from '../../ui-components';
 import { useNavigate } from 'react-router-dom';
 import { RouteNames } from '../../App';
-import { postProject } from '../../utils/project';
+
+// import { CollectionNames, db } from '../../firestore/database';
+// import { getDoc, doc } from 'firebase/firestore';
+// import { postProject } from '../../utils/project';
 
 export const LandingPage = () => {
   const navigate = useNavigate();
 
   const textStyle: React.CSSProperties = { marginBottom: '40px', fontSize: '24px' };
 
-  // I TEST CODE HERE AND RUN WITH WITH THE START BUTTON
   // const start = async () => {
-  //   await postProject({
-  //     projectId: 1234,
-  //     address: '0xabc',
-  //     whatStatement: 'whats',
-  //     whoStatement: 'whos',
-  //     selectedDetails: {
-  //       personal: {
-  //         firstName: true,
-  //         lastName: true,
-  //       },
-  //       platform: {},
-  //     },
-  //   });
+  //   // postProject({
+  //   //   projectId: 1,
+  //   //   address: '0x',
+  //   //   selectedDetails: {
+  //   //     personal: {},
+  //   //     platform: {},
+  //   //   },
+  //   //   whatStatement: 'what',
+  //   //   whoStatement: 'who',
+  //   // });
+  //   const ref = doc(db, 'projects', '1');
+  //   const rdoc = await getDoc(ref);
+  //   console.log({ ex: rdoc.exists(), data: rdoc.data(), id: rdoc.id, db });
   // };
 
   const start = () => {
@@ -47,7 +49,7 @@ export const LandingPage = () => {
           for <span style={{ fontWeight: '600' }}>you</span>
         </Text>
         <Text style={textStyle}>
-          to <span style={{ fontWeight: '600' }}>do</span> something
+          to <span style={{ fontWeight: '600' }}>do</span>
         </Text>
         <AppButton primary onClick={start} label="Start now" style={{ margin: '12px 0px', width: '200px' }} />
       </Box>

@@ -23,7 +23,7 @@ export interface VouchContextProps {
 
 export const VouchContext = (props: VouchContextProps) => {
   /** Vouch */
-  const { registryAddress } = useProjectContext();
+  const { address } = useProjectContext();
   const [vouchParamsInternal, setVouchParamsInternal] = useState<[HexStr, string]>();
 
   const setVouchParams = useCallback((account: HexStr, personCid: string) => {
@@ -31,7 +31,7 @@ export const VouchContext = (props: VouchContextProps) => {
   }, []);
 
   const { config: vouchConfig } = usePrepareContractWrite({
-    address: registryAddress,
+    address: address,
     abi: registryABI,
     args: vouchParamsInternal,
     functionName: 'vouch',

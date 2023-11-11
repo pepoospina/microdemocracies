@@ -1,3 +1,2 @@
 export const appName = 'micro(r)evolutions';
-export const COMMUNITY_NAME = 'Network State';
-export const COMMUNITY_MEMBER = 'Citizen';
+export const COMMUNITY_MEMBER = 'Member';

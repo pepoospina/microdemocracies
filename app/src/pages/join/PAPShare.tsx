@@ -4,6 +4,7 @@ import { AppQRCode } from '../../components/AppQRCode';
 import { useEffect, useState } from 'react';
 
 import { putObject } from '../../utils/store';
+import { useProjectContext } from '../../contexts/ProjectContext';
 
 export interface IPAPShare {
   pap?: PAP;
@@ -11,6 +12,7 @@ export interface IPAPShare {
 
 export const PAPShare = (props: IPAPShare) => {
   const [cid, setCid] = useState<string>();
+  const { projectId } = useProjectContext();
 
   useEffect(() => {
     if (props.pap) {
@@ -29,7 +31,7 @@ export const PAPShare = (props: IPAPShare) => {
           <AppQRCode input={cid}></AppQRCode>
           <Box margin="large" direction="row">
             or{' '}
-            <Anchor style={{ marginLeft: '8px' }} href={`../vouch/${cid}`}>
+            <Anchor style={{ marginLeft: '8px' }} href={`../${projectId}/vouch/${cid}`}>
               share url
             </Anchor>
           </Box>

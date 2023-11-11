@@ -34,7 +34,7 @@ export interface ChallengeContextProps {
 }
 
 export const ChallengeContext = (props: ChallengeContextProps) => {
-  const { registryAddress } = useProjectContext();
+  const { address: projectAddress } = useProjectContext();
 
   /** Vouch */
   const tokenIdInternal = props.tokenId !== undefined ? BigInt(props.tokenId) : undefined;
@@ -47,23 +47,23 @@ export const ChallengeContext = (props: ChallengeContextProps) => {
     isError: isErrorChallengeRead,
     error: errorChallengeRead,
   } = useContractRead({
-    address: registryAddress,
+    address: projectAddress,
     abi: registryABI,
     functionName: 'getChallenge',
     args: tokenIdInternal ? [tokenIdInternal] : undefined,
-    enabled: tokenIdInternal !== undefined,
+    enabled: tokenIdInternal !== undefined && projectAddress !== undefined,
   });
 
   const { data: totalVoters } = useContractRead({
-    address: registryAddress,
+    address: projectAddress,
     abi: registryABI,
     functionName: 'getTotalVoters',
     args: tokenIdInternal ? [tokenIdInternal] : undefined,
-    enabled: tokenIdInternal !== undefined,
+    enabled: tokenIdInternal !== undefined && projectAddress !== undefined,
   });
 
   const { config: configChallenge } = usePrepareContractWrite({
-    address: registryAddress,
+    address: projectAddress,
     abi: registryABI,
     args: tokenIdInternal ? [tokenIdInternal] : undefined,
     functionName: 'challenge',
@@ -94,27 +94,27 @@ export const ChallengeContext = (props: ChallengeContextProps) => {
   const { aaAddress: connectedAddress } = useAccountContext();
 
   const { data: tokenIdOfAddress } = useContractRead({
-    address: registryAddress,
+    address: projectAddress,
     abi: registryABI,
     functionName: 'tokenIdOf',
     args: connectedAddress ? [connectedAddress] : undefined,
-    enabled: connectedAddress !== undefined,
+    enabled: connectedAddress !== undefined && projectAddress !== undefined,
   });
 
   const { data: canVote } = useContractRead({
-    address: registryAddress,
+    address: projectAddress,
     abi: registryABI,
     functionName: 'canVote',
     args: tokenIdOfAddress && tokenIdInternal ? [tokenIdOfAddress, tokenIdInternal] : undefined,
-    enabled: tokenIdOfAddress !== undefined && tokenIdInternal !== undefined,
+    enabled: tokenIdOfAddress !== undefined && tokenIdInternal !== undefined && projectAddress !== undefined,
   });
 
   const { data: _myVote } = useContractRead({
-    address: registryAddress,
+    address: projectAddress,
     abi: registryABI,
     functionName: 'getChallengeVote',
     args: tokenIdOfAddress && tokenIdInternal ? [tokenIdInternal, tokenIdOfAddress] : undefined,
-    enabled: tokenIdOfAddress !== undefined && tokenIdInternal !== undefined,
+    enabled: tokenIdOfAddress !== undefined && tokenIdInternal !== undefined && projectAddress !== undefined,
   });
 
   const myVote = _myVote !== undefined && _myVote !== 0 ? _myVote : undefined;
@@ -124,7 +124,7 @@ export const ChallengeContext = (props: ChallengeContextProps) => {
   const voteKeep: [bigint, number] | undefined = tokenIdInternal !== undefined ? [tokenIdInternal, -1] : undefined;
 
   const { config: configVoteRemove } = usePrepareContractWrite({
-    address: registryAddress,
+    address: projectAddress,
     abi: registryABI,
     args: voteRemove,
     functionName: 'vote',
@@ -134,7 +134,7 @@ export const ChallengeContext = (props: ChallengeContextProps) => {
   });
 
   const { config: configVoteKeep } = usePrepareContractWrite({
-    address: registryAddress,
+    address: projectAddress,
     abi: registryABI,
     args: voteKeep,
     functionName: 'vote',
