@@ -8,9 +8,12 @@ import { useNavigate } from 'react-router-dom';
 import { AppScreen } from '../../ui-components/AppFormScreen';
 import { FormPrevious } from 'grommet-icons';
 import { BottomButton } from '../common/BottomButton';
+import { StatementEditable } from '../voice/StatementEditable';
+import { useProjectContext } from '../../contexts/ProjectContext';
 
 export const VouchPage = (): JSX.Element => {
   const [scan, setScan] = useState<boolean>(false);
+  const { project, goHome } = useProjectContext();
   const navigate = useNavigate();
 
   const setResult = (result: string) => {
@@ -21,40 +24,25 @@ export const VouchPage = (): JSX.Element => {
     <AppScreen label="Vouch">
       <Box pad="large">
         <Box style={{ flexShrink: 0 }}>
-          <AppCard style={{ marginBottom: '16px' }}>
-            <Text>Vouch for a new member of the registry.</Text>
-          </AppCard>
-        </Box>
-        {scan ? (
-          <Box fill style={{ maxWidth: '500px', margin: '0 auto' }}>
-            <QrScanner onDecode={(result) => setResult(result)} onError={(error) => console.log(error?.message)} />
+          <Box style={{ marginBottom: '36px', flexShrink: 0 }}>
+            <StatementEditable value={project?.whoStatement}></StatementEditable>
           </Box>
-        ) : (
-          <AppCard style={{ marginBottom: '32px' }}>
-            <Box style={{ margin: '0px 0 12px 0' }}>
-              <Text>Only vouch for members who:</Text>
+          {scan ? (
+            <Box fill style={{ maxWidth: '500px', margin: '0 auto' }}>
+              <QrScanner onDecode={(result) => setResult(result)} onError={(error) => console.log(error?.message)} />
             </Box>
+          ) : (
+            <AppCard style={{ marginBottom: '16px' }}>
+              <Text>
+                Vouching protects the community. Vouch only people who are expected to join your micro(r)evolution.
+              </Text>
+            </AppCard>
+          )}
+        </Box>
 
-            <Box style={{ margin: '6px 0' }}>
-              <Text>
-                <b>- Are a real person.</b>
-              </Text>
-            </Box>
-            <Box style={{ margin: '6px 0' }}>
-              <Text>
-                <b>- Are not already registered.</b>
-              </Text>
-            </Box>
-            <Box style={{ margin: '6px 0' }}>
-              <Text>
-                <b>- Want to be part of the registry.</b>
-              </Text>
-            </Box>
-          </AppCard>
-        )}
         <AppButton label={!scan ? 'agree & scan' : 'cancel'} onClick={() => setScan(!scan)} primary></AppButton>
       </Box>
-      <BottomButton icon={<FormPrevious />} label="back" onClick={() => navigate(RouteNames.Base)}></BottomButton>
+      <BottomButton icon={<FormPrevious />} label="home" onClick={goHome}></BottomButton>
     </AppScreen>
   );
 };

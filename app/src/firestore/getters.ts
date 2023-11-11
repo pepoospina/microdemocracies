@@ -6,8 +6,6 @@ export const getProject = async (projectId: number) => {
   const ref = collections.project(projectId);
   const doc = await getDoc(ref);
 
-  console.log({ doc, docData: doc.data(), docexist: doc.exists(), docId: doc.id });
-
   return {
     ...doc.data(),
     id: doc.id,

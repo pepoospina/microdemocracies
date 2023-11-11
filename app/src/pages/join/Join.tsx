@@ -25,7 +25,7 @@ export interface IJoinProps {
 export const Join = () => {
   const navigate = useNavigate();
 
-  const { projectId, project } = useProjectContext();
+  const { goHome, project } = useProjectContext();
   const [pageIx, setPageIx] = useState<number>(0);
 
   const { aaAddress: account } = useAccountContext();
@@ -59,12 +59,6 @@ export const Join = () => {
   const prevPage = () => {
     if (pageIx - 1 >= 0) {
       setPageIx(pageIx - 1);
-    }
-  };
-
-  const goHome = () => {
-    if (projectId) {
-      navigate(RouteNames.ProjectHome(projectId.toString()));
     }
   };
 
@@ -121,9 +115,7 @@ export const Join = () => {
       <Box style={{ width: '100%' }}>
         <PAPEntry pap={pap}></PAPEntry>
       </Box>
-      <BottomButtons
-        left={{ label: 'back', primary: false, action: prevPage }}
-        right={{ label: 'share', primary: true, action: nextPage }}></BottomButtons>
+      <BottomButtons left={{ label: 'back', primary: false, action: prevPage }} right={{ label: 'share', primary: true, action: nextPage }}></BottomButtons>
     </AppScreen>
   );
   pages.push(

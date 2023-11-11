@@ -1,6 +1,4 @@
 import { Box } from 'grommet';
-import { RouteNames } from '../../App';
-import { useNavigate } from 'react-router-dom';
 import { FormPrevious } from 'grommet-icons';
 
 import { AppScreen } from '../../ui-components/AppFormScreen';
@@ -9,8 +7,8 @@ import { BottomButton } from '../common/BottomButton';
 import { useProjectContext } from '../../contexts/ProjectContext';
 
 export const AllVouches = (): JSX.Element => {
-  const navigate = useNavigate();
   const { allVouches } = useProjectContext();
+  const { goHome } = useProjectContext();
 
   return (
     <AppScreen label="Vouches">
@@ -25,7 +23,7 @@ export const AllVouches = (): JSX.Element => {
           })}
         </Box>
       </Box>
-      <BottomButton icon={<FormPrevious />} label="home" onClick={() => navigate(RouteNames.Base)}></BottomButton>
+      <BottomButton icon={<FormPrevious />} label="home" onClick={() => goHome()}></BottomButton>
     </AppScreen>
   );
 };

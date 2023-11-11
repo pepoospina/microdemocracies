@@ -30,7 +30,7 @@ export const ProjectHome = (props: IProjectHome) => {
         {tokenId ? (
           <Box>
             <Text size="xlarge">
-              <Anchor onClick={() => navigate(RouteNames.VouchesAll)}>Population: {nMembers}</Anchor>
+              <Anchor onClick={() => navigate(RouteNames.VouchesAll)}>Members: {nMembers}</Anchor>
             </Text>
           </Box>
         ) : (

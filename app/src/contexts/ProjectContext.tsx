@@ -1,11 +1,12 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { useContractRead, usePublicClient, useQuery } from 'wagmi';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { registryABI } from '../utils/contracts.json';
 import { AppProject, AppVouch, HexStr } from '../types';
 import { getContract } from 'viem';
 import { getProject } from '../firestore/getters';
+import { RouteNames } from '../App';
 
 export type ProjectContextType = {
   project?: AppProject;
@@ -15,6 +16,7 @@ export type ProjectContextType = {
   refetch: () => void;
   isLoading: boolean;
   allVouches?: AppVouch[];
+  goHome: () => void;
 };
 
 interface IProjectContext {
@@ -26,6 +28,7 @@ const ProjectContextValue = createContext<ProjectContextType | undefined>(undefi
 export const ProjectContext = (props: IProjectContext) => {
   const publicClient = usePublicClient();
   const { projectId: routeProjectId } = useParams();
+  const navigate = useNavigate();
 
   const [projectId, _setProjectId] = useState<number>();
 
@@ -93,6 +96,12 @@ export const ProjectContext = (props: IProjectContext) => {
     refetchProject();
   };
 
+  const goHome = () => {
+    if (project) {
+      navigate(RouteNames.ProjectHome(project.projectId.toString()));
+    }
+  };
+
   return (
     <ProjectContextValue.Provider
       value={{
@@ -103,6 +112,7 @@ export const ProjectContext = (props: IProjectContext) => {
         refetch,
         isLoading,
         allVouches,
+        goHome,
       }}>
       {props.children}
     </ProjectContextValue.Provider>
