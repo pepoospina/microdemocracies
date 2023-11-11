@@ -7,7 +7,7 @@ import { getEntity } from '../../utils/store';
 import { Entity, HexStr, PAP } from '../../types';
 import { AppButton, AppCard } from '../../ui-components';
 import { RouteNames } from '../../App';
-import { useTokenAccount } from '../../contexts/MemberContext';
+import { useMemberContext } from '../../contexts/MemberContext';
 import { useVouch } from '../../contexts/VouchContext';
 import { useProjectContext } from '../../contexts/ProjectContext';
 import { AppScreen } from '../../ui-components/AppFormScreen';
@@ -17,25 +17,28 @@ import { BottomButton } from '../common/BottomButton';
 import { WaitingTransaction } from '../common/WaitingTransaction';
 import { COMMUNITY_MEMBER } from '../../config/community';
 import { useAccountContext } from '../../wallet/AccountContext';
+import { AppConnectButton } from '../../components/app/AppConnectButton';
 
 export const VouchAccount = () => {
   const navigate = useNavigate();
   const { hash } = useParams();
+  const { isConnected } = useAccountContext();
+
   const { refetch: refetchRegistry } = useProjectContext();
 
   const [pap, setPap] = useState<Entity<PAP>>();
   const [sending, setSending] = useState<boolean>(false);
   const [error, setError] = useState<boolean>();
 
-  const { isConnected } = useAccountContext();
-
   const { setVouchParams, sendVouch, isErrorSending, errorSending, isSuccess } = useVouch();
+
   const {
     accountRead: vouchedAccount,
     tokenId: vouchedTokenId,
     setAddress: setVouchedAddress,
     refetch: refetchVouchedAccount,
-  } = useTokenAccount();
+  } = useMemberContext();
+
   const { account } = useConnectedMember();
 
   // console.log({ isErrorSending, errorSending, isSuccess, vouchedTokenId, vouchedAccount });
@@ -104,12 +107,14 @@ export const VouchAccount = () => {
                 )}
                 {sending ? (
                   <WaitingTransaction></WaitingTransaction>
-                ) : (
+                ) : isConnected ? (
                   <AppButton
-                    label={isConnected ? 'vouch' : 'connect'}
+                    label="vouch"
                     onClick={() => vouch()}
                     disabled={!sendVouch && isConnected}
                     primary></AppButton>
+                ) : (
+                  <AppConnectButton></AppConnectButton>
                 )}
               </>
             ) : (

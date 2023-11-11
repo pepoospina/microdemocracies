@@ -30,7 +30,7 @@ export const CreateProject = () => {
 
   const [formIndex, setFormIndex] = useState(0);
 
-  const { addUserOp, aaAddress, sendUserOps, isSuccess, isSending, error, events, signMessage } = useAccountContext();
+  const { addUserOp, aaAddress, isSuccess, isSending, error, events, signMessage } = useAccountContext();
   const [founderDetails, setFounderDetails] = useState<DetailsAndPlatforms>();
   const [whoStatement, setWhoStatement] = useState<string>('Only people I like');
   const [whatStatement, setWhatStatement] = useState<string>('Change the world');
@@ -71,14 +71,14 @@ export const CreateProject = () => {
 
     const registryFactoryAddress = await getFactoryAddress();
 
-    addUserOp({
-      target: registryFactoryAddress,
-      data: callData,
-      value: BigInt(0),
-    });
-
-    if (!sendUserOps) return;
-    sendUserOps();
+    addUserOp(
+      {
+        target: registryFactoryAddress,
+        data: callData,
+        value: BigInt(0),
+      },
+      true
+    );
   };
 
   const registerProject = async (event: RegistryCreatedEvent) => {

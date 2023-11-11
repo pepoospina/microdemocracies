@@ -1,11 +1,10 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { useContractRead, usePublicClient, useQuery } from 'wagmi';
+import { useParams } from 'react-router-dom';
 
 import { registryABI } from '../utils/contracts.json';
-import { AppProject, AppStatement, AppVouch, Entity, HexStr } from '../types';
+import { AppProject, AppVouch, HexStr } from '../types';
 import { getContract } from 'viem';
-import { getEntity } from '../utils/store';
-import { useParams } from 'react-router-dom';
 import { getProject } from '../firestore/getters';
 
 export type ProjectContextType = {
@@ -13,7 +12,7 @@ export type ProjectContextType = {
   projectId?: number;
   address?: HexStr;
   nMembers?: number;
-  refetch: (options?: { throwOnError: boolean; cancelRefetch: boolean }) => Promise<any>;
+  refetch: () => void;
   isLoading: boolean;
   allVouches?: AppVouch[];
 };
@@ -38,7 +37,7 @@ export const ProjectContext = (props: IProjectContext) => {
   }, [routeProjectId]);
 
   /** from projectId to project */
-  const { data: project } = useQuery(['project', projectId], () => {
+  const { data: project, refetch: refetchProject } = useQuery(['project', projectId], () => {
     if (projectId) {
       return getProject(projectId);
     }
@@ -79,7 +78,7 @@ export const ProjectContext = (props: IProjectContext) => {
   }, [vouchEvents, publicClient]);
 
   const {
-    refetch,
+    refetch: refetchTotalSupply,
     data: nMembers,
     isLoading,
   } = useContractRead({
@@ -88,6 +87,11 @@ export const ProjectContext = (props: IProjectContext) => {
     functionName: 'totalSupply',
     enabled: project !== undefined,
   });
+
+  const refetch = () => {
+    refetchTotalSupply();
+    refetchProject();
+  };
 
   return (
     <ProjectContextValue.Provider

@@ -30,6 +30,7 @@ import { ProjectBase } from './pages/project/ProjectBase';
 import { SignerContext } from './wallet/SignerContext';
 import { ConnectedMemberContext } from './contexts/ConnectedAccountContext';
 import { AccountContext } from './wallet/AccountContext';
+import { MemberContext } from './contexts/MemberContext';
 
 const queryClient = new QueryClient();
 
@@ -84,15 +85,24 @@ function App() {
                           element={
                             <ProjectContext>
                               <ConnectedMemberContext>
-                                <VouchContext>
-                                  <ProjectBase />
-                                </VouchContext>
+                                <MemberContext>
+                                  <VouchContext>
+                                    <ProjectBase />
+                                  </VouchContext>
+                                </MemberContext>
                               </ConnectedMemberContext>
                             </ProjectContext>
                           }>
                           <Route path={RouteNames.Base} element={<ProjectHome />}></Route>
                           <Route path={`account/:tokenId/*`} element={<AccountPage />}></Route>
-                          <Route path={`vouch/:hash`} element={<VouchAccount />}></Route>
+                          <Route
+                            path={`vouch/:hash`}
+                            element={
+                              // Another Member context for the vouched account
+                              <MemberContext>
+                                <VouchAccount />
+                              </MemberContext>
+                            }></Route>
                           <Route path={RouteNames.Join} element={<Join />}></Route>
                           <Route path={RouteNames.Vouch} element={<VouchPage />}></Route>
                           <Route path={RouteNames.MyVouches} element={<Vouches />}></Route>

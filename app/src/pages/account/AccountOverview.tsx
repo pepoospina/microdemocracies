@@ -1,13 +1,13 @@
 import { Box, Spinner } from 'grommet';
 
-import { useTokenAccount } from '../../contexts/MemberContext';
+import { useMemberContext } from '../../contexts/MemberContext';
 import { AccountPerson } from './AccountPerson';
 import { AppCard } from '../../ui-components';
 import { COMMUNITY_MEMBER } from '../../config/community';
 import { BoxCentered } from '../../ui-components/BoxCentered';
 
 export const AccountOverview = () => {
-  const { accountPapRead, accountRead } = useTokenAccount();
+  const { accountPapRead, accountRead } = useMemberContext();
 
   const isFounder = accountRead && accountRead.voucher > 10e70;
 

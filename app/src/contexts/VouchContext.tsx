@@ -5,10 +5,12 @@ import { WriteContractResult } from '@wagmi/core';
 import { registryABI } from '../utils/contracts.json';
 import { HexStr } from '../types';
 import { useProjectContext } from './ProjectContext';
+import { useAccountContext } from '../wallet/AccountContext';
+import { encodeFunctionData } from 'viem';
 
 export type VouchContextType = {
   setVouchParams: (account: HexStr, personCid: string) => void;
-  sendVouch: (() => Promise<WriteContractResult>) | undefined;
+  sendVouch: (() => Promise<void>) | undefined;
   isSending: boolean;
   isErrorSending: boolean;
   errorSending: Error | null;
@@ -24,37 +26,38 @@ export interface VouchContextProps {
 export const VouchContext = (props: VouchContextProps) => {
   /** Vouch */
   const { address } = useProjectContext();
+  const { reset, addUserOp, isSuccess, isSending } = useAccountContext();
+
   const [vouchParamsInternal, setVouchParamsInternal] = useState<[HexStr, string]>();
 
   const setVouchParams = useCallback((account: HexStr, personCid: string) => {
     setVouchParamsInternal([account, personCid]);
   }, []);
 
-  const { config: vouchConfig } = usePrepareContractWrite({
-    address: address,
-    abi: registryABI,
-    args: vouchParamsInternal,
-    functionName: 'vouch',
-  });
+  const sendVouch =
+    address && addUserOp && vouchParamsInternal
+      ? async () => {
+          reset();
 
-  const {
-    data: transaction,
-    writeAsync: sendVouch,
-    isError: _isErrorWriting,
-    error: _errorWriting,
-  } = useContractWrite(vouchConfig);
+          const callData = encodeFunctionData({
+            abi: registryABI,
+            functionName: 'vouch',
+            args: vouchParamsInternal,
+          });
 
-  const {
-    isLoading: isSending,
-    isError: _isErrorWaiting,
-    error: _errorWaiting,
-    isSuccess,
-  } = useWaitForTransaction({
-    hash: transaction?.hash,
-  });
+          addUserOp(
+            {
+              target: address,
+              data: callData,
+              value: BigInt(0),
+            },
+            true
+          );
+        }
+      : undefined;
 
-  const isErrorSending = _isErrorWriting || _isErrorWaiting;
-  const errorSending = _errorWriting ? _errorWriting : _errorWaiting ? _errorWaiting : null;
+  const isErrorSending = false;
+  const errorSending = new Error();
 
   return (
     <VouchContextValue.Provider

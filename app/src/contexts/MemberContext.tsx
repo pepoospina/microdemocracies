@@ -148,7 +148,7 @@ export const MemberContext = (props: AccountContextProps) => {
   );
 };
 
-export const useTokenAccount = (): AccountContextType => {
+export const useMemberContext = (): AccountContextType => {
   const context = useContext(AccountContextValue);
   if (!context) throw Error('context not found');
   return context;
