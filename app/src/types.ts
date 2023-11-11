@@ -102,6 +102,7 @@ export interface AppChallenge {
 export type VoteOption = 1 | -1;
 
 export interface AppStatement {
+  projectId: number;
   author: number;
   statement: string;
   backers: number[] | undefined;
@@ -113,6 +114,7 @@ export interface AppStatementBacking {
   backer: number;
   statement: string;
   statementId: string;
+  projectId: number;
 }
 
 export interface SignedObject<T> {

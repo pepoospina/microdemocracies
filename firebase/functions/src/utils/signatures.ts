@@ -2,14 +2,16 @@ import stringify from 'canonical-json';
 import { binary_to_base58 } from 'base58-js';
 import { sha256 } from 'js-sha256';
 
-import { SignedObject } from '../@app/types';
-import { publicClient, registry } from './contracts';
+import { HexStr, SignedObject } from '../@app/types';
+import { publicClient, getRegistry } from './contracts';
 
 export const verifySignedObject = async <T>(
   signed: SignedObject<T>,
-  tokenId: number
+  tokenId: number,
+  projectAddress: HexStr
 ) => {
   const message = stringify(signed.object);
+  const registry = getRegistry(projectAddress);
   const addressOfToken = await registry.read.ownerOf([BigInt(tokenId)]);
   const valid = await publicClient.verifyMessage({
     address: addressOfToken,

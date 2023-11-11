@@ -1,22 +1,21 @@
-import { stringify } from 'viem';
+import stringify from 'canonical-json';
 import { FUNCTIONS_BASE } from '../config/appConfig';
 
 import { HexStr, AppStatementCreate } from '../types';
 
 export type MessageSigner = (input: { message: string }) => Promise<HexStr>;
 
-export const signStatement = async (tokenId: number, statement: string, signMessage: MessageSigner) => {
-  const object: AppStatementCreate = { author: tokenId, statement };
-  const message = stringify(object);
+export const signStatement = async (statement: AppStatementCreate, signMessage: MessageSigner) => {
+  const message = stringify(statement);
   console.log({ message });
   const signature = await signMessage({
     message,
   });
-  return { object, signature };
+  return { object: statement, signature };
 };
 
-export const postStatement = async (tokenId: number, statement: string, signMessage: MessageSigner) => {
-  const signedStatement = await signStatement(tokenId, statement, signMessage);
+export const postStatement = async (statement: AppStatementCreate, signMessage: MessageSigner) => {
+  const signedStatement = await signStatement(statement, signMessage);
   const res = await fetch(FUNCTIONS_BASE + '/voice/statement', {
     method: 'post',
     headers: { 'Content-Type': 'application/json' },

@@ -3,6 +3,8 @@ import { useSignMessage } from 'wagmi';
 
 import { ConnectedMemberContext, useConnectedMember } from './ConnectedAccountContext';
 import { postStatement } from '../utils/statements';
+import { AppStatementCreate } from '../types';
+import { useProjectContext } from './ProjectContext';
 
 export type VoiceSendContextType = {
   proposeStatement?: (statement: string) => Promise<boolean>;
@@ -16,13 +18,19 @@ const VoiceSendContextValue = createContext<VoiceSendContextType | undefined>(un
 
 export const VoiceSendContext = (props: IVoiceSendContext) => {
   const { tokenId } = useConnectedMember();
+  const { projectId } = useProjectContext();
   const { signMessageAsync } = useSignMessage();
 
   const proposeStatement =
     tokenId !== undefined
-      ? async (statement: string) => {
-          if (tokenId && signMessageAsync) {
-            return postStatement(tokenId, statement, signMessageAsync);
+      ? async (_statement: string) => {
+          if (tokenId && signMessageAsync && projectId) {
+            const statement: AppStatementCreate = {
+              projectId,
+              author: tokenId,
+              statement: _statement,
+            };
+            return postStatement(statement, signMessageAsync);
           }
         }
       : undefined;

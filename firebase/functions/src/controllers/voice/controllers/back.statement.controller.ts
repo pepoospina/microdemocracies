@@ -1,7 +1,7 @@
 import { RequestHandler } from 'express';
 import { logger } from 'firebase-functions/v1';
 
-import { getStatement } from '../../../db/getters';
+import { getProject, getStatement } from '../../../db/getters';
 import { setStatementBacker } from '../../../db/setters';
 
 import { backStatementValidationScheme } from './voice.schemas';
@@ -18,7 +18,13 @@ export const backStatementController: RequestHandler = async (
   )) as SignedObject<AppStatementBacking>;
 
   // verify signature is from the author address in the registry
-  const id = await verifySignedObject(backing, backing.object.backer);
+  const project = await getProject(backing.object.projectId);
+
+  const id = await verifySignedObject(
+    backing,
+    backing.object.backer,
+    project.address
+  );
 
   // verify backer is not author
   const statement = await getStatement(backing.object.statementId);

@@ -55,9 +55,8 @@ export const CreateProject = () => {
     if (!aaAddress || !founderPap || !addUserOp) return;
 
     const entity = await deriveEntity(founderPap);
-    const statement: AppStatementCreate = {
+    const statement = {
       statement: whatStatement,
-      author: 0,
     };
     const statementEntity = await putObject({ statement });
     const salt = utils.keccak256(utils.toUtf8Bytes(Date.now().toString())) as HexStr;

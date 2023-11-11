@@ -6,4 +6,5 @@ export const env: Env = {
   CHAIN_ID: 84531,
   CHAIN_NAME: 'baseGoerli',
   ALCHEMY_KEY: 'lGUBeOhnguEVW2l5uSTRKQWs5xfts0dz',
+  ALCHEMY_SUBDOMAIN: 'base-goerli',
 };
