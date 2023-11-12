@@ -21,6 +21,8 @@ contract Registry is Context, IERC721, IERC721Metadata, Initializable {
     uint256 public constant PENDING_PERIOD = 180 days;
     uint256 public constant VOTING_PERIOD = 15 days;
     uint256 public constant QUIET_ENDING_PERIOD = 2 days;
+    
+    string public statementCid;
 
     uint256 public constant FOUNDERS_VOUCHER = type(uint256).max;
     string internal constant baseURI = "ipfs://";
@@ -99,7 +101,8 @@ contract Registry is Context, IERC721, IERC721Metadata, Initializable {
     error UnexpectedExecutedCondition();
 
     /** Constructor */
-    function initRegistry (string memory __symbol, string memory __name, address[] memory addresses, string[] memory foundersCids) external initializer {
+    function initRegistry (string memory __symbol, string memory __name, address[] memory addresses, string[] memory foundersCids, string memory _statementCid) external initializer {
+        statementCid = _statementCid;
         _symbol = __symbol;
         _name = __name;
         __totalSupply = 0;

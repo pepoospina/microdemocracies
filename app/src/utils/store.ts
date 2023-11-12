@@ -29,7 +29,7 @@ export const putEntity = async (entity: Entity): Promise<Entity> => {
   return entity;
 };
 
-export const getEntity = async (cid: string): Promise<Entity> => {
+export const getEntity = async <T>(cid: string): Promise<Entity<T>> => {
   const client = new Web3Storage({ token: WEB3_STORAGE_KEY });
 
   const response = await client.get(cid);

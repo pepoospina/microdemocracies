@@ -2,10 +2,11 @@ import { createContext, ReactNode, useContext, useEffect, useState } from 'react
 import { useQuery } from 'react-query';
 import { useContractRead, usePublicClient } from 'wagmi';
 
-import { RegistryAbi, VouchEventAbi } from '../utils/contracts.json';
+import { registryABI } from '../utils/contracts.json';
 import { AppAccount, AppChallenge, AppVouch } from '../types';
 import { useProjectContext } from './ProjectContext';
 import { useAccountContext } from '../wallet/AccountContext';
+import { getContract } from 'viem';
 
 export type ConnectedMemberContextType = {
   tokenId?: number;
@@ -21,25 +22,25 @@ export interface ConnectedMemberContextProps {
 }
 
 export const ConnectedMemberContext = (props: ConnectedMemberContextProps) => {
-  const { registryAddress } = useProjectContext();
+  const { address: projectAddress } = useProjectContext();
   const publicClient = usePublicClient();
 
   const { aaAddress } = useAccountContext();
 
   const { data: tokenId } = useContractRead({
-    address: registryAddress,
-    abi: RegistryAbi,
+    address: projectAddress,
+    abi: registryABI,
     functionName: 'tokenIdOf',
     args: aaAddress ? [aaAddress] : undefined,
-    enabled: aaAddress !== undefined,
+    enabled: aaAddress !== undefined && projectAddress !== undefined,
   });
 
   const { data: _accountRead } = useContractRead({
-    address: registryAddress,
-    abi: RegistryAbi,
+    address: projectAddress,
+    abi: registryABI,
     functionName: 'getAccount',
     args: tokenId ? [tokenId] : undefined,
-    enabled: tokenId !== undefined,
+    enabled: tokenId !== undefined && projectAddress !== undefined,
   });
 
   const account = _accountRead && {
@@ -49,16 +50,20 @@ export const ConnectedMemberContext = (props: ConnectedMemberContextProps) => {
   };
 
   const { data: myVouchEvents } = useQuery(['myVoucheEvents', tokenId?.toString()], async () => {
-    if (tokenId) {
-      const logs = await (publicClient as any).getLogs({
-        address: registryAddress,
-        event: VouchEventAbi,
-        args: {
+    if (tokenId && projectAddress) {
+      // TODO viem types issue
+      const contract = (getContract as any)({
+        address: projectAddress,
+        abi: registryABI,
+        publicClient,
+      });
+
+      const logs = await contract.getEvents.VouchEvent(
+        {
           from: BigInt(tokenId),
         },
-        fromBlock: 'earliest',
-        toBlock: 'latest',
-      });
+        { fromBlock: 'earliest', toBlock: 'latest' }
+      );
 
       return logs;
     }
@@ -87,11 +92,11 @@ export const ConnectedMemberContext = (props: ConnectedMemberContextProps) => {
     isError: isErrorChallengeRead,
     error: errorChallengeRead,
   } = useContractRead({
-    address: registryAddress,
-    abi: RegistryAbi,
+    address: projectAddress,
+    abi: registryABI,
     functionName: 'getChallenge',
     args: tokenId ? [tokenId] : undefined,
-    enabled: tokenId !== undefined,
+    enabled: tokenId !== undefined && projectAddress !== undefined,
   });
 
   const myChallenge: AppChallenge | undefined | null = ((_challengeRead) => {

@@ -33,7 +33,7 @@ export interface DetailsAndPlatforms {
 
 export interface PAP {
   person: DetailsAndPlatforms;
-  account: string;
+  account: HexStr;
 }
 
 export interface Page {
@@ -58,7 +58,7 @@ export interface AppAccount {
   voucher: number;
 }
 
-export interface AppProjectCreate {
+export interface AppProject {
   projectId: number;
   address: HexStr;
   whatStatement: string;
@@ -66,17 +66,21 @@ export interface AppProjectCreate {
   selectedDetails: SelectedDetails;
 }
 
+export type AppProjectCreate = AppProject;
+
+export enum PersonalDetailId {
+  firstName = 'firstName',
+  lastName = 'lastName',
+  placeOfBirth = 'placeOfBirth',
+  dateOfBirth = 'dateOfBirth',
+  nationality = 'nationality',
+  nationalID = 'nationalID',
+  organization = 'organization',
+}
+
 export interface SelectedDetails {
-  personal: {
-    firstName: boolean;
-    lastName: boolean;
-    placeOfBirth: boolean;
-    dateOfBirth: boolean;
-    nationality: boolean;
-    nationalID: boolean;
-    organization: boolean;
-  };
-  platform: Record<PlatformId, boolean>;
+  personal: Partial<Record<PersonalDetailId, boolean>>;
+  platform: Partial<Record<PlatformId, boolean>>;
 }
 
 export interface AppVouch {
@@ -98,6 +102,7 @@ export interface AppChallenge {
 export type VoteOption = 1 | -1;
 
 export interface AppStatement {
+  projectId: number;
   author: number;
   statement: string;
   backers: number[] | undefined;
@@ -109,11 +114,12 @@ export interface AppStatementBacking {
   backer: number;
   statement: string;
   statementId: string;
+  projectId: number;
 }
 
 export interface SignedObject<T> {
   object: T;
-  signature: string;
+  signature: HexStr;
 }
 
 export type StatementRead = SignedObject<AppStatement> & { id: string };

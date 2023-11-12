@@ -13,14 +13,15 @@ import { DetailsSelector } from './DetailsSelector';
 import { DetailsForm } from '../join/DetailsForm';
 import { AppConnect } from '../../components/app/AppConnect';
 import { ProjectSummary } from './ProjectSummary';
-import { DetailsAndPlatforms, HexStr, PAP, SelectedDetails } from '../../types';
-import { RegistryFactoryAbi, registryFactoryAddress } from '../../utils/contracts.json';
+import { AppStatementCreate, DetailsAndPlatforms, HexStr, PAP, SelectedDetails } from '../../types';
+import { getFactoryAddress, registryFactoryABI } from '../../utils/contracts.json';
 import { deriveEntity } from '../../utils/cid-hash';
 import { BoxCentered } from '../../ui-components/BoxCentered';
 import { RouteNames } from '../../App';
 import { useAccountContext } from '../../wallet/AccountContext';
-import { postStatement } from '../../utils/statements';
 import { postProject } from '../../utils/project';
+import { RegistryCreatedEvent } from '../../utils/viem.types';
+import { putObject } from '../../utils/store';
 
 const NPAGES = 5;
 
@@ -29,7 +30,7 @@ export const CreateProject = () => {
 
   const [formIndex, setFormIndex] = useState(0);
 
-  const { addUserOp, aaAddress, sendUserOps, isSuccess, isSending, error, events, signMessage } = useAccountContext();
+  const { addUserOp, aaAddress, isSuccess, isSending, error, events, signMessage } = useAccountContext();
   const [founderDetails, setFounderDetails] = useState<DetailsAndPlatforms>();
   const [whoStatement, setWhoStatement] = useState<string>('Only people I like');
   const [whatStatement, setWhatStatement] = useState<string>('Change the world');
@@ -54,23 +55,29 @@ export const CreateProject = () => {
     if (!aaAddress || !founderPap || !addUserOp) return;
 
     const entity = await deriveEntity(founderPap);
+    const statement = {
+      statement: whatStatement,
+    };
+    const statementEntity = await putObject({ statement });
     const salt = utils.keccak256(utils.toUtf8Bytes(Date.now().toString())) as HexStr;
 
     // TODO weird encodedFunctionData asking for zero parameters
-    const callData = (encodeFunctionData as any)({
-      abi: RegistryFactoryAbi,
+    const callData = encodeFunctionData({
+      abi: registryFactoryABI,
       functionName: 'create',
-      args: ['MRS', 'micro(r)evolutions ', [founderPap.account as HexStr], [entity.cid], salt],
+      args: ['MRS', 'micro(r)evolutions ', [founderPap.account as HexStr], [entity.cid], statementEntity.cid, salt],
     });
 
-    addUserOp({
-      target: registryFactoryAddress,
-      data: callData,
-      value: BigInt(0),
-    });
+    const registryFactoryAddress = await getFactoryAddress();
 
-    if (!sendUserOps) return;
-    sendUserOps();
+    addUserOp(
+      {
+        target: registryFactoryAddress,
+        data: callData,
+        value: BigInt(0),
+      },
+      true
+    );
   };
 
   const registerProject = async (event: RegistryCreatedEvent) => {
@@ -78,7 +85,6 @@ export const CreateProject = () => {
     const address = event.args.newRegistry as HexStr;
 
     if (!selectedDetails) throw new Error('selectedDetails undefined');
-    if (!signMessage) throw new Error('signMessage undefined');
 
     /** sign the "what" of the project */
     await postProject({
@@ -89,14 +95,12 @@ export const CreateProject = () => {
       selectedDetails,
     });
 
-    await postStatement(1, whatStatement, signMessage);
-
     navigate(RouteNames.ProjectHome((event.args as any).number));
   };
 
   useEffect(() => {
     if (isSuccess && events) {
-      const event = events.find((e: any) => e.eventName === 'RegistryCreated') as RegistryCreatedEvent | undefined;
+      const event = events.find((e) => e.eventName === 'RegistryCreated') as RegistryCreatedEvent | undefined;
       if (event) {
         registerProject(event);
       }
@@ -198,7 +202,8 @@ export const CreateProject = () => {
             </Box>
             <Box style={{ marginTop: '0px' }}>
               <Text style={{ fontSize: '24px', lineHeight: '150%', fontWeight: '300' }}>
-                Try to make it <span style={{ fontWeight: '400' }}>small</span>, <span style={{ fontWeight: '400' }}>achievable</span> and{' '}
+                Try to make it <span style={{ fontWeight: '400' }}>small</span>,{' '}
+                <span style={{ fontWeight: '400' }}>achievable</span> and{' '}
                 <span style={{ fontWeight: '400' }}>close to you</span>.
               </Text>
             </Box>
@@ -251,7 +256,11 @@ export const CreateProject = () => {
         </Box>
 
         <Box style={boxStyle}>
-          <ProjectSummary selectedDetails={selectedDetails} whatStatement={whatStatement} whoStatement={whoStatement} founderPap={founderPap}></ProjectSummary>
+          <ProjectSummary
+            selectedDetails={selectedDetails}
+            whatStatement={whatStatement}
+            whoStatement={whoStatement}
+            founderPap={founderPap}></ProjectSummary>
         </Box>
       </ReactSimplyCarousel>
 

@@ -1,19 +1,22 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { useContractRead, usePublicClient, useQuery } from 'wagmi';
-import { constants } from 'ethers';
+import { useNavigate, useParams } from 'react-router-dom';
 
-import { RegistryAbi, VouchEventAbi } from '../utils/contracts.json';
-import { AppVouch, HexStr } from '../types';
+import { registryABI } from '../utils/contracts.json';
+import { AppProject, AppVouch, HexStr } from '../types';
+import { getContract } from 'viem';
+import { getProject } from '../firestore/getters';
+import { RouteNames } from '../App';
 
 export type ProjectContextType = {
-  registryAddress?: HexStr;
-  setProjectId: (projectId: string) => void;
-  projectId?: string;
-  projectName?: string;
+  project?: AppProject;
+  projectId?: number;
+  address?: HexStr;
   nMembers?: number;
-  refetch: (options?: { throwOnError: boolean; cancelRefetch: boolean }) => Promise<any>;
+  refetch: () => void;
   isLoading: boolean;
   allVouches?: AppVouch[];
+  goHome: () => void;
 };
 
 interface IProjectContext {
@@ -23,26 +26,40 @@ interface IProjectContext {
 const ProjectContextValue = createContext<ProjectContextType | undefined>(undefined);
 
 export const ProjectContext = (props: IProjectContext) => {
-  const registryAddress = constants.AddressZero;
-
   const publicClient = usePublicClient();
+  const { projectId: routeProjectId } = useParams();
+  const navigate = useNavigate();
 
-  const [projectId, _setProjectId] = useState<string>();
+  const [projectId, _setProjectId] = useState<number>();
 
-  const setProjectId = (projectId: string) => {
-    _setProjectId(projectId);
-  };
+  /** from route param to projectId */
+  useEffect(() => {
+    if (routeProjectId) {
+      _setProjectId(Number(routeProjectId));
+    }
+  }, [routeProjectId]);
+
+  /** from projectId to project */
+  const { data: project, refetch: refetchProject } = useQuery(['project', projectId], () => {
+    if (projectId) {
+      return getProject(projectId);
+    }
+  });
 
   // all vouches
-  const { data: vouchEvents } = useQuery(['allVoucheEvents'], async () => {
-    const logs = await (publicClient as any).getLogs({
-      address: registryAddress,
-      event: VouchEventAbi,
-      fromBlock: 'earliest',
-      toBlock: 'latest',
-    });
+  const { data: vouchEvents } = useQuery(['allVoucheEvents', project], async () => {
+    if (project) {
+      const contract = getContract({
+        address: project.address,
+        abi: registryABI,
+        publicClient,
+      });
 
-    return logs;
+      /** all vouch events */
+      const logs = await contract.getEvents.VouchEvent({}, { fromBlock: 'earliest', toBlock: 'latest' });
+
+      return logs;
+    }
   });
 
   const [allVouches, setAllVouches] = useState<AppVouch[]>();
@@ -52,7 +69,7 @@ export const ProjectContext = (props: IProjectContext) => {
 
     Promise.all(
       vouchEvents.map(async (e: any) => {
-        const block = await (publicClient as any).getBlock(e.blockNumber);
+        const block = await publicClient.getBlock(e.blockNumber);
         return {
           from: e.args.from.toString(),
           to: e.args.to.toString(),
@@ -64,26 +81,38 @@ export const ProjectContext = (props: IProjectContext) => {
   }, [vouchEvents, publicClient]);
 
   const {
-    refetch,
+    refetch: refetchTotalSupply,
     data: nMembers,
     isLoading,
   } = useContractRead({
-    address: registryAddress,
-    abi: RegistryAbi,
+    address: project?.address,
+    abi: registryABI,
     functionName: 'totalSupply',
+    enabled: project !== undefined,
   });
+
+  const refetch = () => {
+    refetchTotalSupply();
+    refetchProject();
+  };
+
+  const goHome = () => {
+    if (project) {
+      navigate(RouteNames.ProjectHome(project.projectId.toString()));
+    }
+  };
 
   return (
     <ProjectContextValue.Provider
       value={{
-        registryAddress,
-        setProjectId,
-        projectId,
-        projectName: 'Test',
+        projectId: project?.projectId,
+        project,
+        address: project?.address,
         nMembers: nMembers !== undefined ? Number(nMembers) : undefined,
         refetch,
         isLoading,
         allVouches,
+        goHome,
       }}>
       {props.children}
     </ProjectContextValue.Provider>

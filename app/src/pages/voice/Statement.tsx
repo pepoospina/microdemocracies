@@ -11,6 +11,7 @@ import { useThemeContext } from '../../components/app';
 import { AppConnectButton } from '../../components/app/AppConnectButton';
 import { COMMUNITY_MEMBER } from '../../config/community';
 import { useAccountContext } from '../../wallet/AccountContext';
+import { useProjectContext } from '../../contexts/ProjectContext';
 
 interface IStatement extends AppCardProps {
   statement?: StatementRead;
@@ -23,6 +24,7 @@ export const Statement = (props: IStatement) => {
   const { isConnected } = useAccountContext();
   const { tokenId } = useConnectedMember();
   const { signMessageAsync } = useSignMessage();
+  const { projectId } = useProjectContext();
 
   const { data: backers, refetch: _refetchBackers } = useQuery(['backers', props.statement?.id], () => {
     if (props.statement) {
@@ -48,8 +50,9 @@ export const Statement = (props: IStatement) => {
   const canBack = tokenId && isBacker !== undefined && !isBacker && isAuthor !== undefined && !isAuthor;
 
   const back = useCallback(async () => {
-    if (props.statement && tokenId) {
+    if (props.statement && tokenId && projectId) {
       const backing: AppStatementBacking = {
+        projectId,
         backer: tokenId,
         statement: props.statement.object.statement,
         statementId: props.statement.id,

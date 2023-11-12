@@ -33,7 +33,7 @@ export const createProject = async (
 
   if (doc.exists) throw new Error(`Project already exist`);
 
-  const docRef = collections.statements.doc();
+  const docRef = collections.projects.doc(projectId);
   await docRef.set(project);
   return docRef.id;
 };

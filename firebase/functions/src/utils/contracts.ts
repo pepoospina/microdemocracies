@@ -1,31 +1,25 @@
-import { createPublicClient } from 'viem';
-import { getContract } from 'viem';
+import { createPublicClient, getContract, http } from 'viem';
 import { baseGoerli } from 'viem/chains';
 
-import contractsJson from '../generated/contracts.json';
 import { env } from '../config/env';
+import { registryABI, registryFactoryABI } from '../contracts/abis';
+import { HexStr } from 'src/@app/types';
 
-function addressOnChain(chainId: number): `0x{string}` {
-  const json = (contractsJson as any)[chainId.toString()];
-  if (json === undefined) throw new Error(`JSON of chain ${chainId} not found`);
-
-  const chainName = Object.getOwnPropertyNames(json);
-  if (chainName.length === 0)
-    throw new Error(`JSON of chain ${chainId} not found`);
-
-  return json[chainName[0]]['contracts']['Registry'].address;
-}
-const registryAddress = addressOnChain(env.CHAIN_ID);
+// const getFactoryAddress = () => _factoryAddress(env.CHAIN_ID);
 
 const publicClient = createPublicClient({
   chain: baseGoerli,
-  transport: http('https://eth-mainnet.g.alchemy.com/v2/<apiKey>'),
+  transport: http(
+    `https://${env.ALCHEMY_SUBDOMAIN}.g.alchemy.com/v2/${env.ALCHEMY_KEY}`
+  ),
 });
 
-const registry = getContract({
-  address: '0xFBA3912Ca04dd458c843e2EE08967fC04f3579c2',
-  abi: wagmiAbi,
-  publicClient,
-});
+const getRegistry = (address: HexStr) => {
+  return getContract({
+    address,
+    abi: registryABI,
+    publicClient,
+  });
+};
 
-export { registryAddress, registry };
+export { registryABI, registryFactoryABI, getRegistry, publicClient };
