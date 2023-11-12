@@ -13,22 +13,6 @@ export const LandingPage = () => {
 
   const textStyle: React.CSSProperties = { marginBottom: '40px', fontSize: '24px' };
 
-  // const start = async () => {
-  //   // postProject({
-  //   //   projectId: 1,
-  //   //   address: '0x',
-  //   //   selectedDetails: {
-  //   //     personal: {},
-  //   //     platform: {},
-  //   //   },
-  //   //   whatStatement: 'what',
-  //   //   whoStatement: 'who',
-  //   // });
-  //   const ref = doc(db, 'projects', '1');
-  //   const rdoc = await getDoc(ref);
-  //   console.log({ ex: rdoc.exists(), data: rdoc.data(), id: rdoc.id, db });
-  // };
-
   const start = () => {
     navigate(RouteNames.Start);
   };
@@ -51,7 +35,13 @@ export const LandingPage = () => {
         <Text style={textStyle}>
           to <span style={{ fontWeight: '600' }}>do</span>
         </Text>
-        <AppButton primary onClick={start} label="Start now" style={{ margin: '12px 0px', width: '200px' }} />
+        <AppButton
+          disabled
+          primary
+          onClick={start}
+          label="Start now (soon)"
+          style={{ margin: '12px 0px', width: '300px' }}
+        />
       </Box>
 
       <Box justify="center" align="center" style={{ flexShrink: '0', marginBottom: '6vh' }}>

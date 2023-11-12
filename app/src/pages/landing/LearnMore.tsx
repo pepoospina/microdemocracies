@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Box, Text } from 'grommet';
 import ReactSimplyCarousel from 'react-simply-carousel';
 
@@ -10,18 +10,54 @@ import { AppButton } from '../../ui-components';
 import { FormNext, FormPrevious } from 'grommet-icons';
 import { LearnMoreItem } from './LearnMoreItem';
 
+const Bold = (props: React.PropsWithChildren) => {
+  return <span style={{ fontWeight: '400' }}>{props.children}</span>;
+};
+
+const N_SLIDES = 3;
+
 export const LearnMore = () => {
   const navigate = useNavigate();
   const [activeSlideIndex, setActiveSlideIndex] = useState(0);
 
+  // Function to handle key press events
+  const handleKeyPress = useCallback(
+    (event: KeyboardEvent) => {
+      if (event.key === 'ArrowLeft') {
+        if (activeSlideIndex > 0) {
+          setActiveSlideIndex(activeSlideIndex - 1);
+        }
+      } else if (event.key === 'ArrowRight') {
+        if (activeSlideIndex < N_SLIDES - 1) {
+          setActiveSlideIndex(activeSlideIndex + 1);
+        }
+      }
+    },
+    [activeSlideIndex]
+  );
+
+  useEffect(() => {
+    window.addEventListener('keydown', handleKeyPress);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyPress);
+    };
+  }, [handleKeyPress]);
+
   const btnStyle: React.CSSProperties = {
     alignSelf: 'center',
+    height: '100%',
+    cursor: 'pointer',
     border: 'none',
     borderRadius: '50%',
     backgroundColor: 'transparent',
   };
 
-  const boxStyle: React.CSSProperties = { width: 'calc(100vw - 100px)' };
+  const boxStyle: React.CSSProperties = {
+    width: 'min(100vw - 100px, 600px)',
+    padding: '0px 3vw',
+    textAlign: 'center',
+  };
 
   return (
     <Box fill align="center">
@@ -35,13 +71,15 @@ export const LearnMore = () => {
         <Text style={{ fontSize: '42px' }}>How it works</Text>
       </BoxCentered>
 
-      <Box style={{ flexGrow: '2', width: '100vw', flexShrink: '0' }} justify="center" align="center">
+      <Box style={{ flexGrow: '1', width: '100%', flexShrink: '0' }} justify="center" align="center">
         <ReactSimplyCarousel
+          disableSwipeByMouse
           infinite={false}
           activeSlideIndex={activeSlideIndex}
           onRequestChange={setActiveSlideIndex}
           itemsToShow={1}
           itemsToScroll={1}
+          containerProps={{ style: { width: '100vw' } }}
           forwardBtnProps={{
             style: btnStyle,
             children: (
@@ -58,26 +96,18 @@ export const LearnMore = () => {
               </Box>
             ),
           }}
-          responsiveProps={[
-            {
-              itemsToShow: 2,
-              itemsToScroll: 2,
-              minWidth: 768,
-            },
-          ]}
           speed={400}
-          easing="linear">
+          easing="cubic-bezier(0.25, 0.1, 0.25, 1)">
           <Box style={boxStyle}>
             <LearnMoreItem
               mainText={
                 <>
-                  Find something you know enough people <span style={{ fontWeight: '400' }}>want</span> to change.
+                  Find something you know <Bold>needs</Bold> to change.
                 </>
               }
               secondaryText={
                 <>
-                  Better if it is <span style={{ fontWeight: '400' }}>small</span> and{' '}
-                  <span style={{ fontWeight: '400' }}>close to you</span>.
+                  And invite others to change it, <Bold>together</Bold>.
                 </>
               }></LearnMoreItem>
           </Box>
@@ -86,25 +116,12 @@ export const LearnMore = () => {
             <LearnMoreItem
               mainText={
                 <>
-                  Invite others to change it, <span style={{ fontWeight: '400' }}>together</span>.
-                </>
-              }
-              secondaryText={<>And invite them, in turn, to invite others.</>}></LearnMoreItem>
-          </Box>
-
-          <Box style={boxStyle}>
-            <LearnMoreItem
-              mainText={
-                <>
-                  Converge into one <span style={{ fontWeight: '400' }}>loud</span> and{' '}
-                  <span style={{ fontWeight: '400' }}>clear</span> collective{' '}
-                  <span style={{ fontWeight: '400' }}>voice</span>.
+                  Talk <Bold>without fear</Bold>.
                 </>
               }
               secondaryText={
                 <>
-                  Micro(r)evolutions brings <span style={{ fontWeight: '400' }}>clarity</span> and help you converge
-                  your collective ideas into <span style={{ fontWeight: '400' }}>action</span>.
+                  Hold <Bold>anonymous</Bold> conversations, <Bold>restricted</Bold> to members.
                 </>
               }></LearnMoreItem>
           </Box>
@@ -113,16 +130,26 @@ export const LearnMore = () => {
             <LearnMoreItem
               mainText={
                 <>
-                  Become <span style={{ fontWeight: '400' }}>powerful</span>, raise funds, and spend them together.
+                  Amplify your <Bold>voice</Bold>.
                 </>
               }
-              secondaryText={<>Handle community funds securely, transparently and collectively.</>}></LearnMoreItem>
+              secondaryText={
+                <>
+                  Anonymously <Bold>back</Bold> the statements you agree with.
+                </>
+              }></LearnMoreItem>
           </Box>
         </ReactSimplyCarousel>
       </Box>
 
       <BoxCentered style={{ flexShrink: '0', marginBottom: '6vh' }}>
-        <AppButton primary onClick={() => navigate(RouteNames.Start)} label="Start now" style={{ width: '200px' }} />
+        <AppButton
+          disabled
+          primary
+          onClick={() => navigate(RouteNames.Start)}
+          label="Start now (soon)"
+          style={{ width: '300px' }}
+        />
       </BoxCentered>
     </Box>
   );
