@@ -1,3 +1,3 @@
-# Network State Citizens Registry
+### Micro(r)evolutions
 
-A registry of persons, and their accounts, of the network state.
+Smart-Contracts for Micro(r)evolutions.com. There is an ugly dependency to ../app using a symbolic link.
