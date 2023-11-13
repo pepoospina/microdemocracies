@@ -20,7 +20,7 @@ export const LandingPage = () => {
   return (
     <Box fill align="center">
       <Box justify="center" align="center" style={{ flexShrink: '0', marginTop: '6vh' }}>
-        <Text size="42px" weight="bold">
+        <Text size="36px" weight="bold">
           {appName}
         </Text>
       </Box>
