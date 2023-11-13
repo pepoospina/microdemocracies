@@ -61,11 +61,14 @@ export const LearnMore = () => {
 
   return (
     <Box fill align="center">
-      <Box justify="center" align="center" style={{ flexShrink: '0', marginTop: '16px' }}>
+      <AppButton
+        onClick={() => navigate('/')}
+        plain
+        style={{ flexShrink: '0', marginTop: '16px', textTransform: 'none' }}>
         <Text size="22px" weight="bold">
           {appName}
         </Text>
-      </Box>
+      </AppButton>
 
       <BoxCentered style={{ marginTop: '56px' }}>
         <Text style={{ fontSize: '42px' }}>How it works</Text>
@@ -158,7 +161,6 @@ export const LearnMore = () => {
       <BoxCentered style={{ flexShrink: '0', marginBottom: '6vh' }}>
         <AppButton
           disabled
-          primary
           onClick={() => navigate(RouteNames.Start)}
           label="Start now (soon)"
           style={{ width: '300px' }}
