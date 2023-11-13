@@ -3,6 +3,7 @@ import { appName } from '../../config/community';
 import { AppButton } from '../../ui-components';
 import { useNavigate } from 'react-router-dom';
 import { RouteNames } from '../../App';
+import { useResponsive } from '../../components/app';
 
 // import { CollectionNames, db } from '../../firestore/database';
 // import { getDoc, doc } from 'firebase/firestore';
@@ -10,8 +11,12 @@ import { RouteNames } from '../../App';
 
 export const LandingPage = () => {
   const navigate = useNavigate();
+  const { mobile } = useResponsive();
 
-  const textStyle: React.CSSProperties = { marginBottom: '40px', fontSize: '24px' };
+  const logoSize = mobile ? '36px' : '48px';
+  const textStyle: React.CSSProperties = mobile
+    ? { marginBottom: '40px', fontSize: '24px' }
+    : { marginBottom: '62px', fontSize: '36px' };
 
   const start = () => {
     navigate(RouteNames.Start);
@@ -20,7 +25,7 @@ export const LandingPage = () => {
   return (
     <Box fill align="center">
       <Box justify="center" align="center" style={{ flexShrink: '0', marginTop: '6vh' }}>
-        <Text size="36px" weight="bold">
+        <Text size={logoSize} weight="bold">
           {appName}
         </Text>
       </Box>
@@ -35,17 +40,11 @@ export const LandingPage = () => {
         <Text style={textStyle}>
           to <span style={{ fontWeight: '600' }}>dare</span>
         </Text>
-        <AppButton
-          disabled
-          primary
-          onClick={start}
-          label="Start now (soon)"
-          style={{ margin: '12px 0px', width: '300px' }}
-        />
+        <AppButton primary onClick={() => navigate(RouteNames.More)} label="Learn more" style={{ width: '200px' }} />
       </Box>
 
       <Box justify="center" align="center" style={{ flexShrink: '0', marginBottom: '6vh' }}>
-        <AppButton onClick={() => navigate(RouteNames.More)} label="Learn more" style={{ width: '200px' }} />
+        <AppButton disabled onClick={start} label="Start now (soon)" style={{ margin: '12px 0px', width: '300px' }} />
       </Box>
     </Box>
   );
