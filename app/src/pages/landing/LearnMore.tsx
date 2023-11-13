@@ -145,7 +145,7 @@ export const LearnMore = () => {
 
           <Box style={boxStyle}>
             <LearnMoreItem
-              mainText={<>Micro(r)evolutions is in closed.</>}
+              mainText={<>Micro(r)evolutions is in closed beta.</>}
               secondaryText={
                 <>
                   Can't wait? contact us at{' '}
