@@ -1,3 +1,3 @@
-# Network State Registry App
+# Micro(r)evolutions App
 
 (more soon)
