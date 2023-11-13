@@ -145,8 +145,8 @@ export const LearnMore = () => {
               mainText={<>Micro(r)evolutions is in closed beta for now.</>}
               secondaryText={
                 <>
-                  Contact us at{' '}
-                  <a href="mailto:start@microrevolutions.com" target="_blank">
+                  Can't wait? contact us at{' '}
+                  <a href="mailto:start@microrevolutions.com" target="_blank" rel="noreferrer">
                     start@microrevolutions.com
                   </a>
                 </>
