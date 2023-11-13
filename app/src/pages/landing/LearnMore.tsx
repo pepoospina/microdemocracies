@@ -107,7 +107,7 @@ export const LearnMore = () => {
               }
               secondaryText={
                 <>
-                  And invite others to change it, <Bold>together</Bold>.
+                  Dare others to change it, <Bold>together</Bold>.
                 </>
               }></LearnMoreItem>
           </Box>
@@ -136,6 +136,19 @@ export const LearnMore = () => {
               secondaryText={
                 <>
                   Anonymously <Bold>back</Bold> the statements you agree with.
+                </>
+              }></LearnMoreItem>
+          </Box>
+
+          <Box style={boxStyle}>
+            <LearnMoreItem
+              mainText={<>Micro(r)evolutions is in closed beta for now.</>}
+              secondaryText={
+                <>
+                  Contact us at{' '}
+                  <a href="mailto:start@microrevolutions.com" target="_blank">
+                    start@microrevolutions.com
+                  </a>
                 </>
               }></LearnMoreItem>
           </Box>

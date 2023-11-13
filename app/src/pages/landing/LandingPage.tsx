@@ -33,7 +33,7 @@ export const LandingPage = () => {
           for <span style={{ fontWeight: '600' }}>you</span>
         </Text>
         <Text style={textStyle}>
-          to <span style={{ fontWeight: '600' }}>do</span>
+          to <span style={{ fontWeight: '600' }}>dare</span>
         </Text>
         <AppButton
           disabled
