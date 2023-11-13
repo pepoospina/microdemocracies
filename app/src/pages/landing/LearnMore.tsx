@@ -14,7 +14,7 @@ const Bold = (props: React.PropsWithChildren) => {
   return <span style={{ fontWeight: '400' }}>{props.children}</span>;
 };
 
-const N_SLIDES = 3;
+const N_SLIDES = 4;
 
 export const LearnMore = () => {
   const navigate = useNavigate();
