@@ -3,6 +3,7 @@ import { appName } from '../../config/community';
 import { AppButton } from '../../ui-components';
 import { useNavigate } from 'react-router-dom';
 import { RouteNames } from '../../App';
+import { useResponsive } from '../../components/app';
 
 // import { CollectionNames, db } from '../../firestore/database';
 // import { getDoc, doc } from 'firebase/firestore';
@@ -10,24 +11,12 @@ import { RouteNames } from '../../App';
 
 export const LandingPage = () => {
   const navigate = useNavigate();
+  const { mobile } = useResponsive();
 
-  const textStyle: React.CSSProperties = { marginBottom: '40px', fontSize: '24px' };
-
-  // const start = async () => {
-  //   // postProject({
-  //   //   projectId: 1,
-  //   //   address: '0x',
-  //   //   selectedDetails: {
-  //   //     personal: {},
-  //   //     platform: {},
-  //   //   },
-  //   //   whatStatement: 'what',
-  //   //   whoStatement: 'who',
-  //   // });
-  //   const ref = doc(db, 'projects', '1');
-  //   const rdoc = await getDoc(ref);
-  //   console.log({ ex: rdoc.exists(), data: rdoc.data(), id: rdoc.id, db });
-  // };
+  const logoSize = mobile ? '36px' : '48px';
+  const textStyle: React.CSSProperties = mobile
+    ? { marginBottom: '40px', fontSize: '24px' }
+    : { marginBottom: '62px', fontSize: '36px' };
 
   const start = () => {
     navigate(RouteNames.Start);
@@ -36,7 +25,7 @@ export const LandingPage = () => {
   return (
     <Box fill align="center">
       <Box justify="center" align="center" style={{ flexShrink: '0', marginTop: '6vh' }}>
-        <Text size="42px" weight="bold">
+        <Text size={logoSize} weight="bold">
           {appName}
         </Text>
       </Box>
@@ -49,13 +38,13 @@ export const LandingPage = () => {
           for <span style={{ fontWeight: '600' }}>you</span>
         </Text>
         <Text style={textStyle}>
-          to <span style={{ fontWeight: '600' }}>do</span>
+          to <span style={{ fontWeight: '600' }}>dare</span>
         </Text>
-        <AppButton primary onClick={start} label="Start now" style={{ margin: '12px 0px', width: '200px' }} />
+        <AppButton primary onClick={() => navigate(RouteNames.More)} label="Learn more" style={{ width: '200px' }} />
       </Box>
 
       <Box justify="center" align="center" style={{ flexShrink: '0', marginBottom: '6vh' }}>
-        <AppButton onClick={() => navigate(RouteNames.More)} label="Learn more" style={{ width: '200px' }} />
+        <AppButton disabled onClick={start} label="Start now (soon)" style={{ margin: '12px 0px', width: '300px' }} />
       </Box>
     </Box>
   );
