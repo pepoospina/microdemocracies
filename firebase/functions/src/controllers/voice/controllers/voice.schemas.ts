@@ -4,7 +4,7 @@ import { MAX_STATEMETN_LENGTH as MAX_STATEMENT_LENGTH } from '../../../config/co
 export const statementValidationScheme = object({
   object: object({
     projectId: number().required(),
-    author: number().required(),
+    proof: string().required(),
     statement: string().max(MAX_STATEMENT_LENGTH).required(),
   }),
   signature: string().required(),

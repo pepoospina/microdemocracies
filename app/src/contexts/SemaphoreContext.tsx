@@ -2,18 +2,19 @@ import { PropsWithChildren, createContext, useContext, useEffect, useState } fro
 import { useSignMessage } from 'wagmi';
 
 import { Identity } from '@semaphore-protocol/identity';
-import { generateProof } from '@semaphore-protocol/proof';
+import { generateProof as _generateProof } from '@semaphore-protocol/proof';
 
 import { getPublicIdentity } from '../firestore/getters';
 import { useAccountContext } from '../wallet/AccountContext';
 import { useAppSigner } from '../wallet/SignerContext';
 
-import { postIdentity } from '../utils/statements';
+import { getMerklePass, postIdentity } from '../utils/statements';
 import { useProjectContext } from './ProjectContext';
 
 export type SemaphoreContextType = {
   connectIdentity?: () => Promise<void>;
   publicId?: string;
+  generateProof?: (signal: string, nullifier: string) => Promise<string>;
 };
 
 const SemaphoreContextValue = createContext<SemaphoreContextType | undefined>(undefined);
@@ -22,7 +23,7 @@ export const SemaphoreContext = (props: PropsWithChildren) => {
   const { signMessageAsync } = useSignMessage();
   const { owner, aaAddress } = useAccountContext();
   const { address: signerAddress } = useAppSigner();
-  const { address: projectAddress } = useProjectContext();
+  const { address: projectAddress, projectId } = useProjectContext();
 
   const [identity, setIdentity] = useState<Identity>();
   const [publicId, setPublicId] = useState<string>();
@@ -46,13 +47,13 @@ export const SemaphoreContext = (props: PropsWithChildren) => {
   /** store the member publicId in the project associated to their address. publicId is
    * the identity commitment. Posts cannot be associated to one publicId */
   const checkStoreId = async (publicId: string) => {
-    if (owner && projectAddress && aaAddress) {
-      const identity = await getPublicIdentity(owner, projectAddress);
+    if (owner && projectId && aaAddress) {
+      const identity = await getPublicIdentity(owner, projectId);
 
       // store the identity on the db
       if (identity === undefined) {
         await postIdentity({
-          projectAddress,
+          projectId,
           owner,
           publicId,
           aaAddress,
@@ -87,17 +88,24 @@ export const SemaphoreContext = (props: PropsWithChildren) => {
         }
       : undefined;
 
-  const proof = identity
-    ? async () => {
-        await generateProof(identity, group, externalNullifier, signal);
-      }
-    : undefined;
+  const generateProof =
+    identity && projectId && publicId
+      ? async (signal: string, nullifier: string) => {
+          const merklePass = await getMerklePass({
+            projectId,
+            publicId,
+          });
+          const generated = await _generateProof(identity, merklePass, nullifier, signal);
+          return generated.proof.toString();
+        }
+      : undefined;
 
   return (
     <SemaphoreContextValue.Provider
       value={{
         connectIdentity,
         publicId,
+        generateProof,
       }}>
       {props.children}
     </SemaphoreContextValue.Provider>

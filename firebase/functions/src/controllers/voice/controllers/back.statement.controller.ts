@@ -1,7 +1,7 @@
 import { RequestHandler } from 'express';
 import { logger } from 'firebase-functions/v1';
 
-import { getProject, getStatement } from '../../../db/getters';
+import { getProject } from '../../../db/getters';
 import { setStatementBacker } from '../../../db/setters';
 
 import { backStatementValidationScheme } from './voice.schemas';
@@ -25,13 +25,6 @@ export const backStatementController: RequestHandler = async (
     backing.object.backer,
     project.address
   );
-
-  // verify backer is not author
-  const statement = await getStatement(backing.object.statementId);
-
-  if (statement.object.author === backing.object.backer) {
-    throw new Error(`Author cannot back their statments`);
-  }
 
   try {
     await setStatementBacker(backing, id);

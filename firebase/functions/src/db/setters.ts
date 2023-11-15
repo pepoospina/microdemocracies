@@ -26,8 +26,7 @@ export const setStatement = async (
 };
 
 export const setIdentity = async (
-  identity: AppPublicIdentity,
-  id: string
+  identity: AppPublicIdentity
 ): Promise<string> => {
   const docRef = collections
     .identities(identity.projectId.toString())

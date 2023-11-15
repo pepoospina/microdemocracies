@@ -4,6 +4,7 @@ import { logger } from 'firebase-functions/v1';
 import { AppPublicIdentity, SignedObject } from '../../../@app/types';
 import { verifySignedObject } from '../../../utils/signatures';
 import { setIdentity } from '../../../db/setters';
+import { getProject } from '../../../db/getters';
 import { getRegistry } from '../../../utils/contracts';
 
 import { identityValidationScheme } from './voice.schemas';
@@ -21,7 +22,8 @@ export const createIdentityController: RequestHandler = async (
   await verifySignedObject(identity, identity.object.owner);
 
   // only store identities that are of addresses currently present in the registy
-  const registry = getRegistry(identity.object.projectAddress);
+  const project = await getProject(identity.object.projectId);
+  const registry = getRegistry(project.address);
   const balance = await registry.read.balanceOf([identity.object.aaAddress]);
 
   if (balance === BigInt(0))
@@ -30,9 +32,8 @@ export const createIdentityController: RequestHandler = async (
     );
 
   try {
-    const entryId = `${identity.object.projectAddress}${identity.object.owner}`;
-    await setIdentity(identity.object, entryId);
-    response.status(200).send({ success: true, id: entryId });
+    const id = await setIdentity(identity.object);
+    response.status(200).send({ success: true, id });
   } catch (error: any) {
     logger.error('error', error);
     response.status(500).send({ success: false, error: error.message });

@@ -46,8 +46,7 @@ export const Statement = (props: IStatement) => {
     });
   });
 
-  const isAuthor = tokenId && props.statement && tokenId === props.statement.object.author;
-  const canBack = tokenId && isBacker !== undefined && !isBacker && isAuthor !== undefined && !isAuthor;
+  const canBack = tokenId && isBacker !== undefined && !isBacker !== undefined;
 
   const back = useCallback(async () => {
     if (props.statement && tokenId && projectId) {
@@ -97,14 +96,6 @@ export const Statement = (props: IStatement) => {
               </Text>
             </Box>
             <Box direction="row" style={{ margin: '0px 0', flexShrink: 0 }}>
-              <Box>
-                <Text>
-                  by{' '}
-                  <Anchor style={{ color: 'white' }}>
-                    {COMMUNITY_MEMBER} #{props.statement.object.author}
-                  </Anchor>
-                </Text>
-              </Box>
               <Box direction="row" style={{ flexGrow: 1 }} justify="end" align="center">
                 {backers && backers.length > 0 ? (
                   <>
@@ -140,7 +131,7 @@ export const Statement = (props: IStatement) => {
           <Spinner></Spinner>
         )}
       </Box>
-      {!props.preview && !isAuthor ? (
+      {!props.preview ? (
         <Box direction="row" justify="end">
           {isConnected ? (
             !isBacker ? (

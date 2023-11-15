@@ -1,14 +1,18 @@
 import { RequestHandler } from 'express';
 import { logger } from 'firebase-functions/v1';
 
-import { getIdentitiesValidationScheme } from './voice.schemas';
+import { AppGetMerklePass } from '../../../@app/types';
 import { getGroup } from '../../../utils/groups';
 
-export const getMerkleProofController: RequestHandler = async (
+import { getIdentitiesValidationScheme } from './voice.schemas';
+
+export const getMerklePassController: RequestHandler = async (
   request,
   response
 ) => {
-  const payload = await getIdentitiesValidationScheme.validate(request.body);
+  const payload = (await getIdentitiesValidationScheme.validate(
+    request.body
+  )) as AppGetMerklePass;
 
   const group = await getGroup(payload.projectId);
   const leafIndex = group.indexOf(payload.publicId);

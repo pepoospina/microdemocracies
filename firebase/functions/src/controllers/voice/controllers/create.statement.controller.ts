@@ -1,10 +1,6 @@
 import { RequestHandler } from 'express';
 import { logger } from 'firebase-functions/v1';
 
-import { verifySignedStatement } from '../../../utils/signatures';
-import { setStatement } from '../../../db/setters';
-import { getProject } from '../../../db/getters';
-
 import { statementValidationScheme } from './voice.schemas';
 import { AppStatementCreate, SignedObject } from 'src/@app/types';
 
@@ -17,18 +13,13 @@ export const createStatementController: RequestHandler = async (
     request.body
   )) as SignedObject<AppStatementCreate>;
 
-  // verify signature is from the author address in the registry
-  const project = await getProject(statement.object.projectId);
+  console.log({ statement });
 
-  const id = await verifySignedStatement(
-    statement,
-    statement.object.author,
-    project.address
-  );
+  // const id = await verifyProof(...)
 
   try {
-    await setStatement(statement, id);
-    response.status(200).send({ success: true, id });
+    // await setStatement(statement, id: 0);
+    response.status(200).send({ success: true });
   } catch (error: any) {
     logger.error('error', error);
     response.status(500).send({ success: false, error: error.message });

@@ -44,8 +44,8 @@ export const isStatementBacker = async (statementId: string, tokenId: number): P
   return querySnapshot.docs.length === 1;
 };
 
-export const getPublicIdentity = async (owner: HexStr, projectAddress: HexStr) => {
-  const ref = collections.identity(`${projectAddress}${owner}`);
+export const getPublicIdentity = async (owner: HexStr, projectId: number) => {
+  const ref = collections.identity(`${projectId}${owner}`);
   const doc = await getDoc(ref);
 
   if (!doc.exists) return undefined;

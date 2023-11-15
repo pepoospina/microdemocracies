@@ -133,3 +133,8 @@ export interface AppPublicIdentity {
   owner: HexStr;
   aaAddress: HexStr;
 }
+
+export interface AppGetMerklePass {
+  projectId: number;
+  publicId: string;
+}
