@@ -13,7 +13,7 @@ export const createStatementController: RequestHandler = async (
     request.body
   )) as SignedObject<AppStatementCreate>;
 
-  console.log({ statement });
+  console.log({ statement, a: 1 });
 
   // const id = await verifyProof(...)
 
