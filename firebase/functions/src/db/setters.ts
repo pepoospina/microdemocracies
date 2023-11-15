@@ -29,7 +29,9 @@ export const setIdentity = async (
   identity: AppPublicIdentity,
   id: string
 ): Promise<string> => {
-  const docRef = collections.identities.doc(id);
+  const docRef = collections
+    .identities(identity.projectId.toString())
+    .doc(identity.publicId);
   await docRef.set(identity);
   return docRef.id;
 };

@@ -10,10 +10,12 @@ import { BottomButton } from '../common/BottomButton';
 import { FormPrevious } from 'grommet-icons';
 import { useAccountContext } from '../../wallet/AccountContext';
 import { StatementEditable } from './StatementEditable';
+import { useSemaphoreContext } from '../../contexts/SemaphoreContext';
 
 export const VoicePropose = (): JSX.Element => {
   const { isConnected } = useAccountContext();
   const { proposeStatement } = useVoiceSend();
+  const { publicId, connectIdentity } = useSemaphoreContext();
 
   const [done, setDone] = useState<boolean>(false);
   const navigate = useNavigate();
@@ -29,6 +31,7 @@ export const VoicePropose = (): JSX.Element => {
     }
   };
 
+  const readyToPropose = isConnected && input && proposeStatement !== undefined && publicId && !done;
   console.log({ isConnected, input, proposeStatement, done });
 
   return (
@@ -38,27 +41,31 @@ export const VoicePropose = (): JSX.Element => {
           <>
             <Box style={{ marginBottom: '36px' }}>
               <StatementEditable
+                value={'Test proposal'}
                 editable
                 onChanged={(value?: string) => {
                   if (value) setInput(value);
                 }}
                 placeholder="new statement..."></StatementEditable>
             </Box>
-            <Box direction="row" justify="center" style={{ margin: '36px 0', width: '100%' }}>
-              {isConnected ? (
-                !done ? (
-                  <AppButton
-                    label="propose statement"
-                    onClick={() => {
-                      if (input) _proposeStatement(input);
-                    }}
-                    disabled={!isConnected || !input || !proposeStatement || done}></AppButton>
-                ) : (
-                  <></>
-                )
+            <Box justify="center" style={{ margin: '36px 0', width: '100%' }}>
+              {!isConnected ? <AppConnectButton label="Connect to propose"></AppConnectButton> : <></>}
+              {isConnected && publicId === undefined ? (
+                <AppButton
+                  onClick={() => {
+                    if (connectIdentity) connectIdentity();
+                  }}
+                  label="Setup"
+                  disabled={connectIdentity === undefined}></AppButton>
               ) : (
-                <AppConnectButton label="Connect to propose"></AppConnectButton>
+                <></>
               )}
+              <AppButton
+                label="propose statement"
+                onClick={() => {
+                  if (input) _proposeStatement(input);
+                }}
+                disabled={!readyToPropose}></AppButton>
             </Box>
           </>
         ) : (

@@ -57,11 +57,14 @@ export const AccountContext = (props: PropsWithChildren) => {
     setUserOps([]);
   };
 
-  const { data: owner } = useContractRead({
+  const { data: owner, error: ownerError } = useContractRead({
     abi: aaWalletAbi,
     address: aaAddress,
+    functionName: 'owner',
     enabled: aaAddress !== undefined,
   });
+
+  console.log({ owner, ownerError });
 
   const setProvider = (signer: WalletClientSigner) => {
     const provider = new AlchemyProvider({

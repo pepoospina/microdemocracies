@@ -28,3 +28,8 @@ export const identityValidationScheme = object({
   }),
   signature: string().required(),
 }).noUnknown(true);
+
+export const getIdentitiesValidationScheme = object({
+  projectId: number().required(),
+  publicId: string().required(),
+}).noUnknown(true);

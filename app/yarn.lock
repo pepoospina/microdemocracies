@@ -1689,7 +1689,7 @@
     "@ethersproject/sha2" "^5.7.0"
     "@ethersproject/strings" "^5.7.0"
 
-"@ethersproject/strings@5.7.0", "@ethersproject/strings@^5.6.1", "@ethersproject/strings@^5.7.0":
+"@ethersproject/strings@5.7.0", "@ethersproject/strings@^5.5.0", "@ethersproject/strings@^5.6.1", "@ethersproject/strings@^5.7.0":
   version "5.7.0"
   resolved "https://registry.yarnpkg.com/@ethersproject/strings/-/strings-5.7.0.tgz#54c9d2a7c57ae8f1205c88a9d3a56471e14d5ed2"
   integrity sha512-/9nu+lj0YswRNSH0NXYqrh8775XNyEdUQAuf3f+SmOrnVewcJ5SBNAjF7lpgehKi4abvNNXyf+HX86czCdJ8Mg==
@@ -2988,6 +2988,18 @@
     "@ethersproject/random" "^5.5.1"
     "@ethersproject/strings" "^5.6.1"
     js-sha512 "^0.8.0"
+
+"@semaphore-protocol/proof@^3.15.0":
+  version "3.15.0"
+  resolved "https://registry.yarnpkg.com/@semaphore-protocol/proof/-/proof-3.15.0.tgz#a31bb268c4f89ee41904172ce5d60a97b549985b"
+  integrity sha512-lMyDqVE1uHDyDw8FJgSUD1xp+BqhOkcsFn0d7hmTADfU5Y8ew9z50wuUN2cNBW4il70/kXlCB/mSkJQfrh7fZg==
+  dependencies:
+    "@ethersproject/bignumber" "^5.5.0"
+    "@ethersproject/bytes" "^5.7.0"
+    "@ethersproject/keccak256" "^5.7.0"
+    "@ethersproject/strings" "^5.5.0"
+    "@zk-kit/groth16" "0.1.0"
+    "@zk-kit/incremental-merkle-tree" "0.4.3"
 
 "@sinclair/typebox@^0.24.1":
   version "0.24.51"
@@ -4531,6 +4543,19 @@
   dependencies:
     "@zxing/library" "^0.20.0"
 
+"@zk-kit/groth16@0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@zk-kit/groth16/-/groth16-0.1.0.tgz#bbde6ad0b74c0f422be92ea3c077a433683271f8"
+  integrity sha512-ilFDztfBAUkC08HNwpwJxDAHromACBBizH/ouKXOeCnlaNw3zwetuhJVwBS+urAzNwu3TU94OcOmAV1JY83mLQ==
+  dependencies:
+    circom_runtime "0.1.24"
+    ffjavascript "0.2.60"
+
+"@zk-kit/incremental-merkle-tree@0.4.3":
+  version "0.4.3"
+  resolved "https://registry.yarnpkg.com/@zk-kit/incremental-merkle-tree/-/incremental-merkle-tree-0.4.3.tgz#197f72102d35dd9c546a6a432896d6d6f6de05f4"
+  integrity sha512-2qHfrJXtPx8/UmF0wFAUr4VqCLr3J/P859fk/e3fwKLUnf3baeIUAO6inY4wrh0NGy4bzpKUWYjDph0yTbPz6A==
+
 "@zxing/library@^0.20.0":
   version "0.20.0"
   resolved "https://registry.yarnpkg.com/@zxing/library/-/library-0.20.0.tgz#11bc411b87693015389555c589da61532879be7b"
@@ -5639,6 +5664,13 @@ cipher-base@^1.0.0, cipher-base@^1.0.1, cipher-base@^1.0.3:
   dependencies:
     inherits "^2.0.1"
     safe-buffer "^5.0.1"
+
+circom_runtime@0.1.24:
+  version "0.1.24"
+  resolved "https://registry.yarnpkg.com/circom_runtime/-/circom_runtime-0.1.24.tgz#60ca8a31c3675802fbab5a0bcdeb02556e510733"
+  integrity sha512-H7/7I2J/cBmRnZm9docOCGhfxzS61BEm4TMCWcrZGsWNBQhePNfQq88Oj2XpUfzmBTCd8pRvRb3Mvazt3TMrJw==
+  dependencies:
+    ffjavascript "0.2.60"
 
 citty@^0.1.3, citty@^0.1.4:
   version "0.1.4"
@@ -7575,6 +7607,15 @@ fb-watchman@^2.0.0:
   integrity sha512-p5161BqbuCaSnB8jIbzQHOlpgsPmK5rJVDfDKO91Axs5NC1uu3HRQm6wt9cd9/+GtQQIO53JdGXXoyDpTAsgYA==
   dependencies:
     bser "2.1.1"
+
+ffjavascript@0.2.60:
+  version "0.2.60"
+  resolved "https://registry.yarnpkg.com/ffjavascript/-/ffjavascript-0.2.60.tgz#4d8ae613d6bf4e98b3cc29ba10c626f5853854cf"
+  integrity sha512-T/9bnEL5xAZRDbQoEMf+pM9nrhK+C3JyZNmqiWub26EQorW7Jt+jR54gpqDhceA4Nj0YctPQwYnl8xa52/A26A==
+  dependencies:
+    wasmbuilder "0.0.16"
+    wasmcurves "0.2.2"
+    web-worker "^1.2.0"
 
 file-entry-cache@^6.0.1:
   version "6.0.1"
@@ -14244,6 +14285,18 @@ walker@^1.0.7:
   dependencies:
     makeerror "1.0.12"
 
+wasmbuilder@0.0.16:
+  version "0.0.16"
+  resolved "https://registry.yarnpkg.com/wasmbuilder/-/wasmbuilder-0.0.16.tgz#f34c1f2c047d2f6e1065cbfec5603988f16d8549"
+  integrity sha512-Qx3lEFqaVvp1cEYW7Bfi+ebRJrOiwz2Ieu7ZG2l7YyeSJIok/reEQCQCuicj/Y32ITIJuGIM9xZQppGx5LrQdA==
+
+wasmcurves@0.2.2:
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/wasmcurves/-/wasmcurves-0.2.2.tgz#ca444f6a6f6e2a5cbe6629d98ff478a62b4ccb2b"
+  integrity sha512-JRY908NkmKjFl4ytnTu5ED6AwPD+8VJ9oc94kdq7h5bIwbj0L4TDJ69mG+2aLs2SoCmGfqIesMWTEJjtYsoQXQ==
+  dependencies:
+    wasmbuilder "0.0.16"
+
 watchpack@^2.4.0:
   version "2.4.0"
   resolved "https://registry.yarnpkg.com/watchpack/-/watchpack-2.4.0.tgz#fa33032374962c78113f93c7f2fb4c54c9862a5d"
@@ -14277,6 +14330,11 @@ web-vitals@^2.1.4:
   version "2.1.4"
   resolved "https://registry.yarnpkg.com/web-vitals/-/web-vitals-2.1.4.tgz#76563175a475a5e835264d373704f9dde718290c"
   integrity sha512-sVWcwhU5mX6crfI5Vd2dC4qchyTqxV8URinzt25XqVh+bHEPGH4C3NPrNionCP7Obx59wrYEbNlw4Z8sjALzZg==
+
+web-worker@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/web-worker/-/web-worker-1.2.0.tgz#5d85a04a7fbc1e7db58f66595d7a3ac7c9c180da"
+  integrity sha512-PgF341avzqyx60neE9DD+XS26MMNMoUQRz9NOZwW32nPQrF6p77f1htcnjBSEV8BGMKZ16choqUG4hyI0Hx7mA==
 
 web3-core-helpers@1.5.2:
   version "1.5.2"

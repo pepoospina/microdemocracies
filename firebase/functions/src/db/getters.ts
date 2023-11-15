@@ -1,4 +1,9 @@
-import { AppProjectCreate, AppStatement, SignedObject } from '../@app/types';
+import {
+  AppProjectCreate,
+  AppPublicIdentity,
+  AppStatement,
+  SignedObject,
+} from '../@app/types';
 import { collections } from './db';
 
 export const getStatement = async (
@@ -23,4 +28,20 @@ export const getProject = async (
   if (!statement) throw new Error(`Statement not found`);
 
   return doc.data() as unknown as AppProjectCreate;
+};
+
+export const getIdentities = async (
+  projectId: number
+): Promise<AppPublicIdentity[]> => {
+  const identities = collections.identities(projectId.toString());
+  const refs = await identities.listDocuments();
+
+  const allDocs = await Promise.all(
+    refs.map(async (ref) => {
+      const doc = await ref.get();
+      return doc.exists ? doc.data() : undefined;
+    })
+  );
+
+  return allDocs.filter((doc) => doc !== undefined) as AppPublicIdentity[];
 };

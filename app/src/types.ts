@@ -103,8 +103,8 @@ export type VoteOption = 1 | -1;
 
 export interface AppStatement {
   projectId: number;
-  author: number;
   statement: string;
+  proof: string;
   backers: number[] | undefined;
 }
 
@@ -129,7 +129,7 @@ export type StatementBackerRead = SignedObject<AppStatementBacking> & {
 
 export interface AppPublicIdentity {
   publicId: string;
-  projectAddress: HexStr;
+  projectId: number;
   owner: HexStr;
   aaAddress: HexStr;
 }

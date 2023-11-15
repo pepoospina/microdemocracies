@@ -13,8 +13,15 @@ export enum CollectionNames {
 }
 
 export const collections = {
-  identities: db.collection(CollectionNames.Identities),
+  identities: (projectId: string) =>
+    db
+      .collection(CollectionNames.Projects)
+      .doc(projectId)
+      .collection(CollectionNames.Identities),
+
   projects: db.collection(CollectionNames.Projects),
+
   statements: db.collection(CollectionNames.Statments),
+
   statementsBackers: db.collection(CollectionNames.StatementsBackers),
 };

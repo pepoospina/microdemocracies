@@ -1,6 +1,8 @@
-import { Identity } from '@semaphore-protocol/identity';
-import { PropsWithChildren, createContext, useEffect, useState } from 'react';
+import { PropsWithChildren, createContext, useContext, useEffect, useState } from 'react';
 import { useSignMessage } from 'wagmi';
+
+import { Identity } from '@semaphore-protocol/identity';
+import { generateProof } from '@semaphore-protocol/proof';
 
 import { getPublicIdentity } from '../firestore/getters';
 import { useAccountContext } from '../wallet/AccountContext';
@@ -11,6 +13,7 @@ import { useProjectContext } from './ProjectContext';
 
 export type SemaphoreContextType = {
   connectIdentity?: () => Promise<void>;
+  publicId?: string;
 };
 
 const SemaphoreContextValue = createContext<SemaphoreContextType | undefined>(undefined);
@@ -22,12 +25,21 @@ export const SemaphoreContext = (props: PropsWithChildren) => {
   const { address: projectAddress } = useProjectContext();
 
   const [identity, setIdentity] = useState<Identity>();
+  const [publicId, setPublicId] = useState<string>();
+
+  // keep publicId aligned with identity
+  useEffect(() => {
+    if (identity) {
+      const _publicId = identity.getCommitment().toString();
+      setPublicId(_publicId);
+    }
+  }, [identity]);
 
   // read identity from localstorage
   useEffect(() => {
     const identity = localStorage.getItem('identity');
     if (identity != null) {
-      setIdentity(JSON.parse(identity) as Identity);
+      setIdentity(new Identity(identity));
     }
   }, []);
 
@@ -50,6 +62,8 @@ export const SemaphoreContext = (props: PropsWithChildren) => {
   };
 
   /** Derive the sempaphore identity from signer */
+  console.log({ signMessageAsync, signerAddress, owner });
+
   const connectIdentity =
     signMessageAsync !== undefined && signerAddress !== undefined && owner !== undefined
       ? async () => {
@@ -62,10 +76,10 @@ export const SemaphoreContext = (props: PropsWithChildren) => {
 
           const secret = await signMessageAsync({ message: 'Prepare anonymous identity' });
           const identity = new Identity(secret);
-          const publicId = identity.getCommitment().toString();
+          const _publicId = identity.getCommitment().toString();
 
           // make sure the identity is stored in the DB
-          await checkStoreId(publicId);
+          await checkStoreId(_publicId);
 
           // store the secret identity on this device (so we dont have to ask for a signature with metamask from now on)
           localStorage.setItem('identity', identity.toString());
@@ -73,12 +87,25 @@ export const SemaphoreContext = (props: PropsWithChildren) => {
         }
       : undefined;
 
+  const proof = identity
+    ? async () => {
+        await generateProof(identity, group, externalNullifier, signal);
+      }
+    : undefined;
+
   return (
     <SemaphoreContextValue.Provider
       value={{
         connectIdentity,
+        publicId,
       }}>
       {props.children}
     </SemaphoreContextValue.Provider>
   );
+};
+
+export const useSemaphoreContext = (): SemaphoreContextType => {
+  const context = useContext(SemaphoreContextValue);
+  if (!context) throw Error('context not found');
+  return context;
 };

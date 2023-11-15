@@ -16,6 +16,7 @@
   },
   "main": "lib/index.js",
   "dependencies": {
+    "@semaphore-protocol/group": "^3.15.0",
     "@types/express": "^4.17.20",
     "base58-js": "1.0.5",
     "canonical-json": "^0.0.4",
