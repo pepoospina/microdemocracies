@@ -14,8 +14,8 @@ export const getGroup = async (projectId: number) => {
   const identities = await getIdentities(projectId);
 
   const serializedGroup: SerializedSemaphoreGroup = {
-    name: '',
-    id: `microrevolutions-${projectId}`,
+    name: `microrevolutions-${projectId}`,
+    id: `${projectId}`,
     depth: 18, // 262,144 members
     members: identities.map((id) => id.publicId),
     zeroValue: '0',

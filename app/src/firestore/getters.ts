@@ -35,10 +35,7 @@ export const getStatementBackers = async (statementId: string) => {
 };
 
 export const isStatementBacker = async (statementId: string, tokenId: number): Promise<boolean> => {
-  const q = query(
-    collections.statementsBackers,
-    and(where('object.statementId', '==', statementId), where('object.backer', '==', tokenId))
-  );
+  const q = query(collections.statementsBackers, and(where('object.statementId', '==', statementId), where('object.backer', '==', tokenId)));
   const querySnapshot = await getDocs(q);
 
   return querySnapshot.docs.length === 1;
@@ -48,7 +45,7 @@ export const getPublicIdentity = async (owner: HexStr, projectId: number) => {
   const ref = collections.identity(`${projectId}${owner}`);
   const doc = await getDoc(ref);
 
-  if (!doc.exists) return undefined;
+  if (!doc.exists()) return undefined;
 
   return {
     ...doc.data(),

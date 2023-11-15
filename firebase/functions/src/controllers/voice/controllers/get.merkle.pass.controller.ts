@@ -15,11 +15,14 @@ export const getMerklePassController: RequestHandler = async (
   )) as AppGetMerklePass;
 
   const group = await getGroup(payload.projectId);
-  const leafIndex = group.indexOf(payload.publicId);
+  const leafIndex = group.indexOf(BigInt(payload.publicId));
   const merkleProof = group.generateMerkleProof(leafIndex);
+  const merkleProofStr = JSON.stringify(merkleProof, (key, value) => {
+    return typeof value === 'bigint' ? value.toString() : value;
+  });
 
   try {
-    response.status(200).send(merkleProof);
+    response.status(200).send({ merkleProofStr });
   } catch (error: any) {
     logger.error('error', error);
     response.status(500).send({ success: false, error: error.message });

@@ -8,8 +8,9 @@ import { getPublicIdentity } from '../firestore/getters';
 import { useAccountContext } from '../wallet/AccountContext';
 import { useAppSigner } from '../wallet/SignerContext';
 
-import { getMerklePass, postIdentity } from '../utils/statements';
+import { getMerklePass, postIdentity, signObject } from '../utils/statements';
 import { useProjectContext } from './ProjectContext';
+import { AppPublicIdentity } from '../types';
 
 export type SemaphoreContextType = {
   connectIdentity?: () => Promise<void>;
@@ -47,17 +48,20 @@ export const SemaphoreContext = (props: PropsWithChildren) => {
   /** store the member publicId in the project associated to their address. publicId is
    * the identity commitment. Posts cannot be associated to one publicId */
   const checkStoreId = async (publicId: string) => {
-    if (owner && projectId && aaAddress) {
+    if (owner && projectId && aaAddress && signMessageAsync) {
       const identity = await getPublicIdentity(owner, projectId);
 
       // store the identity on the db
       if (identity === undefined) {
-        await postIdentity({
+        const details: AppPublicIdentity = {
           projectId,
           owner,
           publicId,
           aaAddress,
-        });
+        };
+
+        const signed = await signObject(details, signMessageAsync);
+        await postIdentity(signed);
       }
     }
   };
