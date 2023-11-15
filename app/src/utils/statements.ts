@@ -1,7 +1,7 @@
 import stringify from 'canonical-json';
 import { FUNCTIONS_BASE } from '../config/appConfig';
 
-import { HexStr, AppStatementCreate } from '../types';
+import { HexStr, AppStatementCreate, AppPublicIdentity } from '../types';
 
 export type MessageSigner = (input: { message: string }) => Promise<HexStr>;
 
@@ -14,12 +14,22 @@ export const signStatement = async (statement: AppStatementCreate, signMessage: 
   return { object: statement, signature };
 };
 
-export const postStatement = async (statement: AppStatementCreate, signMessage: MessageSigner) => {
-  const signedStatement = await signStatement(statement, signMessage);
+export const postStatement = async (statement: AppStatementCreate) => {
   const res = await fetch(FUNCTIONS_BASE + '/voice/statement', {
     method: 'post',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(signedStatement),
+    body: JSON.stringify(statement),
+  });
+
+  const body = await res.json();
+  return body.success;
+};
+
+export const postIdentity = async (publicIdentity: AppPublicIdentity) => {
+  const res = await fetch(FUNCTIONS_BASE + '/voice/identity', {
+    method: 'post',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(publicIdentity),
   });
 
   const body = await res.json();

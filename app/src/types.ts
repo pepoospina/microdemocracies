@@ -126,3 +126,10 @@ export type StatementRead = SignedObject<AppStatement> & { id: string };
 export type StatementBackerRead = SignedObject<AppStatementBacking> & {
   id: string;
 };
+
+export interface AppPublicIdentity {
+  publicId: string;
+  projectAddress: HexStr;
+  owner: HexStr;
+  aaAddress: HexStr;
+}

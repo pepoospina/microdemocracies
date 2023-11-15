@@ -7,21 +7,29 @@ import { publicClient, getRegistry } from './contracts';
 
 export const verifySignedObject = async <T>(
   signed: SignedObject<T>,
-  tokenId: number,
-  projectAddress: HexStr
+  expectedSigner: HexStr
 ) => {
   const message = stringify(signed.object);
-  const registry = getRegistry(projectAddress);
-  const addressOfToken = await registry.read.ownerOf([BigInt(tokenId)]);
   const valid = await publicClient.verifyMessage({
-    address: addressOfToken,
+    address: expectedSigner,
     message,
     signature: signed.signature,
   });
 
   if (!valid) {
-    throw new Error(`Invalid signer expected ${addressOfToken}`);
+    throw new Error(`Invalid signer expected ${expectedSigner}`);
   }
+};
+
+export const verifySignedStatement = async <T>(
+  signed: SignedObject<T>,
+  tokenId: number,
+  projectAddress: HexStr
+) => {
+  const registry = getRegistry(projectAddress);
+  const addressOfToken = await registry.read.ownerOf([BigInt(tokenId)]);
+
+  await verifySignedObject(signed, addressOfToken);
 
   /** encode signature to use as statement id */
   const bytes = Uint8Array.from(Buffer.from(signed.signature.slice(2), 'hex'));

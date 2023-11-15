@@ -19,3 +19,12 @@ export const backStatementValidationScheme = object({
   }),
   signature: string().required(),
 }).noUnknown(true);
+
+export const identityValidationScheme = object({
+  object: object({
+    publicId: string().required(),
+    owner: string().required(),
+    aaAddress: string().required(),
+  }),
+  signature: string().required(),
+}).noUnknown(true);

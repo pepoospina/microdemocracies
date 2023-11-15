@@ -1,10 +1,15 @@
-import { createContext, useContext } from 'react';
-import { useSignMessage } from 'wagmi';
+import { createContext, useContext, useEffect, useState } from 'react';
+
+import { Identity } from '@semaphore-protocol/identity';
 
 import { ConnectedMemberContext, useConnectedMember } from './ConnectedAccountContext';
-import { postStatement } from '../utils/statements';
+import { postIdentity, postStatement } from '../utils/statements';
 import { AppStatementCreate } from '../types';
 import { useProjectContext } from './ProjectContext';
+import { useAccountContext } from '../wallet/AccountContext';
+import { useAppSigner } from '../wallet/SignerContext';
+import { useSignMessage } from 'wagmi';
+import { getPublicIdentity } from '../firestore/getters';
 
 export type VoiceSendContextType = {
   proposeStatement?: (statement: string) => Promise<boolean>;
@@ -19,18 +24,17 @@ const VoiceSendContextValue = createContext<VoiceSendContextType | undefined>(un
 export const VoiceSendContext = (props: IVoiceSendContext) => {
   const { tokenId } = useConnectedMember();
   const { projectId } = useProjectContext();
-  const { signMessageAsync } = useSignMessage();
 
   const proposeStatement =
     tokenId !== undefined
       ? async (_statement: string) => {
-          if (tokenId && signMessageAsync && projectId) {
+          if (tokenId && projectId) {
             const statement: AppStatementCreate = {
               projectId,
               author: tokenId,
               statement: _statement,
             };
-            return postStatement(statement, signMessageAsync);
+            return postStatement(statement);
           }
         }
       : undefined;

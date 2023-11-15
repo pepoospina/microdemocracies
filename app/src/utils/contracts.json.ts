@@ -12,4 +12,14 @@ async function _factoryAddress(chainId: number): Promise<`0x{string}`> {
 
 const getFactoryAddress = () => _factoryAddress(CHAIN_ID);
 
-export { registryABI, registryFactoryABI, getFactoryAddress };
+const aaWalletAbi = [
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [],
+    name: 'owner',
+    outputs: [{ name: '', internalType: 'address', type: 'address' }],
+  },
+] as const;
+
+export { registryABI, registryFactoryABI, aaWalletAbi, getFactoryAddress };

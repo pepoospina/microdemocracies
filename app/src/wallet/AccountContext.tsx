@@ -5,16 +5,17 @@ import { LightSmartContractAccount, getDefaultLightAccountFactoryAddress } from 
 import { UserOperationCallData, WalletClientSigner } from '@alchemy/aa-core';
 import { HexStr } from '../types';
 import { chain } from './config';
-import { usePublicClient } from 'wagmi';
+import { useContractRead, usePublicClient } from 'wagmi';
 import { ALCHEMY_KEY } from '../config/appConfig';
 import { DecodeEventLogReturnType, decodeEventLog } from 'viem';
 import { useAppSigner } from './SignerContext';
 import { MessageSigner } from '../utils/statements';
-import { getFactoryAddress, registryFactoryABI } from '../utils/contracts.json';
+import { aaWalletAbi, getFactoryAddress, registryFactoryABI } from '../utils/contracts.json';
 
 export type AccountContextType = {
   isConnected: boolean;
   aaAddress?: HexStr;
+  owner?: HexStr;
   addUserOp?: (userOp: UserOperationCallData, send?: boolean) => void;
   reset: () => void;
   isSending: boolean;
@@ -55,6 +56,12 @@ export const AccountContext = (props: PropsWithChildren) => {
     setEvents(undefined);
     setUserOps([]);
   };
+
+  const { data: owner } = useContractRead({
+    abi: aaWalletAbi,
+    address: aaAddress,
+    enabled: aaAddress !== undefined,
+  });
 
   const setProvider = (signer: WalletClientSigner) => {
     const provider = new AlchemyProvider({
@@ -133,6 +140,7 @@ export const AccountContext = (props: PropsWithChildren) => {
       value={{
         isConnected,
         aaAddress,
+        owner,
         addUserOp,
         reset,
         isSuccess,

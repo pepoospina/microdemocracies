@@ -12,9 +12,10 @@ const firebaseConfig = {
 
 export const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
-// connectFirestoreEmulator(db, '127.0.0.1', 8080);
+connectFirestoreEmulator(db, '127.0.0.1', 8080);
 
 export enum CollectionNames {
+  Identities = 'identities',
   Projects = 'projects',
   Statments = 'statements',
   StatementsBackers = 'statements_backers',
@@ -22,6 +23,7 @@ export enum CollectionNames {
 
 export const collections = {
   project: (id: number) => doc(db, CollectionNames.Projects, id.toString()),
+  identity: (id: string) => doc(db, CollectionNames.Identities, id),
   projects: collection(db, CollectionNames.Projects),
   statements: collection(db, CollectionNames.Statments),
   statementsBackers: collection(db, CollectionNames.StatementsBackers),

@@ -5,7 +5,7 @@ import { getProject, getStatement } from '../../../db/getters';
 import { setStatementBacker } from '../../../db/setters';
 
 import { backStatementValidationScheme } from './voice.schemas';
-import { verifySignedObject } from '../../../utils/signatures';
+import { verifySignedStatement } from '../../../utils/signatures';
 import { AppStatementBacking, SignedObject } from 'src/@app/types';
 
 export const backStatementController: RequestHandler = async (
@@ -20,7 +20,7 @@ export const backStatementController: RequestHandler = async (
   // verify signature is from the author address in the registry
   const project = await getProject(backing.object.projectId);
 
-  const id = await verifySignedObject(
+  const id = await verifySignedStatement(
     backing,
     backing.object.backer,
     project.address

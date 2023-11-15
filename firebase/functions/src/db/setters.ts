@@ -1,5 +1,6 @@
 import {
   AppProjectCreate,
+  AppPublicIdentity,
   AppStatementBacking,
   AppStatementCreate,
   SignedObject,
@@ -21,6 +22,15 @@ export const setStatement = async (
 ): Promise<string> => {
   const docRef = collections.statements.doc(id);
   await docRef.set(backing);
+  return docRef.id;
+};
+
+export const setIdentity = async (
+  identity: AppPublicIdentity,
+  id: string
+): Promise<string> => {
+  const docRef = collections.identities.doc(id);
+  await docRef.set(identity);
   return docRef.id;
 };
 

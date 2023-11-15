@@ -1,7 +1,7 @@
 import { RequestHandler } from 'express';
 import { logger } from 'firebase-functions/v1';
 
-import { verifySignedObject } from '../../../utils/signatures';
+import { verifySignedStatement } from '../../../utils/signatures';
 import { setStatement } from '../../../db/setters';
 import { getProject } from '../../../db/getters';
 
@@ -20,7 +20,7 @@ export const createStatementController: RequestHandler = async (
   // verify signature is from the author address in the registry
   const project = await getProject(statement.object.projectId);
 
-  const id = await verifySignedObject(
+  const id = await verifySignedStatement(
     statement,
     statement.object.author,
     project.address

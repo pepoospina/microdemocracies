@@ -21,6 +21,7 @@ import { LandingPage } from './pages/landing/LandingPage';
 import { LearnMore } from './pages/landing/LearnMore';
 import { ProjectHome } from './pages/project/ProjectHome';
 import { VoicePage } from './pages/voice/VoicePage';
+import { VoiceBase } from './pages/voice/VoiceBase';
 import { VoicePropose } from './pages/voice/VoicePropose';
 import { VouchPage } from './pages/vouch/Vouch';
 import { VouchAccount } from './pages/vouch/VouchAccount';
@@ -31,6 +32,7 @@ import { SignerContext } from './wallet/SignerContext';
 import { ConnectedMemberContext } from './contexts/ConnectedAccountContext';
 import { AccountContext } from './wallet/AccountContext';
 import { MemberContext } from './contexts/MemberContext';
+import { SemaphoreContext } from './contexts/SemaphoreContext';
 
 const queryClient = new QueryClient();
 
@@ -48,7 +50,7 @@ export const RouteNames = {
   Member: (id: number) => `member/${id}`,
   MemberChallange: (id: number) => `member/${id}/challenge`,
   Voice: `voice`,
-  VoicePropose: `voice/propose`,
+  VoicePropose: `propose`,
 };
 
 function App() {
@@ -109,21 +111,29 @@ function App() {
                           <Route path={RouteNames.VouchesAll} element={<AllVouches />}></Route>
                           <Route path={RouteNames.Challenges} element={<Challenges />}></Route>
                           {/* <Route path={ProjectRouteNames.Base} element={<TestComponent />}></Route> */}
+                          <Route
+                            path={'voice'}
+                            element={
+                              <SemaphoreContext>
+                                <VoiceBase />
+                              </SemaphoreContext>
+                            }>
+                            <Route
+                              path={''}
+                              element={
+                                <VoiceSendContext>
+                                  <VoicePropose />
+                                </VoiceSendContext>
+                              }></Route>
+                            <Route
+                              path={RouteNames.VoicePropose}
+                              element={
+                                <VoiceReadContext>
+                                  <VoicePage />
+                                </VoiceReadContext>
+                              }></Route>
+                          </Route>
                           <Route path={RouteNames.Base} element={<ProjectHome />}></Route>
-                          <Route
-                            path={RouteNames.VoicePropose}
-                            element={
-                              <VoiceSendContext>
-                                <VoicePropose />
-                              </VoiceSendContext>
-                            }></Route>
-                          <Route
-                            path={RouteNames.Voice}
-                            element={
-                              <VoiceReadContext>
-                                <VoicePage />
-                              </VoiceReadContext>
-                            }></Route>
                         </Route>
                       </Routes>
                     </ViewportContainer>

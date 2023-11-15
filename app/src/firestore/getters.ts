@@ -1,6 +1,6 @@
 import { getDocs, where, query, and, getDoc } from 'firebase/firestore';
 import { collections } from './database';
-import { AppProject, StatementBackerRead, StatementRead } from '../types';
+import { AppProject, AppPublicIdentity, HexStr, StatementBackerRead, StatementRead } from '../types';
 
 export const getProject = async (projectId: number) => {
   const ref = collections.project(projectId);
@@ -42,4 +42,15 @@ export const isStatementBacker = async (statementId: string, tokenId: number): P
   const querySnapshot = await getDocs(q);
 
   return querySnapshot.docs.length === 1;
+};
+
+export const getPublicIdentity = async (owner: HexStr, projectAddress: HexStr) => {
+  const ref = collections.identity(`${projectAddress}${owner}`);
+  const doc = await getDoc(ref);
+
+  if (!doc.exists) return undefined;
+
+  return {
+    ...doc.data(),
+  } as unknown as AppPublicIdentity;
 };
