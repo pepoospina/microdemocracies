@@ -159,12 +159,7 @@ export const LearnMore = () => {
       </Box>
 
       <BoxCentered style={{ flexShrink: '0', marginBottom: '6vh' }}>
-        <AppButton
-          disabled
-          onClick={() => navigate(RouteNames.Start)}
-          label="Start now (soon)"
-          style={{ width: '300px' }}
-        />
+        <AppButton onClick={() => navigate(RouteNames.Start)} label="Start now" style={{ width: '200px' }} />
       </BoxCentered>
     </Box>
   );

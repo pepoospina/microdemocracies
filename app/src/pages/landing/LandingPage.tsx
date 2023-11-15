@@ -44,7 +44,7 @@ export const LandingPage = () => {
       </Box>
 
       <Box justify="center" align="center" style={{ flexShrink: '0', marginBottom: '6vh' }}>
-        <AppButton disabled onClick={start} label="Start now (soon)" style={{ margin: '12px 0px', width: '300px' }} />
+        <AppButton onClick={start} label="Start now" style={{ margin: '12px 0px', width: '200px' }} />
       </Box>
     </Box>
   );

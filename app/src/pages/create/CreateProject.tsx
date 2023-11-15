@@ -44,7 +44,12 @@ export const CreateProject = () => {
         }
       : undefined;
 
-  const boxStyle: React.CSSProperties = { width: '100vw', height: 'calc(100vh - 60px - 50px)', overflowY: 'auto' };
+  const boxStyle: React.CSSProperties = {
+    width: '100vw',
+    height: 'calc(100vh - 60px - 50px)',
+    maxWidth: '600px',
+    overflowY: 'auto',
+  };
 
   const btnStyle: React.CSSProperties = {
     width: '0px',
@@ -173,6 +178,7 @@ export const CreateProject = () => {
         containerProps={{
           style: {
             height: '100%',
+            maxWidth: '600px',
             display: isSending ? 'none' : 'flex',
           },
         }}
