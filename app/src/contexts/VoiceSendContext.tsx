@@ -5,6 +5,8 @@ import { postStatement } from '../utils/statements';
 import { AppStatementCreate } from '../types';
 import { useProjectContext } from './ProjectContext';
 import { useSemaphoreContext } from './SemaphoreContext';
+import { hashMessage, stringToBytes } from 'viem';
+import { hashObject } from '../utils/cid-hash';
 
 export type VoiceSendContextType = {
   proposeStatement?: (statement: string) => Promise<boolean>;
@@ -19,12 +21,15 @@ const VoiceSendContextValue = createContext<VoiceSendContextType | undefined>(un
 export const VoiceSendContext = (props: IVoiceSendContext) => {
   const { tokenId } = useConnectedMember();
   const { projectId } = useProjectContext();
-  const { publicId } = useSemaphoreContext();
+  const { publicId, generateProof } = useSemaphoreContext();
 
   const proposeStatement =
-    tokenId !== undefined
+    tokenId !== undefined && generateProof !== undefined && projectId !== undefined
       ? async (_statement: string) => {
-          if (tokenId && projectId) {
+          if (projectId) {
+            const statementHash = await hashMessage(_statement);
+            const nullifier = Date.now().toString();
+            const proof = await generateProof(statementHash, nullifier);
             const statement: AppStatementCreate = {
               projectId,
               proof,
