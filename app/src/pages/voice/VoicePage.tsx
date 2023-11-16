@@ -19,7 +19,11 @@ export const VoicePage = (): JSX.Element => {
         <Box pad="large">
           {statements !== undefined ? (
             statements.map((statement) => {
-              return <StatementEditable value={statement.object.statement} key={statement.id}></StatementEditable>;
+              return (
+                <Box style={{ marginBottom: '16px' }}>
+                  <StatementEditable value={statement.statement} key={statement.id}></StatementEditable>
+                </Box>
+              );
             })
           ) : (
             <Box fill align="center" justify="center">

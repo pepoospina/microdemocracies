@@ -109,16 +109,7 @@ export interface SemaphoreProofStrings {
   proof: PackedProofString;
 }
 
-export type PackedProofString = [
-  string,
-  string,
-  string,
-  string,
-  string,
-  string,
-  string,
-  string
-];
+export type PackedProofString = [string, string, string, string, string, string, string, string];
 
 export interface AppStatement {
   projectId: number;
@@ -142,7 +133,7 @@ export interface SignedObject<T> {
   signature: HexStr;
 }
 
-export type StatementRead = SignedObject<AppStatement> & { id: string };
+export type StatementRead = AppStatement & { id: string };
 export type StatementBackerRead = SignedObject<AppStatementBacking> & {
   id: string;
 };

@@ -9,7 +9,6 @@ import { useSignMessage } from 'wagmi';
 import { getStatementBackers, isStatementBacker } from '../../firestore/getters';
 import { useThemeContext } from '../../components/app';
 import { AppConnectButton } from '../../components/app/AppConnectButton';
-import { COMMUNITY_MEMBER } from '../../config/community';
 import { useAccountContext } from '../../wallet/AccountContext';
 import { useProjectContext } from '../../contexts/ProjectContext';
 
@@ -53,7 +52,7 @@ export const Statement = (props: IStatement) => {
       const backing: AppStatementBacking = {
         projectId,
         backer: tokenId,
-        statement: props.statement.object.statement,
+        statement: props.statement.statement,
         statementId: props.statement.id,
       };
       const signature = await signMessageAsync({ message: JSON.stringify(backing) });
@@ -92,7 +91,7 @@ export const Statement = (props: IStatement) => {
                   lineHeight: '125%',
                   fontWeight: '800',
                 }}>
-                {props.statement.object.statement}
+                {props.statement.statement}
               </Text>
             </Box>
             <Box direction="row" style={{ margin: '0px 0', flexShrink: 0 }}>

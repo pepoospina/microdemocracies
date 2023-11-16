@@ -23,10 +23,11 @@ export const VouchPage = (): JSX.Element => {
   const invite = () => {};
 
   return (
-    <AppScreen label="Vouch">
+    <AppScreen label="Invite">
       <Box pad="large">
         <Box style={{ flexShrink: 0 }}>
           <Box style={{ marginBottom: '36px', flexShrink: 0 }}>
+            <Text>Remember, this micro(r)evolution is for anyone who:</Text>
             <StatementEditable value={project?.whoStatement}></StatementEditable>
           </Box>
           {scan ? (
@@ -34,16 +35,12 @@ export const VouchPage = (): JSX.Element => {
               <QrScanner onDecode={(result) => setResult(result)} onError={(error) => console.log(error?.message)} />
             </Box>
           ) : (
-            <AppCard style={{ marginBottom: '16px' }}>
-              <Text>
-                Vouching protects the community. Vouch only people who are expected to join your micro(r)evolution.
-              </Text>
-            </AppCard>
+            <></>
           )}
         </Box>
 
         <AppButton
-          label={!scan ? 'agree & scan' : 'cancel'}
+          label={!scan ? 'scan' : 'cancel'}
           onClick={() => setScan(!scan)}
           primary
           style={{ marginBottom: '16px' }}></AppButton>

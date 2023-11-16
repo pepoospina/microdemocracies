@@ -59,17 +59,7 @@ export const ProjectHome = (props: IProjectHome) => {
             </Box>
           </>
         ) : (
-          <>
-            <Box>
-              <Text size="xlarge">Welcome</Text>
-            </Box>
-            <Box></Box>
-            <Box>
-              <Text size="48px">
-                {COMMUNITY_MEMBER} #{tokenId}
-              </Text>
-            </Box>
-          </>
+          <></>
         )}
       </Box>
 
@@ -79,7 +69,7 @@ export const ProjectHome = (props: IProjectHome) => {
         ) : (
           <></>
         )}
-        <AppButton onClick={() => navigate(RouteNames.Vouch)} label="VOUCH" style={{ marginBottom: '15px' }} />
+        <AppButton onClick={() => navigate(RouteNames.Vouch)} label="INVITE" style={{ marginBottom: '15px' }} />
         <AppButton onClick={() => navigate(RouteNames.Voice)} label="VOICE" style={{ marginBottom: '15px' }} />
       </Box>
 
