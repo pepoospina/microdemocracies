@@ -4,6 +4,7 @@ import { AppButton } from '../../ui-components';
 import { useNavigate } from 'react-router-dom';
 import { RouteNames } from '../../App';
 import { useResponsive } from '../../components/app';
+import { LearnMore } from './LearnMore';
 
 // import { CollectionNames, db } from '../../firestore/database';
 // import { getDoc, doc } from 'firebase/firestore';
@@ -14,9 +15,6 @@ export const LandingPage = () => {
   const { mobile } = useResponsive();
 
   const logoSize = mobile ? '36px' : '48px';
-  const textStyle: React.CSSProperties = mobile
-    ? { marginBottom: '40px', fontSize: '24px' }
-    : { marginBottom: '62px', fontSize: '36px' };
 
   const start = () => {
     navigate(RouteNames.Start);
@@ -31,20 +29,11 @@ export const LandingPage = () => {
       </Box>
 
       <Box style={{ flexGrow: '2', width: '100%', flexShrink: '0' }} justify="center" align="center">
-        <Text style={textStyle}>
-          It's <span style={{ fontWeight: '600' }}>time</span>
-        </Text>
-        <Text style={textStyle}>
-          for <span style={{ fontWeight: '600' }}>you</span>
-        </Text>
-        <Text style={textStyle}>
-          to <span style={{ fontWeight: '600' }}>dare</span>
-        </Text>
-        <AppButton primary onClick={() => navigate(RouteNames.More)} label="Learn more" style={{ width: '200px' }} />
+        <LearnMore></LearnMore>
       </Box>
 
       <Box justify="center" align="center" style={{ flexShrink: '0', marginBottom: '6vh' }}>
-        <AppButton onClick={start} label="Start now" style={{ margin: '12px 0px', width: '200px' }} />
+        <AppButton primary onClick={start} label="Start now" style={{ margin: '12px 0px', width: '200px' }} />
       </Box>
     </Box>
   );

@@ -23,7 +23,7 @@ import { postProject } from '../../utils/project';
 import { RegistryCreatedEvent } from '../../utils/viem.types';
 import { putObject } from '../../utils/store';
 
-const NPAGES = 5;
+const NPAGES = 4;
 
 export const CreateProject = () => {
   const navigate = useNavigate();
@@ -32,8 +32,8 @@ export const CreateProject = () => {
 
   const { addUserOp, aaAddress, isSuccess, isSending, error, events, signMessage } = useAccountContext();
   const [founderDetails, setFounderDetails] = useState<DetailsAndPlatforms>();
-  const [whoStatement, setWhoStatement] = useState<string>('Only people I like');
-  const [whatStatement, setWhatStatement] = useState<string>('Change the world');
+  const [whoStatement, setWhoStatement] = useState<string>('');
+  const [whatStatement, setWhatStatement] = useState<string>('');
   const [selectedDetails, setDetails] = useState<SelectedDetails>();
 
   const founderPap: PAP | undefined =
@@ -123,10 +123,18 @@ export const CreateProject = () => {
   };
 
   const prevPage = () => {
+    if (formIndex === 0) {
+      navigate('..');
+    }
     if (formIndex > 0) {
       setFormIndex(formIndex - 1);
     }
   };
+
+  const prevStr = (() => {
+    if (formIndex === 0) return 'home';
+    return 'prev';
+  })();
 
   const nextStr = (() => {
     if (formIndex === 2) return 'next';
@@ -184,7 +192,7 @@ export const CreateProject = () => {
         }}
         speed={400}
         easing="linear">
-        <Box style={boxStyle} id="a">
+        {/* <Box style={boxStyle} id="what">
           <Box style={{ width: '100%', flexShrink: 0 }} pad="large">
             <Box style={{ marginBottom: '12px', fontSize: '10px', fontWeight: '300' }}>
               <Text>
@@ -214,12 +222,13 @@ export const CreateProject = () => {
               </Text>
             </Box>
           </Box>
-        </Box>
+        </Box> */}
+
         <Box style={boxStyle}>
           <Box style={{ width: '100%', flexShrink: 0 }} pad="large">
             <Box style={{ marginBottom: '12px', fontSize: '10px', fontWeight: '300', flexShrink: 0 }}>
               <Text>
-                Can participate anyone <span style={{ fontWeight: '400' }}>who</span>:
+                Describe the rules for participating. Anyone <span style={{ fontWeight: '400' }}>who</span>:
               </Text>
             </Box>
             <Box>
@@ -243,7 +252,7 @@ export const CreateProject = () => {
             <Box style={{ marginBottom: '24px' }}>
               <AppHeading>Your Details</AppHeading>
               <Box>
-                <Text>All members of the commuity are expected to provide their details. Including you :)</Text>
+                <Text>Include your own deteails as a member here</Text>
               </Box>
             </Box>
             <DetailsForm selected={selectedDetails} onChange={(details) => setFounderDetails(details)}></DetailsForm>
@@ -271,7 +280,7 @@ export const CreateProject = () => {
       </ReactSimplyCarousel>
 
       <Box direction="row" style={{ flexShrink: 0, height: '60px' }}>
-        <AppButton onClick={() => prevPage()} label="prev" style={{ margin: '0px 0px', width: '200px' }} />
+        <AppButton onClick={() => prevPage()} label={prevStr} style={{ margin: '0px 0px', width: '200px' }} />
         <AppButton primary onClick={() => nextPage()} label={nextStr} style={{ margin: '0px 0px', width: '200px' }} />
       </Box>
     </Box>
