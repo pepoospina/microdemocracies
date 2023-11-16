@@ -4,18 +4,15 @@ import { useSignMessage } from 'wagmi';
 import { Identity } from '@semaphore-protocol/identity';
 import { generateProof as _generateProof } from '@semaphore-protocol/proof';
 
-import { getPublicIdentity } from '../firestore/getters';
 import { useAccountContext } from '../wallet/AccountContext';
 import { useAppSigner } from '../wallet/SignerContext';
 
-import { getMerklePass, postIdentity, signObject } from '../utils/statements';
-import { useProjectContext } from './ProjectContext';
-import { AppPublicIdentity } from '../types';
+import { connectIdentity as _connectIdentity } from '../utils/identity';
+import { AppGetMerklePass } from '../types';
 
 export type SemaphoreContextType = {
-  connectIdentity?: () => Promise<void>;
   publicId?: string;
-  generateProof?: (signal: string, nullifier: string) => Promise<string>;
+  generateProof?: (signal: string, nullifier: string, merklePass: AppGetMerklePass) => Promise<string>;
 };
 
 const SemaphoreContextValue = createContext<SemaphoreContextType | undefined>(undefined);
@@ -24,7 +21,6 @@ export const SemaphoreContext = (props: PropsWithChildren) => {
   const { signMessageAsync } = useSignMessage();
   const { owner, aaAddress } = useAccountContext();
   const { address: signerAddress } = useAppSigner();
-  const { address: projectAddress, projectId } = useProjectContext();
 
   const [identity, setIdentity] = useState<Identity>();
   const [publicId, setPublicId] = useState<string>();
@@ -37,68 +33,42 @@ export const SemaphoreContext = (props: PropsWithChildren) => {
     }
   }, [identity]);
 
-  // read identity from localstorage
-  useEffect(() => {
-    const identity = localStorage.getItem('identity');
-    if (identity != null) {
-      setIdentity(new Identity(identity));
-    }
-  }, []);
+  const checkStoredIdentity = async () => {
+    const identityStr = localStorage.getItem('identity');
+    let create: boolean = false;
 
-  /** store the member publicId in the project associated to their address. publicId is
-   * the identity commitment. Posts cannot be associated to one publicId */
-  const checkStoreId = async (publicId: string) => {
-    if (owner && projectId && aaAddress && signMessageAsync) {
-      const identity = await getPublicIdentity(owner, projectId);
+    if (identityStr != null) {
+      const identity = JSON.parse(identityStr);
 
-      // store the identity on the db
-      if (identity === undefined) {
-        const details: AppPublicIdentity = {
-          projectId,
-          owner,
-          publicId,
-          aaAddress,
-        };
-
-        const signed = await signObject(details, signMessageAsync);
-        await postIdentity(signed);
+      if (identity.aaAddress === aaAddress) {
+        setIdentity(new Identity(identity.identity));
+      } else {
+        create = true;
       }
+    } else {
+      create = true;
+    }
+
+    if (create) {
+      if (!owner) throw new Error('owner undefined');
+      if (!aaAddress) throw new Error('owner undefined');
+
+      const _identity = await _connectIdentity(owner, aaAddress, signMessageAsync);
+
+      // store the secret identity on this device (so we dont have to ask for a signature with metamask from now on)
+      localStorage.setItem('identity', _identity.toString());
+      setIdentity(identity);
     }
   };
 
-  /** Derive the sempaphore identity from signer */
-  console.log({ signMessageAsync, signerAddress, owner });
-
-  const connectIdentity =
-    signMessageAsync !== undefined && signerAddress !== undefined && owner !== undefined
-      ? async () => {
-          setIdentity(undefined);
-          localStorage.removeItem('identity');
-
-          if (signerAddress !== owner) {
-            throw new Error('Signer not the owner of the connected account');
-          }
-
-          const secret = await signMessageAsync({ message: 'Prepare anonymous identity' });
-          const identity = new Identity(secret);
-          const _publicId = identity.getCommitment().toString();
-
-          // make sure the identity is stored in the DB
-          await checkStoreId(_publicId);
-
-          // store the secret identity on this device (so we dont have to ask for a signature with metamask from now on)
-          localStorage.setItem('identity', identity.toString());
-          setIdentity(identity);
-        }
-      : undefined;
+  // keep identity inline with aaAddress
+  useEffect(() => {
+    checkStoredIdentity();
+  }, [aaAddress]);
 
   const generateProof =
-    identity && projectId && publicId
-      ? async (signal: string, nullifier: string) => {
-          const merklePass = await getMerklePass({
-            projectId,
-            publicId,
-          });
+    identity && publicId
+      ? async (signal: string, nullifier: string, merklePass: AppGetMerklePass) => {
           const generated = await _generateProof(identity, merklePass, nullifier, signal);
           return generated.proof.toString();
         }
@@ -107,7 +77,6 @@ export const SemaphoreContext = (props: PropsWithChildren) => {
   return (
     <SemaphoreContextValue.Provider
       value={{
-        connectIdentity,
         publicId,
         generateProof,
       }}>

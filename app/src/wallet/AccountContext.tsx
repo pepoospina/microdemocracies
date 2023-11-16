@@ -9,7 +9,7 @@ import { useContractRead, usePublicClient } from 'wagmi';
 import { ALCHEMY_KEY } from '../config/appConfig';
 import { DecodeEventLogReturnType, decodeEventLog } from 'viem';
 import { useAppSigner } from './SignerContext';
-import { MessageSigner } from '../utils/statements';
+import { MessageSigner } from '../utils/identity';
 import { aaWalletAbi, getFactoryAddress, registryFactoryABI } from '../utils/contracts.json';
 
 export type AccountContextType = {

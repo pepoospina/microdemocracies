@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { Box, Spinner, Text } from 'grommet';
 import { FormNext, FormPrevious } from 'grommet-icons';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import ReactSimplyCarousel from 'react-simply-carousel';
 import { encodeFunctionData } from 'viem';
 import { utils } from 'ethers';
@@ -28,9 +28,9 @@ const NPAGES = 4;
 export const CreateProject = () => {
   const navigate = useNavigate();
 
-  const [formIndex, setFormIndex] = useState(0);
+  const { addUserOp, aaAddress, isSuccess, isSending, events, owner } = useAccountContext();
 
-  const { addUserOp, aaAddress, isSuccess, isSending, events } = useAccountContext();
+  const [formIndex, setFormIndex] = useState(0);
   const [founderDetails, setFounderDetails] = useState<DetailsAndPlatforms>();
   const [whoStatement, setWhoStatement] = useState<string>('');
   // const [whatStatement, setWhatStatement] = useState<string>('');
@@ -88,24 +88,30 @@ export const CreateProject = () => {
     );
   };
 
-  const registerProject = async (event: RegistryCreatedEvent) => {
-    const projectId = Number(event.args.number);
-    const address = event.args.newRegistry as HexStr;
+  const registerProject = useCallback(
+    async (event: RegistryCreatedEvent) => {
+      if (!owner) throw new Error('Owner not defined');
+      if (!aaAddress) throw new Error('Owner not defined');
 
-    if (!selectedDetails) throw new Error('selectedDetails undefined');
+      const projectId = Number(event.args.number);
+      const address = event.args.newRegistry as HexStr;
 
-    /** sign the "what" of the project */
-    await postProject({
-      projectId,
-      address,
-      whatStatement: '',
-      whoStatement,
-      selectedDetails,
-    });
+      if (!selectedDetails) throw new Error('selectedDetails undefined');
 
-    navigate(RouteNames.ProjectHome((event.args as any).number));
-    setIsCreating(false);
-  };
+      /** sign the "what" of the project */
+      await postProject({
+        projectId,
+        address,
+        whatStatement: '',
+        whoStatement,
+        selectedDetails,
+      });
+
+      navigate(RouteNames.ProjectHome((event.args as any).number));
+      setIsCreating(false);
+    },
+    [owner, aaAddress, selectedDetails, whoStatement, navigate]
+  );
 
   useEffect(() => {
     if (isSuccess && events) {

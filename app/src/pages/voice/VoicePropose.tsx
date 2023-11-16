@@ -15,7 +15,7 @@ import { useSemaphoreContext } from '../../contexts/SemaphoreContext';
 export const VoicePropose = (): JSX.Element => {
   const { isConnected } = useAccountContext();
   const { proposeStatement } = useVoiceSend();
-  const { publicId, connectIdentity } = useSemaphoreContext();
+  const { publicId } = useSemaphoreContext();
 
   const [done, setDone] = useState<boolean>(false);
   const navigate = useNavigate();
@@ -50,16 +50,6 @@ export const VoicePropose = (): JSX.Element => {
             </Box>
             <Box justify="center" style={{ margin: '36px 0', width: '100%' }}>
               {!isConnected ? <AppConnectButton label="Connect to propose"></AppConnectButton> : <></>}
-              {isConnected && publicId === undefined ? (
-                <AppButton
-                  onClick={() => {
-                    if (connectIdentity) connectIdentity();
-                  }}
-                  label="Setup"
-                  disabled={connectIdentity === undefined}></AppButton>
-              ) : (
-                <></>
-              )}
               <AppButton
                 label="propose statement"
                 onClick={() => {

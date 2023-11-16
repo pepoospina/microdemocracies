@@ -129,8 +129,12 @@ export type StatementBackerRead = SignedObject<AppStatementBacking> & {
 
 export interface AppPublicIdentity {
   publicId: string;
-  projectId: number;
   owner: HexStr;
+  aaAddress: HexStr;
+  signature: HexStr;
+}
+
+export interface AppProjectMember {
   aaAddress: HexStr;
 }
 

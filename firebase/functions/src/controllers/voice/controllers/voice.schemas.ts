@@ -21,11 +21,9 @@ export const backStatementValidationScheme = object({
 }).noUnknown(true);
 
 export const identityValidationScheme = object({
-  object: object({
-    publicId: string().required(),
-    owner: string().required(),
-    aaAddress: string().required(),
-  }),
+  publicId: string().required(),
+  owner: string().required(),
+  aaAddress: string().required(),
   signature: string().required(),
 }).noUnknown(true);
 

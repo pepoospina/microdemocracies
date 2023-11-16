@@ -30,16 +30,25 @@ export const getProject = async (
   return doc.data() as unknown as AppProjectCreate;
 };
 
-export const getIdentities = async (
+export const getProjectIdentities = async (
   projectId: number
 ): Promise<AppPublicIdentity[]> => {
-  const identities = collections.identities(projectId.toString());
-  const refs = await identities.listDocuments();
+  const members = collections.projectMembers(projectId.toString());
+  const refs = await members.listDocuments();
 
   const allDocs = await Promise.all(
     refs.map(async (ref) => {
       const doc = await ref.get();
-      return doc.exists ? doc.data() : undefined;
+      const member = doc.exists ? doc.data() : undefined;
+      if (member) {
+        const identityRef = collections.identities.doc(member.aaAddress);
+        const identity = await identityRef.get();
+        if (!identity.exists) {
+          throw new Error(`Identity not found for user ${member.aaAddress}`);
+        }
+        return identity.data();
+      }
+      return undefined;
     })
   );
 

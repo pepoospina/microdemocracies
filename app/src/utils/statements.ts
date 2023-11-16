@@ -1,9 +1,8 @@
 import stringify from 'canonical-json';
 import { FUNCTIONS_BASE } from '../config/appConfig';
 
-import { HexStr, AppStatementCreate, AppPublicIdentity, AppGetMerklePass, SignedObject } from '../types';
-
-export type MessageSigner = (input: { message: string }) => Promise<HexStr>;
+import { AppStatementCreate, AppPublicIdentity, AppGetMerklePass } from '../types';
+import { MessageSigner } from './identity';
 
 export const signObject = async <T>(object: T, signMessage: MessageSigner) => {
   const message = stringify(object);
@@ -25,7 +24,7 @@ export const postStatement = async (statement: AppStatementCreate) => {
   return body.success;
 };
 
-export const postIdentity = async (publicIdentity: SignedObject<AppPublicIdentity>) => {
+export const postIdentity = async (publicIdentity: AppPublicIdentity) => {
   const res = await fetch(FUNCTIONS_BASE + '/voice/identity', {
     method: 'post',
     headers: { 'Content-Type': 'application/json' },

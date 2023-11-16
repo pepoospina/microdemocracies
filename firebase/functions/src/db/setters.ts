@@ -5,6 +5,7 @@ import {
   AppStatementCreate,
   SignedObject,
 } from '../@app/types';
+
 import { collections } from './db';
 
 export const setStatementBacker = async (
@@ -28,8 +29,8 @@ export const setStatement = async (
 export const setIdentity = async (
   identity: AppPublicIdentity
 ): Promise<string> => {
-  const id = identity.publicId.slice(0, 12);
-  const docRef = collections.identities(identity.projectId.toString()).doc(id);
+  const id = identity.aaAddress;
+  const docRef = collections.identities.doc(id);
   await docRef.set(identity);
   return docRef.id;
 };

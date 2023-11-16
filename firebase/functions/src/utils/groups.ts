@@ -1,6 +1,6 @@
 import { Group } from '@semaphore-protocol/group';
 
-import { getIdentities } from '../db/getters';
+import { getProjectIdentities } from '../db/getters';
 
 export interface SerializedSemaphoreGroup {
   id: string;
@@ -11,7 +11,7 @@ export interface SerializedSemaphoreGroup {
 }
 
 export const getGroup = async (projectId: number) => {
-  const identities = await getIdentities(projectId);
+  const identities = await getProjectIdentities(projectId);
 
   const serializedGroup: SerializedSemaphoreGroup = {
     name: `microrevolutions-${projectId}`,

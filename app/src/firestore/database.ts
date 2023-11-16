@@ -24,6 +24,7 @@ export enum CollectionNames {
 export const collections = {
   project: (id: number) => doc(db, CollectionNames.Projects, id.toString()),
   identity: (id: string) => doc(db, CollectionNames.Identities, id),
+  identities: collection(db, CollectionNames.Projects),
   projects: collection(db, CollectionNames.Projects),
   statements: collection(db, CollectionNames.Statments),
   statementsBackers: collection(db, CollectionNames.StatementsBackers),
