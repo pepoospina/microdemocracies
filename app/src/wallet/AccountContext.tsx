@@ -41,9 +41,7 @@ export const AccountContext = (props: PropsWithChildren) => {
   const [error, setError] = useState<Error>();
   const [events, setEvents] = useState<DecodeEventLogReturnType[]>();
 
-  console.log({ userOps, alchemyProviderAA });
-
-  const isConnected = signer !== undefined;
+  const isConnected = alchemyProviderAA !== undefined;
 
   const signMessageAA = alchemyProviderAA ? (message: string) => alchemyProviderAA.signMessage(message) : undefined;
 
@@ -62,8 +60,6 @@ export const AccountContext = (props: PropsWithChildren) => {
     enabled: aaAddress !== undefined,
   });
 
-  console.log({ owner, ownerError });
-
   const setProvider = (signer: WalletClientSigner) => {
     const provider = new AlchemyProvider({
       apiKey: ALCHEMY_KEY,
@@ -78,6 +74,7 @@ export const AccountContext = (props: PropsWithChildren) => {
         })
     );
     setAlchemyProviderAA(provider);
+    console.log('created aa provider', { provider });
   };
 
   /** keep the alchemy provider in sync with selected signer */
@@ -88,7 +85,10 @@ export const AccountContext = (props: PropsWithChildren) => {
 
   useEffect(() => {
     if (alchemyProviderAA) {
-      alchemyProviderAA.getAddress().then((address) => setAaAddress(address));
+      alchemyProviderAA.getAddress().then((address) => {
+        setAaAddress(address);
+        console.log('computed aa address', { aaAddress: address });
+      });
     }
   }, [alchemyProviderAA]);
 

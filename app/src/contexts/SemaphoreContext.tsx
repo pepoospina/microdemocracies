@@ -15,6 +15,8 @@ import { useAppSigner } from '../wallet/SignerContext';
 export type SemaphoreContextType = {
   publicId?: string;
   generateProof?: (signal: string, nullifier: string, merklePass: AppGetMerklePass) => Promise<string>;
+  isCreatingPublicId: boolean;
+  errorCreating?: Error;
 };
 
 const SemaphoreContextValue = createContext<SemaphoreContextType | undefined>(undefined);
@@ -24,6 +26,8 @@ export const SemaphoreContext = (props: PropsWithChildren) => {
   const { signMessage } = useAppSigner();
 
   // console.log({ walletClient, isError, isLoading });
+  const [isCreatingPublicId, setIsCreatingPublicId] = useState<boolean>(false);
+  const [errorCreating, setErrorCreating] = useState<Error>();
 
   const [identity, setIdentity] = useState<Identity>();
   const [publicId, setPublicId] = useState<string>();
@@ -39,53 +43,67 @@ export const SemaphoreContext = (props: PropsWithChildren) => {
   // keep identity inline with aaAddress
   useEffect(() => {
     checkStoredIdentity();
-  }, [aaAddress]);
+  }, [aaAddress, owner, signMessage]);
 
   const checkStoredIdentity = async () => {
-    const identityStr = localStorage.getItem('identity');
-    let create: boolean = false;
+    try {
+      const identityStr = localStorage.getItem('identity');
+      let create: boolean = false;
 
-    if (identityStr != null) {
-      const identity = JSON.parse(identityStr);
+      if (identityStr != null) {
+        const identity = JSON.parse(identityStr);
 
-      if (identity.aaAddress === aaAddress) {
-        setIdentity(new Identity(identity.identity));
+        if (identity.aaAddress === aaAddress) {
+          setIdentity(new Identity(identity.identity));
+        } else {
+          create = true;
+        }
       } else {
         create = true;
       }
-    } else {
-      create = true;
-    }
 
-    if (create) {
-      if (!owner) throw new Error('owner undefined');
-      if (!aaAddress) throw new Error('owner undefined');
-      if (!signMessage) throw new Error('signMessage undefined');
+      if (create) {
+        if (!owner) return;
+        if (!aaAddress) return;
+        if (!signMessage) return;
 
-      const secret = await signMessage('Prepare anonymous identity');
-      const _identity = new Identity(secret);
-      const _publicId = _identity.getCommitment().toString();
+        console.log('creating publiId', { owner, aaAddress });
 
-      // check identity on DB
-      const identity = await getPublicIdentity(aaAddress);
+        setIsCreatingPublicId(true);
 
-      // if not found, store the identity
-      if (identity === undefined) {
-        const signature = await signMessage(getControlMessage(_publicId));
-        const details: AppPublicIdentity = {
-          owner,
-          publicId: _publicId,
-          aaAddress,
-          signature,
-        };
+        const secret = await signMessage('Prepare anonymous identity');
+        const _identity = new Identity(secret);
+        const _publicId = _identity.getCommitment().toString();
 
-        await postIdentity(details);
+        // check identity on DB
+        const identity = await getPublicIdentity(aaAddress);
+
+        // if not found, store the identity
+        if (identity === undefined) {
+          const signature = await signMessage(getControlMessage(_publicId));
+          const details: AppPublicIdentity = {
+            owner,
+            publicId: _publicId,
+            aaAddress,
+            signature,
+          };
+
+          console.log('posting public identity', { details });
+          await postIdentity(details);
+        }
+
+        // store the secret identity on this device (so we dont have to ask for a signature with metamask from now on)
+        localStorage.setItem('identity', JSON.stringify({ identity: _identity.toString(), aaAddress }));
+        setIdentity(_identity);
       }
 
-      // store the secret identity on this device (so we dont have to ask for a signature with metamask from now on)
-      localStorage.setItem('identity', JSON.stringify({ identity: _identity.toString(), aaAddress }));
-      setIdentity(_identity);
+      setIsCreatingPublicId(false);
+    } catch (e: any) {
+      console.error(e);
+      setIsCreatingPublicId(false);
+      setErrorCreating(e);
     }
+    setIsCreatingPublicId(false);
   };
 
   const generateProof =
@@ -101,6 +119,8 @@ export const SemaphoreContext = (props: PropsWithChildren) => {
       value={{
         publicId,
         generateProof,
+        isCreatingPublicId,
+        errorCreating,
       }}>
       {props.children}
     </SemaphoreContextValue.Provider>

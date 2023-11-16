@@ -4,10 +4,21 @@ import { AppButton, Address } from '../../ui-components';
 import { CHAIN_ID } from '../../config/appConfig';
 import { useAccountContext } from '../../wallet/AccountContext';
 import { useAppSigner } from '../../wallet/SignerContext';
+import { Loading } from '../../pages/common/WaitingTransaction';
+import { useSemaphoreContext } from '../../contexts/SemaphoreContext';
 
 export const AppConnect = (props: {}) => {
-  const { hasInjected, connectInjected, connectMagic, signer, address } = useAppSigner();
+  const { hasInjected, connectInjected, connectMagic, signer, address, isConnecting } = useAppSigner();
   const { aaAddress } = useAccountContext();
+  const { isCreatingPublicId } = useSemaphoreContext();
+
+  if (isConnecting || isCreatingPublicId) {
+    return (
+      <Box>
+        <Loading label={isCreatingPublicId ? 'Creating Public Id - Waiting for Signatures' : 'Connecting'}></Loading>
+      </Box>
+    );
+  }
 
   return !signer || !aaAddress ? (
     <Box>
