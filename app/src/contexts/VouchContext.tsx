@@ -54,10 +54,10 @@ export const VouchContext = (props: VouchContextProps) => {
   };
 
   useEffect(() => {
-    if (isSuccess && events && projectId) {
+    if (isSuccess && events && projectId && vouchParamsInternal) {
       checkAndPostMember(events, projectId);
     }
-  }, [isSuccess, events, projectId]);
+  }, [isSuccess, events, projectId, vouchParamsInternal]);
 
   const sendVouch =
     address && addUserOp && vouchParamsInternal

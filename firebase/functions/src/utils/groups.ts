@@ -73,11 +73,11 @@ export const storeTree = async (projectId: number, group: Group) => {
     projectId,
     root: serialized.merkleRoot,
   };
-  const id = await getTree(tree);
+  const readTree = await getTree(tree);
 
-  if (!id) {
+  if (!readTree) {
     return setTree(tree);
   } else {
-    return id;
+    return readTree.id;
   }
 };

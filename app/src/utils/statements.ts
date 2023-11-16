@@ -41,6 +41,7 @@ export const getMerklePass = async (details: AppGetMerklePass): Promise<AppRetur
   });
 
   const body = await res.json();
-  const parsed = { merklePass: JSON.parse(body.merklePassStr), treeId: body.treeId };
+  const merklePass = JSON.parse(body.merklePassStr);
+  const parsed = { merklePass, treeId: body.treeId };
   return parsed;
 };

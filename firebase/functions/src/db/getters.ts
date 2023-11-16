@@ -76,5 +76,6 @@ export const getTree = async (tree: AppTree) => {
 
   return {
     ...doc.data(),
-  } as unknown as AppTree;
+    id: ref.id,
+  } as unknown as AppTree & { id: string };
 };

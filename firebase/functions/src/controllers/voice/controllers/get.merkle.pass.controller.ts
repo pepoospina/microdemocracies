@@ -19,12 +19,12 @@ export const getMerklePassController: RequestHandler = async (
 
   const leafIndex = group.indexOf(BigInt(payload.publicId));
   const merklePass = group.generateMerkleProof(leafIndex);
-  const merklePassfStr = JSON.stringify(merklePass, (key, value) => {
+  const merklePassStr = JSON.stringify(merklePass, (key, value) => {
     return typeof value === 'bigint' ? value.toString() : value;
   });
 
   try {
-    response.status(200).send({ merklePassfStr, treeId });
+    response.status(200).send({ merklePassStr, treeId });
   } catch (error: any) {
     logger.error('error', error);
     response.status(500).send({ success: false, error: error.message });

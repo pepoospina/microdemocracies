@@ -136,11 +136,12 @@ export const AccountContext = (props: PropsWithChildren) => {
 
       // extract all events from the target contracts (events from other callers would be here too... hmmm)
       const logs = tx.logs.filter((log: any) => targets.includes(log.address.toLowerCase()));
+      const factoryAddress = await getFactoryAddress();
 
       console.log({ logs });
       const events = logs
         .map((log: any) => {
-          if (log.address === getFactoryAddress()) {
+          if (log.address.toLowerCase() === factoryAddress.toLowerCase()) {
             return decodeEventLog({ abi: registryFactoryABI, data: log.data, topics: log.topics });
           } else {
             try {

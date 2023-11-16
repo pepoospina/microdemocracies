@@ -3,7 +3,7 @@ import { MAX_STATEMETN_LENGTH as MAX_STATEMENT_LENGTH } from '../../../config/co
 
 export const statementValidationScheme = object({
   projectId: number().required(),
-  proof: object().required(),
+  proof: object().shape({}).required(),
   treeId: string().required(),
   statement: string().max(MAX_STATEMENT_LENGTH).required(),
 }).noUnknown(true);

@@ -10,11 +10,10 @@ export const getControlMessage = (publicId: string) => {
 
 export const serializeProof = (proof: any): SemaphoreProofStrings => {
   // to string all NumericString;
-  return JSON.parse(
-    JSON.stringify(proof, (key, value) => {
-      return value.toString();
-    })
-  );
+  const str = JSON.stringify(proof, (key, value) => {
+    return value.toString();
+  });
+  return JSON.parse(str);
 };
 
 export const deserializeProof = (proof: SemaphoreProofStrings): any => {

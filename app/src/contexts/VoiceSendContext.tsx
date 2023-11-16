@@ -39,7 +39,7 @@ export const VoiceSendContext = (props: IVoiceSendContext) => {
             const proofAndTree = await generateStatementProof(statementHash, nullifier);
             const statement: AppStatementCreate = {
               projectId,
-              proof: serializeProof(proofAndTree.proof),
+              proof: proofAndTree.proof,
               treeId: proofAndTree.treeId,
               statement: _statement,
             };

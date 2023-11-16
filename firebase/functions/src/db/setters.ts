@@ -1,3 +1,4 @@
+import { hashMessage } from 'viem';
 import {
   AppProjectCreate,
   AppProjectMember,
@@ -20,12 +21,17 @@ export const setStatementBacker = async (
   return docRef.id;
 };
 
+export const getStatementId = (statement: AppStatementCreate) => {
+  const hash = hashMessage(JSON.stringify(statement.proof));
+  return hash.slice(0, 18);
+};
+
 export const setStatement = async (
-  backing: SignedObject<AppStatementCreate>,
-  id: string
+  statement: AppStatementCreate
 ): Promise<string> => {
+  const id = getStatementId(statement);
   const docRef = collections.statements.doc(id);
-  await docRef.set(backing);
+  await docRef.set(statement);
   return docRef.id;
 };
 
