@@ -5,30 +5,31 @@ import { LightSmartContractAccount, getDefaultLightAccountFactoryAddress } from 
 import { UserOperationCallData, WalletClientSigner } from '@alchemy/aa-core';
 import { HexStr } from '../types';
 import { chain } from './config';
-import { usePublicClient } from 'wagmi';
+import { useContractRead, usePublicClient } from 'wagmi';
 import { ALCHEMY_KEY } from '../config/appConfig';
 import { DecodeEventLogReturnType, decodeEventLog } from 'viem';
 import { useAppSigner } from './SignerContext';
-import { MessageSigner } from '../utils/statements';
-import { getFactoryAddress, registryFactoryABI } from '../utils/contracts.json';
+import { MessageSigner } from '../utils/identity';
+import { aaWalletAbi, getFactoryAddress, registryABI, registryFactoryABI } from '../utils/contracts.json';
 
 export type AccountContextType = {
   isConnected: boolean;
   aaAddress?: HexStr;
+  owner?: HexStr;
   addUserOp?: (userOp: UserOperationCallData, send?: boolean) => void;
   reset: () => void;
   isSending: boolean;
   isSuccess: boolean;
   error?: Error;
   events?: DecodeEventLogReturnType[];
-  signMessage?: MessageSigner;
+  signMessageAA?: MessageSigner;
 };
 
 const AccountContextValue = createContext<AccountContextType | undefined>(undefined);
 
 /** Manages the AA user ops and their execution */
 export const AccountContext = (props: PropsWithChildren) => {
-  const { signer } = useAppSigner();
+  const { signer, address: signerAddress } = useAppSigner();
   const publicClient = usePublicClient();
 
   /** ALCHEMY provider to send transactions using AA */
@@ -40,13 +41,9 @@ export const AccountContext = (props: PropsWithChildren) => {
   const [error, setError] = useState<Error>();
   const [events, setEvents] = useState<DecodeEventLogReturnType[]>();
 
-  console.log({ userOps, alchemyProviderAA });
+  const isConnected = alchemyProviderAA !== undefined;
 
-  const isConnected = signer !== undefined;
-
-  const signMessage = alchemyProviderAA
-    ? (input: { message: string }) => alchemyProviderAA.signMessage(input.message)
-    : undefined;
+  const signMessageAA = alchemyProviderAA ? (message: string) => alchemyProviderAA.signMessage(message) : undefined;
 
   const reset = () => {
     setIsSuccess(false);
@@ -55,6 +52,29 @@ export const AccountContext = (props: PropsWithChildren) => {
     setEvents(undefined);
     setUserOps([]);
   };
+
+  const {
+    data: _owner,
+    error: ownerError,
+    status: statusOwner,
+  } = useContractRead({
+    abi: aaWalletAbi,
+    address: aaAddress,
+    functionName: 'owner',
+    enabled: aaAddress !== undefined,
+  });
+
+  const owner = (() => {
+    if (!aaAddress) return undefined;
+    if (!signerAddress) return undefined;
+    if (
+      ownerError &&
+      (ownerError as any).shortMessage === 'The contract function "owner" returned no data ("0x").' &&
+      signerAddress
+    )
+      return signerAddress;
+    return _owner;
+  })();
 
   const setProvider = (signer: WalletClientSigner) => {
     const provider = new AlchemyProvider({
@@ -70,6 +90,7 @@ export const AccountContext = (props: PropsWithChildren) => {
         })
     );
     setAlchemyProviderAA(provider);
+    console.log('created aa provider', { provider });
   };
 
   /** keep the alchemy provider in sync with selected signer */
@@ -80,7 +101,10 @@ export const AccountContext = (props: PropsWithChildren) => {
 
   useEffect(() => {
     if (alchemyProviderAA) {
-      alchemyProviderAA.getAddress().then((address) => setAaAddress(address));
+      alchemyProviderAA.getAddress().then((address) => {
+        setAaAddress(address);
+        console.log('computed aa address', { aaAddress: address });
+      });
     }
   }, [alchemyProviderAA]);
 
@@ -108,14 +132,26 @@ export const AccountContext = (props: PropsWithChildren) => {
       const res = await alchemyProviderAA.sendUserOperation(_userOps);
       const txHash = await alchemyProviderAA.waitForUserOperationTransaction(res.hash);
       const tx = await (publicClient as any).waitForTransactionReceipt({ hash: txHash });
+      const targets = _userOps.map((op) => op.target.toLowerCase());
+
+      // extract all events from the target contracts (events from other callers would be here too... hmmm)
+      const logs = tx.logs.filter((log: any) => targets.includes(log.address.toLowerCase()));
       const factoryAddress = await getFactoryAddress();
 
-      const logs = tx.logs.filter((log: any) => log.address.toLowerCase() === factoryAddress.toLowerCase());
-
       console.log({ logs });
-      const events = logs.map((log: any) => {
-        return (decodeEventLog as any)({ abi: registryFactoryABI, data: log.data, topics: log.topics });
-      });
+      const events = logs
+        .map((log: any) => {
+          if (log.address.toLowerCase() === factoryAddress.toLowerCase()) {
+            return decodeEventLog({ abi: registryFactoryABI, data: log.data, topics: log.topics });
+          } else {
+            try {
+              return decodeEventLog({ abi: registryABI, data: log.data, topics: log.topics });
+            } catch (e) {
+              return undefined;
+            }
+          }
+        })
+        .filter((e: any) => e !== undefined);
 
       console.log({ events });
 
@@ -124,6 +160,7 @@ export const AccountContext = (props: PropsWithChildren) => {
       setEvents(events);
       setUserOps([]);
     } catch (e: any) {
+      console.error(e);
       setError(e);
     }
   };
@@ -133,13 +170,14 @@ export const AccountContext = (props: PropsWithChildren) => {
       value={{
         isConnected,
         aaAddress,
+        owner,
         addUserOp,
         reset,
         isSuccess,
         isSending,
         events,
         error,
-        signMessage,
+        signMessageAA,
       }}>
       {props.children}
     </AccountContextValue.Provider>

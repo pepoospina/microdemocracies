@@ -1,34 +1,35 @@
 import { RequestHandler } from 'express';
+import { verifyProof } from '@semaphore-protocol/proof';
 import { logger } from 'firebase-functions/v1';
 
-import { verifySignedObject } from '../../../utils/signatures';
+import { AppStatementCreate } from '../../../@app/types';
+
+import { TREE_DEPTH } from '../../../utils/groups';
 import { setStatement } from '../../../db/setters';
-import { getProject } from '../../../db/getters';
 
 import { statementValidationScheme } from './voice.schemas';
-import { AppStatementCreate, SignedObject } from 'src/@app/types';
 
 export const createStatementController: RequestHandler = async (
   request,
   response
 ) => {
-  // console.log('validate', request.body);
   const statement = (await statementValidationScheme.validate(
     request.body
-  )) as SignedObject<AppStatementCreate>;
+  )) as AppStatementCreate;
 
-  // verify signature is from the author address in the registry
-  const project = await getProject(statement.object.projectId);
+  // const statement = request.body as AppStatementCreate;
 
-  const id = await verifySignedObject(
-    statement,
-    statement.object.author,
-    project.address
-  );
+  // store identity if proof valid
+  // const proof = deserializeProof();
+  const result = await verifyProof(statement.proof, TREE_DEPTH);
+
+  if (!result) {
+    throw new Error('Invalid proof');
+  }
 
   try {
-    await setStatement(statement, id);
-    response.status(200).send({ success: true, id });
+    await setStatement(statement);
+    response.status(200).send({ success: true });
   } catch (error: any) {
     logger.error('error', error);
     response.status(500).send({ success: false, error: error.message });

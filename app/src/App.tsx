@@ -21,6 +21,7 @@ import { LandingPage } from './pages/landing/LandingPage';
 import { LearnMore } from './pages/landing/LearnMore';
 import { ProjectHome } from './pages/project/ProjectHome';
 import { VoicePage } from './pages/voice/VoicePage';
+import { VoiceBase } from './pages/voice/VoiceBase';
 import { VoicePropose } from './pages/voice/VoicePropose';
 import { VouchPage } from './pages/vouch/Vouch';
 import { VouchAccount } from './pages/vouch/VouchAccount';
@@ -31,6 +32,7 @@ import { SignerContext } from './wallet/SignerContext';
 import { ConnectedMemberContext } from './contexts/ConnectedAccountContext';
 import { AccountContext } from './wallet/AccountContext';
 import { MemberContext } from './contexts/MemberContext';
+import { SemaphoreContext } from './contexts/SemaphoreContext';
 
 const queryClient = new QueryClient();
 
@@ -48,7 +50,7 @@ export const RouteNames = {
   Member: (id: number) => `member/${id}`,
   MemberChallange: (id: number) => `member/${id}/challenge`,
   Voice: `voice`,
-  VoicePropose: `voice/propose`,
+  VoicePropose: `propose`,
 };
 
 function App() {
@@ -67,70 +69,74 @@ function App() {
       <WagmiConfig config={config}>
         <SignerContext>
           <AccountContext>
-            <GlobalStyles />
-            <ThemedApp>
-              <ResponsiveApp>
-                <QueryClientProvider client={queryClient}>
-                  <BrowserRouter>
-                    <ViewportContainer>
-                      <Routes>
-                        {/* Landing and project create */}
-                        <Route path={RouteNames.Base} element={<LandingPage />}></Route>
-                        <Route path={RouteNames.More} element={<LearnMore />}></Route>
-                        <Route path={RouteNames.Start} element={<CreateProject />}></Route>
+            <SemaphoreContext>
+              <GlobalStyles />
+              <ThemedApp>
+                <ResponsiveApp>
+                  <QueryClientProvider client={queryClient}>
+                    <BrowserRouter>
+                      <ViewportContainer>
+                        <Routes>
+                          {/* Landing and project create */}
+                          <Route path={RouteNames.Base} element={<LandingPage />}></Route>
+                          <Route path={RouteNames.More} element={<LearnMore />}></Route>
+                          <Route path={RouteNames.Start} element={<CreateProject />}></Route>
 
-                        {/* Project-Specific */}
-                        <Route
-                          path={`/p/:projectId`}
-                          element={
-                            <ProjectContext>
-                              <ConnectedMemberContext>
+                          {/* Project-Specific */}
+                          <Route
+                            path={`/p/:projectId`}
+                            element={
+                              <ProjectContext>
+                                <ConnectedMemberContext>
+                                  <MemberContext>
+                                    <VouchContext>
+                                      <ProjectBase />
+                                    </VouchContext>
+                                  </MemberContext>
+                                </ConnectedMemberContext>
+                              </ProjectContext>
+                            }>
+                            <Route path={RouteNames.Base} element={<ProjectHome />}></Route>
+                            <Route path={`account/:tokenId/*`} element={<AccountPage />}></Route>
+                            <Route
+                              path={`vouch/:hash`}
+                              element={
+                                // Another Member context for the vouched account
                                 <MemberContext>
-                                  <VouchContext>
-                                    <ProjectBase />
-                                  </VouchContext>
+                                  <VouchAccount />
                                 </MemberContext>
-                              </ConnectedMemberContext>
-                            </ProjectContext>
-                          }>
-                          <Route path={RouteNames.Base} element={<ProjectHome />}></Route>
-                          <Route path={`account/:tokenId/*`} element={<AccountPage />}></Route>
-                          <Route
-                            path={`vouch/:hash`}
-                            element={
-                              // Another Member context for the vouched account
-                              <MemberContext>
-                                <VouchAccount />
-                              </MemberContext>
-                            }></Route>
-                          <Route path={RouteNames.Join} element={<Join />}></Route>
-                          <Route path={RouteNames.Vouch} element={<VouchPage />}></Route>
-                          <Route path={RouteNames.MyVouches} element={<Vouches />}></Route>
-                          <Route path={RouteNames.VouchesAll} element={<AllVouches />}></Route>
-                          <Route path={RouteNames.Challenges} element={<Challenges />}></Route>
-                          {/* <Route path={ProjectRouteNames.Base} element={<TestComponent />}></Route> */}
-                          <Route path={RouteNames.Base} element={<ProjectHome />}></Route>
-                          <Route
-                            path={RouteNames.VoicePropose}
-                            element={
-                              <VoiceSendContext>
-                                <VoicePropose />
-                              </VoiceSendContext>
-                            }></Route>
-                          <Route
-                            path={RouteNames.Voice}
-                            element={
-                              <VoiceReadContext>
-                                <VoicePage />
-                              </VoiceReadContext>
-                            }></Route>
-                        </Route>
-                      </Routes>
-                    </ViewportContainer>
-                  </BrowserRouter>
-                </QueryClientProvider>
-              </ResponsiveApp>
-            </ThemedApp>
+                              }></Route>
+                            <Route path={RouteNames.Join} element={<Join />}></Route>
+                            <Route path={RouteNames.Vouch} element={<VouchPage />}></Route>
+                            <Route path={RouteNames.MyVouches} element={<Vouches />}></Route>
+                            <Route path={RouteNames.VouchesAll} element={<AllVouches />}></Route>
+                            <Route path={RouteNames.Challenges} element={<Challenges />}></Route>
+                            {/* <Route path={ProjectRouteNames.Base} element={<TestComponent />}></Route> */}
+                            <Route path={'voice'} element={<VoiceBase />}>
+                              <Route
+                                path={''}
+                                element={
+                                  <VoiceReadContext>
+                                    <VoicePage />
+                                  </VoiceReadContext>
+                                }></Route>
+                              <Route
+                                path={RouteNames.VoicePropose}
+                                element={
+                                  <VoiceSendContext>
+                                    <VoicePropose />
+                                  </VoiceSendContext>
+                                }></Route>
+                            </Route>
+                            <Route path={RouteNames.Base} element={<ProjectHome />}></Route>
+                          </Route>
+                        </Routes>
+                      </ViewportContainer>
+                    </BrowserRouter>
+                  </QueryClientProvider>
+                </ResponsiveApp>
+              </ThemedApp>
+            </SemaphoreContext>
           </AccountContext>
         </SignerContext>
       </WagmiConfig>

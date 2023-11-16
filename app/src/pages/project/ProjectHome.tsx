@@ -9,6 +9,7 @@ import { COMMUNITY_MEMBER } from '../../config/community';
 import { useAccountContext } from '../../wallet/AccountContext';
 import { RouteNames } from '../../App';
 import { StatementEditable } from '../voice/StatementEditable';
+import { useResponsive } from '../../components/app';
 
 export interface IProjectHome {
   dum?: any;
@@ -20,15 +21,25 @@ export const ProjectHome = (props: IProjectHome) => {
 
   const { isConnected } = useAccountContext();
   const { tokenId } = useConnectedMember();
+  const { mobile } = useResponsive();
+
+  const logoSize = mobile ? '36px' : '48px';
+  const textSize = mobile ? '22px' : '32px';
 
   return (
     <Box style={{ flexGrow: '1', width: '100%', overflowY: 'auto' }} align="center" id="LandingPageContainer">
       <Box justify="center" align="center" style={{ flexShrink: '0', marginTop: '6vh' }}>
-        <Text size="48px" weight="bold">
-          <StatementEditable value={project?.whatStatement}></StatementEditable>
-        </Text>
+        <Box>
+          <Text style={{ marginBottom: '16px' }} size={logoSize} weight="bold">
+            micro(r)evolution
+          </Text>
+          <Text style={{ marginBottom: '16px', textAlign: 'center' }} size={textSize}>
+            For anyone who:
+          </Text>
+        </Box>
+        <StatementEditable value={project?.whoStatement}></StatementEditable>
         {tokenId ? (
-          <Box>
+          <Box style={{ marginTop: '16px' }}>
             <Text size="xlarge">
               <Anchor onClick={() => navigate(RouteNames.VouchesAll)}>Members: {nMembers}</Anchor>
             </Text>
@@ -48,17 +59,7 @@ export const ProjectHome = (props: IProjectHome) => {
             </Box>
           </>
         ) : (
-          <>
-            <Box>
-              <Text size="xlarge">Welcome</Text>
-            </Box>
-            <Box></Box>
-            <Box>
-              <Text size="48px">
-                {COMMUNITY_MEMBER} #{tokenId}
-              </Text>
-            </Box>
-          </>
+          <></>
         )}
       </Box>
 
@@ -68,7 +69,7 @@ export const ProjectHome = (props: IProjectHome) => {
         ) : (
           <></>
         )}
-        <AppButton onClick={() => navigate(RouteNames.Vouch)} label="VOUCH" style={{ marginBottom: '15px' }} />
+        <AppButton onClick={() => navigate(RouteNames.Vouch)} label="INVITE" style={{ marginBottom: '15px' }} />
         <AppButton onClick={() => navigate(RouteNames.Voice)} label="VOICE" style={{ marginBottom: '15px' }} />
       </Box>
 

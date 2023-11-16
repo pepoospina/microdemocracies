@@ -10,10 +10,12 @@ import { BottomButton } from '../common/BottomButton';
 import { FormPrevious } from 'grommet-icons';
 import { useAccountContext } from '../../wallet/AccountContext';
 import { StatementEditable } from './StatementEditable';
+import { useSemaphoreContext } from '../../contexts/SemaphoreContext';
 
 export const VoicePropose = (): JSX.Element => {
   const { isConnected } = useAccountContext();
   const { proposeStatement } = useVoiceSend();
+  const { publicId } = useSemaphoreContext();
 
   const [done, setDone] = useState<boolean>(false);
   const navigate = useNavigate();
@@ -29,6 +31,7 @@ export const VoicePropose = (): JSX.Element => {
     }
   };
 
+  const readyToPropose = isConnected && input && proposeStatement !== undefined && publicId && !done;
   console.log({ isConnected, input, proposeStatement, done });
 
   return (
@@ -44,28 +47,21 @@ export const VoicePropose = (): JSX.Element => {
                 }}
                 placeholder="new statement..."></StatementEditable>
             </Box>
-            <Box direction="row" justify="center" style={{ margin: '36px 0', width: '100%' }}>
-              {isConnected ? (
-                !done ? (
-                  <AppButton
-                    label="propose statement"
-                    onClick={() => {
-                      if (input) _proposeStatement(input);
-                    }}
-                    disabled={!isConnected || !input || !proposeStatement || done}></AppButton>
-                ) : (
-                  <></>
-                )
-              ) : (
-                <AppConnectButton label="Connect to propose"></AppConnectButton>
-              )}
+            <Box justify="center" style={{ margin: '36px 0', width: '100%' }}>
+              {!isConnected ? <AppConnectButton label="Connect to propose"></AppConnectButton> : <></>}
+              <AppButton
+                label="propose statement"
+                onClick={() => {
+                  if (input) _proposeStatement(input);
+                }}
+                disabled={!readyToPropose}></AppButton>
             </Box>
           </>
         ) : (
           <AppCard>Statement Proposed!</AppCard>
         )}
       </Box>
-      <BottomButton label="Voice" icon={<FormPrevious />} onClick={() => navigate('../voice')}></BottomButton>
+      <BottomButton label="Voice" icon={<FormPrevious />} onClick={() => navigate('..')}></BottomButton>
     </AppScreen>
   );
 };

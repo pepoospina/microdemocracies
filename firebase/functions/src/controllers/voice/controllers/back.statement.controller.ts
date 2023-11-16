@@ -1,12 +1,12 @@
 import { RequestHandler } from 'express';
 import { logger } from 'firebase-functions/v1';
 
-import { getProject, getStatement } from '../../../db/getters';
+import { AppStatementBacking, SignedObject } from '../../../@app/types';
+import { getProject } from '../../../db/getters';
 import { setStatementBacker } from '../../../db/setters';
 
 import { backStatementValidationScheme } from './voice.schemas';
-import { verifySignedObject } from '../../../utils/signatures';
-import { AppStatementBacking, SignedObject } from 'src/@app/types';
+import { verifySignedStatement } from '../../../utils/signatures';
 
 export const backStatementController: RequestHandler = async (
   request,
@@ -20,18 +20,11 @@ export const backStatementController: RequestHandler = async (
   // verify signature is from the author address in the registry
   const project = await getProject(backing.object.projectId);
 
-  const id = await verifySignedObject(
+  const id = await verifySignedStatement(
     backing,
     backing.object.backer,
     project.address
   );
-
-  // verify backer is not author
-  const statement = await getStatement(backing.object.statementId);
-
-  if (statement.object.author === backing.object.backer) {
-    throw new Error(`Author cannot back their statments`);
-  }
 
   try {
     await setStatementBacker(backing, id);

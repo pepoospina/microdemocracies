@@ -377,6 +377,7 @@ contract Registry is Context, IERC721, IERC721Metadata, Initializable {
         /** decrease the number of total entries in the registry */
         __totalSupply -= 1;
 
+        emit Transfer(account.account, address(0), tokenId);
         emit InvalidatedAccountEvent(tokenId);
     }
 

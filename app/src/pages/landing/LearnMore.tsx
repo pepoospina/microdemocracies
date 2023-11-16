@@ -1,12 +1,8 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Box, Text } from 'grommet';
+import { Box } from 'grommet';
 import ReactSimplyCarousel from 'react-simply-carousel';
 
-import { RouteNames } from '../../App';
-import { appName } from '../../config/community';
-import { BoxCentered } from '../../ui-components/BoxCentered';
 import { useNavigate } from 'react-router-dom';
-import { AppButton } from '../../ui-components';
 import { FormNext, FormPrevious } from 'grommet-icons';
 import { LearnMoreItem } from './LearnMoreItem';
 
@@ -61,19 +57,6 @@ export const LearnMore = () => {
 
   return (
     <Box fill align="center">
-      <AppButton
-        onClick={() => navigate('/')}
-        plain
-        style={{ flexShrink: '0', marginTop: '16px', textTransform: 'none' }}>
-        <Text size="22px" weight="bold">
-          {appName}
-        </Text>
-      </AppButton>
-
-      <BoxCentered style={{ marginTop: '56px' }}>
-        <Text style={{ fontSize: '42px' }}>How it works</Text>
-      </BoxCentered>
-
       <Box style={{ flexGrow: '1', width: '100%', flexShrink: '0' }} justify="center" align="center">
         <ReactSimplyCarousel
           disableSwipeByMouse
@@ -145,6 +128,16 @@ export const LearnMore = () => {
 
           <Box style={boxStyle}>
             <LearnMoreItem
+              mainText={
+                <>
+                  Handle funds <Bold>transparently</Bold>, no banks.
+                </>
+              }
+              secondaryText={<>(comming soon)</>}></LearnMoreItem>
+          </Box>
+
+          {/* <Box style={boxStyle}>
+            <LearnMoreItem
               mainText={<>Micro(r)evolutions is in closed beta.</>}
               secondaryText={
                 <>
@@ -154,18 +147,9 @@ export const LearnMore = () => {
                   </a>
                 </>
               }></LearnMoreItem>
-          </Box>
+          </Box> */}
         </ReactSimplyCarousel>
       </Box>
-
-      <BoxCentered style={{ flexShrink: '0', marginBottom: '6vh' }}>
-        <AppButton
-          disabled
-          onClick={() => navigate(RouteNames.Start)}
-          label="Start now (soon)"
-          style={{ width: '300px' }}
-        />
-      </BoxCentered>
     </Box>
   );
 };

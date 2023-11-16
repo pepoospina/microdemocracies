@@ -9,7 +9,6 @@ import { useSignMessage } from 'wagmi';
 import { getStatementBackers, isStatementBacker } from '../../firestore/getters';
 import { useThemeContext } from '../../components/app';
 import { AppConnectButton } from '../../components/app/AppConnectButton';
-import { COMMUNITY_MEMBER } from '../../config/community';
 import { useAccountContext } from '../../wallet/AccountContext';
 import { useProjectContext } from '../../contexts/ProjectContext';
 
@@ -46,15 +45,14 @@ export const Statement = (props: IStatement) => {
     });
   });
 
-  const isAuthor = tokenId && props.statement && tokenId === props.statement.object.author;
-  const canBack = tokenId && isBacker !== undefined && !isBacker && isAuthor !== undefined && !isAuthor;
+  const canBack = tokenId && isBacker !== undefined && !isBacker !== undefined;
 
   const back = useCallback(async () => {
     if (props.statement && tokenId && projectId) {
       const backing: AppStatementBacking = {
         projectId,
         backer: tokenId,
-        statement: props.statement.object.statement,
+        statement: props.statement.statement,
         statementId: props.statement.id,
       };
       const signature = await signMessageAsync({ message: JSON.stringify(backing) });
@@ -93,18 +91,10 @@ export const Statement = (props: IStatement) => {
                   lineHeight: '125%',
                   fontWeight: '800',
                 }}>
-                {props.statement.object.statement}
+                {props.statement.statement}
               </Text>
             </Box>
             <Box direction="row" style={{ margin: '0px 0', flexShrink: 0 }}>
-              <Box>
-                <Text>
-                  by{' '}
-                  <Anchor style={{ color: 'white' }}>
-                    {COMMUNITY_MEMBER} #{props.statement.object.author}
-                  </Anchor>
-                </Text>
-              </Box>
               <Box direction="row" style={{ flexGrow: 1 }} justify="end" align="center">
                 {backers && backers.length > 0 ? (
                   <>
@@ -140,7 +130,7 @@ export const Statement = (props: IStatement) => {
           <Spinner></Spinner>
         )}
       </Box>
-      {!props.preview && !isAuthor ? (
+      {!props.preview ? (
         <Box direction="row" justify="end">
           {isConnected ? (
             !isBacker ? (

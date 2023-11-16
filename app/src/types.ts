@@ -101,10 +101,21 @@ export interface AppChallenge {
 
 export type VoteOption = 1 | -1;
 
+export interface SemaphoreProofStrings {
+  merkleTreeRoot: string;
+  signal: string;
+  nullifierHash: string;
+  externalNullifier: string;
+  proof: PackedProofString;
+}
+
+export type PackedProofString = [string, string, string, string, string, string, string, string];
+
 export interface AppStatement {
   projectId: number;
-  author: number;
   statement: string;
+  treeId: string;
+  proof: SemaphoreProofStrings;
   backers: number[] | undefined;
 }
 
@@ -122,7 +133,39 @@ export interface SignedObject<T> {
   signature: HexStr;
 }
 
-export type StatementRead = SignedObject<AppStatement> & { id: string };
+export type StatementRead = AppStatement & { id: string };
 export type StatementBackerRead = SignedObject<AppStatementBacking> & {
   id: string;
 };
+
+export interface AppPublicIdentity {
+  publicId: string;
+  owner: HexStr;
+  aaAddress: HexStr;
+  signature: HexStr;
+}
+
+export interface AppGetMerklePass {
+  projectId: number;
+  publicId: string;
+}
+
+export interface AppReturnMerklePass {
+  merklePass: any;
+  treeId: string;
+}
+
+export interface AppProjectMember {
+  projectId: number;
+  aaAddress: HexStr;
+}
+
+export interface AppProjectIndex {
+  deployAt: number;
+  indexedAt: number;
+}
+
+export interface AppTree {
+  projectId: number;
+  root: string;
+}

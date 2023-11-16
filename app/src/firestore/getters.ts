@@ -1,6 +1,12 @@
 import { getDocs, where, query, and, getDoc } from 'firebase/firestore';
 import { collections } from './database';
-import { AppProject, StatementBackerRead, StatementRead } from '../types';
+import {
+  AppProject,
+  AppPublicIdentity,
+  HexStr,
+  StatementBackerRead,
+  StatementRead,
+} from '../types';
 
 export const getProject = async (projectId: number) => {
   const ref = collections.project(projectId);
@@ -23,7 +29,10 @@ export const getTopStatements = async () => {
 };
 
 export const getStatementBackers = async (statementId: string) => {
-  const q = query(collections.statementsBackers, where('object.statementId', '==', statementId));
+  const q = query(
+    collections.statementsBackers,
+    where('object.statementId', '==', statementId)
+  );
   const querySnapshot = await getDocs(q);
 
   return querySnapshot.docs.map((doc) => {
@@ -34,12 +43,29 @@ export const getStatementBackers = async (statementId: string) => {
   });
 };
 
-export const isStatementBacker = async (statementId: string, tokenId: number): Promise<boolean> => {
+export const isStatementBacker = async (
+  statementId: string,
+  tokenId: number
+): Promise<boolean> => {
   const q = query(
     collections.statementsBackers,
-    and(where('object.statementId', '==', statementId), where('object.backer', '==', tokenId))
+    and(
+      where('object.statementId', '==', statementId),
+      where('object.backer', '==', tokenId)
+    )
   );
   const querySnapshot = await getDocs(q);
 
   return querySnapshot.docs.length === 1;
+};
+
+export const getPublicIdentity = async (aaAddress: HexStr) => {
+  const ref = collections.identity(aaAddress);
+  const doc = await getDoc(ref);
+
+  if (!doc.exists()) return undefined;
+
+  return {
+    ...doc.data(),
+  } as unknown as AppPublicIdentity;
 };

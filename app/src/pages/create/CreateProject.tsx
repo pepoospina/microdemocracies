@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { Box, Spinner, Text } from 'grommet';
 import { FormNext, FormPrevious } from 'grommet-icons';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import ReactSimplyCarousel from 'react-simply-carousel';
 import { encodeFunctionData } from 'viem';
 import { utils } from 'ethers';
@@ -13,27 +13,28 @@ import { DetailsSelector } from './DetailsSelector';
 import { DetailsForm } from '../join/DetailsForm';
 import { AppConnect } from '../../components/app/AppConnect';
 import { ProjectSummary } from './ProjectSummary';
-import { AppStatementCreate, DetailsAndPlatforms, HexStr, PAP, SelectedDetails } from '../../types';
+import { DetailsAndPlatforms, HexStr, PAP, SelectedDetails } from '../../types';
 import { getFactoryAddress, registryFactoryABI } from '../../utils/contracts.json';
 import { deriveEntity } from '../../utils/cid-hash';
 import { BoxCentered } from '../../ui-components/BoxCentered';
 import { RouteNames } from '../../App';
 import { useAccountContext } from '../../wallet/AccountContext';
-import { postProject } from '../../utils/project';
+import { postMember, postProject } from '../../utils/project';
 import { RegistryCreatedEvent } from '../../utils/viem.types';
 import { putObject } from '../../utils/store';
 
-const NPAGES = 5;
+const NPAGES = 4;
 
 export const CreateProject = () => {
   const navigate = useNavigate();
 
-  const [formIndex, setFormIndex] = useState(0);
+  const { addUserOp, aaAddress, isSuccess, isSending, events, owner } = useAccountContext();
 
-  const { addUserOp, aaAddress, isSuccess, isSending, error, events, signMessage } = useAccountContext();
+  const [formIndex, setFormIndex] = useState(0);
   const [founderDetails, setFounderDetails] = useState<DetailsAndPlatforms>();
-  const [whoStatement, setWhoStatement] = useState<string>('Only people I like');
-  const [whatStatement, setWhatStatement] = useState<string>('Change the world');
+  const [whoStatement, setWhoStatement] = useState<string>('');
+  // const [whatStatement, setWhatStatement] = useState<string>('');
+  const [isCreating, setIsCreating] = useState<boolean>(false);
   const [selectedDetails, setDetails] = useState<SelectedDetails>();
 
   const founderPap: PAP | undefined =
@@ -44,7 +45,12 @@ export const CreateProject = () => {
         }
       : undefined;
 
-  const boxStyle: React.CSSProperties = { width: '100vw', height: 'calc(100vh - 60px - 50px)', overflowY: 'auto' };
+  const boxStyle: React.CSSProperties = {
+    width: '100vw',
+    height: 'calc(100vh - 60px - 50px)',
+    maxWidth: '600px',
+    overflowY: 'auto',
+  };
 
   const btnStyle: React.CSSProperties = {
     width: '0px',
@@ -54,9 +60,11 @@ export const CreateProject = () => {
   const createProject = async () => {
     if (!aaAddress || !founderPap || !addUserOp) return;
 
+    setIsCreating(true);
+
     const entity = await deriveEntity(founderPap);
     const statement = {
-      statement: whatStatement,
+      statement: '',
     };
     const statementEntity = await putObject({ statement });
     const salt = utils.keccak256(utils.toUtf8Bytes(Date.now().toString())) as HexStr;
@@ -80,23 +88,35 @@ export const CreateProject = () => {
     );
   };
 
-  const registerProject = async (event: RegistryCreatedEvent) => {
-    const projectId = Number(event.args.number);
-    const address = event.args.newRegistry as HexStr;
+  const registerProject = useCallback(
+    async (event: RegistryCreatedEvent) => {
+      if (!owner) throw new Error('Owner not defined');
+      if (!aaAddress) throw new Error('aaAddress not defined');
 
-    if (!selectedDetails) throw new Error('selectedDetails undefined');
+      const projectId = Number(event.args.number);
+      const address = event.args.newRegistry as HexStr;
 
-    /** sign the "what" of the project */
-    await postProject({
-      projectId,
-      address,
-      whatStatement,
-      whoStatement,
-      selectedDetails,
-    });
+      if (!selectedDetails) throw new Error('selectedDetails undefined');
 
-    navigate(RouteNames.ProjectHome((event.args as any).number));
-  };
+      /** sign the "what" of the project */
+      await postProject({
+        projectId,
+        address,
+        whatStatement: '',
+        whoStatement,
+        selectedDetails,
+      });
+
+      await postMember({
+        projectId,
+        aaAddress,
+      });
+
+      navigate(RouteNames.ProjectHome((event.args as any).number));
+      setIsCreating(false);
+    },
+    [owner, aaAddress, selectedDetails, whoStatement, navigate]
+  );
 
   useEffect(() => {
     if (isSuccess && events) {
@@ -118,19 +138,32 @@ export const CreateProject = () => {
   };
 
   const prevPage = () => {
+    if (formIndex === 0) {
+      navigate('..');
+    }
     if (formIndex > 0) {
       setFormIndex(formIndex - 1);
     }
   };
 
+  const prevStr = (() => {
+    if (formIndex === 0) return 'home';
+    return 'prev';
+  })();
+
   const nextStr = (() => {
-    if (formIndex === 2) return 'next';
-    if (formIndex === 3) return 'review';
-    if (formIndex === 4) return 'create';
+    if (formIndex === 1) return 'next';
+    if (formIndex === 2) return 'review';
+    if (formIndex === 3) return 'create';
     return 'next';
   })();
 
-  if (isSending) {
+  const nextDisabled = (() => {
+    if (formIndex === 2 && !founderPap) return true;
+    return false;
+  })();
+
+  if (isCreating) {
     return (
       <BoxCentered fill>
         <Text>Creating your micro(r)evolution</Text>
@@ -173,12 +206,13 @@ export const CreateProject = () => {
         containerProps={{
           style: {
             height: '100%',
+            maxWidth: '600px',
             display: isSending ? 'none' : 'flex',
           },
         }}
         speed={400}
         easing="linear">
-        <Box style={boxStyle} id="a">
+        {/* <Box style={boxStyle} id="what">
           <Box style={{ width: '100%', flexShrink: 0 }} pad="large">
             <Box style={{ marginBottom: '12px', fontSize: '10px', fontWeight: '300' }}>
               <Text>
@@ -208,17 +242,17 @@ export const CreateProject = () => {
               </Text>
             </Box>
           </Box>
-        </Box>
+        </Box> */}
+
         <Box style={boxStyle}>
           <Box style={{ width: '100%', flexShrink: 0 }} pad="large">
             <Box style={{ marginBottom: '12px', fontSize: '10px', fontWeight: '300', flexShrink: 0 }}>
               <Text>
-                Can participate anyone <span style={{ fontWeight: '400' }}>who</span>:
+                Describe the rules for participating. Anyone <span style={{ fontWeight: '400' }}>who</span>:
               </Text>
             </Box>
             <Box>
               <StatementEditable
-                value={whoStatement}
                 onChanged={(value) => {
                   if (value) setWhoStatement(value);
                 }}
@@ -237,7 +271,7 @@ export const CreateProject = () => {
             <Box style={{ marginBottom: '24px' }}>
               <AppHeading>Your Details</AppHeading>
               <Box>
-                <Text>All members of the commuity are expected to provide their details. Including you :)</Text>
+                <Text>Include your own deteails as a member here</Text>
               </Box>
             </Box>
             <DetailsForm selected={selectedDetails} onChange={(details) => setFounderDetails(details)}></DetailsForm>
@@ -258,15 +292,21 @@ export const CreateProject = () => {
         <Box style={boxStyle}>
           <ProjectSummary
             selectedDetails={selectedDetails}
-            whatStatement={whatStatement}
+            whatStatement={''}
             whoStatement={whoStatement}
             founderPap={founderPap}></ProjectSummary>
         </Box>
       </ReactSimplyCarousel>
 
       <Box direction="row" style={{ flexShrink: 0, height: '60px' }}>
-        <AppButton onClick={() => prevPage()} label="prev" style={{ margin: '0px 0px', width: '200px' }} />
-        <AppButton primary onClick={() => nextPage()} label={nextStr} style={{ margin: '0px 0px', width: '200px' }} />
+        <AppButton onClick={() => prevPage()} label={prevStr} style={{ margin: '0px 0px', width: '200px' }} />
+        <AppButton
+          primary
+          disabled={nextDisabled}
+          onClick={() => nextPage()}
+          label={nextStr}
+          style={{ margin: '0px 0px', width: '200px' }}
+        />
       </Box>
     </Box>
   );

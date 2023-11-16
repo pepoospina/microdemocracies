@@ -24,7 +24,7 @@ export const VouchAccount = () => {
   const { hash } = useParams();
   const { isConnected } = useAccountContext();
 
-  const { refetch: refetchRegistry } = useProjectContext();
+  const { refetch: refetchRegistry, goHome } = useProjectContext();
 
   const [pap, setPap] = useState<Entity<PAP>>();
   const [sending, setSending] = useState<boolean>(false);
@@ -139,7 +139,7 @@ export const VouchAccount = () => {
           </Box>
         )}
       </Box>
-      <BottomButton icon={<FormPrevious />} label="home" onClick={() => navigate(RouteNames.Base)}></BottomButton>
+      <BottomButton icon={<FormPrevious />} label="home" onClick={goHome}></BottomButton>
     </AppScreen>
   );
 };
