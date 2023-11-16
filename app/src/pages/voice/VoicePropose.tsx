@@ -72,7 +72,7 @@ export const VoicePropose = (): JSX.Element => {
           <AppCard>Statement Proposed!</AppCard>
         )}
       </Box>
-      <BottomButton label="Voice" icon={<FormPrevious />} onClick={() => navigate('../voice')}></BottomButton>
+      <BottomButton label="Voice" icon={<FormPrevious />} onClick={() => navigate('..')}></BottomButton>
     </AppScreen>
   );
 };

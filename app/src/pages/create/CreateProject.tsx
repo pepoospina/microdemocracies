@@ -13,7 +13,7 @@ import { DetailsSelector } from './DetailsSelector';
 import { DetailsForm } from '../join/DetailsForm';
 import { AppConnect } from '../../components/app/AppConnect';
 import { ProjectSummary } from './ProjectSummary';
-import { AppStatementCreate, DetailsAndPlatforms, HexStr, PAP, SelectedDetails } from '../../types';
+import { DetailsAndPlatforms, HexStr, PAP, SelectedDetails } from '../../types';
 import { getFactoryAddress, registryFactoryABI } from '../../utils/contracts.json';
 import { deriveEntity } from '../../utils/cid-hash';
 import { BoxCentered } from '../../ui-components/BoxCentered';
@@ -30,10 +30,11 @@ export const CreateProject = () => {
 
   const [formIndex, setFormIndex] = useState(0);
 
-  const { addUserOp, aaAddress, isSuccess, isSending, error, events, signMessage } = useAccountContext();
+  const { addUserOp, aaAddress, isSuccess, isSending, events } = useAccountContext();
   const [founderDetails, setFounderDetails] = useState<DetailsAndPlatforms>();
   const [whoStatement, setWhoStatement] = useState<string>('');
-  const [whatStatement, setWhatStatement] = useState<string>('');
+  // const [whatStatement, setWhatStatement] = useState<string>('');
+  const [isCreating, setIsCreating] = useState<boolean>(false);
   const [selectedDetails, setDetails] = useState<SelectedDetails>();
 
   const founderPap: PAP | undefined =
@@ -59,9 +60,11 @@ export const CreateProject = () => {
   const createProject = async () => {
     if (!aaAddress || !founderPap || !addUserOp) return;
 
+    setIsCreating(true);
+
     const entity = await deriveEntity(founderPap);
     const statement = {
-      statement: whatStatement,
+      statement: '',
     };
     const statementEntity = await putObject({ statement });
     const salt = utils.keccak256(utils.toUtf8Bytes(Date.now().toString())) as HexStr;
@@ -95,12 +98,13 @@ export const CreateProject = () => {
     await postProject({
       projectId,
       address,
-      whatStatement,
+      whatStatement: '',
       whoStatement,
       selectedDetails,
     });
 
     navigate(RouteNames.ProjectHome((event.args as any).number));
+    setIsCreating(false);
   };
 
   useEffect(() => {
@@ -137,13 +141,18 @@ export const CreateProject = () => {
   })();
 
   const nextStr = (() => {
-    if (formIndex === 2) return 'next';
-    if (formIndex === 3) return 'review';
-    if (formIndex === 4) return 'create';
+    if (formIndex === 1) return 'next';
+    if (formIndex === 2) return 'review';
+    if (formIndex === 3) return 'create';
     return 'next';
   })();
 
-  if (isSending) {
+  const nextDisabled = (() => {
+    if (formIndex === 2 && !founderPap) return true;
+    return false;
+  })();
+
+  if (isCreating) {
     return (
       <BoxCentered fill>
         <Text>Creating your micro(r)evolution</Text>
@@ -233,7 +242,6 @@ export const CreateProject = () => {
             </Box>
             <Box>
               <StatementEditable
-                value={whoStatement}
                 onChanged={(value) => {
                   if (value) setWhoStatement(value);
                 }}
@@ -273,7 +281,7 @@ export const CreateProject = () => {
         <Box style={boxStyle}>
           <ProjectSummary
             selectedDetails={selectedDetails}
-            whatStatement={whatStatement}
+            whatStatement={''}
             whoStatement={whoStatement}
             founderPap={founderPap}></ProjectSummary>
         </Box>
@@ -281,7 +289,13 @@ export const CreateProject = () => {
 
       <Box direction="row" style={{ flexShrink: 0, height: '60px' }}>
         <AppButton onClick={() => prevPage()} label={prevStr} style={{ margin: '0px 0px', width: '200px' }} />
-        <AppButton primary onClick={() => nextPage()} label={nextStr} style={{ margin: '0px 0px', width: '200px' }} />
+        <AppButton
+          primary
+          disabled={nextDisabled}
+          onClick={() => nextPage()}
+          label={nextStr}
+          style={{ margin: '0px 0px', width: '200px' }}
+        />
       </Box>
     </Box>
   );

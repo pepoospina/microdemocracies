@@ -121,16 +121,16 @@ function App() {
                             <Route
                               path={''}
                               element={
-                                <VoiceSendContext>
-                                  <VoicePropose />
-                                </VoiceSendContext>
+                                <VoiceReadContext>
+                                  <VoicePage />
+                                </VoiceReadContext>
                               }></Route>
                             <Route
                               path={RouteNames.VoicePropose}
                               element={
-                                <VoiceReadContext>
-                                  <VoicePage />
-                                </VoiceReadContext>
+                                <VoiceSendContext>
+                                  <VoicePropose />
+                                </VoiceSendContext>
                               }></Route>
                           </Route>
                           <Route path={RouteNames.Base} element={<ProjectHome />}></Route>
