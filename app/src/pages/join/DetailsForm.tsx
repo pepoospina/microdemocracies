@@ -3,10 +3,7 @@ import { PlatformDetails, platforms } from '../../utils/platforms';
 import { DetailsAndPlatforms, PersonDetails, PlatformAccount, PlatformId, SelectedDetails } from '../../types';
 import { useState, useEffect } from 'react';
 
-const formInit = {
-  firstName: 'Test',
-  lastName: 'Test Lastname',
-};
+const formInit = {};
 
 export const DetailsForm = (props: { selected?: SelectedDetails; onChange: (values: DetailsAndPlatforms) => void }) => {
   const [formValues, setFormValuesState] = useState<any>(formInit);
