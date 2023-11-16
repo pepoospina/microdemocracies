@@ -21,7 +21,7 @@ export const AppScreen = (props: IAppFormScreen) => {
 
   return (
     <Box {...props} style={{ height: '100%', ...props.style }} align="center">
-      <Box style={{ height: '80px' }} align="center" justify="center">
+      <Box style={{ height: '80px', textAlign: 'center', paddingTop: '16px' }} align="center" justify="center">
         <AppHeading level="1">{props.label}</AppHeading>
       </Box>
       <Box style={{ height: 'calc(100% - 160px)', maxWidth: '850px', overflowY: 'auto', width: '100%' }}>

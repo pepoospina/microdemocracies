@@ -8,3 +8,8 @@ export const projectValidationScheme = object({
   whoStatement: string().max(MAX_STATEMENT_LENGTH).required(),
   selectedDetails: object().required(),
 }).noUnknown(true);
+
+export const addMemberValidationScheme = object({
+  projectId: number().required(),
+  aaAddress: string().required(),
+}).noUnknown(true);

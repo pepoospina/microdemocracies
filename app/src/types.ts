@@ -134,11 +134,17 @@ export interface AppPublicIdentity {
   signature: HexStr;
 }
 
-export interface AppProjectMember {
-  aaAddress: HexStr;
-}
-
 export interface AppGetMerklePass {
   projectId: number;
   publicId: string;
+}
+
+export interface AppProjectMember {
+  projectId: number;
+  aaAddress: HexStr;
+}
+
+export interface AppProjectIndex {
+  deployAt: number;
+  indexedAt: number;
 }

@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useCallback, useContext, useState } from 'react';
+import { createContext, ReactNode, useCallback, useContext, useEffect, useState } from 'react';
 import { useContractWrite, usePrepareContractWrite, useWaitForTransaction } from 'wagmi';
 import { WriteContractResult } from '@wagmi/core';
 
@@ -6,7 +6,8 @@ import { registryABI } from '../utils/contracts.json';
 import { HexStr } from '../types';
 import { useProjectContext } from './ProjectContext';
 import { useAccountContext } from '../wallet/AccountContext';
-import { encodeFunctionData } from 'viem';
+import { DecodeEventLogReturnType, encodeFunctionData, zeroAddress } from 'viem';
+import { postMember } from '../utils/project';
 
 export type VouchContextType = {
   setVouchParams: (account: HexStr, personCid: string) => void;
@@ -25,14 +26,38 @@ export interface VouchContextProps {
 
 export const VouchContext = (props: VouchContextProps) => {
   /** Vouch */
-  const { address } = useProjectContext();
-  const { reset, addUserOp, isSuccess, isSending } = useAccountContext();
+  const { address, projectId } = useProjectContext();
+  const { reset, addUserOp, isSuccess, isSending, events } = useAccountContext();
 
   const [vouchParamsInternal, setVouchParamsInternal] = useState<[HexStr, string]>();
 
   const setVouchParams = useCallback((account: HexStr, personCid: string) => {
     setVouchParamsInternal([account, personCid]);
   }, []);
+
+  const checkAndPostMember = async (_events: DecodeEventLogReturnType[], _projectId: number) => {
+    if (!vouchParamsInternal) throw Error('Unexpected vouchParamsInternal undefined');
+    const vouchedAddress = vouchParamsInternal[0];
+
+    const transfer = _events?.find((e) => {
+      return (
+        e.eventName === 'Transfer' && (e.args as any).from === zeroAddress && (e.args as any).to === vouchedAddress
+      );
+    });
+
+    if (transfer) {
+      await postMember({
+        projectId: _projectId,
+        aaAddress: vouchedAddress,
+      });
+    }
+  };
+
+  useEffect(() => {
+    if (isSuccess && events && projectId) {
+      checkAndPostMember(events, projectId);
+    }
+  }, [isSuccess, events, projectId]);
 
   const sendVouch =
     address && addUserOp && vouchParamsInternal

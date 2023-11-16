@@ -130,7 +130,7 @@ export const LearnMore = () => {
             <LearnMoreItem
               mainText={
                 <>
-                  Raise and spend funds <Bold>transparently</Bold>, without banks.
+                  Handle funds <Bold>transparently</Bold>, no banks.
                 </>
               }
               secondaryText={<>(comming soon)</>}></LearnMoreItem>

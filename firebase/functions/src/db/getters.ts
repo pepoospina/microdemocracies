@@ -1,5 +1,6 @@
 import {
   AppProjectCreate,
+  AppProjectIndex,
   AppPublicIdentity,
   AppStatement,
   SignedObject,
@@ -16,6 +17,15 @@ export const getStatement = async (
   if (!statement) throw new Error(`Statement not found`);
 
   return doc.data() as unknown as SignedObject<AppStatement>;
+};
+
+export const getProjectIndex = async (
+  projectId: string
+): Promise<AppProjectIndex | undefined> => {
+  const ref = collections.projectIndexes.doc(projectId);
+  const doc = await ref.get();
+  if (!doc.exists) return undefined;
+  return doc.data() as unknown as AppProjectIndex;
 };
 
 export const getProject = async (

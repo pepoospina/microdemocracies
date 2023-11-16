@@ -19,7 +19,7 @@ import { deriveEntity } from '../../utils/cid-hash';
 import { BoxCentered } from '../../ui-components/BoxCentered';
 import { RouteNames } from '../../App';
 import { useAccountContext } from '../../wallet/AccountContext';
-import { postProject } from '../../utils/project';
+import { postMember, postProject } from '../../utils/project';
 import { RegistryCreatedEvent } from '../../utils/viem.types';
 import { putObject } from '../../utils/store';
 
@@ -91,7 +91,7 @@ export const CreateProject = () => {
   const registerProject = useCallback(
     async (event: RegistryCreatedEvent) => {
       if (!owner) throw new Error('Owner not defined');
-      if (!aaAddress) throw new Error('Owner not defined');
+      if (!aaAddress) throw new Error('aaAddress not defined');
 
       const projectId = Number(event.args.number);
       const address = event.args.newRegistry as HexStr;
@@ -105,6 +105,11 @@ export const CreateProject = () => {
         whatStatement: '',
         whoStatement,
         selectedDetails,
+      });
+
+      await postMember({
+        projectId,
+        aaAddress,
       });
 
       navigate(RouteNames.ProjectHome((event.args as any).number));

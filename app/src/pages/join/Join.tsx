@@ -69,11 +69,7 @@ export const Join = () => {
       <Box>
         <Box pad="large">
           <Box>
-            <Text>You are about to join the following micro(r)evolution. </Text>
-          </Box>
-          <StatementEditable value={project?.whatStatement}></StatementEditable>
-          <Box>
-            <Text>Addressed to the following people: </Text>
+            <Text>You are about to join a micro(r)evolution addressed to anyone who:</Text>
           </Box>
           <StatementEditable value={project?.whoStatement}></StatementEditable>
         </Box>
@@ -94,7 +90,7 @@ export const Join = () => {
     pages.push(
       <AppScreen key="3" label="Personal">
         <Box>
-          <Box>
+          <Box pad="large">
             <DetailsForm selected={project?.selectedDetails} onChange={(d) => setPersonal(d)}></DetailsForm>
           </Box>
         </Box>
@@ -115,7 +111,9 @@ export const Join = () => {
       <Box style={{ width: '100%' }}>
         <PAPEntry pap={pap}></PAPEntry>
       </Box>
-      <BottomButtons left={{ label: 'back', primary: false, action: prevPage }} right={{ label: 'share', primary: true, action: nextPage }}></BottomButtons>
+      <BottomButtons
+        left={{ label: 'back', primary: false, action: prevPage }}
+        right={{ label: 'share', primary: true, action: nextPage }}></BottomButtons>
     </AppScreen>
   );
   pages.push(

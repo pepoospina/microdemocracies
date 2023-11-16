@@ -1,5 +1,6 @@
 import {
   AppProjectCreate,
+  AppProjectMember,
   AppPublicIdentity,
   AppStatementBacking,
   AppStatementCreate,
@@ -46,5 +47,16 @@ export const createProject = async (
 
   const docRef = collections.projects.doc(projectId);
   await docRef.set(project);
+  return docRef.id;
+};
+
+export const setProjectMember = async (
+  member: AppProjectMember
+): Promise<string> => {
+  const id = member.aaAddress;
+  const docRef = collections
+    .projectMembers(member.projectId.toString())
+    .doc(id);
+  await docRef.set(member);
   return docRef.id;
 };

@@ -10,7 +10,7 @@ import { ALCHEMY_KEY } from '../config/appConfig';
 import { DecodeEventLogReturnType, decodeEventLog } from 'viem';
 import { useAppSigner } from './SignerContext';
 import { MessageSigner } from '../utils/identity';
-import { aaWalletAbi, getFactoryAddress, registryFactoryABI } from '../utils/contracts.json';
+import { aaWalletAbi, getFactoryAddress, registryABI, registryFactoryABI } from '../utils/contracts.json';
 
 export type AccountContextType = {
   isConnected: boolean;
@@ -29,7 +29,7 @@ const AccountContextValue = createContext<AccountContextType | undefined>(undefi
 
 /** Manages the AA user ops and their execution */
 export const AccountContext = (props: PropsWithChildren) => {
-  const { signer } = useAppSigner();
+  const { signer, address: signerAddress } = useAppSigner();
   const publicClient = usePublicClient();
 
   /** ALCHEMY provider to send transactions using AA */
@@ -53,12 +53,28 @@ export const AccountContext = (props: PropsWithChildren) => {
     setUserOps([]);
   };
 
-  const { data: owner, error: ownerError } = useContractRead({
+  const {
+    data: _owner,
+    error: ownerError,
+    status: statusOwner,
+  } = useContractRead({
     abi: aaWalletAbi,
     address: aaAddress,
     functionName: 'owner',
     enabled: aaAddress !== undefined,
   });
+
+  const owner = (() => {
+    if (!aaAddress) return undefined;
+    if (!signerAddress) return undefined;
+    if (
+      ownerError &&
+      (ownerError as any).shortMessage === 'The contract function "owner" returned no data ("0x").' &&
+      signerAddress
+    )
+      return signerAddress;
+    return _owner;
+  })();
 
   const setProvider = (signer: WalletClientSigner) => {
     const provider = new AlchemyProvider({
@@ -116,14 +132,25 @@ export const AccountContext = (props: PropsWithChildren) => {
       const res = await alchemyProviderAA.sendUserOperation(_userOps);
       const txHash = await alchemyProviderAA.waitForUserOperationTransaction(res.hash);
       const tx = await (publicClient as any).waitForTransactionReceipt({ hash: txHash });
-      const factoryAddress = await getFactoryAddress();
+      const targets = _userOps.map((op) => op.target.toLowerCase());
 
-      const logs = tx.logs.filter((log: any) => log.address.toLowerCase() === factoryAddress.toLowerCase());
+      // extract all events from the target contracts (events from other callers would be here too... hmmm)
+      const logs = tx.logs.filter((log: any) => targets.includes(log.address.toLowerCase()));
 
       console.log({ logs });
-      const events = logs.map((log: any) => {
-        return (decodeEventLog as any)({ abi: registryFactoryABI, data: log.data, topics: log.topics });
-      });
+      const events = logs
+        .map((log: any) => {
+          if (log.address === getFactoryAddress()) {
+            return decodeEventLog({ abi: registryFactoryABI, data: log.data, topics: log.topics });
+          } else {
+            try {
+              return decodeEventLog({ abi: registryABI, data: log.data, topics: log.topics });
+            } catch (e) {
+              return undefined;
+            }
+          }
+        })
+        .filter((e: any) => e !== undefined);
 
       console.log({ events });
 
@@ -132,6 +159,7 @@ export const AccountContext = (props: PropsWithChildren) => {
       setEvents(events);
       setUserOps([]);
     } catch (e: any) {
+      console.error(e);
       setError(e);
     }
   };

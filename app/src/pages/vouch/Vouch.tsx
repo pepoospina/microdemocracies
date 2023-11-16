@@ -20,6 +20,8 @@ export const VouchPage = (): JSX.Element => {
     navigate(RouteNames.VouchAccount(result));
   };
 
+  const invite = () => {};
+
   return (
     <AppScreen label="Vouch">
       <Box pad="large">
@@ -40,7 +42,12 @@ export const VouchPage = (): JSX.Element => {
           )}
         </Box>
 
-        <AppButton label={!scan ? 'agree & scan' : 'cancel'} onClick={() => setScan(!scan)} primary></AppButton>
+        <AppButton
+          label={!scan ? 'agree & scan' : 'cancel'}
+          onClick={() => setScan(!scan)}
+          primary
+          style={{ marginBottom: '16px' }}></AppButton>
+        <AppButton label={'invite'} onClick={() => invite()}></AppButton>
       </Box>
       <BottomButton icon={<FormPrevious />} label="home" onClick={goHome}></BottomButton>
     </AppScreen>
