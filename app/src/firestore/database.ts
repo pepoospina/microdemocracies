@@ -1,10 +1,5 @@
 import { initializeApp } from 'firebase/app';
-import {
-  collection,
-  connectFirestoreEmulator,
-  doc,
-  getFirestore,
-} from 'firebase/firestore';
+import { collection, connectFirestoreEmulator, doc, getFirestore } from 'firebase/firestore';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyD0Mg8hk5cQAfNc-ZNM-pM_76kZY4IXxM4',
@@ -17,7 +12,7 @@ const firebaseConfig = {
 
 export const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
-connectFirestoreEmulator(db, '127.0.0.1', 8080);
+// connectFirestoreEmulator(db, '127.0.0.1', 8080);
 
 export enum CollectionNames {
   Trees = 'trees',
