@@ -41,7 +41,6 @@ export const VoicePropose = (): JSX.Element => {
           <>
             <Box style={{ marginBottom: '36px' }}>
               <StatementEditable
-                value={'Test proposal'}
                 editable
                 onChanged={(value?: string) => {
                   if (value) setInput(value);

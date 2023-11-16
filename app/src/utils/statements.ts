@@ -1,7 +1,7 @@
 import stringify from 'canonical-json';
 import { FUNCTIONS_BASE } from '../config/appConfig';
 
-import { AppStatementCreate, AppPublicIdentity, AppGetMerklePass } from '../types';
+import { AppStatementCreate, AppPublicIdentity, AppGetMerklePass, AppReturnMerklePass } from '../types';
 import { MessageSigner } from './identity';
 
 export const signObject = async <T>(object: T, signMessage: MessageSigner) => {
@@ -33,7 +33,7 @@ export const postIdentity = async (publicIdentity: AppPublicIdentity) => {
   return body.success;
 };
 
-export const getMerklePass = async (details: AppGetMerklePass) => {
+export const getMerklePass = async (details: AppGetMerklePass): Promise<AppReturnMerklePass> => {
   const res = await fetch(FUNCTIONS_BASE + '/voice/merklepass/get', {
     method: 'post',
     headers: { 'Content-Type': 'application/json' },
@@ -41,6 +41,6 @@ export const getMerklePass = async (details: AppGetMerklePass) => {
   });
 
   const body = await res.json();
-  const parsed = JSON.parse(body.merkleProofStr);
+  const parsed = { merklePass: JSON.parse(body.merklePassStr), treeId: body.treeId };
   return parsed;
 };

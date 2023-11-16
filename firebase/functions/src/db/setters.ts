@@ -4,9 +4,11 @@ import {
   AppPublicIdentity,
   AppStatementBacking,
   AppStatementCreate,
+  AppTree,
   SignedObject,
 } from '../@app/types';
 
+import { getTreeId } from '../utils/groups';
 import { collections } from './db';
 
 export const setStatementBacker = async (
@@ -58,5 +60,11 @@ export const setProjectMember = async (
     .projectMembers(member.projectId.toString())
     .doc(id);
   await docRef.set(member);
+  return docRef.id;
+};
+
+export const setTree = async (tree: AppTree): Promise<string> => {
+  const docRef = collections.trees.doc(getTreeId(tree));
+  await docRef.set(tree);
   return docRef.id;
 };

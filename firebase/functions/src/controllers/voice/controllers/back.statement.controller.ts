@@ -1,12 +1,12 @@
 import { RequestHandler } from 'express';
 import { logger } from 'firebase-functions/v1';
 
+import { AppStatementBacking, SignedObject } from '../../../@app/types';
 import { getProject } from '../../../db/getters';
 import { setStatementBacker } from '../../../db/setters';
 
 import { backStatementValidationScheme } from './voice.schemas';
 import { verifySignedStatement } from '../../../utils/signatures';
-import { AppStatementBacking, SignedObject } from 'src/@app/types';
 
 export const backStatementController: RequestHandler = async (
   request,

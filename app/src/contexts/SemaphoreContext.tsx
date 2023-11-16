@@ -1,20 +1,20 @@
 import { PropsWithChildren, createContext, useContext, useEffect, useState } from 'react';
 
 import { Identity } from '@semaphore-protocol/identity';
-import { generateProof as _generateProof } from '@semaphore-protocol/proof';
 
 import { useAccountContext } from '../wallet/AccountContext';
 
-import { connectIdentity as _connectIdentity } from '../utils/identity';
-import { AppGetMerklePass, AppPublicIdentity, HexStr } from '../types';
+import { AppPublicIdentity } from '../types';
 import { getPublicIdentity } from '../firestore/getters';
-import { getControlMessage } from '../utils/identity.basic';
+import { getControlMessage } from '../utils/identity.utils';
+import { ProofAndTree, generateProof as _generateProof } from '../utils/identity';
+
 import { postIdentity } from '../utils/statements';
 import { useAppSigner } from '../wallet/SignerContext';
 
 export type SemaphoreContextType = {
   publicId?: string;
-  generateProof?: (signal: string, nullifier: string, merklePass: AppGetMerklePass) => Promise<string>;
+  generateProof?: (signal: string, nullifier: string, projectId: number) => Promise<ProofAndTree>;
   isCreatingPublicId: boolean;
   errorCreating?: Error;
 };
@@ -106,13 +106,12 @@ export const SemaphoreContext = (props: PropsWithChildren) => {
     setIsCreatingPublicId(false);
   };
 
-  const generateProof =
-    identity && publicId
-      ? async (signal: string, nullifier: string, merklePass: AppGetMerklePass) => {
-          const generated = await _generateProof(identity, merklePass, nullifier, signal);
-          return generated.proof.toString();
-        }
-      : undefined;
+  // exposes a call to the generateProof function using the connected identity (which is sensistive)
+  const generateProof = identity
+    ? async (signal: string, nullifier: string, projectId: number) => {
+        return _generateProof(identity, projectId, nullifier, signal);
+      }
+    : undefined;
 
   return (
     <SemaphoreContextValue.Provider

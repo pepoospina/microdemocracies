@@ -2,12 +2,10 @@ import { object, string, number } from 'yup';
 import { MAX_STATEMETN_LENGTH as MAX_STATEMENT_LENGTH } from '../../../config/constants';
 
 export const statementValidationScheme = object({
-  object: object({
-    projectId: number().required(),
-    proof: string().required(),
-    statement: string().max(MAX_STATEMENT_LENGTH).required(),
-  }),
-  signature: string().required(),
+  projectId: number().required(),
+  proof: object().required(),
+  treeId: string().required(),
+  statement: string().max(MAX_STATEMENT_LENGTH).required(),
 }).noUnknown(true);
 
 export const backStatementValidationScheme = object({

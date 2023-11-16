@@ -1,6 +1,5 @@
-import { AppProjectMember } from '../../../firebase/functions/src/@app/types';
 import { FUNCTIONS_BASE } from '../config/appConfig';
-import { AppProjectCreate } from '../types';
+import { AppProjectCreate, AppProjectMember } from '../types';
 
 export const postProject = async (create: AppProjectCreate) => {
   const res = await fetch(FUNCTIONS_BASE + '/project/create', {

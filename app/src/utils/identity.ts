@@ -1,12 +1,18 @@
 import { Identity } from '@semaphore-protocol/identity';
-import { generateProof as _generateProof } from '@semaphore-protocol/proof';
-
+import { SemaphoreProof, generateProof as _generateProof } from '@semaphore-protocol/proof';
 import { getPublicIdentity } from '../firestore/getters';
+
 import { AppPublicIdentity, HexStr } from '../types';
+
 import { getMerklePass, postIdentity } from './statements';
-import { getControlMessage } from './identity.basic';
+import { getControlMessage } from './identity.utils';
 
 export type MessageSigner = (message: string) => Promise<HexStr>;
+
+export interface ProofAndTree {
+  proof: SemaphoreProof;
+  treeId: string;
+}
 
 export const checkOrStoreId = async (
   publicId: string,
@@ -45,14 +51,22 @@ export const connectIdentity = async (owner: HexStr, aaAddress: HexStr, signMess
 export const generateProof = async (
   identity: Identity,
   projectId: number,
-  publicId: string,
   signal: string,
   nullifier: string
-) => {
-  const merklePass = await getMerklePass({
+): Promise<ProofAndTree> => {
+  /**
+   * Get the merkle pass as computed by the backend. It builds a tree
+   * with the current list of project members and return the merkle pass
+   * and the tree id (root)
+   */
+  const treePass = await getMerklePass({
     projectId,
-    publicId,
+    publicId: identity.getCommitment().toString(),
   });
-  const generated = await _generateProof(identity, merklePass, nullifier, signal);
-  return generated.proof.toString();
+
+  /** Based on this tree, a proof is generated here in the frontend */
+  const generated = await _generateProof(identity, treePass.merklePass, nullifier, signal);
+
+  /** Return the generated proof and the associated tree root */
+  return { proof: generated, treeId: treePass.treeId };
 };

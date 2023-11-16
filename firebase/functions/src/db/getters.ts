@@ -3,8 +3,11 @@ import {
   AppProjectIndex,
   AppPublicIdentity,
   AppStatement,
+  AppTree,
   SignedObject,
 } from '../@app/types';
+
+import { getTreeId } from '../utils/groups';
 import { collections } from './db';
 
 export const getStatement = async (
@@ -63,4 +66,15 @@ export const getProjectIdentities = async (
   );
 
   return allDocs.filter((doc) => doc !== undefined) as AppPublicIdentity[];
+};
+
+export const getTree = async (tree: AppTree) => {
+  const ref = collections.trees.doc(getTreeId(tree));
+  const doc = await ref.get();
+
+  if (!doc.exists) return undefined;
+
+  return {
+    ...doc.data(),
+  } as unknown as AppTree;
 };

@@ -1,13 +1,12 @@
 import { createContext, useContext } from 'react';
 
-import { getMerklePass } from '../utils/statements';
-
 import { ConnectedMemberContext, useConnectedMember } from './ConnectedAccountContext';
 import { postStatement } from '../utils/statements';
 import { AppStatementCreate } from '../types';
 import { useProjectContext } from './ProjectContext';
 import { useSemaphoreContext } from './SemaphoreContext';
 import { hashMessage } from 'viem';
+import { serializeProof } from '../utils/identity.utils';
 
 export type VoiceSendContextType = {
   proposeStatement?: (statement: string) => Promise<boolean>;
@@ -27,11 +26,7 @@ export const VoiceSendContext = (props: IVoiceSendContext) => {
   const generateStatementProof =
     projectId && publicId && generateProof !== undefined
       ? async (signal: string, nullifier: string) => {
-          const merklePass = await getMerklePass({
-            projectId,
-            publicId,
-          });
-          return generateProof(signal, nullifier, merklePass);
+          return generateProof(signal, nullifier, projectId);
         }
       : undefined;
 
@@ -41,10 +36,11 @@ export const VoiceSendContext = (props: IVoiceSendContext) => {
           if (projectId) {
             const statementHash = await hashMessage(_statement);
             const nullifier = Date.now().toString();
-            const proof = await generateStatementProof(statementHash, nullifier);
+            const proofAndTree = await generateStatementProof(statementHash, nullifier);
             const statement: AppStatementCreate = {
               projectId,
-              proof,
+              proof: serializeProof(proofAndTree.proof),
+              treeId: proofAndTree.treeId,
               statement: _statement,
             };
             return postStatement(statement);

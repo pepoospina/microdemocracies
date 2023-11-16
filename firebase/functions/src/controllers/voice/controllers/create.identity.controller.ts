@@ -2,7 +2,7 @@ import { RequestHandler } from 'express';
 import { logger } from 'firebase-functions/v1';
 
 import { AppPublicIdentity } from '../../../@app/types';
-import { getControlMessage } from '../../../@app/utils/identity.basic';
+import { getControlMessage } from '../../../@app/utils/identity.utils';
 import { setIdentity } from '../../../db/setters';
 import { publicClient } from '../../../utils/contracts';
 

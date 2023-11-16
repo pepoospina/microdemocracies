@@ -1,8 +1,12 @@
 import { RequestHandler } from 'express';
+import { verifyProof } from '@semaphore-protocol/proof';
 import { logger } from 'firebase-functions/v1';
 
+import { deserializeProof } from '../../../@app/utils/identity.utils';
+import { AppStatementCreate } from '../../../@app/types';
+import { TREE_DEPTH } from '../../../utils/groups';
+
 import { statementValidationScheme } from './voice.schemas';
-import { AppStatementCreate, SignedObject } from 'src/@app/types';
 
 export const createStatementController: RequestHandler = async (
   request,
@@ -11,14 +15,18 @@ export const createStatementController: RequestHandler = async (
   // console.log('validate', request.body);
   const statement = (await statementValidationScheme.validate(
     request.body
-  )) as SignedObject<AppStatementCreate>;
+  )) as AppStatementCreate;
 
-  console.log({ statement, a: 1 });
+  // store identity if proof valid
+  const proof = deserializeProof(statement.proof);
+  const result = await verifyProof(proof, TREE_DEPTH);
 
-  // const id = await verifyProof(...)
+  if (!result) {
+    throw new Error('Invalid proof');
+  }
 
   try {
-    // await setStatement(statement, id: 0);
+    // await setStatement(statement);
     response.status(200).send({ success: true });
   } catch (error: any) {
     logger.error('error', error);
