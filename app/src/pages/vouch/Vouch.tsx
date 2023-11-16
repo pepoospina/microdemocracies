@@ -40,11 +40,11 @@ export const VouchPage = (): JSX.Element => {
         </Box>
 
         <AppButton
-          label={!scan ? 'scan' : 'cancel'}
+          label={!scan ? 'scan member details' : 'cancel'}
           onClick={() => setScan(!scan)}
           primary
           style={{ marginBottom: '16px' }}></AppButton>
-        <AppButton label={'invite'} onClick={() => invite()}></AppButton>
+        {/* <AppButton label={'invite'} onClick={() => invite()}></AppButton> */}
       </Box>
       <BottomButton icon={<FormPrevious />} label="home" onClick={goHome}></BottomButton>
     </AppScreen>
