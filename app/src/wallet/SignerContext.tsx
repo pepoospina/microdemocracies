@@ -6,6 +6,7 @@ import { createInjectedSigner } from './injected.signer';
 import { InjectedConnector } from '@wagmi/core';
 import { useConnect } from 'wagmi';
 import { HexStr } from '../types';
+import { MessageSigner } from '../utils/identity';
 
 export type SignerContextType = {
   connectMagic: () => void;
@@ -13,6 +14,7 @@ export type SignerContextType = {
   hasInjected: boolean;
   signer?: WalletClientSigner;
   address?: HexStr;
+  signMessage?: MessageSigner;
 };
 
 const ProviderContextValue = createContext<SignerContextType | undefined>(undefined);
@@ -45,11 +47,14 @@ export const SignerContext = (props: PropsWithChildren) => {
 
   const hasInjected = (window as any).ethereum !== undefined;
 
+  const signMessage = signer ? signer.signMessage : undefined;
+
   return (
     <ProviderContextValue.Provider
       value={{
         connectMagic,
         connectInjected,
+        signMessage,
         hasInjected,
         signer,
         address,

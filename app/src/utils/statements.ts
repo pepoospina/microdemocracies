@@ -7,9 +7,7 @@ import { MessageSigner } from './identity';
 export const signObject = async <T>(object: T, signMessage: MessageSigner) => {
   const message = stringify(object);
   console.log({ message });
-  const signature = await signMessage({
-    message,
-  });
+  const signature = await signMessage(message);
   return { object: object, signature };
 };
 

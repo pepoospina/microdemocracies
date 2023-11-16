@@ -22,7 +22,7 @@ export type AccountContextType = {
   isSuccess: boolean;
   error?: Error;
   events?: DecodeEventLogReturnType[];
-  signMessage?: MessageSigner;
+  signMessageAA?: MessageSigner;
 };
 
 const AccountContextValue = createContext<AccountContextType | undefined>(undefined);
@@ -45,9 +45,7 @@ export const AccountContext = (props: PropsWithChildren) => {
 
   const isConnected = signer !== undefined;
 
-  const signMessage = alchemyProviderAA
-    ? (input: { message: string }) => alchemyProviderAA.signMessage(input.message)
-    : undefined;
+  const signMessageAA = alchemyProviderAA ? (message: string) => alchemyProviderAA.signMessage(message) : undefined;
 
   const reset = () => {
     setIsSuccess(false);
@@ -150,7 +148,7 @@ export const AccountContext = (props: PropsWithChildren) => {
         isSending,
         events,
         error,
-        signMessage,
+        signMessageAA,
       }}>
       {props.children}
     </AccountContextValue.Provider>

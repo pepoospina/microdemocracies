@@ -6,7 +6,7 @@ import { AppPublicIdentity, HexStr } from '../types';
 import { getMerklePass, postIdentity } from './statements';
 import { getControlMessage } from './identity.basic';
 
-export type MessageSigner = (input: { message: string }) => Promise<HexStr>;
+export type MessageSigner = (message: string) => Promise<HexStr>;
 
 export const checkOrStoreId = async (
   publicId: string,
@@ -19,9 +19,7 @@ export const checkOrStoreId = async (
 
   // if not found, store the identity
   if (identity === undefined) {
-    const signature = await signMessage({
-      message: getControlMessage(publicId),
-    });
+    const signature = await signMessage(getControlMessage(publicId));
     const details: AppPublicIdentity = {
       owner,
       publicId,
@@ -34,7 +32,7 @@ export const checkOrStoreId = async (
 };
 
 export const connectIdentity = async (owner: HexStr, aaAddress: HexStr, signMessage: MessageSigner) => {
-  const secret = await signMessage({ message: 'Prepare anonymous identity' });
+  const secret = await signMessage('Prepare anonymous identity');
   const identity = new Identity(secret);
   const _publicId = identity.getCommitment().toString();
 
