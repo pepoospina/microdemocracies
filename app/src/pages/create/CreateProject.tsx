@@ -23,14 +23,13 @@ import { postMember, postProject } from '../../utils/project';
 import { RegistryCreatedEvent } from '../../utils/viem.types';
 import { putObject } from '../../utils/store';
 import { ViewportPage } from '../../components/styles/LayoutComponents.styled';
-import { AppCarousel } from '../../ui-components/AppCarousel';
 
 const NPAGES = 4;
 
 export const CreateProject = () => {
   const navigate = useNavigate();
 
-  const { addUserOp, aaAddress, isSuccess, isSending, events, owner } = useAccountContext();
+  const { addUserOp, aaAddress, isSuccess, events, owner } = useAccountContext();
 
   const [pageIx, setPageIx] = useState(0);
   const [founderDetails, setFounderDetails] = useState<DetailsAndPlatforms>();
@@ -152,6 +151,7 @@ export const CreateProject = () => {
 
   const nextDisabled = (() => {
     if (pageIx === 2 && !founderPap) return true;
+    if (pageIx === 3 && !whoStatement) return true;
     return false;
   })();
 
