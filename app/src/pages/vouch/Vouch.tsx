@@ -27,7 +27,7 @@ export const VouchPage = (): JSX.Element => {
       <Box pad="large">
         <Box style={{ flexShrink: 0 }}>
           <Box style={{ marginBottom: '36px', flexShrink: 0 }}>
-            <Text>Remember, this micro(r)evolution is for anyone who:</Text>
+            <Text style={{ marginBottom: '16px' }}>Remember, this micro(r)evolution is for anyone who:</Text>
             <StatementEditable value={project?.whoStatement}></StatementEditable>
           </Box>
           {scan ? (

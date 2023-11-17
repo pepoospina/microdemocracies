@@ -11,7 +11,7 @@ export const AllVouches = (): JSX.Element => {
   const { goHome } = useProjectContext();
 
   return (
-    <AppScreen label="Vouches">
+    <AppScreen label="Members">
       <Box pad="large">
         <Box>
           {allVouches?.map((vouch) => {
