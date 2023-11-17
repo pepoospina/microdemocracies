@@ -1,10 +1,10 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Box } from 'grommet';
-import ReactSimplyCarousel from 'react-simply-carousel';
 
 import { useNavigate } from 'react-router-dom';
 import { FormNext, FormPrevious } from 'grommet-icons';
 import { LearnMoreItem } from './LearnMoreItem';
+import { AppCarousel } from '../../ui-components/AppCarousel';
 
 const Bold = (props: React.PropsWithChildren) => {
   return <span style={{ fontWeight: '400' }}>{props.children}</span>;
@@ -58,7 +58,7 @@ export const LearnMore = () => {
   return (
     <Box fill align="center">
       <Box style={{ flexGrow: '1', width: '100%', flexShrink: '0' }} justify="center" align="center">
-        <ReactSimplyCarousel
+        <AppCarousel
           disableSwipeByMouse
           infinite={false}
           activeSlideIndex={activeSlideIndex}
@@ -148,7 +148,7 @@ export const LearnMore = () => {
                 </>
               }></LearnMoreItem>
           </Box> */}
-        </ReactSimplyCarousel>
+        </AppCarousel>
       </Box>
     </Box>
   );

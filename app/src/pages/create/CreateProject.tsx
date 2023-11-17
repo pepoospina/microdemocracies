@@ -1,8 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { Box, Spinner, Text } from 'grommet';
 import { FormNext, FormPrevious } from 'grommet-icons';
-import { useCallback, useEffect, useState } from 'react';
-import ReactSimplyCarousel from 'react-simply-carousel';
+import { ReactNode, useCallback, useEffect, useState } from 'react';
 import { encodeFunctionData } from 'viem';
 import { utils } from 'ethers';
 
@@ -11,6 +10,7 @@ import { StatementEditable } from '../voice/StatementEditable';
 import { AppButton, AppHeading } from '../../ui-components';
 import { DetailsSelector } from './DetailsSelector';
 import { DetailsForm } from '../join/DetailsForm';
+
 import { AppConnect } from '../../components/app/AppConnect';
 import { ProjectSummary } from './ProjectSummary';
 import { DetailsAndPlatforms, HexStr, PAP, SelectedDetails } from '../../types';
@@ -22,6 +22,8 @@ import { useAccountContext } from '../../wallet/AccountContext';
 import { postMember, postProject } from '../../utils/project';
 import { RegistryCreatedEvent } from '../../utils/viem.types';
 import { putObject } from '../../utils/store';
+import { ViewportPage } from '../../components/styles/LayoutComponents.styled';
+import { AppCarousel } from '../../ui-components/AppCarousel';
 
 const NPAGES = 4;
 
@@ -30,7 +32,7 @@ export const CreateProject = () => {
 
   const { addUserOp, aaAddress, isSuccess, isSending, events, owner } = useAccountContext();
 
-  const [formIndex, setFormIndex] = useState(0);
+  const [pageIx, setPageIx] = useState(0);
   const [founderDetails, setFounderDetails] = useState<DetailsAndPlatforms>();
   const [whoStatement, setWhoStatement] = useState<string>('');
   // const [whatStatement, setWhatStatement] = useState<string>('');
@@ -45,17 +47,7 @@ export const CreateProject = () => {
         }
       : undefined;
 
-  const boxStyle: React.CSSProperties = {
-    width: '100vw',
-    height: 'calc(100vh - 60px - 50px)',
-    maxWidth: '600px',
-    overflowY: 'auto',
-  };
-
-  const btnStyle: React.CSSProperties = {
-    width: '0px',
-    display: 'none',
-  };
+  const boxStyle: React.CSSProperties = {};
 
   const createProject = async () => {
     if (!aaAddress || !founderPap || !addUserOp) return;
@@ -128,38 +120,38 @@ export const CreateProject = () => {
   }, [isSuccess, events, navigate]);
 
   const nextPage = () => {
-    if (formIndex < NPAGES - 1) {
-      setFormIndex(formIndex + 1);
+    if (pageIx < NPAGES - 1) {
+      setPageIx(pageIx + 1);
     }
 
-    if (formIndex === NPAGES - 1) {
+    if (pageIx === NPAGES - 1) {
       createProject();
     }
   };
 
   const prevPage = () => {
-    if (formIndex === 0) {
+    if (pageIx === 0) {
       navigate('..');
     }
-    if (formIndex > 0) {
-      setFormIndex(formIndex - 1);
+    if (pageIx > 0) {
+      setPageIx(pageIx - 1);
     }
   };
 
   const prevStr = (() => {
-    if (formIndex === 0) return 'home';
+    if (pageIx === 0) return 'home';
     return 'prev';
   })();
 
   const nextStr = (() => {
-    if (formIndex === 1) return 'next';
-    if (formIndex === 2) return 'review';
-    if (formIndex === 3) return 'create';
+    if (pageIx === 1) return 'next';
+    if (pageIx === 2) return 'review';
+    if (pageIx === 3) return 'create';
     return 'next';
   })();
 
   const nextDisabled = (() => {
-    if (formIndex === 2 && !founderPap) return true;
+    if (pageIx === 2 && !founderPap) return true;
     return false;
   })();
 
@@ -172,131 +164,79 @@ export const CreateProject = () => {
     );
   }
 
+  const pages: ReactNode[] = [
+    <Box style={boxStyle}>
+      <Box style={{ width: '100%', flexShrink: 0 }} pad="large">
+        <Box style={{ marginBottom: '12px', fontSize: '10px', fontWeight: '300', flexShrink: 0 }}>
+          <Text>
+            Describe the rules for participating. Anyone <span style={{ fontWeight: '400' }}>who</span>:
+          </Text>
+        </Box>
+        <Box>
+          <StatementEditable
+            onChanged={(value) => {
+              if (value) setWhoStatement(value);
+            }}
+            editable
+            placeholder="Who..."></StatementEditable>
+        </Box>
+      </Box>
+
+      <Box style={{ width: '100%', flexShrink: 0, overflowY: 'auto' }} pad="large">
+        <DetailsSelector onChanged={(details) => setDetails(details)}></DetailsSelector>
+      </Box>
+    </Box>,
+
+    <Box style={boxStyle}>
+      <Box style={{ width: '100%', flexShrink: 0 }} pad="large">
+        <Box style={{ marginBottom: '24px' }}>
+          <AppHeading>Your Details</AppHeading>
+          <Box>
+            <Text>Include your own deteails as a member here</Text>
+          </Box>
+        </Box>
+        <DetailsForm selected={selectedDetails} onChange={(details) => setFounderDetails(details)}></DetailsForm>
+      </Box>
+    </Box>,
+
+    <Box style={boxStyle}>
+      <Box style={{ width: '100%', flexShrink: 0 }} pad="large">
+        <Box pad="large" style={{ flexShrink: 0 }}>
+          <AppHeading level="2" style={{ marginBottom: '16px' }}>
+            Your account
+          </AppHeading>
+          <AppConnect></AppConnect>
+        </Box>
+      </Box>
+    </Box>,
+
+    <Box style={boxStyle}>
+      <ProjectSummary
+        selectedDetails={selectedDetails}
+        whatStatement={''}
+        whoStatement={whoStatement}
+        founderPap={founderPap}></ProjectSummary>
+    </Box>,
+  ];
+
   return (
-    <Box fill align="center">
+    <ViewportPage>
       <Box justify="center" align="center" style={{ flexShrink: '0', height: '50px' }}>
         <Text size="22px" weight="bold">
           {appName}
         </Text>
       </Box>
 
-      <ReactSimplyCarousel
-        disableSwipeByMouse
-        infinite={false}
-        activeSlideIndex={formIndex}
-        onRequestChange={setFormIndex}
-        itemsToShow={1}
-        itemsToScroll={1}
-        forwardBtnProps={{
-          style: btnStyle,
-          children: (
-            <Box align="center" justify="center" style={{ height: 36, width: 36 }}>
-              <FormNext></FormNext>
-            </Box>
-          ),
-        }}
-        backwardBtnProps={{
-          style: btnStyle,
-          children: (
-            <Box align="center" justify="center" style={{ height: 36, width: 36 }}>
-              <FormPrevious></FormPrevious>
-            </Box>
-          ),
-        }}
-        containerProps={{
-          style: {
-            height: '100%',
-            maxWidth: '600px',
-            display: isSending ? 'none' : 'flex',
-          },
-        }}
-        speed={400}
-        easing="linear">
-        {/* <Box style={boxStyle} id="what">
-          <Box style={{ width: '100%', flexShrink: 0 }} pad="large">
-            <Box style={{ marginBottom: '12px', fontSize: '10px', fontWeight: '300' }}>
-              <Text>
-                Write here <span style={{ fontWeight: '400' }}>what</span> you to want achieve
-              </Text>
-            </Box>
-            <Box>
-              <StatementEditable
-                value={whatStatement}
-                placeholder="What..."
-                editable
-                onChanged={(value) => {
-                  if (value) setWhatStatement(value);
-                }}></StatementEditable>
-            </Box>
-          </Box>
-
-          <Box style={{ width: '100%', flexShrink: 0 }} pad="large">
-            <Box style={{ marginBottom: '12px', fontSize: '10px', fontWeight: '300' }}>
-              <Text>Remember</Text>
-            </Box>
-            <Box style={{ marginTop: '0px' }}>
-              <Text style={{ fontSize: '24px', lineHeight: '150%', fontWeight: '300' }}>
-                Try to make it <span style={{ fontWeight: '400' }}>small</span>,{' '}
-                <span style={{ fontWeight: '400' }}>achievable</span> and{' '}
-                <span style={{ fontWeight: '400' }}>close to you</span>.
-              </Text>
-            </Box>
-          </Box>
-        </Box> */}
-
-        <Box style={boxStyle}>
-          <Box style={{ width: '100%', flexShrink: 0 }} pad="large">
-            <Box style={{ marginBottom: '12px', fontSize: '10px', fontWeight: '300', flexShrink: 0 }}>
-              <Text>
-                Describe the rules for participating. Anyone <span style={{ fontWeight: '400' }}>who</span>:
-              </Text>
-            </Box>
-            <Box>
-              <StatementEditable
-                onChanged={(value) => {
-                  if (value) setWhoStatement(value);
-                }}
-                editable
-                placeholder="Who..."></StatementEditable>
-            </Box>
-          </Box>
-
-          <Box style={{ width: '100%', flexShrink: 0, overflowY: 'auto' }} pad="large">
-            <DetailsSelector onChanged={(details) => setDetails(details)}></DetailsSelector>
-          </Box>
-        </Box>
-
-        <Box style={boxStyle}>
-          <Box style={{ width: '100%', flexShrink: 0 }} pad="large">
-            <Box style={{ marginBottom: '24px' }}>
-              <AppHeading>Your Details</AppHeading>
-              <Box>
-                <Text>Include your own deteails as a member here</Text>
-              </Box>
-            </Box>
-            <DetailsForm selected={selectedDetails} onChange={(details) => setFounderDetails(details)}></DetailsForm>
-          </Box>
-        </Box>
-
-        <Box style={boxStyle}>
-          <Box style={{ width: '100%', flexShrink: 0 }} pad="large">
-            <Box pad="large" style={{ flexShrink: 0 }}>
-              <AppHeading level="2" style={{ marginBottom: '16px' }}>
-                Your account
-              </AppHeading>
-              <AppConnect></AppConnect>
-            </Box>
-          </Box>
-        </Box>
-
-        <Box style={boxStyle}>
-          <ProjectSummary
-            selectedDetails={selectedDetails}
-            whatStatement={''}
-            whoStatement={whoStatement}
-            founderPap={founderPap}></ProjectSummary>
-        </Box>
-      </ReactSimplyCarousel>
+      <Box>
+        {' '}
+        {pages.map((page, ix) => {
+          return (
+            <div key={ix} style={{ height: '100%', width: '100%', display: pageIx === ix ? 'block' : 'none' }}>
+              {page}
+            </div>
+          );
+        })}
+      </Box>
 
       <Box direction="row" style={{ flexShrink: 0, height: '60px' }}>
         <AppButton onClick={() => prevPage()} label={prevStr} style={{ margin: '0px 0px', width: '200px' }} />
@@ -308,6 +248,6 @@ export const CreateProject = () => {
           style={{ margin: '0px 0px', width: '200px' }}
         />
       </Box>
-    </Box>
+    </ViewportPage>
   );
 };
