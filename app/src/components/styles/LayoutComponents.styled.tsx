@@ -36,6 +36,8 @@ export const ViewportPage = (props: { children: ReactNode[] }) => {
       style={{
         height: '100%',
         width: '100%',
+        maxWidth: '700px',
+        margin: '0 auto',
         overflow: 'hidden',
       }}>
       <Box id="header" style={{ height: '60px' }}>

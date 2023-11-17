@@ -4,6 +4,7 @@ import { ConnectedMemberContext } from './ConnectedAccountContext';
 import { StatementRead } from '../types';
 import { useQuery } from 'react-query';
 import { getTopStatements } from '../firestore/getters';
+import { useProjectContext } from './ProjectContext';
 
 export type VoiceReadContextType = {
   statements?: StatementRead[];
@@ -16,8 +17,11 @@ interface IVoiceContext {
 const VoiceReadContextValue = createContext<VoiceReadContextType | undefined>(undefined);
 
 export const VoiceReadContext = (props: IVoiceContext) => {
-  const { data: statements } = useQuery(['topStatements'], async () => {
-    return getTopStatements();
+  const { projectId } = useProjectContext();
+  const { data: statements } = useQuery(['topStatements', projectId?.toString()], async () => {
+    if (projectId) {
+      return getTopStatements(projectId);
+    }
   });
 
   return (

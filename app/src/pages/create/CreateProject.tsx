@@ -238,9 +238,16 @@ export const CreateProject = () => {
         })}
       </Box>
 
-      <Box direction="row" style={{ flexShrink: 0, height: '60px' }}>
-        <AppButton onClick={() => prevPage()} label={prevStr} style={{ margin: '0px 0px', width: '200px' }} />
+      <Box direction="row" style={{ flexShrink: 0, height: '60px' }} justify="between">
         <AppButton
+          icon={<FormPrevious></FormPrevious>}
+          onClick={() => prevPage()}
+          label={prevStr}
+          style={{ margin: '0px 0px', width: '200px' }}
+        />
+        <AppButton
+          reverse
+          icon={<FormNext></FormNext>}
           primary
           disabled={nextDisabled}
           onClick={() => nextPage()}
