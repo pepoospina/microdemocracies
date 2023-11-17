@@ -43,7 +43,7 @@ export const VoicePage = (): JSX.Element => {
         left={{ label: 'home', primary: false, action: goHome }}
         right={{
           icon: <Add />,
-          label: 'propose new',
+          label: 'new',
           primary: true,
           action: () => navigate('propose'),
         }}></BottomButtons>
