@@ -12,6 +12,7 @@ export const AppTag = (props: BoxExtendedProps): JSX.Element => {
         borderRadius: '30px',
         backgroundColor: constants.colors.backgroundLight,
         padding: '6.5px 16px',
+        fontSize: '10px',
         ...props.style,
       }}>
       {props.children}

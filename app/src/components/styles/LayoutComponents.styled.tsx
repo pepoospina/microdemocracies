@@ -8,7 +8,7 @@ import {
   GridSizeType,
   ResponsiveContext,
 } from 'grommet';
-import { ReactNode } from 'react';
+import { PropsWithChildren, ReactNode } from 'react';
 import { IElement, useThemeContext } from '../app';
 
 export const MAX_WIDTH_LANDING = 1600;
@@ -16,14 +16,39 @@ export const MAX_WIDTH_LANDING = 1600;
 export const ViewportContainer = (props: IElement) => {
   return (
     <Box
+      id="viewport-container"
       style={{
-        height: '100vh',
+        height: 'calc(100vh - 60px)',
         width: '100vw',
         overflow: 'hidden',
         maxWidth: `${MAX_WIDTH_LANDING}px`,
         margin: '0 auto',
       }}>
       {props.children}
+    </Box>
+  );
+};
+
+export const ViewportPage = (props: { children: ReactNode[] }) => {
+  return (
+    <Box
+      id="viewport-page"
+      style={{
+        height: '100%',
+        width: '100%',
+        maxWidth: '700px',
+        margin: '0 auto',
+        overflow: 'hidden',
+      }}>
+      <Box id="header" style={{ height: '60px' }}>
+        {props.children[0]}
+      </Box>
+      <Box id="content" style={{ flexGrow: 1, overflowY: 'auto' }}>
+        {props.children[1]}
+      </Box>
+      <Box id="nav" style={{ height: '60px', flexShrink: 0 }}>
+        {props.children[2]}
+      </Box>
     </Box>
   );
 };

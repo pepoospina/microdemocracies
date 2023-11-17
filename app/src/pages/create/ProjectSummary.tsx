@@ -1,7 +1,7 @@
-import { Box } from 'grommet';
+import { Box, Text } from 'grommet';
 import { StatementEditable } from '../voice/StatementEditable';
 import { DetailsSelectedSummary } from './DetailsSelectedSummary';
-import { AppHeading } from '../../ui-components';
+import { AppCard, AppHeading } from '../../ui-components';
 import { PAP, SelectedDetails } from '../../types';
 import { AccountPerson } from '../account/AccountPerson';
 
@@ -14,23 +14,28 @@ export const ProjectSummary = (props: {
   return (
     <Box pad="large">
       <Box style={{ width: '100%', flexShrink: 0 }}>
-        {/* <Box style={{ marginBottom: '12px', fontSize: '10px', fontWeight: '300', flexShrink: 0 }}>
-          <AppHeading level="3">What:</AppHeading>
-        </Box>
-        <Box>
-          <StatementEditable value={props.whatStatement}></StatementEditable>
-        </Box> */}
-
-        <Box style={{ margin: '36px 0 12px 0', fontSize: '10px', fontWeight: '300', flexShrink: 0 }}>
-          <AppHeading level="3">Can join anyone who:</AppHeading>
-        </Box>
-        <Box>
-          <StatementEditable value={props.whoStatement}></StatementEditable>
-        </Box>
+        {props.whoStatement ? (
+          <>
+            <Box style={{ margin: '36px 0 12px 0', fontSize: '10px', fontWeight: '300', flexShrink: 0 }}>
+              <AppHeading level="3">Can join anyone who:</AppHeading>
+            </Box>
+            <Box>
+              <StatementEditable value={props.whoStatement}></StatementEditable>
+            </Box>
+          </>
+        ) : (
+          <>
+            <AppCard>
+              <Text>Please include who can join.</Text>
+            </AppCard>
+          </>
+        )}
       </Box>
 
       <Box style={{ marginTop: '36px', flexShrink: 0 }}>
-        <AppHeading level="3">Participants will be asked to provide:</AppHeading>
+        <AppHeading level="3" style={{ marginBottom: '12px' }}>
+          Participants will be asked to provide:
+        </AppHeading>
         <DetailsSelectedSummary selected={props.selectedDetails}></DetailsSelectedSummary>
       </Box>
 
