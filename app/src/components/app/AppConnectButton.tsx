@@ -4,9 +4,7 @@ import { useState } from 'react';
 import { AppConnect } from './AppConnect';
 import { useAppSigner } from '../../wallet/SignerContext';
 
-interface IAppConectAnd extends IButton {}
-
-export const AppConnectButton = (props: IAppConectAnd) => {
+export const AppConnectButton = (props: IButton) => {
   const [showModal, setShowModal] = useState<boolean>();
 
   const { hasInjected, connectInjected } = useAppSigner();
@@ -26,7 +24,7 @@ export const AppConnectButton = (props: IAppConectAnd) => {
           <AppConnect></AppConnect>
         </AppModal>
       ) : (
-        <AppButton label="Connect" onClick={() => connect()}></AppButton>
+        <AppButton label="Connect" onClick={() => connect()} style={{ ...props.style }}></AppButton>
       )}
     </Box>
   );

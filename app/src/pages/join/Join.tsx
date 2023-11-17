@@ -123,7 +123,7 @@ export const Join = () => {
       </Box>
       <BottomButtons
         left={{ label: 'back', primary: false, action: prevPage }}
-        right={{ label: 'done', primary: true, action: () => navigate(RouteNames.Base) }}></BottomButtons>
+        right={{ label: 'done', primary: true, action: goHome }}></BottomButtons>
     </AppScreen>
   );
 

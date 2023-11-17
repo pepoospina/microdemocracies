@@ -73,9 +73,9 @@ export const ProjectHome = (props: IProjectHome) => {
         <AppButton onClick={() => navigate(RouteNames.Voice)} label="VOICE" style={{ marginBottom: '15px' }} />
       </Box>
 
-      {/* <Box style={{ width: '100%', flexShrink: '0' }} pad="large" justify="center" align="center">
-        {isConnected ? <MyNetworkWidget></MyNetworkWidget> : <AppConnectButton primary style={{ width: '200px' }} />}
-      </Box> */}
+      <Box style={{ width: '100%', flexShrink: '0' }} pad="large" justify="center" align="center">
+        {isConnected ? <></> : <AppConnectButton primary style={{ width: '200px' }} />}
+      </Box>
     </Box>
   );
 };

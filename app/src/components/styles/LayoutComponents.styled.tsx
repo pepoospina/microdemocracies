@@ -8,7 +8,7 @@ import {
   GridSizeType,
   ResponsiveContext,
 } from 'grommet';
-import { PropsWithChildren, ReactNode } from 'react';
+import { ReactNode } from 'react';
 import { IElement, useThemeContext } from '../app';
 
 export const MAX_WIDTH_LANDING = 1600;
