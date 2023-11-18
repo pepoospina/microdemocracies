@@ -23,6 +23,7 @@ import { postMember, postProject } from '../../utils/project';
 import { RegistryCreatedEvent } from '../../utils/viem.types';
 import { putObject } from '../../utils/store';
 import { ViewportPage } from '../../components/styles/LayoutComponents.styled';
+import { Bold } from '../landing/LandingPage';
 
 const NPAGES = 4;
 
@@ -168,8 +169,9 @@ export const CreateProject = () => {
     <Box style={boxStyle}>
       <Box style={{ width: '100%', flexShrink: 0 }} pad="large">
         <Box style={{ marginBottom: '12px', fontSize: '10px', fontWeight: '300', flexShrink: 0 }}>
-          <Text>
-            Describe the rules for participating. Anyone <span style={{ fontWeight: '400' }}>who</span>:
+          <AppHeading level="3">This micro(r)revolution is for anyone who:</AppHeading>
+          <Text style={{ margin: '12px 0px 0px 0px' }}>
+            <Bold>Examples are:</Bold> "LIVES IN...", "STUDY AT...", "WANTS TO...", etc.
           </Text>
         </Box>
         <Box>
@@ -178,7 +180,7 @@ export const CreateProject = () => {
               if (value) setWhoStatement(value);
             }}
             editable
-            placeholder="Who..."></StatementEditable>
+            placeholder="WANTS TO..."></StatementEditable>
         </Box>
       </Box>
 

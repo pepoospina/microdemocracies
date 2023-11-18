@@ -1,6 +1,6 @@
 import { Box, Text } from 'grommet';
 import { StatusGood } from 'grommet-icons';
-import { AppButton } from '../../ui-components';
+import { AppButton, AppHeading } from '../../ui-components';
 import { useThemeContext } from '../../components/app';
 import { useEffect, useState } from 'react';
 import { PlatformDetails, platforms } from '../../utils/platforms';
@@ -93,7 +93,8 @@ export const DetailsSelector = (props: { onChanged: (seleted: SelectedDetails) =
   return (
     <>
       <Box style={{ marginBottom: '12px', fontSize: '10px', fontWeight: '300' }}>
-        <Text>Participants will be asked to provide:</Text>
+        <AppHeading level="3">Participants should give their:</AppHeading>
+        <Text style={{ margin: '12px 0px 0px 0px' }}>Select one, none, or many of the options below.</Text>
       </Box>
 
       <Box direction="row" align="center" style={{ marginBottom: '12px' }}>
