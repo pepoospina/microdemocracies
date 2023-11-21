@@ -76,6 +76,8 @@ export const AccountContext = (props: PropsWithChildren) => {
     return _owner;
   })();
 
+  console.log({ ownerError, owner });
+
   const setProvider = (signer: WalletClientSigner) => {
     const provider = new AlchemyProvider({
       apiKey: ALCHEMY_KEY,
@@ -89,6 +91,7 @@ export const AccountContext = (props: PropsWithChildren) => {
           rpcClient,
         })
     );
+    provider.withAlchemyGasManager({ policyId: '4bb896df-1684-4e86-b732-07f696ecf2be' });
     setAlchemyProviderAA(provider);
     console.log('created aa provider', { provider });
   };

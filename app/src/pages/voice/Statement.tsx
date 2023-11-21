@@ -1,11 +1,11 @@
-import { Anchor, Box, Spinner, Text } from 'grommet';
+import { Box, Spinner, Text } from 'grommet';
 import { AppButton, AppCardProps } from '../../ui-components';
 import { useMutation, useQuery } from 'react-query';
+import { useCallback } from 'react';
+
 import { StatementRead, AppStatementBacking, SignedObject } from '../../types';
 import { FUNCTIONS_BASE } from '../../config/appConfig';
 import { useConnectedMember } from '../../contexts/ConnectedAccountContext';
-import { useCallback } from 'react';
-import { useSignMessage } from 'wagmi';
 import { getStatementBackers, isStatementBacker } from '../../firestore/getters';
 import { useThemeContext } from '../../components/app';
 import { AppConnectButton } from '../../components/app/AppConnectButton';
@@ -22,7 +22,6 @@ export const Statement = (props: IStatement) => {
   const { constants } = useThemeContext();
   const { isConnected } = useAccountContext();
   const { tokenId } = useConnectedMember();
-  const { signMessageAsync } = useSignMessage();
   const { projectId } = useProjectContext();
 
   const { data: backers, refetch: _refetchBackers } = useQuery(['backers', props.statement?.id], () => {
@@ -55,7 +54,7 @@ export const Statement = (props: IStatement) => {
         statement: props.statement.statement,
         statementId: props.statement.id,
       };
-      const signature = await signMessageAsync({ message: JSON.stringify(backing) });
+      const signature = '0x';
       const res = await sendBack({
         object: backing,
         signature,

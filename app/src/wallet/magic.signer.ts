@@ -2,6 +2,7 @@ import { WalletClientSigner } from '@alchemy/aa-core';
 import { Magic } from 'magic-sdk';
 import { createWalletClient, custom } from 'viem';
 import { MAGIC_API_KEY } from '../config/appConfig';
+import { baseGoerli } from 'viem/chains';
 
 // instantiate Magic SDK instance
 export const magic = new Magic(MAGIC_API_KEY);
@@ -14,6 +15,7 @@ export const createMagicSigner = async () => {
   // 2. create a wallet client
   const magicClient = createWalletClient({
     transport: custom(await magic.wallet.getProvider()),
+    chain: baseGoerli,
   });
 
   return new WalletClientSigner(magicClient as any, 'magic');

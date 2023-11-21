@@ -18,7 +18,6 @@ import { Challenges } from './pages/challenges/Challenges';
 import { CreateProject } from './pages/create/CreateProject';
 import { Join } from './pages/join/Join';
 import { LandingPage } from './pages/landing/LandingPage';
-import { LearnMore } from './pages/landing/LearnMore';
 import { ProjectHome } from './pages/project/ProjectHome';
 import { VoicePage } from './pages/voice/VoicePage';
 import { VoiceBase } from './pages/voice/VoiceBase';
@@ -38,7 +37,6 @@ const queryClient = new QueryClient();
 
 export const RouteNames = {
   Base: ``,
-  More: `/learn`,
   Start: '/start',
   ProjectHome: (projectId: string) => `/p/${projectId}`,
   Join: `join`,
@@ -79,7 +77,6 @@ function App() {
                         <Routes>
                           {/* Landing and project create */}
                           <Route path={RouteNames.Base} element={<LandingPage />}></Route>
-                          <Route path={RouteNames.More} element={<LearnMore />}></Route>
                           <Route path={RouteNames.Start} element={<CreateProject />}></Route>
 
                           {/* Project-Specific */}
