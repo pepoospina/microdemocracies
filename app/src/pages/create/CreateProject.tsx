@@ -171,7 +171,7 @@ export const CreateProject = () => {
         <Box style={{ marginBottom: '12px', fontSize: '10px', fontWeight: '300', flexShrink: 0 }}>
           <AppHeading level="3">This micro(r)revolution is for anyone who:</AppHeading>
           <Text style={{ margin: '12px 0px 0px 0px' }}>
-            <Bold>Examples are:</Bold> "LIVES IN...", "STUDY AT...", "WANTS TO...", etc.
+            <Bold>Examples are:</Bold> "LIVES IN...", "STUDIES AT...", "WANTS TO...", etc.
           </Text>
         </Box>
         <Box>
