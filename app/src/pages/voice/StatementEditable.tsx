@@ -10,6 +10,7 @@ export interface IStatementEditable {
   editable?: boolean;
   value?: string;
   onChanged?: (value?: string) => void;
+  containerStyle?: React.CSSProperties;
 }
 
 export const StatementEditable = (props: IStatementEditable) => {
@@ -62,6 +63,7 @@ export const StatementEditable = (props: IStatementEditable) => {
         color: constants.colors.textOnPrimary,
         fontSize: '48px',
         borderRadius: '6px',
+        ...props.containerStyle,
       }}
       pad="small">
       <Box>

@@ -32,12 +32,14 @@ import { ConnectedMemberContext } from './contexts/ConnectedAccountContext';
 import { AccountContext } from './wallet/AccountContext';
 import { MemberContext } from './contexts/MemberContext';
 import { SemaphoreContext } from './contexts/SemaphoreContext';
+import { AppHome } from './pages/myprojects/AppHome';
 
 const queryClient = new QueryClient();
 
 export const RouteNames = {
   Base: ``,
   Start: '/start',
+  Projects: '/app',
   ProjectHome: (projectId: string) => `/p/${projectId}`,
   Join: `join`,
   Vouch: `invite`,
@@ -64,19 +66,20 @@ function App() {
 
   return (
     <div className="App">
-      <WagmiConfig config={config}>
-        <SignerContext>
-          <AccountContext>
-            <SemaphoreContext>
-              <GlobalStyles />
-              <ThemedApp>
-                <ResponsiveApp>
-                  <QueryClientProvider client={queryClient}>
+      <QueryClientProvider client={queryClient}>
+        <WagmiConfig config={config}>
+          <SignerContext>
+            <AccountContext>
+              <SemaphoreContext>
+                <GlobalStyles />
+                <ThemedApp>
+                  <ResponsiveApp>
                     <BrowserRouter>
                       <ViewportContainer>
                         <Routes>
                           {/* Landing and project create */}
                           <Route path={RouteNames.Base} element={<LandingPage />}></Route>
+                          <Route path={RouteNames.Projects} element={<AppHome></AppHome>}></Route>
                           <Route path={RouteNames.Start} element={<CreateProject />}></Route>
 
                           {/* Project-Specific */}
@@ -130,13 +133,13 @@ function App() {
                         </Routes>
                       </ViewportContainer>
                     </BrowserRouter>
-                  </QueryClientProvider>
-                </ResponsiveApp>
-              </ThemedApp>
-            </SemaphoreContext>
-          </AccountContext>
-        </SignerContext>
-      </WagmiConfig>
+                  </ResponsiveApp>
+                </ThemedApp>
+              </SemaphoreContext>
+            </AccountContext>
+          </SignerContext>
+        </WagmiConfig>
+      </QueryClientProvider>
     </div>
   );
 }

@@ -11,6 +11,7 @@ import { DecodeEventLogReturnType, decodeEventLog } from 'viem';
 import { useAppSigner } from './SignerContext';
 import { MessageSigner } from '../utils/identity';
 import { aaWalletAbi, getFactoryAddress, registryABI, registryFactoryABI } from '../utils/contracts.json';
+import { AccountDataContext } from './AccountDataContext';
 
 export type AccountContextType = {
   isConnected: boolean;
@@ -182,7 +183,7 @@ export const AccountContext = (props: PropsWithChildren) => {
         error,
         signMessageAA,
       }}>
-      {props.children}
+      <AccountDataContext>{props.children}</AccountDataContext>
     </AccountContextValue.Provider>
   );
 };

@@ -1,6 +1,6 @@
 import { getDocs, where, query, and, getDoc } from 'firebase/firestore';
 import { collections } from './database';
-import { AppProject, AppPublicIdentity, HexStr, StatementBackerRead, StatementRead } from '../types';
+import { AppProject, AppProjectMember, AppPublicIdentity, HexStr, StatementBackerRead, StatementRead } from '../types';
 
 export const getProject = async (projectId: number) => {
   const ref = collections.project(projectId);
@@ -10,6 +10,23 @@ export const getProject = async (projectId: number) => {
     ...doc.data(),
     id: doc.id,
   } as unknown as AppProject;
+};
+
+export const getAccountProjects = async (aaAddress: HexStr) => {
+  const q = query(collections.members, where('aaAddress', '==', aaAddress));
+  const snap = await getDocs(q);
+
+  const projectIds = snap.docs.map((doc) => {
+    return doc.data().projectId;
+  });
+
+  const projects = await Promise.all(
+    projectIds.map((pId) => {
+      return getProject(pId);
+    })
+  );
+
+  return projects;
 };
 
 export const getTopStatements = async (projectId: number) => {
