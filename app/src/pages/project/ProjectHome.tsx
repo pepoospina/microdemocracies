@@ -1,4 +1,4 @@
-import { Box, Text } from 'grommet';
+import { Anchor, Box, Text } from 'grommet';
 import { useNavigate } from 'react-router-dom';
 
 import { AppButton, AppCard, AppHeading } from '../../ui-components';
@@ -7,9 +7,9 @@ import { Add, FormPrevious } from 'grommet-icons';
 import { ViewportPage } from '../../components/styles/LayoutComponents.styled';
 import { Loading } from '../common/WaitingTransaction';
 import { ProjectCard } from './ProjecCard';
-import { appName } from '../../config/community';
 import { useVoiceRead } from '../../contexts/VoiceReadContext';
 import { StatementEditable } from '../voice/StatementEditable';
+import { RouteNames } from '../../App';
 
 export interface IProjectHome {
   dum?: any;
@@ -17,7 +17,7 @@ export interface IProjectHome {
 
 export const ProjectHome = (props: IProjectHome) => {
   const navigate = useNavigate();
-  const { project } = useProjectContext();
+  const { project, nMembers } = useProjectContext();
   const { statements } = useVoiceRead();
 
   if (project === undefined) {
@@ -40,14 +40,12 @@ export const ProjectHome = (props: IProjectHome) => {
 
     return statements.map((statement) => {
       return (
-        <Box style={{ marginBottom: '16px' }}>
+        <Box key={statement.id} style={{ marginBottom: '16px' }}>
           <StatementEditable value={statement.statement} key={statement.id}></StatementEditable>
         </Box>
       );
     });
   })();
-
-  console.log({ statementsContent });
 
   const content = (() => {
     return (
@@ -56,7 +54,10 @@ export const ProjectHome = (props: IProjectHome) => {
           <ProjectCard project={project}></ProjectCard>
 
           <Box margin={{ vertical: 'large' }}>
-            <AppHeading level="3">People's voice:</AppHeading>
+            <AppHeading level="3">Community's voice:</AppHeading>
+            <Text>
+              From <Anchor onClick={() => navigate(RouteNames.Members)}>{nMembers} members</Anchor>
+            </Text>
           </Box>
         </Box>
         <Box style={{ flexShrink: 0 }} pad={{ right: 'large', bottom: 'large' }}>
@@ -70,7 +71,7 @@ export const ProjectHome = (props: IProjectHome) => {
     <ViewportPage>
       <Box pad={{ horizontal: 'large' }} align="center" justify="center" fill style={{ flexShrink: '0' }}>
         <Text size="22px" weight="bold">
-          {appName}
+          A micro(r)evolution for:
         </Text>
       </Box>
       <Box pad={{ left: 'large' }}>{content}</Box>

@@ -8,6 +8,7 @@ import { useProjectContext } from './ProjectContext';
 
 export type VoiceReadContextType = {
   statements?: StatementRead[];
+  refetchStatements: () => void;
 };
 
 interface IVoiceContext {
@@ -18,16 +19,20 @@ const VoiceReadContextValue = createContext<VoiceReadContextType | undefined>(un
 
 export const VoiceReadContext = (props: IVoiceContext) => {
   const { projectId } = useProjectContext();
-  const { data: statements } = useQuery(['topStatements', projectId?.toString()], async () => {
-    if (projectId) {
-      return getTopStatements(projectId);
+  const { data: statements, refetch: refetchStatements } = useQuery(
+    ['topStatements', projectId?.toString()],
+    async () => {
+      if (projectId) {
+        return getTopStatements(projectId);
+      }
     }
-  });
+  );
 
   return (
     <VoiceReadContextValue.Provider
       value={{
         statements,
+        refetchStatements,
       }}>
       <ConnectedMemberContext>{props.children}</ConnectedMemberContext>
     </VoiceReadContextValue.Provider>

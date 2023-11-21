@@ -11,13 +11,13 @@ import { BottomButton } from '../common/BottomButton';
 import { StatementEditable } from '../voice/StatementEditable';
 import { useProjectContext } from '../../contexts/ProjectContext';
 
-export const VouchPage = (): JSX.Element => {
+export const InvitePage = (): JSX.Element => {
   const [scan, setScan] = useState<boolean>(false);
   const { project, goHome } = useProjectContext();
   const navigate = useNavigate();
 
   const setResult = (result: string) => {
-    navigate(RouteNames.VouchAccount(result));
+    navigate(RouteNames.InviteAccount(result));
   };
 
   const invite = () => {};

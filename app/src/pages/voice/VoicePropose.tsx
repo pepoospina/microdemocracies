@@ -12,10 +12,13 @@ import { useAccountContext } from '../../wallet/AccountContext';
 import { StatementEditable } from './StatementEditable';
 import { useSemaphoreContext } from '../../contexts/SemaphoreContext';
 import { Loading } from '../common/WaitingTransaction';
+import { useVoiceRead } from '../../contexts/VoiceReadContext';
 
 export const VoicePropose = (): JSX.Element => {
   const { isConnected } = useAccountContext();
   const { proposeStatement } = useVoiceSend();
+  const { refetchStatements } = useVoiceRead();
+
   const { publicId } = useSemaphoreContext();
 
   const [done, setDone] = useState<boolean>(false);
@@ -37,6 +40,7 @@ export const VoicePropose = (): JSX.Element => {
 
   useEffect(() => {
     if (done) {
+      refetchStatements();
       navigate('../..');
     }
   }, [done]);

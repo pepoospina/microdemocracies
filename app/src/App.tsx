@@ -22,9 +22,9 @@ import { ProjectHome } from './pages/project/ProjectHome';
 import { VoicePage } from './pages/voice/VoicePage';
 import { VoiceBase } from './pages/voice/VoiceBase';
 import { VoicePropose } from './pages/voice/VoicePropose';
-import { VouchPage } from './pages/vouch/Vouch';
-import { VouchAccount } from './pages/vouch/VouchAccount';
-import { AllVouches } from './pages/vouches/AllVouches';
+import { InvitePage } from './pages/vouch/InvitePage';
+import { InviteAccount } from './pages/vouch/InviteAccount';
+import { Members } from './pages/vouches/Members';
 import { Vouches } from './pages/vouches/Vouches';
 import { ProjectBase } from './pages/project/ProjectBase';
 import { SignerContext } from './wallet/SignerContext';
@@ -38,18 +38,17 @@ const queryClient = new QueryClient();
 
 export const RouteNames = {
   Base: ``,
-  Start: '/start',
-  Projects: '/home',
-  ProjectHome: (projectId: string) => `/p/${projectId}`,
+  Start: 'start',
+  Projects: 'home',
+  ProjectHome: (projectId: string) => `p/${projectId}`,
   Join: `join`,
-  Vouch: `invite`,
-  VouchAccount: (hash: string) => `invite/${hash}`,
+  Invite: `invite`,
+  InviteAccount: (hash: string) => `invite/${hash}`,
   MyVouches: `invites`,
-  VouchesAll: `allnew`,
+  Members: `members`,
   Challenges: `challenges`,
   Member: (id: number) => `member/${id}`,
   MemberChallange: (id: number) => `member/${id}/challenge`,
-  Voice: `voice`,
   VoicePropose: `propose`,
 };
 
@@ -107,13 +106,13 @@ function App() {
                               element={
                                 // Another Member context for the vouched account
                                 <MemberContext>
-                                  <VouchAccount />
+                                  <InviteAccount />
                                 </MemberContext>
                               }></Route>
                             <Route path={RouteNames.Join} element={<Join />}></Route>
-                            <Route path={RouteNames.Vouch} element={<VouchPage />}></Route>
+                            <Route path={RouteNames.Invite} element={<InvitePage />}></Route>
                             <Route path={RouteNames.MyVouches} element={<Vouches />}></Route>
-                            <Route path={RouteNames.VouchesAll} element={<AllVouches />}></Route>
+                            <Route path={`${RouteNames.Members}`} element={<Members />}></Route>
                             <Route path={RouteNames.Challenges} element={<Challenges />}></Route>
                             {/* <Route path={ProjectRouteNames.Base} element={<TestComponent />}></Route> */}
                             <Route path={'voice'} element={<VoiceBase />}>
