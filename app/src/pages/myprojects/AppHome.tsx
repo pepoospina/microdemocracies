@@ -26,7 +26,7 @@ export const AppHome = (props: {}) => {
     if (projects === undefined) return <Loading label="Loading projects"></Loading>;
 
     return (
-      <Box pad={{ horizontal: 'large' }}>
+      <Box>
         {projects.map((project) => {
           return (
             <Box style={{ position: 'relative', marginBottom: '16px' }}>
@@ -46,16 +46,16 @@ export const AppHome = (props: {}) => {
     );
   })();
 
-  console.log({ content });
-
   return (
     <ViewportPage>
-      <Box justify="center" align="center" style={{ flexShrink: '0', height: '50px' }}>
+      <Box justify="center" align="center" fill>
         <Text size="22px" weight="bold">
           Your {appName}:
         </Text>
       </Box>
-      <Box justify="center">{content}</Box>
+      <Box justify="center" pad={{ horizontal: 'large' }}>
+        {content}
+      </Box>
       <Box>
         <AppButton onClick={() => navigate('/start')} icon={<Add></Add>} label="Start new"></AppButton>
       </Box>

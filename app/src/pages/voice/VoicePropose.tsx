@@ -1,5 +1,5 @@
 import { Box } from 'grommet';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { AppButton, AppCard } from '../../ui-components';
 import { AppScreen } from '../../ui-components/AppFormScreen';
@@ -35,8 +35,13 @@ export const VoicePropose = (): JSX.Element => {
     }
   };
 
+  useEffect(() => {
+    if (done) {
+      navigate('../..');
+    }
+  }, [done]);
+
   const readyToPropose = isConnected && input && proposeStatement !== undefined && publicId && !done;
-  console.log({ isConnected, input, proposeStatement, done });
 
   return (
     <AppScreen label="Propose Statement">
@@ -71,7 +76,7 @@ export const VoicePropose = (): JSX.Element => {
           <AppCard>Statement Proposed!</AppCard>
         )}
       </Box>
-      <BottomButton label="Voice" icon={<FormPrevious />} onClick={() => navigate('..')}></BottomButton>
+      <BottomButton label="Back" icon={<FormPrevious />} onClick={() => navigate(-1)}></BottomButton>
     </AppScreen>
   );
 };

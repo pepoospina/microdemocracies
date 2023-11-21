@@ -1,15 +1,15 @@
-import { Anchor, Box, Text } from 'grommet';
-import { AppButton } from '../../ui-components';
+import { Box, Text } from 'grommet';
 import { useNavigate } from 'react-router-dom';
+
+import { AppButton, AppCard, AppHeading } from '../../ui-components';
 import { useProjectContext } from '../../contexts/ProjectContext';
-import { MyNetworkWidget } from '../mynetwork/MyNetworkWidget';
-import { useConnectedMember } from '../../contexts/ConnectedAccountContext';
-import { AppConnectButton } from '../../components/app/AppConnectButton';
-import { COMMUNITY_MEMBER } from '../../config/community';
-import { useAccountContext } from '../../wallet/AccountContext';
-import { RouteNames } from '../../App';
+import { Add, FormPrevious } from 'grommet-icons';
+import { ViewportPage } from '../../components/styles/LayoutComponents.styled';
+import { Loading } from '../common/WaitingTransaction';
+import { ProjectCard } from './ProjecCard';
+import { appName } from '../../config/community';
+import { useVoiceRead } from '../../contexts/VoiceReadContext';
 import { StatementEditable } from '../voice/StatementEditable';
-import { useResponsive } from '../../components/app';
 
 export interface IProjectHome {
   dum?: any;
@@ -17,65 +17,67 @@ export interface IProjectHome {
 
 export const ProjectHome = (props: IProjectHome) => {
   const navigate = useNavigate();
-  const { nMembers, project } = useProjectContext();
+  const { project } = useProjectContext();
+  const { statements } = useVoiceRead();
 
-  const { isConnected } = useAccountContext();
-  const { tokenId } = useConnectedMember();
-  const { mobile } = useResponsive();
+  if (project === undefined) {
+    return (
+      <Box>
+        <Loading></Loading>
+      </Box>
+    );
+  }
 
-  const logoSize = mobile ? '36px' : '48px';
-  const textSize = mobile ? '22px' : '32px';
+  const statementsContent = (() => {
+    if (statements === undefined) return <Loading></Loading>;
+    if (statements !== undefined && statements.length === 0) {
+      return (
+        <AppCard>
+          <Text>Nothing has been said yet</Text>
+        </AppCard>
+      );
+    }
+
+    return statements.map((statement) => {
+      return (
+        <Box style={{ marginBottom: '16px' }}>
+          <StatementEditable value={statement.statement} key={statement.id}></StatementEditable>
+        </Box>
+      );
+    });
+  })();
+
+  console.log({ statementsContent });
+
+  const content = (() => {
+    return (
+      <Box style={{ overflowY: 'auto' }}>
+        <Box style={{ flexShrink: 0 }} pad={{ right: 'large' }}>
+          <ProjectCard project={project}></ProjectCard>
+
+          <Box margin={{ vertical: 'large' }}>
+            <AppHeading level="3">People's voice:</AppHeading>
+          </Box>
+        </Box>
+        <Box style={{ flexShrink: 0 }} pad={{ right: 'large', bottom: 'large' }}>
+          {statementsContent}
+        </Box>
+      </Box>
+    );
+  })();
 
   return (
-    <Box style={{ flexGrow: '1', width: '100%', overflowY: 'auto' }} align="center" id="LandingPageContainer">
-      <Box justify="center" align="center" style={{ flexShrink: '0', marginTop: '6vh' }}>
-        <Box>
-          <Text style={{ marginBottom: '16px' }} size={logoSize} weight="bold">
-            micro(r)evolution
-          </Text>
-          <Text style={{ marginBottom: '16px', textAlign: 'center' }} size={textSize}>
-            For anyone who:
-          </Text>
-        </Box>
-        <StatementEditable value={project?.whoStatement}></StatementEditable>
-        {tokenId ? (
-          <Box style={{ marginTop: '16px' }}>
-            <Text size="xlarge">
-              <Anchor onClick={() => navigate(RouteNames.VouchesAll)}>Members: {nMembers}</Anchor>
-            </Text>
-          </Box>
-        ) : (
-          <></>
-        )}
+    <ViewportPage>
+      <Box pad={{ horizontal: 'large' }} align="center" justify="center" fill style={{ flexShrink: '0' }}>
+        <Text size="22px" weight="bold">
+          {appName}
+        </Text>
       </Box>
-      <Box justify="center" align="center" style={{ flexGrow: 1, flexShrink: '0', marginBottom: '16px' }}>
-        {!tokenId ? (
-          <>
-            <Box>
-              <Text size="110px">{nMembers}</Text>
-            </Box>
-            <Box>
-              <Anchor onClick={() => navigate(RouteNames.VouchesAll)}>{COMMUNITY_MEMBER}s</Anchor>
-            </Box>
-          </>
-        ) : (
-          <></>
-        )}
+      <Box pad={{ left: 'large' }}>{content}</Box>
+      <Box direction="row">
+        <AppButton onClick={() => navigate('/home')} label="back" icon={<FormPrevious />}></AppButton>
+        <AppButton onClick={() => navigate('voice/propose')} icon={<Add></Add>} label="Propose new"></AppButton>
       </Box>
-
-      <Box style={{ flexGrow: '2', width: '200px', flexShrink: '0' }} justify="center">
-        {!tokenId ? (
-          <AppButton onClick={() => navigate(RouteNames.Join)} label="JOIN" primary style={{ marginBottom: '15px' }} />
-        ) : (
-          <></>
-        )}
-        <AppButton onClick={() => navigate(RouteNames.Vouch)} label="INVITE" style={{ marginBottom: '15px' }} />
-        <AppButton onClick={() => navigate(RouteNames.Voice)} label="VOICE" style={{ marginBottom: '15px' }} />
-      </Box>
-
-      <Box style={{ width: '100%', flexShrink: '0' }} pad="large" justify="center" align="center">
-        {isConnected ? <></> : <AppConnectButton primary style={{ width: '200px' }} />}
-      </Box>
-    </Box>
+    </ViewportPage>
   );
 };

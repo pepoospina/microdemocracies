@@ -14,11 +14,12 @@ import { IElement, useThemeContext } from '../app';
 export const MAX_WIDTH_LANDING = 1600;
 
 export const ViewportContainer = (props: IElement) => {
+  const height = 'calc(100vh)';
   return (
     <Box
       id="viewport-container"
       style={{
-        height: 'calc(100vh - 60px)',
+        height,
         width: '100vw',
         overflow: 'hidden',
         maxWidth: `${MAX_WIDTH_LANDING}px`,

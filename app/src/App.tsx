@@ -39,7 +39,7 @@ const queryClient = new QueryClient();
 export const RouteNames = {
   Base: ``,
   Start: '/start',
-  Projects: '/app',
+  Projects: '/home',
   ProjectHome: (projectId: string) => `/p/${projectId}`,
   Join: `join`,
   Vouch: `invite`,
@@ -90,7 +90,11 @@ function App() {
                                 <ConnectedMemberContext>
                                   <MemberContext>
                                     <VouchContext>
-                                      <ProjectBase />
+                                      <VoiceSendContext>
+                                        <VoiceReadContext>
+                                          <ProjectBase />
+                                        </VoiceReadContext>
+                                      </VoiceSendContext>
                                     </VouchContext>
                                   </MemberContext>
                                 </ConnectedMemberContext>
@@ -113,20 +117,8 @@ function App() {
                             <Route path={RouteNames.Challenges} element={<Challenges />}></Route>
                             {/* <Route path={ProjectRouteNames.Base} element={<TestComponent />}></Route> */}
                             <Route path={'voice'} element={<VoiceBase />}>
-                              <Route
-                                path={''}
-                                element={
-                                  <VoiceReadContext>
-                                    <VoicePage />
-                                  </VoiceReadContext>
-                                }></Route>
-                              <Route
-                                path={RouteNames.VoicePropose}
-                                element={
-                                  <VoiceSendContext>
-                                    <VoicePropose />
-                                  </VoiceSendContext>
-                                }></Route>
+                              <Route path={''} element={<VoicePage />}></Route>
+                              <Route path={RouteNames.VoicePropose} element={<VoicePropose />}></Route>
                             </Route>
                             <Route path={RouteNames.Base} element={<ProjectHome />}></Route>
                           </Route>
