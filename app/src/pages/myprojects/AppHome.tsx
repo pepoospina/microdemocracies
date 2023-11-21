@@ -15,8 +15,6 @@ export const AppHome = (props: {}) => {
   const { projects } = useAccountDataContext();
   const navigate = useNavigate();
 
-  console.log({ projects });
-
   const projectClicked = (projectId: number) => {
     navigate(`/p/${projectId}`);
   };
