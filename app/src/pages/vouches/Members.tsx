@@ -5,10 +5,11 @@ import { AppScreen } from '../../ui-components/AppFormScreen';
 import { VoucheCard } from './VouchCard';
 import { BottomButton } from '../common/BottomButton';
 import { useProjectContext } from '../../contexts/ProjectContext';
+import { useNavigate } from 'react-router-dom';
 
-export const AllVouches = (): JSX.Element => {
+export const Members = (): JSX.Element => {
   const { allVouches } = useProjectContext();
-  const { goHome } = useProjectContext();
+  const navigate = useNavigate();
 
   return (
     <AppScreen label="Members">
@@ -23,7 +24,7 @@ export const AllVouches = (): JSX.Element => {
           })}
         </Box>
       </Box>
-      <BottomButton icon={<FormPrevious />} label="home" onClick={() => goHome()}></BottomButton>
+      <BottomButton icon={<FormPrevious />} label="back" onClick={() => navigate('..')}></BottomButton>
     </AppScreen>
   );
 };

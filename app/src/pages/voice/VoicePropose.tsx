@@ -1,5 +1,5 @@
 import { Box } from 'grommet';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { AppButton, AppCard } from '../../ui-components';
 import { AppScreen } from '../../ui-components/AppFormScreen';
@@ -12,10 +12,13 @@ import { useAccountContext } from '../../wallet/AccountContext';
 import { StatementEditable } from './StatementEditable';
 import { useSemaphoreContext } from '../../contexts/SemaphoreContext';
 import { Loading } from '../common/WaitingTransaction';
+import { useVoiceRead } from '../../contexts/VoiceReadContext';
 
 export const VoicePropose = (): JSX.Element => {
   const { isConnected } = useAccountContext();
   const { proposeStatement } = useVoiceSend();
+  const { refetchStatements } = useVoiceRead();
+
   const { publicId } = useSemaphoreContext();
 
   const [done, setDone] = useState<boolean>(false);
@@ -35,8 +38,14 @@ export const VoicePropose = (): JSX.Element => {
     }
   };
 
+  useEffect(() => {
+    if (done) {
+      refetchStatements();
+      navigate('../..');
+    }
+  }, [done]);
+
   const readyToPropose = isConnected && input && proposeStatement !== undefined && publicId && !done;
-  console.log({ isConnected, input, proposeStatement, done });
 
   return (
     <AppScreen label="Propose Statement">
@@ -71,7 +80,7 @@ export const VoicePropose = (): JSX.Element => {
           <AppCard>Statement Proposed!</AppCard>
         )}
       </Box>
-      <BottomButton label="Voice" icon={<FormPrevious />} onClick={() => navigate('..')}></BottomButton>
+      <BottomButton label="Back" icon={<FormPrevious />} onClick={() => navigate(-1)}></BottomButton>
     </AppScreen>
   );
 };

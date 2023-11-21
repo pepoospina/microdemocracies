@@ -77,8 +77,6 @@ export const AccountContext = (props: PropsWithChildren) => {
     return _owner;
   })();
 
-  console.log({ ownerError, owner });
-
   const setProvider = (signer: WalletClientSigner) => {
     const provider = new AlchemyProvider({
       apiKey: ALCHEMY_KEY,

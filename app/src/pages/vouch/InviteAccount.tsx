@@ -19,7 +19,7 @@ import { COMMUNITY_MEMBER } from '../../config/community';
 import { useAccountContext } from '../../wallet/AccountContext';
 import { AppConnectButton } from '../../components/app/AppConnectButton';
 
-export const VouchAccount = () => {
+export const InviteAccount = () => {
   const navigate = useNavigate();
   const { hash } = useParams();
   const { isConnected } = useAccountContext();
