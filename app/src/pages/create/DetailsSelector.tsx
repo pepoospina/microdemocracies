@@ -93,7 +93,7 @@ export const DetailsSelector = (props: { onChanged: (seleted: SelectedDetails) =
   return (
     <>
       <Box style={{ marginBottom: '12px', fontSize: '10px', fontWeight: '300' }}>
-        <AppHeading level="3">Participants should give their:</AppHeading>
+        <AppHeading level="3">To join, participants should give their:</AppHeading>
         <Text style={{ margin: '12px 0px 0px 0px' }}>Select one, none, or many of the options below.</Text>
       </Box>
 
