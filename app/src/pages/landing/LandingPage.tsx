@@ -172,7 +172,7 @@ export const LandingPage = () => {
                       Handle funds <Bold>transparently</Bold>, no banks.
                     </>
                   }
-                  secondaryText={<>(comming soon)</>}></LearnMoreItem>
+                  secondaryText={<>(coming soon)</>}></LearnMoreItem>
               </Box>
 
               {/* <Box style={boxStyle}>
