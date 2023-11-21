@@ -131,7 +131,7 @@ export const CreateProject = () => {
 
   const prevPage = () => {
     if (pageIx === 0) {
-      navigate('..');
+      navigate(-1);
     }
     if (pageIx > 0) {
       setPageIx(pageIx - 1);
@@ -139,7 +139,7 @@ export const CreateProject = () => {
   };
 
   const prevStr = (() => {
-    if (pageIx === 0) return 'home';
+    if (pageIx === 0) return 'back';
     return 'prev';
   })();
 

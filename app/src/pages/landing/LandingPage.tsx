@@ -38,6 +38,8 @@ export const LandingPage = () => {
     return false;
   })();
 
+  const showOpenApp = activeSlideIndex === N_SLIDES - 1;
+
   const prevSlide = () => {
     if (activeSlideIndex > 0) {
       setActiveSlideIndex(activeSlideIndex - 1);
@@ -70,6 +72,10 @@ export const LandingPage = () => {
       window.removeEventListener('keydown', handleKeyPress);
     };
   }, [handleKeyPress]);
+
+  const goApp = () => {
+    navigate('/app');
+  };
 
   const btnStyle: React.CSSProperties = {
     alignSelf: 'center',
@@ -174,19 +180,6 @@ export const LandingPage = () => {
                   }
                   secondaryText={<>(coming soon)</>}></LearnMoreItem>
               </Box>
-
-              {/* <Box style={boxStyle}>
-            <LearnMoreItem
-              mainText={<>Micro(r)evolutions is in closed beta.</>}
-              secondaryText={
-                <>
-                  Can't wait? contact us at{' '}
-                  <a href="mailto:start@microrevolutions.com" target="_blank" rel="noreferrer">
-                    start@microrevolutions.com
-                  </a>
-                </>
-              }></LearnMoreItem>
-          </Box> */}
             </AppCarousel>
           </Box>
         </Box>
@@ -199,6 +192,11 @@ export const LandingPage = () => {
           label={btnText}
           style={{ margin: '12px 0px', width: '200px' }}
         />
+        {showOpenApp ? (
+          <AppButton onClick={goApp} label={'Open app'} style={{ margin: '12px 0px', width: '200px' }} />
+        ) : (
+          <></>
+        )}
       </Box>
     </Box>
   );
