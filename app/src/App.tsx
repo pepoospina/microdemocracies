@@ -40,7 +40,7 @@ export const RouteNames = {
   Base: ``,
   Start: 'start',
   Projects: 'home',
-  ProjectHome: (projectId: string) => `p/${projectId}`,
+  ProjectHome: (projectId: string) => `/p/${projectId}`,
   Join: `join`,
   Invite: `invite`,
   InviteAccount: (hash: string) => `invite/${hash}`,

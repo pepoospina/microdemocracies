@@ -5,9 +5,8 @@ import { isAddress } from 'ethers/lib/utils';
 import React from 'react';
 
 import { AppHeading } from '../../ui-components';
-import { AppScreen, BottomButtons } from '../../ui-components/AppFormScreen';
+import { AppScreen } from '../../ui-components/AppFormScreen';
 import { AppConnect } from '../../components/app/AppConnect';
-import { RouteNames } from '../../App';
 import { useAccountContext } from '../../wallet/AccountContext';
 import { useProjectContext } from '../../contexts/ProjectContext';
 import { StatementEditable } from '../voice/StatementEditable';
@@ -17,6 +16,7 @@ import { PAPShare } from './PAPShare';
 import { DetailsAndPlatforms, PAP } from '../../types';
 import { PAPEntry } from './PAPEntry';
 import { DetailsForm } from './DetailsForm';
+import { AppBottomButtons } from '../common/BottomButtons';
 
 export interface IJoinProps {
   dum?: any;
@@ -80,9 +80,9 @@ export const Join = () => {
           <AppConnect></AppConnect>
         </Box>
       </Box>
-      <BottomButtons
+      <AppBottomButtons
         left={{ label: 'home', primary: false, action: () => goHome() }}
-        right={{ label: 'next', primary: true, action: nextPage }}></BottomButtons>
+        right={{ label: 'next', primary: true, action: nextPage }}></AppBottomButtons>
     </AppScreen>
   );
 
@@ -94,7 +94,7 @@ export const Join = () => {
             <DetailsForm selected={project?.selectedDetails} onChange={(d) => setPersonal(d)}></DetailsForm>
           </Box>
         </Box>
-        <BottomButtons
+        <AppBottomButtons
           popUp={!account ? 'You need to, at least, provide your blockchain account' : undefined}
           left={{ label: 'back', primary: false, action: prevPage }}
           right={{
@@ -102,7 +102,7 @@ export const Join = () => {
             primary: true,
             action: review,
             disabled: !account,
-          }}></BottomButtons>
+          }}></AppBottomButtons>
       </AppScreen>
     );
   }
@@ -111,9 +111,9 @@ export const Join = () => {
       <Box style={{ width: '100%' }}>
         <PAPEntry pap={pap}></PAPEntry>
       </Box>
-      <BottomButtons
+      <AppBottomButtons
         left={{ label: 'back', primary: false, action: prevPage }}
-        right={{ label: 'share', primary: true, action: nextPage }}></BottomButtons>
+        right={{ label: 'share', primary: true, action: nextPage }}></AppBottomButtons>
     </AppScreen>
   );
   pages.push(
@@ -121,9 +121,9 @@ export const Join = () => {
       <Box fill>
         <PAPShare pap={pap}></PAPShare>
       </Box>
-      <BottomButtons
+      <AppBottomButtons
         left={{ label: 'back', primary: false, action: prevPage }}
-        right={{ label: 'done', primary: true, action: goHome }}></BottomButtons>
+        right={{ label: 'done', primary: true, action: goHome }}></AppBottomButtons>
     </AppScreen>
   );
 

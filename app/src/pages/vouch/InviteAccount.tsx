@@ -13,7 +13,7 @@ import { useProjectContext } from '../../contexts/ProjectContext';
 import { AppScreen } from '../../ui-components/AppFormScreen';
 import { AccountPerson } from '../account/AccountPerson';
 import { useConnectedMember } from '../../contexts/ConnectedAccountContext';
-import { BottomButton } from '../common/BottomButton';
+import { AppBottomButton } from '../common/BottomButtons';
 import { WaitingTransaction } from '../common/WaitingTransaction';
 import { COMMUNITY_MEMBER } from '../../config/community';
 import { useAccountContext } from '../../wallet/AccountContext';
@@ -139,7 +139,7 @@ export const InviteAccount = () => {
           </Box>
         )}
       </Box>
-      <BottomButton icon={<FormPrevious />} label="home" onClick={goHome}></BottomButton>
+      <AppBottomButton icon={<FormPrevious />} label="home" onClick={goHome}></AppBottomButton>
     </AppScreen>
   );
 };

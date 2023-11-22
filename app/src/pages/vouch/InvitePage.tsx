@@ -7,7 +7,7 @@ import { RouteNames } from '../../App';
 import { useNavigate } from 'react-router-dom';
 import { AppScreen } from '../../ui-components/AppFormScreen';
 import { FormPrevious } from 'grommet-icons';
-import { BottomButton } from '../common/BottomButton';
+import { AppBottomButton } from '../common/BottomButtons';
 import { StatementEditable } from '../voice/StatementEditable';
 import { useProjectContext } from '../../contexts/ProjectContext';
 
@@ -46,7 +46,7 @@ export const InvitePage = (): JSX.Element => {
           style={{ marginBottom: '16px' }}></AppButton>
         {/* <AppButton label={'invite'} onClick={() => invite()}></AppButton> */}
       </Box>
-      <BottomButton icon={<FormPrevious />} label="home" onClick={goHome}></BottomButton>
+      <AppBottomButton icon={<FormPrevious />} label="home" onClick={goHome}></AppBottomButton>
     </AppScreen>
   );
 };

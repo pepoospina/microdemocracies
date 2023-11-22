@@ -3,7 +3,7 @@ import { FormPrevious } from 'grommet-icons';
 
 import { AppScreen } from '../../ui-components/AppFormScreen';
 import { VoucheCard } from './VouchCard';
-import { BottomButton } from '../common/BottomButton';
+import { AppBottomButton } from '../common/BottomButtons';
 import { useProjectContext } from '../../contexts/ProjectContext';
 import { useNavigate } from 'react-router-dom';
 
@@ -24,7 +24,7 @@ export const Members = (): JSX.Element => {
           })}
         </Box>
       </Box>
-      <BottomButton icon={<FormPrevious />} label="back" onClick={() => navigate('..')}></BottomButton>
+      <AppBottomButton icon={<FormPrevious />} label="back" onClick={() => navigate('..')}></AppBottomButton>
     </AppScreen>
   );
 };

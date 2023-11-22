@@ -8,7 +8,7 @@ import { AccountChallenge } from '../challenges/AccountChallenge';
 import { MemberContext } from '../../contexts/MemberContext';
 import { ChallengeContext } from '../../contexts/CurrentChallengeContext';
 import { AppScreen } from '../../ui-components/AppFormScreen';
-import { BottomButton } from '../common/BottomButton';
+import { AppBottomButton } from '../common/BottomButtons';
 import { AccountCircles } from './AccountCircles';
 import { COMMUNITY_MEMBER } from '../../config/community';
 import { RouteNames } from '../../App';
@@ -34,7 +34,7 @@ export const AccountPage = () => {
           </ChallengeContext>
         </MemberContext>
       </Box>
-      <BottomButton icon={<FormPrevious />} label="home" onClick={() => navigate(RouteNames.Base)}></BottomButton>
+      <AppBottomButton icon={<FormPrevious />} label="home" onClick={() => navigate(RouteNames.Base)}></AppBottomButton>
     </AppScreen>
   );
 };

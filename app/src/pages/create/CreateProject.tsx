@@ -7,7 +7,7 @@ import { utils } from 'ethers';
 
 import { appName } from '../../config/community';
 import { StatementEditable } from '../voice/StatementEditable';
-import { AppButton, AppHeading } from '../../ui-components';
+import { AppHeading } from '../../ui-components';
 import { DetailsSelector } from './DetailsSelector';
 import { DetailsForm } from '../join/DetailsForm';
 
@@ -24,6 +24,7 @@ import { RegistryCreatedEvent } from '../../utils/viem.types';
 import { putObject } from '../../utils/store';
 import { ViewportPage } from '../../components/styles/LayoutComponents.styled';
 import { Bold } from '../landing/LandingPage';
+import { AppBottomButtons } from '../common/BottomButtons';
 
 const NPAGES = 4;
 
@@ -240,23 +241,18 @@ export const CreateProject = () => {
         })}
       </Box>
 
-      <Box direction="row" style={{ flexShrink: 0, height: '60px' }} justify="between">
-        <AppButton
-          icon={<FormPrevious></FormPrevious>}
-          onClick={() => prevPage()}
-          label={prevStr}
-          style={{ margin: '0px 0px', width: '200px' }}
-        />
-        <AppButton
-          reverse
-          icon={<FormNext></FormNext>}
-          primary
-          disabled={nextDisabled}
-          onClick={() => nextPage()}
-          label={nextStr}
-          style={{ margin: '0px 0px', width: '200px' }}
-        />
-      </Box>
+      <AppBottomButtons
+        left={{
+          action: () => prevPage(),
+          icon: <FormPrevious></FormPrevious>,
+          label: prevStr,
+        }}
+        right={{
+          action: () => nextPage(),
+          icon: <FormNext></FormNext>,
+          label: nextStr,
+          disabled: nextDisabled,
+        }}></AppBottomButtons>
     </ViewportPage>
   );
 };

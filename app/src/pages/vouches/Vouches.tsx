@@ -5,7 +5,7 @@ import { AppScreen } from '../../ui-components/AppFormScreen';
 import { useConnectedMember } from '../../contexts/ConnectedAccountContext';
 import { VoucheCard } from './VouchCard';
 import { AppConnectButton } from '../../components/app/AppConnectButton';
-import { BottomButton } from '../common/BottomButton';
+import { AppBottomButton } from '../common/BottomButtons';
 import { useAccountContext } from '../../wallet/AccountContext';
 import { useProjectContext } from '../../contexts/ProjectContext';
 
@@ -31,7 +31,7 @@ export const Vouches = (): JSX.Element => {
           <AppConnectButton />
         )}
       </Box>
-      <BottomButton icon={<FormPrevious />} label="home" onClick={() => goHome()}></BottomButton>
+      <AppBottomButton icon={<FormPrevious />} label="home" onClick={() => goHome()}></AppBottomButton>
     </AppScreen>
   );
 };

@@ -6,7 +6,7 @@ import { AppScreen } from '../../ui-components/AppFormScreen';
 import { useVoiceSend } from '../../contexts/VoiceSendContext';
 import { AppConnectButton } from '../../components/app/AppConnectButton';
 import { useNavigate } from 'react-router-dom';
-import { BottomButton } from '../common/BottomButton';
+import { AppBottomButton } from '../common/BottomButtons';
 import { FormPrevious } from 'grommet-icons';
 import { useAccountContext } from '../../wallet/AccountContext';
 import { StatementEditable } from './StatementEditable';
@@ -80,7 +80,7 @@ export const VoicePropose = (): JSX.Element => {
           <AppCard>Statement Proposed!</AppCard>
         )}
       </Box>
-      <BottomButton label="Back" icon={<FormPrevious />} onClick={() => navigate(-1)}></BottomButton>
+      <AppBottomButton label="Back" icon={<FormPrevious />} onClick={() => navigate(-1)}></AppBottomButton>
     </AppScreen>
   );
 };
