@@ -1,6 +1,15 @@
 import { getDocs, where, query, and, getDoc } from 'firebase/firestore';
 import { collections } from './database';
-import { AppProject, AppProjectMember, AppPublicIdentity, HexStr, StatementBackerRead, StatementRead } from '../types';
+import {
+  AppInvite,
+  AppProject,
+  AppProjectMember,
+  AppPublicIdentity,
+  HexStr,
+  StatementBackerRead,
+  StatementRead,
+} from '../types';
+import { postInvite } from '../utils/project';
 
 export const getProject = async (projectId: number) => {
   const ref = collections.project(projectId);
@@ -39,6 +48,21 @@ export const getTopStatements = async (projectId: number) => {
       id: doc.id,
     } as unknown as StatementRead;
   });
+};
+
+export const getInviteId = async (projectId: number, aaAddress: HexStr) => {
+  const q = query(collections.projectInvites(projectId), where('memberAddress', '==', aaAddress));
+  const querySnapshot = await getDocs(q);
+
+  if (querySnapshot.docs.length === 0) {
+    return await postInvite({ projectId, memberAddress: aaAddress, creationDate: 0 });
+  }
+
+  const doc = querySnapshot.docs[0];
+  return {
+    ...doc.data(),
+    id: doc.id,
+  } as unknown as AppInvite;
 };
 
 export const getStatementBackers = async (statementId: string) => {

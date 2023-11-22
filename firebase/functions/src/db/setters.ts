@@ -1,5 +1,6 @@
 import { hashMessage } from 'viem';
 import {
+  AppInvite,
   AppProjectCreate,
   AppProjectMember,
   AppPublicIdentity,
@@ -72,5 +73,23 @@ export const setProjectMember = async (
 export const setTree = async (tree: AppTree): Promise<string> => {
   const docRef = collections.trees.doc(getTreeId(tree));
   await docRef.set(tree);
+  return docRef.id;
+};
+
+export const setInvitation = async (invitation: AppInvite): Promise<string> => {
+  const invitations = collections.projectInvitations(
+    invitation.projectId.toString()
+  );
+  // delete previous invitations
+  const snap = await invitations
+    .where('memberAddress', '==', invitation.memberAddress)
+    .get();
+  await Promise.all(snap.docs.map((i) => i.ref.delete()));
+
+  // create new
+  const docRef = collections
+    .projectInvitations(invitation.projectId.toString())
+    .doc();
+  await docRef.set(invitation);
   return docRef.id;
 };

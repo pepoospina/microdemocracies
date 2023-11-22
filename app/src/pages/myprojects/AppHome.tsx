@@ -1,5 +1,5 @@
 import { Box, Button, Text } from 'grommet';
-import { AppButton } from '../../ui-components';
+import { AppButton, AppCard } from '../../ui-components';
 import { ViewportPage } from '../../components/styles/LayoutComponents.styled';
 import { appName } from '../../config/community';
 import { Add } from 'grommet-icons';
@@ -9,6 +9,7 @@ import { useAccountDataContext } from '../../wallet/AccountDataContext';
 import { Loading } from '../common/WaitingTransaction';
 import { ProjectCard } from '../project/ProjecCard';
 import { useNavigate } from 'react-router-dom';
+import { BoxCentered } from '../../ui-components/BoxCentered';
 
 export const AppHome = (props: {}) => {
   const { isConnected } = useAccountContext();
@@ -20,9 +21,14 @@ export const AppHome = (props: {}) => {
   };
 
   const content = (() => {
-    if (!isConnected) return <AppConnect></AppConnect>;
+    if (!isConnected)
+      return (
+        <BoxCentered fill>
+          <AppConnect></AppConnect>
+        </BoxCentered>
+      );
     if (projects === undefined) return <Loading label="Loading projects"></Loading>;
-
+    if (projects.length === 0) return <AppCard>Your have not joined or started any micro(r)evolution yet.</AppCard>;
     return (
       <Box>
         {projects.map((project) => {
@@ -51,7 +57,7 @@ export const AppHome = (props: {}) => {
           Your {appName}:
         </Text>
       </Box>
-      <Box justify="center" pad={{ horizontal: 'large' }}>
+      <Box fill justify="center" pad={{ horizontal: 'large' }}>
         {content}
       </Box>
       <Box>

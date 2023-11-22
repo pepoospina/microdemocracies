@@ -113,7 +113,7 @@ export const Join = () => {
       </Box>
       <AppBottomButtons
         left={{ label: 'back', primary: false, action: prevPage }}
-        right={{ label: 'share', primary: true, action: nextPage }}></AppBottomButtons>
+        right={{ label: 'send', primary: true, action: nextPage }}></AppBottomButtons>
     </AppScreen>
   );
   pages.push(
