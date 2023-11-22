@@ -13,7 +13,7 @@ import { useProjectContext } from '../../contexts/ProjectContext';
 
 export const InvitePage = (): JSX.Element => {
   const [scan, setScan] = useState<boolean>(false);
-  const { project, goHome } = useProjectContext();
+  const { project } = useProjectContext();
   const navigate = useNavigate();
 
   const setResult = (result: string) => {
@@ -46,7 +46,7 @@ export const InvitePage = (): JSX.Element => {
           style={{ marginBottom: '16px' }}></AppButton>
         {/* <AppButton label={'invite'} onClick={() => invite()}></AppButton> */}
       </Box>
-      <AppBottomButton icon={<FormPrevious />} label="home" onClick={goHome}></AppBottomButton>
+      <AppBottomButton icon={<FormPrevious />} label="back" onClick={() => navigate('../members')}></AppBottomButton>
     </AppScreen>
   );
 };
