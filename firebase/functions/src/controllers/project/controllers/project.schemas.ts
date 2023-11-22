@@ -13,3 +13,8 @@ export const addMemberValidationScheme = object({
   projectId: number().required(),
   aaAddress: string().required(),
 }).noUnknown(true);
+
+export const addInvitationValidationScheme = object({
+  projectId: number().required(),
+  memberAddress: string().required(),
+}).noUnknown(true);

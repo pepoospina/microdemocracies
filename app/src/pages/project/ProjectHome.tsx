@@ -1,7 +1,7 @@
-import { Anchor, Box, Text } from 'grommet';
+import { Anchor, Box, Spinner, Text } from 'grommet';
 import { useNavigate } from 'react-router-dom';
 
-import { AppButton, AppCard, AppHeading } from '../../ui-components';
+import { AppCard, AppHeading } from '../../ui-components';
 import { useProjectContext } from '../../contexts/ProjectContext';
 import { Add, FormPrevious } from 'grommet-icons';
 import { ViewportPage } from '../../components/styles/LayoutComponents.styled';
@@ -10,6 +10,9 @@ import { ProjectCard } from './ProjecCard';
 import { useVoiceRead } from '../../contexts/VoiceReadContext';
 import { StatementEditable } from '../voice/StatementEditable';
 import { RouteNames } from '../../App';
+import { useResponsive } from '../../components/app';
+import { AppBottomButtons } from '../common/BottomButtons';
+import { BoxCentered } from '../../ui-components/BoxCentered';
 
 export interface IProjectHome {
   dum?: any;
@@ -19,12 +22,16 @@ export const ProjectHome = (props: IProjectHome) => {
   const navigate = useNavigate();
   const { project, nMembers } = useProjectContext();
   const { statements } = useVoiceRead();
+  const { mobile } = useResponsive();
+
+  const newStr = mobile ? 'propose' : 'Propose new';
 
   if (project === undefined) {
     return (
-      <Box>
-        <Loading></Loading>
-      </Box>
+      <BoxCentered fill>
+        <Text>Loading micro(r)evolution details</Text>
+        <Spinner></Spinner>
+      </BoxCentered>
     );
   }
 
@@ -49,18 +56,21 @@ export const ProjectHome = (props: IProjectHome) => {
 
   const content = (() => {
     return (
-      <Box style={{ overflowY: 'auto' }}>
+      <Box style={{ overflowY: 'auto' }} margin={{ bottom: 'medium' }}>
         <Box style={{ flexShrink: 0 }} pad={{ right: 'large' }}>
           <ProjectCard project={project}></ProjectCard>
 
-          <Box margin={{ vertical: 'large' }}>
-            <AppHeading level="3">Community's voice:</AppHeading>
+          <Box margin={{ vertical: 'small' }} align="center">
             <Text>
-              From <Anchor onClick={() => navigate(RouteNames.Members)}>{nMembers} members</Anchor>
+              <Anchor onClick={() => navigate(RouteNames.Members)}>{nMembers} members</Anchor>
             </Text>
           </Box>
+
+          <Box margin={{ vertical: 'small' }}>
+            <AppHeading level="3">Community's voice:</AppHeading>
+          </Box>
         </Box>
-        <Box style={{ flexShrink: 0 }} pad={{ right: 'large', bottom: 'large' }}>
+        <Box style={{ flexShrink: 0 }} pad={{ right: 'large' }}>
           {statementsContent}
         </Box>
       </Box>
@@ -71,14 +81,21 @@ export const ProjectHome = (props: IProjectHome) => {
     <ViewportPage>
       <Box pad={{ horizontal: 'large' }} align="center" justify="center" fill style={{ flexShrink: '0' }}>
         <Text size="22px" weight="bold">
-          A micro(r)evolution for:
+          micro(r)evolution for:
         </Text>
       </Box>
       <Box pad={{ left: 'large' }}>{content}</Box>
-      <Box direction="row">
-        <AppButton onClick={() => navigate('/home')} label="back" icon={<FormPrevious />}></AppButton>
-        <AppButton onClick={() => navigate('voice/propose')} icon={<Add></Add>} label="Propose new"></AppButton>
-      </Box>
+      <AppBottomButtons
+        left={{
+          action: () => navigate('/home'),
+          label: 'back',
+          icon: <FormPrevious />,
+        }}
+        right={{
+          action: () => navigate('voice/propose'),
+          icon: <Add></Add>,
+          label: newStr,
+        }}></AppBottomButtons>
     </ViewportPage>
   );
 };

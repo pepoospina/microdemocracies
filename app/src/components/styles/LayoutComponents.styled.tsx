@@ -41,7 +41,7 @@ export const ViewportPage = (props: { children: ReactNode[] }) => {
         margin: '0 auto',
         overflow: 'hidden',
       }}>
-      <Box id="header" style={{ height: '60px' }}>
+      <Box id="header" style={{ flexShrink: 0, flexGrow: 0 }}>
         {props.children[0]}
       </Box>
       <Box id="content" style={{ flexGrow: 1, overflowY: 'auto' }}>

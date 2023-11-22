@@ -2,11 +2,12 @@ import { Box, Spinner, Text } from 'grommet';
 import { Add } from 'grommet-icons';
 
 import { AppCard } from '../../ui-components';
-import { AppScreen, BottomButtons } from '../../ui-components/AppFormScreen';
+import { AppScreen } from '../../ui-components/AppFormScreen';
 import { useNavigate } from 'react-router-dom';
 import { useVoiceRead } from '../../contexts/VoiceReadContext';
 import { StatementEditable } from './StatementEditable';
 import { useProjectContext } from '../../contexts/ProjectContext';
+import { AppBottomButtons } from '../common/BottomButtons';
 
 export const VoicePage = (): JSX.Element => {
   const { statements } = useVoiceRead();
@@ -39,14 +40,14 @@ export const VoicePage = (): JSX.Element => {
           )}
         </Box>
       </Box>
-      <BottomButtons
+      <AppBottomButtons
         left={{ label: 'home', primary: false, action: goHome }}
         right={{
           icon: <Add />,
           label: 'new',
           primary: true,
           action: () => navigate('propose'),
-        }}></BottomButtons>
+        }}></AppBottomButtons>
     </AppScreen>
   );
 };

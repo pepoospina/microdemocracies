@@ -14,17 +14,10 @@ export interface IStatementEditable {
 }
 
 export const StatementEditable = (props: IStatementEditable) => {
-  const ref = useRef<ReactQuill>(null);
   const { constants } = useThemeContext();
   const [text, setText] = useState<string>();
 
   const editable = props.editable !== undefined && props.editable;
-
-  useEffect(() => {
-    if (ref != null && ref.current) {
-      ref.current.focus();
-    }
-  }, [ref]);
 
   useEffect(() => {
     if (props.onChanged) {
@@ -75,7 +68,6 @@ export const StatementEditable = (props: IStatementEditable) => {
       pad="small">
       <Box>
         <ReactQuill
-          ref={ref}
           placeholder={props.placeholder}
           theme="bubble"
           modules={modules}

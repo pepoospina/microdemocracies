@@ -1,7 +1,7 @@
 import { Anchor, Box, Spinner, Text } from 'grommet';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { FormPrevious } from 'grommet-icons';
+import { FormNext, FormPrevious } from 'grommet-icons';
 
 import { getEntity } from '../../utils/store';
 import { Entity, HexStr, PAP } from '../../types';
@@ -13,11 +13,12 @@ import { useProjectContext } from '../../contexts/ProjectContext';
 import { AppScreen } from '../../ui-components/AppFormScreen';
 import { AccountPerson } from '../account/AccountPerson';
 import { useConnectedMember } from '../../contexts/ConnectedAccountContext';
-import { BottomButton } from '../common/BottomButton';
+import { AppBottomButton, AppBottomButtons } from '../common/BottomButtons';
 import { WaitingTransaction } from '../common/WaitingTransaction';
-import { COMMUNITY_MEMBER } from '../../config/community';
+import { COMMUNITY_MEMBER, appName } from '../../config/community';
 import { useAccountContext } from '../../wallet/AccountContext';
 import { AppConnectButton } from '../../components/app/AppConnectButton';
+import { ViewportPage } from '../../components/styles/LayoutComponents.styled';
 
 export const InviteAccount = () => {
   const navigate = useNavigate();
@@ -83,63 +84,89 @@ export const InviteAccount = () => {
 
   const alreadyVouched = vouchedAccount && vouchedAccount.valid;
 
+  const content = (() => {
+    return (
+      <>
+        <Box pad="large" fill>
+          {pap ? (
+            <Box>
+              <AccountPerson pap={pap.object} cardStyle={{ marginBottom: '32px' }}></AccountPerson>
+              {!alreadyVouched ? (
+                <>
+                  {isConnected && (!account || !account.valid) ? (
+                    <AppCard style={{ marginBottom: '16px' }}>
+                      <Text>Only existing {COMMUNITY_MEMBER}s can vouch.</Text>
+                    </AppCard>
+                  ) : (
+                    <></>
+                  )}
+                  {error ? (
+                    <AppCard style={{ marginBottom: '16px' }}>
+                      <Text>{error}</Text>
+                    </AppCard>
+                  ) : (
+                    <></>
+                  )}
+                  {sending ? (
+                    <WaitingTransaction></WaitingTransaction>
+                  ) : isConnected ? (
+                    <AppButton
+                      label="vouch"
+                      onClick={() => vouch()}
+                      disabled={!sendVouch && isConnected}
+                      primary></AppButton>
+                  ) : (
+                    <AppConnectButton></AppConnectButton>
+                  )}
+                </>
+              ) : (
+                <Box>
+                  <AppCard>
+                    Entry already vouched as
+                    <Anchor
+                      onClick={() => {
+                        if (vouchedTokenId) {
+                          navigate(RouteNames.Member(vouchedTokenId));
+                        }
+                      }}>
+                      {COMMUNITY_MEMBER} #{vouchedTokenId}
+                    </Anchor>
+                  </AppCard>
+                </Box>
+              )}
+            </Box>
+          ) : (
+            <Box fill align="center" justify="center">
+              <Spinner></Spinner>
+            </Box>
+          )}
+        </Box>
+        <AppBottomButton icon={<FormPrevious />} label="home" onClick={goHome}></AppBottomButton>
+      </>
+    );
+  })();
+
   return (
-    <AppScreen label="Vouch for New Member">
-      <Box pad="large" fill>
-        {pap ? (
-          <Box>
-            <AccountPerson pap={pap.object} cardStyle={{ marginBottom: '32px' }}></AccountPerson>
-            {!alreadyVouched ? (
-              <>
-                {isConnected && (!account || !account.valid) ? (
-                  <AppCard style={{ marginBottom: '16px' }}>
-                    <Text>Only existing {COMMUNITY_MEMBER}s can vouch.</Text>
-                  </AppCard>
-                ) : (
-                  <></>
-                )}
-                {error ? (
-                  <AppCard style={{ marginBottom: '16px' }}>
-                    <Text>{error}</Text>
-                  </AppCard>
-                ) : (
-                  <></>
-                )}
-                {sending ? (
-                  <WaitingTransaction></WaitingTransaction>
-                ) : isConnected ? (
-                  <AppButton
-                    label="vouch"
-                    onClick={() => vouch()}
-                    disabled={!sendVouch && isConnected}
-                    primary></AppButton>
-                ) : (
-                  <AppConnectButton></AppConnectButton>
-                )}
-              </>
-            ) : (
-              <Box>
-                <AppCard>
-                  Entry already vouched as
-                  <Anchor
-                    onClick={() => {
-                      if (vouchedTokenId) {
-                        navigate(RouteNames.Member(vouchedTokenId));
-                      }
-                    }}>
-                    {COMMUNITY_MEMBER} #{vouchedTokenId}
-                  </Anchor>
-                </AppCard>
-              </Box>
-            )}
-          </Box>
-        ) : (
-          <Box fill align="center" justify="center">
-            <Spinner></Spinner>
-          </Box>
-        )}
+    <ViewportPage>
+      <Box justify="center" align="center" style={{ flexShrink: '0', height: '50px' }}>
+        <Text size="22px" weight="bold">
+          {appName}
+        </Text>
       </Box>
-      <BottomButton icon={<FormPrevious />} label="home" onClick={goHome}></BottomButton>
-    </AppScreen>
+
+      {content}
+
+      <AppBottomButtons
+        left={{
+          action: () => {},
+          icon: <FormPrevious></FormPrevious>,
+          label: 'back',
+        }}
+        right={{
+          action: () => {},
+          icon: <FormNext></FormNext>,
+          label: 'next',
+        }}></AppBottomButtons>
+    </ViewportPage>
   );
 };

@@ -186,8 +186,17 @@ export const LandingPage = () => {
       </Box>
 
       <Box justify="center" align="center" style={{ flexShrink: '0', marginBottom: '6vh' }}>
-        <AppButton primary={btnPrimary} onClick={btnClick} label={btnText} style={{ margin: '12px 0px', width: '200px' }} />
-        {showOpenApp ? <AppButton onClick={goApp} label={'Open app'} style={{ margin: '12px 0px', width: '200px' }} /> : <></>}
+        {showOpenApp ? (
+          <AppButton onClick={goApp} label={'Open app'} style={{ margin: '12px 0px', width: '200px' }} />
+        ) : (
+          <></>
+        )}
+        <AppButton
+          primary={btnPrimary}
+          onClick={btnClick}
+          label={btnText}
+          style={{ margin: '12px 0px', width: '200px' }}
+        />
       </Box>
     </Box>
   );

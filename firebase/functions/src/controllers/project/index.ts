@@ -4,11 +4,13 @@ import { RUNTIME_OPTIONS } from '../../config/RUNTIME_OPTIONS';
 
 import { createProjectController } from './controllers/create.project.controller';
 import { addMemberController } from './controllers/add.member.controller';
+import { addInvitationController } from './controllers/add.invitation.controller';
 
 import { app } from '../../instances/app';
 
 const projectRouter = express.Router();
 
+projectRouter.post('/newInvite', addInvitationController);
 projectRouter.post('/create', createProjectController);
 projectRouter.post('/member', addMemberController);
 
