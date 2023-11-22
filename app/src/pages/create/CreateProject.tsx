@@ -226,7 +226,7 @@ export const CreateProject = () => {
     <ViewportPage>
       <Box justify="center" align="center" style={{ flexShrink: '0', height: '50px' }}>
         <Text size="22px" weight="bold">
-          {appName}
+          start a micro(r)evolution
         </Text>
       </Box>
 

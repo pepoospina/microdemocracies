@@ -8,6 +8,7 @@ export const db = getFirestore();
 export enum CollectionNames {
   ProjectIndexes = 'projectIndexes',
   ProjectMembers = 'members',
+  ProjectInvitations = 'invitations',
   Trees = 'trees',
   Identities = 'identities',
   Projects = 'projects',
@@ -16,6 +17,11 @@ export enum CollectionNames {
 }
 
 export const collections = {
+  projectInvitations: (projectId: string) =>
+    db
+      .collection(CollectionNames.Projects)
+      .doc(projectId)
+      .collection(CollectionNames.ProjectInvitations),
   projectMembers: (projectId: string) =>
     db
       .collection(CollectionNames.Projects)

@@ -12,7 +12,7 @@ export const AppQRCode = (props: IQRCode) => {
   const boxRef = useRef<HTMLDivElement>(null);
   const stringifiedData = props.input;
 
-  const size = vw - 40 < 400 ? vw - 40 : 400;
+  const size = vw - 40 < 300 ? vw - 40 : 300;
 
   return (
     <BoxCentered fill id="Box" ref={boxRef}>

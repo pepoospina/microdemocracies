@@ -60,11 +60,14 @@ export const ProjectHome = (props: IProjectHome) => {
         <Box style={{ flexShrink: 0 }} pad={{ right: 'large' }}>
           <ProjectCard project={project}></ProjectCard>
 
-          <Box margin={{ vertical: 'large' }}>
-            <AppHeading level="3">Community's voice:</AppHeading>
+          <Box margin={{ vertical: 'small' }} align="center">
             <Text>
-              From <Anchor onClick={() => navigate(RouteNames.Members)}>{nMembers} members</Anchor>
+              <Anchor onClick={() => navigate(RouteNames.Members)}>{nMembers} members</Anchor>
             </Text>
+          </Box>
+
+          <Box margin={{ vertical: 'small' }}>
+            <AppHeading level="3">Community's voice:</AppHeading>
           </Box>
         </Box>
         <Box style={{ flexShrink: 0 }} pad={{ right: 'large' }}>
@@ -78,7 +81,7 @@ export const ProjectHome = (props: IProjectHome) => {
     <ViewportPage>
       <Box pad={{ horizontal: 'large' }} align="center" justify="center" fill style={{ flexShrink: '0' }}>
         <Text size="22px" weight="bold">
-          A micro(r)evolution for:
+          micro(r)evolution for:
         </Text>
       </Box>
       <Box pad={{ left: 'large' }}>{content}</Box>

@@ -112,7 +112,7 @@ function App() {
                             <Route path={RouteNames.Join} element={<Join />}></Route>
                             <Route path={RouteNames.Invite} element={<InvitePage />}></Route>
                             <Route path={RouteNames.MyVouches} element={<Vouches />}></Route>
-                            <Route path={`${RouteNames.Members}`} element={<Members />}></Route>
+                            <Route path={RouteNames.Members} element={<Members />}></Route>
                             <Route path={RouteNames.Challenges} element={<Challenges />}></Route>
                             {/* <Route path={ProjectRouteNames.Base} element={<TestComponent />}></Route> */}
                             <Route path={'voice'} element={<VoiceBase />}>

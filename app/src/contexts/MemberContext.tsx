@@ -6,6 +6,7 @@ import { AppAccount, AppVouch, Entity, HexStr, PAP } from '../types';
 import { useQuery } from 'react-query';
 import { getEntity } from '../utils/store';
 import { useProjectContext } from './ProjectContext';
+import { useAccountContext } from '../wallet/AccountContext';
 
 export type AccountContextType = {
   refetch: (options?: { throwOnError: boolean; cancelRefetch: boolean }) => Promise<any>;
@@ -35,10 +36,11 @@ export interface AccountContextProps {
  */
 export const MemberContext = (props: AccountContextProps) => {
   const { address: projectAddress } = useProjectContext();
+  const { aaAddress } = useAccountContext();
 
   /** Read Account */
   const _tokenIdProp = props.tokenId !== undefined ? BigInt(props.tokenId) : undefined;
-  const _addressProp = props.address;
+  const _addressProp = props.address || aaAddress;
 
   const [tokenId, _setTokenId] = useState<bigint>();
   const [address, setAddress] = useState<HexStr>();

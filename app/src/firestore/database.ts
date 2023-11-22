@@ -12,9 +12,10 @@ const firebaseConfig = {
 
 export const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
-// connectFirestoreEmulator(db, '127.0.0.1', 8080);
+connectFirestoreEmulator(db, '127.0.0.1', 8080);
 
 export enum CollectionNames {
+  ProjectInvites = 'invites',
   ProjectMembers = 'members',
   Trees = 'trees',
   Identities = 'identities',
@@ -27,6 +28,8 @@ export const collections = {
   tree: (root: string) => doc(db, CollectionNames.Trees, root),
   project: (id: number) => doc(db, CollectionNames.Projects, id.toString()),
   identity: (id: string) => doc(db, CollectionNames.Identities, id),
+  projectInvites: (projectId: number) =>
+    collection(doc(db, CollectionNames.Projects, projectId.toString()), CollectionNames.ProjectInvites),
   members: collectionGroup(db, CollectionNames.ProjectMembers),
   identities: collection(db, CollectionNames.Projects),
   projects: collection(db, CollectionNames.Projects),
