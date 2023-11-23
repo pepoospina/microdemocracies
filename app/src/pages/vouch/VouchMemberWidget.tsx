@@ -13,13 +13,14 @@ import { AppCard, AppButton } from '../../ui-components';
 import { useAccountContext } from '../../wallet/AccountContext';
 import { WaitingTransaction } from '../common/WaitingTransaction';
 import { useNavigate } from 'react-router-dom';
+import { postDeleteApplication } from '../../utils/project';
 
 export const VouchMemberWidget = (props: { pap: Entity<PAP> }) => {
   const { pap } = props;
 
   const navigate = useNavigate();
   const { isConnected } = useAccountContext();
-  const { refetch: refetchRegistry } = useProjectContext();
+  const { refetch: refetchRegistry, refetchApplications } = useProjectContext();
 
   const [sending, setSending] = useState<boolean>(false);
   const [error, setError] = useState<boolean>();
@@ -40,11 +41,19 @@ export const VouchMemberWidget = (props: { pap: Entity<PAP> }) => {
     setVouchedAddress(pap.object.account as HexStr);
   }, []);
 
+  const deleteApplications = () => {
+    /** delete applications and update */
+    postDeleteApplication(pap.object.account).then(() => {
+      refetchApplications();
+    });
+  };
+
   useEffect(() => {
     // console.log('useEffect isSuccess', { isSuccess });
     if (isSuccess) {
       setSending(false);
       setError(undefined);
+      deleteApplications();
       refetchVouchedAccount();
       refetchRegistry();
     }
@@ -111,6 +120,7 @@ export const VouchMemberWidget = (props: { pap: Entity<PAP> }) => {
           {COMMUNITY_MEMBER} #{vouchedTokenId}
         </Anchor>
       </AppCard>
+      <AppButton onClick={() => deleteApplications()} label="delete applications"></AppButton>
     </Box>
   );
 };

@@ -24,3 +24,7 @@ export const addApplicationValidationScheme = object({
   projectId: number().required(),
   invitationId: string().required(),
 }).noUnknown(true);
+
+export const deleteApplicationValidationScheme = object({
+  address: string().required(),
+}).noUnknown(true);

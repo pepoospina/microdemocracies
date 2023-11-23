@@ -20,6 +20,7 @@ export type ProjectContextType = {
   inviteId?: string;
   resetLink: () => void;
   applications?: AppApplication[];
+  refetchApplications: () => void;
 };
 
 interface IProjectContext {
@@ -118,7 +119,7 @@ export const ProjectContext = (props: IProjectContext) => {
   };
 
   /** get applications created for this member */
-  const { data: applications } = useQuery(['getApplications', aaAddress], () => {
+  const { data: applications, refetch: refetchApplications } = useQuery(['getApplications', aaAddress], () => {
     if (aaAddress) {
       return getApplications(aaAddress);
     }
@@ -137,6 +138,7 @@ export const ProjectContext = (props: IProjectContext) => {
         inviteId,
         resetLink,
         applications,
+        refetchApplications,
       }}>
       {props.children}
     </ProjectContextValue.Provider>

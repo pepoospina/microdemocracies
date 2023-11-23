@@ -161,7 +161,7 @@ export const Join = () => {
       </Box>
       <AppBottomButtons
         left={{ label: 'back', primary: false, action: prevPage }}
-        right={{ label: 'done', primary: true, action: () => navigate('.') }}></AppBottomButtons>
+        right={{ label: 'done', primary: true, action: () => navigate('..') }}></AppBottomButtons>
     </AppScreen>
   );
 

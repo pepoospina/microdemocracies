@@ -6,11 +6,13 @@ import { createProjectController } from './controllers/create.project.controller
 import { addMemberController } from './controllers/add.member.controller';
 import { addInvitationController } from './controllers/add.invitation.controller';
 import { addApplicationController } from './controllers/add.application.controller';
+import { deleteApplicationController } from './controllers/delete.application.controller';
 
 import { app } from '../../instances/app';
 
 const projectRouter = express.Router();
 
+projectRouter.post('/deleteApplication', deleteApplicationController);
 projectRouter.post('/apply', addApplicationController);
 projectRouter.post('/newInvite', addInvitationController);
 projectRouter.post('/create', createProjectController);

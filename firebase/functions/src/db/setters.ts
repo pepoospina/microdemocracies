@@ -8,6 +8,7 @@ import {
   AppStatementBacking,
   AppStatementCreate,
   AppTree,
+  HexStr,
   SignedObject,
 } from '../@app/types';
 
@@ -101,4 +102,16 @@ export const setApplication = async (
   const docRef = collections.userApplications(application.memberAddress).doc();
   await docRef.set(application);
   return docRef.id;
+};
+
+export const deleteApplications = async (address: HexStr): Promise<void> => {
+  const snap = await collections.applications
+    .where('papEntity.object.account', '==', address)
+    .get();
+
+  await Promise.all(
+    snap.docs.map(async (doc) => {
+      await doc.ref.delete();
+    })
+  );
 };

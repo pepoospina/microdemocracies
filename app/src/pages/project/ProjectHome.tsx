@@ -25,6 +25,7 @@ export const ProjectHome = (props: IProjectHome) => {
   const { mobile } = useResponsive();
 
   const newStr = mobile ? 'propose' : 'Propose new';
+  const membersStr = mobile ? 'Members' : 'See/Invite Members';
 
   if (project === undefined) {
     return (
@@ -78,11 +79,13 @@ export const ProjectHome = (props: IProjectHome) => {
           </Text>
         </Box>
 
-        <ProjectCard project={project}></ProjectCard>
+        <Box pad="medium">
+          <ProjectCard project={project}></ProjectCard>
+        </Box>
 
         <Box pad="medium" direction="row" align="center" justify="between">
           <AppHeading level="3">Members: {nMembers}</AppHeading>
-          <AppButton onClick={() => navigate(RouteNames.Members)} label="See/Invite Members"></AppButton>
+          <AppButton onClick={() => navigate(RouteNames.Members)} label={membersStr}></AppButton>
         </Box>
       </Box>
 

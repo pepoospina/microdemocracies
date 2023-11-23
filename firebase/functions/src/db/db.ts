@@ -23,7 +23,7 @@ export const collections = {
       .collection(CollectionNames.Projects)
       .doc(projectId)
       .collection(CollectionNames.ProjectMembers),
-  applications: db.collection(CollectionNames.Applications),
+  applications: db.collectionGroup(CollectionNames.Applications),
   trees: db.collection(CollectionNames.Trees),
   identities: db.collection(CollectionNames.Identities),
   projectIndexes: db.collection(CollectionNames.ProjectIndexes),
