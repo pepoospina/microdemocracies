@@ -100,11 +100,10 @@ function App() {
                               </ProjectContext>
                             }>
                             <Route path={RouteNames.Base} element={<ProjectHome />}></Route>
-                            <Route path={`account/:tokenId/*`} element={<AccountPage />}></Route>
+                            <Route path={`member/:tokenId/*`} element={<AccountPage />}></Route>
                             <Route
                               path={`${RouteNames.Invite}/:hash`}
                               element={
-                                // Another Member context for the vouched account
                                 <MemberContext>
                                   <InviteAccount />
                                 </MemberContext>

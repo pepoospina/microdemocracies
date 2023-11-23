@@ -16,7 +16,7 @@ export const VoucheCard = (props: IVouchCard): JSX.Element => {
 
   const goTo = () => {
     if (vouch) {
-      navigate(RouteNames.Member(vouch.to));
+      navigate(`../${RouteNames.Member(vouch.to)}`);
     }
   };
 
@@ -45,12 +45,6 @@ export const VoucheCard = (props: IVouchCard): JSX.Element => {
                 <Anchor>
                   {COMMUNITY_MEMBER} #{vouch.to.toString()}
                 </Anchor>
-                {/* {' '}
-              {duration ? (
-                <AppRemainingTime remainingTime={duration} suffix=" ago" compactFormat></AppRemainingTime>
-              ) : (
-                <></>
-              )} */}
               </Text>
             )}
           </Box>

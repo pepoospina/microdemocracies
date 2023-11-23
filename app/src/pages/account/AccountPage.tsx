@@ -11,7 +11,6 @@ import { AppScreen } from '../../ui-components/AppFormScreen';
 import { AppBottomButton } from '../common/BottomButtons';
 import { AccountCircles } from './AccountCircles';
 import { COMMUNITY_MEMBER } from '../../config/community';
-import { RouteNames } from '../../App';
 
 export const AccountPage = () => {
   const { tokenId } = useParams();
@@ -34,7 +33,7 @@ export const AccountPage = () => {
           </ChallengeContext>
         </MemberContext>
       </Box>
-      <AppBottomButton icon={<FormPrevious />} label="home" onClick={() => navigate(RouteNames.Base)}></AppBottomButton>
+      <AppBottomButton icon={<FormPrevious />} label="back" onClick={() => navigate(-1)}></AppBottomButton>
     </AppScreen>
   );
 };
