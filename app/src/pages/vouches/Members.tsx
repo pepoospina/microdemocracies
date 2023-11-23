@@ -15,22 +15,20 @@ export const Members = (): JSX.Element => {
   return (
     <AppScreen label="Members">
       <Box pad="large">
-        <Box>
-          {applications?.map((application) => {
-            return (
-              <Box style={{ marginBottom: '16px' }}>
-                <ApplicationCard application={application}></ApplicationCard>
-              </Box>
-            );
-          })}
-          {allVouches?.map((vouch) => {
-            return (
-              <Box style={{ marginBottom: '16px' }}>
-                <VoucheCard vouch={vouch}></VoucheCard>
-              </Box>
-            );
-          })}
-        </Box>
+        {applications?.map((application) => {
+          return (
+            <Box style={{ marginBottom: '16px' }}>
+              <ApplicationCard application={application}></ApplicationCard>
+            </Box>
+          );
+        })}
+        {allVouches?.map((vouch) => {
+          return (
+            <Box style={{ marginBottom: '16px', flexShrink: 0 }}>
+              <VoucheCard vouch={vouch}></VoucheCard>
+            </Box>
+          );
+        })}
       </Box>
       <AppBottomButtons
         left={{

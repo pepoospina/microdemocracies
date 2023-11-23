@@ -8,6 +8,8 @@ import { getContract } from 'viem';
 import { getApplications, getInviteId, getProject } from '../firestore/getters';
 import { useAccountContext } from '../wallet/AccountContext';
 import { postInvite } from '../utils/project';
+import { collections } from '../firestore/database';
+import { onSnapshot } from 'firebase/firestore';
 
 export type ProjectContextType = {
   project?: AppProject;
@@ -124,6 +126,16 @@ export const ProjectContext = (props: IProjectContext) => {
       return getApplications(aaAddress);
     }
   });
+
+  /** autorefetch on applications changes */
+  useEffect(() => {
+    if (aaAddress) {
+      const unsub = onSnapshot(collections.userApplications(aaAddress), (doc) => {
+        refetchApplications();
+      });
+      return unsub;
+    }
+  }, [aaAddress, refetchApplications]);
 
   return (
     <ProjectContextValue.Provider
