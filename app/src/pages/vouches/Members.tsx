@@ -6,15 +6,23 @@ import { VoucheCard } from './VouchCard';
 import { AppBottomButtons } from '../common/BottomButtons';
 import { useProjectContext } from '../../contexts/ProjectContext';
 import { useNavigate } from 'react-router-dom';
+import { ApplicationCard } from './ApplicationCard';
 
 export const Members = (): JSX.Element => {
-  const { allVouches } = useProjectContext();
+  const { allVouches, applications } = useProjectContext();
   const navigate = useNavigate();
 
   return (
     <AppScreen label="Members">
       <Box pad="large">
         <Box>
+          {applications?.map((application) => {
+            return (
+              <Box style={{ marginBottom: '16px' }}>
+                <ApplicationCard application={application}></ApplicationCard>
+              </Box>
+            );
+          })}
           {allVouches?.map((vouch) => {
             return (
               <Box style={{ marginBottom: '16px' }}>

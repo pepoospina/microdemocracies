@@ -13,9 +13,10 @@ import { FormPrevious } from 'grommet-icons';
 import { ViewportPage } from '../../components/styles/LayoutComponents.styled';
 import { AppBottomButton } from '../common/BottomButtons';
 import { StatementEditable } from '../voice/StatementEditable';
+import { ApplicationCard } from '../vouches/ApplicationCard';
 
 export const InvitePage = (): JSX.Element => {
-  const { project, projectId, inviteId, resetLink } = useProjectContext();
+  const { project, projectId, inviteId, resetLink, applications } = useProjectContext();
   const { aaAddress } = useAccountContext();
 
   const navigate = useNavigate();
@@ -87,13 +88,22 @@ export const InvitePage = (): JSX.Element => {
       </Box>
 
       <Box fill pad={{ horizontal: 'large' }}>
-        <>
-          <Box style={{ margin: '36px 0px', flexShrink: 0 }}>
+        <Box style={{ flexShrink: 0 }}>
+          <Box style={{ margin: '36px 0px' }}>
             <Text style={{ marginBottom: '16px' }}>Remember, this micro(r)evolution is for anyone who:</Text>
             <StatementEditable value={project?.whoStatement}></StatementEditable>
           </Box>
-          {content}
-        </>
+
+          {applications?.map((application) => {
+            return (
+              <Box style={{ marginBottom: '16px' }}>
+                <ApplicationCard application={application}></ApplicationCard>
+              </Box>
+            );
+          })}
+        </Box>
+
+        {content}
       </Box>
 
       <AppBottomButton icon={<FormPrevious />} label="back" onClick={() => navigate('../members')}></AppBottomButton>

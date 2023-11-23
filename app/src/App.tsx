@@ -102,7 +102,7 @@ function App() {
                             <Route path={RouteNames.Base} element={<ProjectHome />}></Route>
                             <Route path={`account/:tokenId/*`} element={<AccountPage />}></Route>
                             <Route
-                              path={`vouch/:hash`}
+                              path={`${RouteNames.Invite}/:hash`}
                               element={
                                 // Another Member context for the vouched account
                                 <MemberContext>
@@ -110,7 +110,13 @@ function App() {
                                 </MemberContext>
                               }></Route>
                             <Route path={RouteNames.Join} element={<Join />}></Route>
-                            <Route path={RouteNames.Invite} element={<InvitePage />}></Route>
+                            <Route
+                              path={RouteNames.Invite}
+                              element={
+                                <MemberContext>
+                                  <InvitePage />
+                                </MemberContext>
+                              }></Route>
                             <Route path={RouteNames.MyVouches} element={<Vouches />}></Route>
                             <Route path={RouteNames.Members} element={<Members />}></Route>
                             <Route path={RouteNames.Challenges} element={<Challenges />}></Route>

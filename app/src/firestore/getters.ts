@@ -1,6 +1,6 @@
 import { getDocs, where, query, and, getDoc } from 'firebase/firestore';
 import { collections } from './database';
-import { AppProject, AppPublicIdentity, HexStr, StatementBackerRead, StatementRead } from '../types';
+import { AppApplication, AppProject, AppPublicIdentity, HexStr, StatementBackerRead, StatementRead } from '../types';
 import { postInvite } from '../utils/project';
 import { getAddress } from 'viem';
 
@@ -64,8 +64,7 @@ export const getApplications = async (aaAddress: HexStr) => {
   return querySnapshot.docs.map((app) => {
     return {
       ...app.data(),
-      id: app.id,
-    };
+    } as AppApplication;
   });
 };
 

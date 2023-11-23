@@ -3,7 +3,7 @@ import { useContractRead, usePublicClient, useQuery } from 'wagmi';
 import { useParams } from 'react-router-dom';
 
 import { registryABI } from '../utils/contracts.json';
-import { AppProject, AppVouch, HexStr } from '../types';
+import { AppApplication, AppProject, AppVouch, HexStr } from '../types';
 import { getContract } from 'viem';
 import { getApplications, getInviteId, getProject } from '../firestore/getters';
 import { useAccountContext } from '../wallet/AccountContext';
@@ -19,6 +19,7 @@ export type ProjectContextType = {
   allVouches?: AppVouch[];
   inviteId?: string;
   resetLink: () => void;
+  applications?: AppApplication[];
 };
 
 interface IProjectContext {
@@ -123,8 +124,6 @@ export const ProjectContext = (props: IProjectContext) => {
     }
   });
 
-  console.log({ applications, allVouches });
-
   return (
     <ProjectContextValue.Provider
       value={{
@@ -137,6 +136,7 @@ export const ProjectContext = (props: IProjectContext) => {
         allVouches,
         inviteId,
         resetLink,
+        applications,
       }}>
       {props.children}
     </ProjectContextValue.Provider>
