@@ -7,9 +7,11 @@ import {
   GridExtendedProps,
   GridSizeType,
   ResponsiveContext,
+  Text,
 } from 'grommet';
-import { ReactNode } from 'react';
+import { PropsWithChildren, ReactNode } from 'react';
 import { IElement, useThemeContext } from '../app';
+import { AppHeading } from '../../ui-components';
 
 export const MAX_WIDTH_LANDING = 1600;
 
@@ -26,6 +28,24 @@ export const ViewportContainer = (props: IElement) => {
         margin: '0 auto',
       }}>
       {props.children}
+    </Box>
+  );
+};
+
+export const ViewportHeadingSmall = (props: { label: ReactNode }) => {
+  return (
+    <Box justify="center" align="center" pad="medium">
+      <Text size="22px" weight="bold">
+        {props.label}
+      </Text>
+    </Box>
+  );
+};
+
+export const ViewportHeadingLarge = (props: { label: ReactNode }) => {
+  return (
+    <Box justify="center" align="center" pad="medium">
+      <AppHeading level="1">{props.label}</AppHeading>
     </Box>
   );
 };

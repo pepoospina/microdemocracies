@@ -7,10 +7,10 @@ import { AccountChallenge } from '../challenges/AccountChallenge';
 
 import { MemberContext } from '../../contexts/MemberContext';
 import { ChallengeContext } from '../../contexts/CurrentChallengeContext';
-import { AppScreen } from '../../ui-components/AppFormScreen';
 import { AppBottomButton } from '../common/BottomButtons';
 import { AccountCircles } from './AccountCircles';
 import { COMMUNITY_MEMBER } from '../../config/community';
+import { ViewportHeadingLarge, ViewportPage } from '../../components/styles/LayoutComponents.styled';
 
 export const AccountPage = () => {
   const { tokenId } = useParams();
@@ -21,8 +21,10 @@ export const AccountPage = () => {
   }
 
   return (
-    <AppScreen label={`${COMMUNITY_MEMBER} #${tokenId}`}>
-      <Box pad={{ top: '0', left: 'large', right: 'large' }} style={{ overflowY: 'auto' }}>
+    <ViewportPage>
+      <ViewportHeadingLarge label={`${COMMUNITY_MEMBER} #${tokenId}`} />
+
+      <Box>
         <MemberContext tokenId={+tokenId}>
           <Box margin={{ top: 'large' }} style={{ flexShrink: 0 }}>
             <AccountOverview></AccountOverview>
@@ -34,6 +36,6 @@ export const AccountPage = () => {
         </MemberContext>
       </Box>
       <AppBottomButton icon={<FormPrevious />} label="back" onClick={() => navigate(-1)}></AppBottomButton>
-    </AppScreen>
+    </ViewportPage>
   );
 };
