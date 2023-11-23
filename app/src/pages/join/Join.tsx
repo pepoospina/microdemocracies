@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Box, Text } from 'grommet';
 import { useState } from 'react';
 import { isAddress } from 'ethers/lib/utils';
@@ -17,6 +17,10 @@ import { DetailsAndPlatforms, PAP } from '../../types';
 import { PAPEntry } from './PAPEntry';
 import { DetailsForm } from './DetailsForm';
 import { AppBottomButtons } from '../common/BottomButtons';
+import { putObject } from '../../utils/store';
+import { postApply } from '../../utils/project';
+import { BoxCentered } from '../../ui-components/BoxCentered';
+import { Loading } from '../common/WaitingTransaction';
 
 export interface IJoinProps {
   dum?: any;
@@ -25,14 +29,18 @@ export interface IJoinProps {
 export const Join = () => {
   const navigate = useNavigate();
 
-  const { goHome, project } = useProjectContext();
+  const { project, projectId } = useProjectContext();
   const [pageIx, setPageIx] = useState<number>(0);
+  const [sending, setSending] = useState<boolean>(false);
+  const [searchParams] = useSearchParams();
+  const invitation = searchParams.get('invitation');
 
   const { aaAddress: account } = useAccountContext();
 
   const [personal, setPersonal] = useState<DetailsAndPlatforms>({});
 
   const [pap, setPap] = useState<PAP>();
+  const [cid, setCid] = useState<string>();
 
   const askPlatform = SelectedDetailsHelper.hasPlatforms(project?.selectedDetails);
   const askPersonal = SelectedDetailsHelper.hasPersonal(project?.selectedDetails);
@@ -62,6 +70,27 @@ export const Join = () => {
     }
   };
 
+  const send = async () => {
+    if (pap) {
+      setSending(true);
+      const papEntity = await putObject<PAP>(pap);
+
+      setCid(papEntity.cid);
+
+      if (invitation && projectId) {
+        const application = {
+          projectId,
+          invitationId: invitation,
+          papEntity,
+        };
+        await postApply(application);
+      }
+
+      setSending(false);
+      nextPage();
+    }
+  };
+
   const pages: React.ReactNode[] = [];
 
   pages.push(
@@ -81,7 +110,7 @@ export const Join = () => {
         </Box>
       </Box>
       <AppBottomButtons
-        left={{ label: 'home', primary: false, action: () => goHome() }}
+        left={{ label: 'home', primary: false, action: () => '.' }}
         right={{ label: 'next', primary: true, action: nextPage }}></AppBottomButtons>
     </AppScreen>
   );
@@ -109,21 +138,30 @@ export const Join = () => {
   pages.push(
     <AppScreen key="4" label="Review">
       <Box style={{ width: '100%' }}>
-        <PAPEntry pap={pap}></PAPEntry>
+        <Box style={{ flexShrink: 0 }}>
+          <PAPEntry pap={pap}></PAPEntry>
+        </Box>
+        {sending ? (
+          <BoxCentered fill>
+            <Loading label="Sending your application"></Loading>
+          </BoxCentered>
+        ) : (
+          <></>
+        )}
       </Box>
       <AppBottomButtons
         left={{ label: 'back', primary: false, action: prevPage }}
-        right={{ label: 'send', primary: true, action: nextPage }}></AppBottomButtons>
+        right={{ label: 'send', primary: true, action: send }}></AppBottomButtons>
     </AppScreen>
   );
   pages.push(
     <AppScreen key="5" label="Scan to vouch">
       <Box fill>
-        <PAPShare pap={pap}></PAPShare>
+        <PAPShare cid={cid}></PAPShare>
       </Box>
       <AppBottomButtons
         left={{ label: 'back', primary: false, action: prevPage }}
-        right={{ label: 'done', primary: true, action: goHome }}></AppBottomButtons>
+        right={{ label: 'done', primary: true, action: () => navigate('.') }}></AppBottomButtons>
     </AppScreen>
   );
 

@@ -1,12 +1,13 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { useContractRead, usePublicClient, useQuery } from 'wagmi';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 import { registryABI } from '../utils/contracts.json';
 import { AppProject, AppVouch, HexStr } from '../types';
 import { getContract } from 'viem';
-import { getProject } from '../firestore/getters';
-import { RouteNames } from '../App';
+import { getApplications, getInviteId, getProject } from '../firestore/getters';
+import { useAccountContext } from '../wallet/AccountContext';
+import { postInvite } from '../utils/project';
 
 export type ProjectContextType = {
   project?: AppProject;
@@ -16,7 +17,8 @@ export type ProjectContextType = {
   refetch: () => void;
   isLoading: boolean;
   allVouches?: AppVouch[];
-  goHome: () => void;
+  inviteId?: string;
+  resetLink: () => void;
 };
 
 interface IProjectContext {
@@ -27,8 +29,9 @@ const ProjectContextValue = createContext<ProjectContextType | undefined>(undefi
 
 export const ProjectContext = (props: IProjectContext) => {
   const publicClient = usePublicClient();
+  const { aaAddress } = useAccountContext();
+
   const { projectId: routeProjectId } = useParams();
-  const navigate = useNavigate();
 
   const [projectId, _setProjectId] = useState<number>();
 
@@ -96,11 +99,31 @@ export const ProjectContext = (props: IProjectContext) => {
     refetchProject();
   };
 
-  const goHome = () => {
-    if (project) {
-      navigate(RouteNames.ProjectHome(project.projectId.toString()));
+  /** Member unique invite link */
+  const { data: inviteId, refetch: refetchInvite } = useQuery(['getInviteLink', aaAddress, projectId], () => {
+    if (projectId && aaAddress) {
+      return getInviteId(projectId, aaAddress);
+    }
+  });
+
+  const resetLink = () => {
+    if (projectId && aaAddress) {
+      postInvite({
+        projectId,
+        memberAddress: aaAddress,
+        creationDate: 0, //ignored
+      }).then((id) => refetchInvite());
     }
   };
+
+  /** get applications created for this member */
+  const { data: applications } = useQuery(['getApplications', aaAddress], () => {
+    if (aaAddress) {
+      return getApplications(aaAddress);
+    }
+  });
+
+  console.log({ applications, allVouches });
 
   return (
     <ProjectContextValue.Provider
@@ -112,7 +135,8 @@ export const ProjectContext = (props: IProjectContext) => {
         refetch,
         isLoading,
         allVouches,
-        goHome,
+        inviteId,
+        resetLink,
       }}>
       {props.children}
     </ProjectContextValue.Provider>

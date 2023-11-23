@@ -184,3 +184,16 @@ export interface AppInvite {
   projectId: number;
   memberAddress: HexStr;
 }
+
+export interface AppApply {
+  papEntity: Entity<PAP>;
+  invitationId: string;
+  projectId: number;
+}
+
+export interface AppApplication {
+  papEntity: Entity<PAP>;
+  memberAddress: string;
+  invitationId: string;
+  projectId: number;
+}

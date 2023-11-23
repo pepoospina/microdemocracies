@@ -1,5 +1,5 @@
 import { FUNCTIONS_BASE } from '../config/appConfig';
-import { AppInvite, AppProjectCreate, AppProjectMember } from '../types';
+import { AppApply, AppInvite, AppProjectCreate, AppProjectMember, Entity, PAP } from '../types';
 
 export const postProject = async (create: AppProjectCreate) => {
   const res = await fetch(FUNCTIONS_BASE + '/project/create', {
@@ -28,6 +28,17 @@ export const postInvite = async (invite: AppInvite) => {
     method: 'post',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(invite),
+  });
+
+  const body = await res.json();
+  return body.id;
+};
+
+export const postApply = async (application: AppApply) => {
+  const res = await fetch(FUNCTIONS_BASE + '/project/apply', {
+    method: 'post',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(application),
   });
 
   const body = await res.json();

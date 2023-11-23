@@ -3,8 +3,8 @@ import { WEB3_STORAGE_KEY } from '../config/appConfig';
 import { Entity } from '../types';
 import { deriveEntity, cidConfigOf, bufferToHash, hash2cid, objectToBytes, bytesToObject } from './cid-hash';
 
-export const putObject = async (object: any): Promise<Entity> => {
-  const entity = await deriveEntity(object);
+export const putObject = async <T extends object>(object: T): Promise<Entity<T>> => {
+  const entity = await deriveEntity<T>(object);
   return putEntity(entity);
 };
 

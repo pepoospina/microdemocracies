@@ -3,7 +3,7 @@ import { Add, FormPrevious } from 'grommet-icons';
 
 import { AppScreen } from '../../ui-components/AppFormScreen';
 import { VoucheCard } from './VouchCard';
-import { AppBottomButton, AppBottomButtons } from '../common/BottomButtons';
+import { AppBottomButtons } from '../common/BottomButtons';
 import { useProjectContext } from '../../contexts/ProjectContext';
 import { useNavigate } from 'react-router-dom';
 

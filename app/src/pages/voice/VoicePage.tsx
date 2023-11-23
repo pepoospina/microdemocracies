@@ -6,12 +6,10 @@ import { AppScreen } from '../../ui-components/AppFormScreen';
 import { useNavigate } from 'react-router-dom';
 import { useVoiceRead } from '../../contexts/VoiceReadContext';
 import { StatementEditable } from './StatementEditable';
-import { useProjectContext } from '../../contexts/ProjectContext';
 import { AppBottomButtons } from '../common/BottomButtons';
 
 export const VoicePage = (): JSX.Element => {
   const { statements } = useVoiceRead();
-  const { goHome } = useProjectContext();
   const navigate = useNavigate();
 
   return (
@@ -41,7 +39,7 @@ export const VoicePage = (): JSX.Element => {
         </Box>
       </Box>
       <AppBottomButtons
-        left={{ label: 'home', primary: false, action: goHome }}
+        left={{ label: 'home', primary: false, action: () => navigate('..') }}
         right={{
           icon: <Add />,
           label: 'new',

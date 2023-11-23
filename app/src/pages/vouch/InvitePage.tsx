@@ -7,18 +7,15 @@ import { RouteNames } from '../../App';
 import { useNavigate } from 'react-router-dom';
 import { useProjectContext } from '../../contexts/ProjectContext';
 import { useAccountContext } from '../../wallet/AccountContext';
-import { postInvite } from '../../utils/project';
 import { AppQRCode } from '../../components/AppQRCode';
 import { AppConnect } from '../../components/app/AppConnect';
-import { useQuery } from 'react-query';
-import { getInviteId } from '../../firestore/getters';
 import { FormPrevious } from 'grommet-icons';
 import { ViewportPage } from '../../components/styles/LayoutComponents.styled';
 import { AppBottomButton } from '../common/BottomButtons';
 import { StatementEditable } from '../voice/StatementEditable';
 
 export const InvitePage = (): JSX.Element => {
-  const { project, projectId } = useProjectContext();
+  const { project, projectId, inviteId, resetLink } = useProjectContext();
   const { aaAddress } = useAccountContext();
 
   const navigate = useNavigate();
@@ -30,25 +27,7 @@ export const InvitePage = (): JSX.Element => {
     navigate(RouteNames.InviteAccount(cid));
   };
 
-  const { data: inviteId, refetch: refetchInvite } = useQuery(['getInviteLink', aaAddress, projectId], () => {
-    if (projectId && aaAddress) {
-      return getInviteId(projectId, aaAddress);
-    }
-  });
-
   const inviteLink = `${window.origin}/p/${projectId}/join?invitation=${inviteId}`;
-
-  const resetLink = async () => {
-    if (projectId && aaAddress) {
-      await postInvite({
-        projectId,
-        memberAddress: aaAddress,
-        creationDate: 0, //ignored
-      });
-
-      refetchInvite();
-    }
-  };
 
   const content = (() => {
     if (aaAddress === undefined) return <AppConnect></AppConnect>;

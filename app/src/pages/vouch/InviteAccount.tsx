@@ -10,7 +10,6 @@ import { RouteNames } from '../../App';
 import { useMemberContext } from '../../contexts/MemberContext';
 import { useVouch } from '../../contexts/VouchContext';
 import { useProjectContext } from '../../contexts/ProjectContext';
-import { AppScreen } from '../../ui-components/AppFormScreen';
 import { AccountPerson } from '../account/AccountPerson';
 import { useConnectedMember } from '../../contexts/ConnectedAccountContext';
 import { AppBottomButton, AppBottomButtons } from '../common/BottomButtons';
@@ -25,7 +24,7 @@ export const InviteAccount = () => {
   const { hash } = useParams();
   const { isConnected } = useAccountContext();
 
-  const { refetch: refetchRegistry, goHome } = useProjectContext();
+  const { refetch: refetchRegistry } = useProjectContext();
 
   const [pap, setPap] = useState<Entity<PAP>>();
   const [sending, setSending] = useState<boolean>(false);
@@ -141,7 +140,7 @@ export const InviteAccount = () => {
             </Box>
           )}
         </Box>
-        <AppBottomButton icon={<FormPrevious />} label="home" onClick={goHome}></AppBottomButton>
+        <AppBottomButton icon={<FormPrevious />} label="home" onClick={() => navigate('..')}></AppBottomButton>
       </>
     );
   })();

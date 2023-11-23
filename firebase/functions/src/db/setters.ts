@@ -1,5 +1,6 @@
-import { hashMessage } from 'viem';
+import { getAddress, hashMessage } from 'viem';
 import {
+  AppApplication,
   AppInvite,
   AppProjectCreate,
   AppProjectMember,
@@ -82,7 +83,7 @@ export const setInvitation = async (invitation: AppInvite): Promise<string> => {
   );
   // delete previous invitations
   const snap = await invitations
-    .where('memberAddress', '==', invitation.memberAddress)
+    .where('memberAddress', '==', getAddress(invitation.memberAddress))
     .get();
   await Promise.all(snap.docs.map((i) => i.ref.delete()));
 
@@ -91,5 +92,13 @@ export const setInvitation = async (invitation: AppInvite): Promise<string> => {
     .projectInvitations(invitation.projectId.toString())
     .doc();
   await docRef.set(invitation);
+  return docRef.id;
+};
+
+export const setApplication = async (
+  application: AppApplication
+): Promise<string> => {
+  const docRef = collections.userApplications(application.memberAddress).doc();
+  await docRef.set(application);
   return docRef.id;
 };

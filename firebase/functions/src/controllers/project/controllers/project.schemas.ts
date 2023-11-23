@@ -18,3 +18,9 @@ export const addInvitationValidationScheme = object({
   projectId: number().required(),
   memberAddress: string().required(),
 }).noUnknown(true);
+
+export const addApplicationValidationScheme = object({
+  papEntity: object().shape({}).required(),
+  projectId: number().required(),
+  invitationId: string().required(),
+}).noUnknown(true);

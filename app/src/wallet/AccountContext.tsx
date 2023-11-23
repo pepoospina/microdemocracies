@@ -7,7 +7,7 @@ import { HexStr } from '../types';
 import { chain } from './config';
 import { useContractRead, usePublicClient } from 'wagmi';
 import { ALCHEMY_KEY } from '../config/appConfig';
-import { DecodeEventLogReturnType, decodeEventLog } from 'viem';
+import { DecodeEventLogReturnType, decodeEventLog, getAddress } from 'viem';
 import { useAppSigner } from './SignerContext';
 import { MessageSigner } from '../utils/identity';
 import { aaWalletAbi, getFactoryAddress, registryABI, registryFactoryABI } from '../utils/contracts.json';
@@ -104,7 +104,7 @@ export const AccountContext = (props: PropsWithChildren) => {
   useEffect(() => {
     if (alchemyProviderAA) {
       alchemyProviderAA.getAddress().then((address) => {
-        setAaAddress(address);
+        setAaAddress(getAddress(address));
         console.log('computed aa address', { aaAddress: address });
       });
     }

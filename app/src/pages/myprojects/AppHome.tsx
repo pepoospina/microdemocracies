@@ -52,12 +52,12 @@ export const AppHome = (props: {}) => {
 
   return (
     <ViewportPage>
-      <Box justify="center" align="center" fill>
+      <Box justify="center" align="center" pad="medium">
         <Text size="22px" weight="bold">
           Your {appName}:
         </Text>
       </Box>
-      <Box fill justify="center" pad={{ horizontal: 'large' }}>
+      <Box fill pad={{ horizontal: 'large' }}>
         {content}
       </Box>
       <Box>

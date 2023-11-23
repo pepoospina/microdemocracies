@@ -1,7 +1,7 @@
 import { Anchor, Box, Spinner, Text } from 'grommet';
 import { useNavigate } from 'react-router-dom';
 
-import { AppCard, AppHeading } from '../../ui-components';
+import { AppButton, AppCard, AppHeading } from '../../ui-components';
 import { useProjectContext } from '../../contexts/ProjectContext';
 import { Add, FormPrevious } from 'grommet-icons';
 import { ViewportPage } from '../../components/styles/LayoutComponents.styled';
@@ -57,20 +57,12 @@ export const ProjectHome = (props: IProjectHome) => {
   const content = (() => {
     return (
       <Box style={{ overflowY: 'auto' }} margin={{ bottom: 'medium' }}>
-        <Box style={{ flexShrink: 0 }} pad={{ right: 'large' }}>
-          <ProjectCard project={project}></ProjectCard>
-
-          <Box margin={{ vertical: 'small' }} align="center">
-            <Text>
-              <Anchor onClick={() => navigate(RouteNames.Members)}>{nMembers} members</Anchor>
-            </Text>
-          </Box>
-
+        <Box style={{ flexShrink: 0 }} pad={{ right: 'medium' }}>
           <Box margin={{ vertical: 'small' }}>
             <AppHeading level="3">Community's voice:</AppHeading>
           </Box>
         </Box>
-        <Box style={{ flexShrink: 0 }} pad={{ right: 'large' }}>
+        <Box style={{ flexShrink: 0 }} pad={{ right: 'medium' }}>
           {statementsContent}
         </Box>
       </Box>
@@ -79,12 +71,23 @@ export const ProjectHome = (props: IProjectHome) => {
 
   return (
     <ViewportPage>
-      <Box pad={{ horizontal: 'large' }} align="center" justify="center" fill style={{ flexShrink: '0' }}>
-        <Text size="22px" weight="bold">
-          micro(r)evolution for:
-        </Text>
+      <Box>
+        <Box pad="medium" align="center" justify="center">
+          <Text size="22px" weight="bold">
+            micro(r)evolution for:
+          </Text>
+        </Box>
+
+        <ProjectCard project={project}></ProjectCard>
+
+        <Box pad="medium" direction="row" align="center" justify="between">
+          <AppHeading level="3">Members: {nMembers}</AppHeading>
+          <AppButton onClick={() => navigate(RouteNames.Members)} label="See/Invite Members"></AppButton>
+        </Box>
       </Box>
-      <Box pad={{ left: 'large' }}>{content}</Box>
+
+      <Box pad={{ left: 'medium' }}>{content}</Box>
+
       <AppBottomButtons
         left={{
           action: () => navigate('/home'),

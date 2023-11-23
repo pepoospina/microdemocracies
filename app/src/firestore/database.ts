@@ -1,5 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import { collection, collectionGroup, connectFirestoreEmulator, doc, getFirestore } from 'firebase/firestore';
+import { CollectionNames } from './collectionNames';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyD0Mg8hk5cQAfNc-ZNM-pM_76kZY4IXxM4',
@@ -14,22 +15,18 @@ export const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
 connectFirestoreEmulator(db, '127.0.0.1', 8080);
 
-export enum CollectionNames {
-  ProjectInvites = 'invites',
-  ProjectMembers = 'members',
-  Trees = 'trees',
-  Identities = 'identities',
-  Projects = 'projects',
-  Statments = 'statements',
-  StatementsBackers = 'statements_backers',
-}
-
 export const collections = {
   tree: (root: string) => doc(db, CollectionNames.Trees, root),
   project: (id: number) => doc(db, CollectionNames.Projects, id.toString()),
   identity: (id: string) => doc(db, CollectionNames.Identities, id),
-  projectInvites: (projectId: number) =>
-    collection(doc(db, CollectionNames.Projects, projectId.toString()), CollectionNames.ProjectInvites),
+  projectInvites: (projectId: number) => {
+    const project = doc(db, CollectionNames.Projects, projectId.toString());
+    return collection(project, CollectionNames.ProjectInvitations);
+  },
+  userApplications: (aaAddress: string) => {
+    const user = doc(db, CollectionNames.Identities, aaAddress);
+    return collection(user, CollectionNames.Applications);
+  },
   members: collectionGroup(db, CollectionNames.ProjectMembers),
   identities: collection(db, CollectionNames.Projects),
   projects: collection(db, CollectionNames.Projects),
