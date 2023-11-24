@@ -1,6 +1,5 @@
 import { createContext, useContext } from 'react';
 
-import { ConnectedMemberContext } from './ConnectedAccountContext';
 import { StatementRead } from '../types';
 import { useQuery } from 'react-query';
 import { getTopStatements } from '../firestore/getters';
@@ -34,7 +33,7 @@ export const VoiceReadContext = (props: IVoiceContext) => {
         statements,
         refetchStatements,
       }}>
-      <ConnectedMemberContext>{props.children}</ConnectedMemberContext>
+      {props.children}
     </VoiceReadContextValue.Provider>
   );
 };

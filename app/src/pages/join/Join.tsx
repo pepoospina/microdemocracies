@@ -104,14 +104,14 @@ export const Join = () => {
           <StatementEditable value={project?.whoStatement}></StatementEditable>
         </Box>
         <Box pad="large" style={{ flexShrink: 0 }}>
-          <AppHeading level="2" style={{ marginBottom: '16px' }}>
+          <AppHeading level="3" style={{ marginBottom: '16px' }}>
             Select the account
           </AppHeading>
           <AppConnect></AppConnect>
         </Box>
       </Box>
       <AppBottomButtons
-        left={{ label: 'home', primary: false, action: () => '.' }}
+        left={{ label: 'home', primary: false, action: () => navigate('..') }}
         right={{ label: 'next', primary: true, action: nextPage }}></AppBottomButtons>
     </ViewportPage>
   );

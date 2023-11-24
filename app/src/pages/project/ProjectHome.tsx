@@ -13,6 +13,7 @@ import { RouteNames } from '../../App';
 import { useResponsive } from '../../components/app';
 import { AppBottomButtons } from '../common/BottomButtons';
 import { BoxCentered } from '../../ui-components/BoxCentered';
+import { useConnectedMember } from '../../contexts/ConnectedAccountContext';
 
 export interface IProjectHome {
   dum?: any;
@@ -21,6 +22,7 @@ export interface IProjectHome {
 export const ProjectHome = (props: IProjectHome) => {
   const navigate = useNavigate();
   const { project, nMembers } = useProjectContext();
+  const { tokenId } = useConnectedMember();
   const { statements } = useVoiceRead();
   const { mobile } = useResponsive();
 
@@ -97,6 +99,14 @@ export const ProjectHome = (props: IProjectHome) => {
           <AppHeading level="3">Members: {nMembers}</AppHeading>
           <AppButton onClick={() => navigate(RouteNames.Members)} label={membersStr}></AppButton>
         </Box>
+
+        {tokenId === null ? (
+          <Box pad="small">
+            <AppButton onClick={() => navigate(RouteNames.Join)} label={'join'}></AppButton>
+          </Box>
+        ) : (
+          <></>
+        )}
       </Box>
 
       <Box pad={{ left: 'medium' }}>{content}</Box>

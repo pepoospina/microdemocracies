@@ -29,16 +29,10 @@ export const VouchMemberWidget = (props: { pap: Entity<PAP> }) => {
 
   const { account } = useConnectedMember();
 
-  const {
-    accountRead: vouchedAccount,
-    tokenId: vouchedTokenId,
-    setAddress: setVouchedAddress,
-    refetch: refetchVouchedAccount,
-  } = useMemberContext();
+  const { accountRead: vouchedAccount, tokenId: vouchedTokenId, refetch: refetchVouchedAccount } = useMemberContext();
 
   useEffect(() => {
     setVouchParams(pap.object.account, pap.cid);
-    setVouchedAddress(pap.object.account as HexStr);
   }, []);
 
   const deleteApplications = () => {

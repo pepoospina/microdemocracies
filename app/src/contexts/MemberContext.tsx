@@ -18,8 +18,6 @@ export type AccountContextType = {
   voucherTokenId?: number;
   tokenId?: number;
   address?: string;
-  setTokenId: (tokenId: number) => void;
-  setAddress: (address: HexStr) => void;
 };
 
 const AccountContextValue = createContext<AccountContextType | undefined>(undefined);
@@ -40,7 +38,7 @@ export const MemberContext = (props: AccountContextProps) => {
 
   /** Read Account */
   const _tokenIdProp = props.tokenId !== undefined ? BigInt(props.tokenId) : undefined;
-  const _addressProp = props.address || aaAddress;
+  const _addressProp = props.tokenId === undefined ? props.address || aaAddress : undefined;
 
   const [tokenId, _setTokenId] = useState<bigint>();
   const [address, setAddress] = useState<HexStr>();
@@ -58,11 +56,6 @@ export const MemberContext = (props: AccountContextProps) => {
       setAddress(_addressProp);
     }
   }, [_addressProp]);
-
-  /** if setTokenId is called, trigger an account read */
-  const setTokenId = (_tokenId: number) => {
-    _setTokenId(BigInt(_tokenId));
-  };
 
   const {
     data: tokenIdOfAddress,
@@ -105,6 +98,8 @@ export const MemberContext = (props: AccountContextProps) => {
     enabled: tokenId !== undefined && projectAddress !== undefined,
   });
 
+  console.log({ accountVouch, tokenId });
+
   const { data: voucherVouch } = useContractRead({
     address: projectAddress,
     abi: registryABI,
@@ -142,8 +137,6 @@ export const MemberContext = (props: AccountContextProps) => {
         address,
         voucherTokenId: _accountRead !== undefined ? Number(_accountRead.voucher) : undefined,
         voucherPapRead,
-        setTokenId,
-        setAddress,
       }}>
       {props.children}
     </AccountContextValue.Provider>
