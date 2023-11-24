@@ -1,8 +1,8 @@
 import React from 'react';
-import { Box, BoxExtendedProps, ResponsiveContext, Spinner } from 'grommet';
+import { Box, BoxExtendedProps, ResponsiveContext, Spinner, Text } from 'grommet';
 
 import { HexStr, PAP } from '../../types';
-import { Address, AppCard, AppHeading, TwoColumns } from '../../ui-components';
+import { Address, TwoColumns } from '../../ui-components';
 import { PlatformUrl } from './PlatformUrl';
 import { CHAIN_ID } from '../../config/appConfig';
 import { BoxCentered } from '../../ui-components/BoxCentered';
@@ -38,7 +38,7 @@ export const DetailField = (props: IDetailField) => {
 
 export const AccountPerson = (props: IAccountPerson) => {
   return props.pap ? (
-    <AppCard style={{ width: '100%', ...props.cardStyle }}>
+    <Box style={{ width: '100%', ...props.cardStyle }}>
       <Box>
         <DetailField field={{ label: 'First Name', value: props.pap.person?.personal?.firstName }}></DetailField>
         <DetailField field={{ label: 'Last Name', value: props.pap.person?.personal?.lastName }}></DetailField>
@@ -58,11 +58,11 @@ export const AccountPerson = (props: IAccountPerson) => {
           return <DetailField key={JSON.stringify(user)} field={field} />;
         })}
       </Box>
-      <BoxCentered style={{ margin: '16px 0px' }}>
-        <AppHeading level="3">Account: </AppHeading>
+      <Box style={{ margin: '16px 0px' }}>
+        <Text style={{ fontWeight: 'bold' }}>Account:</Text>
         <Address digits={8} address={props.pap.account as HexStr} chainId={CHAIN_ID}></Address>
-      </BoxCentered>
-    </AppCard>
+      </Box>
+    </Box>
   ) : (
     <Spinner></Spinner>
   );

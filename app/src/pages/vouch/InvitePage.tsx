@@ -10,7 +10,7 @@ import { useAccountContext } from '../../wallet/AccountContext';
 import { AppQRCode } from '../../components/AppQRCode';
 import { AppConnect } from '../../components/app/AppConnect';
 import { FormPrevious } from 'grommet-icons';
-import { ViewportPage } from '../../components/styles/LayoutComponents.styled';
+import { ViewportPage } from '../../components/app/Viewport';
 import { AppBottomButton } from '../common/BottomButtons';
 import { StatementEditable } from '../voice/StatementEditable';
 import { ApplicationCard } from '../vouches/ApplicationCard';

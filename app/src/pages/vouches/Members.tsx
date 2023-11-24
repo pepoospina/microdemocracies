@@ -1,19 +1,20 @@
 import { Box } from 'grommet';
 import { Add, FormPrevious } from 'grommet-icons';
+import { useNavigate } from 'react-router-dom';
 
-import { AppScreen } from '../../ui-components/AppFormScreen';
 import { VoucheCard } from './VouchCard';
 import { AppBottomButtons } from '../common/BottomButtons';
 import { useProjectContext } from '../../contexts/ProjectContext';
-import { useNavigate } from 'react-router-dom';
 import { ApplicationCard } from './ApplicationCard';
+import { ViewportHeadingLarge, ViewportPage } from '../../components/app/Viewport';
 
 export const Members = (): JSX.Element => {
   const { allVouches, applications } = useProjectContext();
   const navigate = useNavigate();
 
   return (
-    <AppScreen label="Members">
+    <ViewportPage>
+      <ViewportHeadingLarge label="Members"></ViewportHeadingLarge>
       <Box pad="large">
         {applications?.map((application) => {
           return (
@@ -42,6 +43,6 @@ export const Members = (): JSX.Element => {
           label: 'invite',
           action: () => navigate('../invite'),
         }}></AppBottomButtons>
-    </AppScreen>
+    </ViewportPage>
   );
 };

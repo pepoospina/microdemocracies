@@ -44,7 +44,9 @@ export const getEntity = async <T>(cid: string): Promise<Entity<T>> => {
   const _cid = hash2cid(hash, cidConfig);
   const object = bytesToObject(array);
 
-  if (cid !== _cid) throw new Error(`Unexpected CID ${_cid}. Expected ${cid}`);
+  if (cid !== _cid) throw new Error(`Unexpected getInviteLinkCID ${_cid}. Expected ${cid}`);
+
+  console.log({ cid, object });
 
   return { cid, object };
 };

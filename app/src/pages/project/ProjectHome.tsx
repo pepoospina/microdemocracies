@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { AppButton, AppCard, AppHeading } from '../../ui-components';
 import { useProjectContext } from '../../contexts/ProjectContext';
 import { Add, FormPrevious } from 'grommet-icons';
-import { ViewportPage } from '../../components/styles/LayoutComponents.styled';
+import { ViewportPage } from '../../components/app/Viewport';
 import { Loading } from '../common/WaitingTransaction';
 import { ProjectCard } from './ProjecCard';
 import { useVoiceRead } from '../../contexts/VoiceReadContext';
@@ -27,6 +27,15 @@ export const ProjectHome = (props: IProjectHome) => {
   const newStr = mobile ? 'propose' : 'Propose new';
   const membersStr = mobile ? 'Members' : 'See/Invite Members';
 
+  if (project == null) {
+    return (
+      <BoxCentered fill>
+        <AppCard>
+          <Text>Project not found</Text>
+        </AppCard>
+      </BoxCentered>
+    );
+  }
   if (project === undefined) {
     return (
       <BoxCentered fill>
@@ -59,7 +68,7 @@ export const ProjectHome = (props: IProjectHome) => {
     return (
       <Box style={{ overflowY: 'auto' }} margin={{ bottom: 'medium' }}>
         <Box style={{ flexShrink: 0 }} pad={{ right: 'medium' }}>
-          <Box margin={{ vertical: 'small' }}>
+          <Box margin={{ vertical: 'large' }}>
             <AppHeading level="3">Community's voice:</AppHeading>
           </Box>
         </Box>
@@ -98,6 +107,7 @@ export const ProjectHome = (props: IProjectHome) => {
           icon: <FormPrevious />,
         }}
         right={{
+          primary: true,
           action: () => navigate('voice/propose'),
           icon: <Add></Add>,
           label: newStr,

@@ -5,7 +5,6 @@ import { isAddress } from 'ethers/lib/utils';
 import React from 'react';
 
 import { AppHeading } from '../../ui-components';
-import { AppScreen } from '../../ui-components/AppFormScreen';
 import { AppConnect } from '../../components/app/AppConnect';
 import { useAccountContext } from '../../wallet/AccountContext';
 import { useProjectContext } from '../../contexts/ProjectContext';
@@ -21,6 +20,7 @@ import { putObject } from '../../utils/store';
 import { postApply } from '../../utils/project';
 import { BoxCentered } from '../../ui-components/BoxCentered';
 import { Loading } from '../common/WaitingTransaction';
+import { ViewportHeadingLarge, ViewportPage } from '../../components/app/Viewport';
 
 export interface IJoinProps {
   dum?: any;
@@ -94,7 +94,8 @@ export const Join = () => {
   const pages: React.ReactNode[] = [];
 
   pages.push(
-    <AppScreen key="0" label="Let's start!">
+    <ViewportPage key="0">
+      <ViewportHeadingLarge label="Join"></ViewportHeadingLarge>
       <Box>
         <Box pad="large">
           <Box>
@@ -112,17 +113,18 @@ export const Join = () => {
       <AppBottomButtons
         left={{ label: 'home', primary: false, action: () => '.' }}
         right={{ label: 'next', primary: true, action: nextPage }}></AppBottomButtons>
-    </AppScreen>
+    </ViewportPage>
   );
 
   if (askPersonal || askPlatform) {
     pages.push(
-      <AppScreen key="3" label="Personal">
-        <Box>
-          <Box pad="large">
-            <DetailsForm selected={project?.selectedDetails} onChange={(d) => setPersonal(d)}></DetailsForm>
-          </Box>
+      <ViewportPage key="3">
+        <ViewportHeadingLarge label="Personal"></ViewportHeadingLarge>
+
+        <Box pad="large">
+          <DetailsForm selected={project?.selectedDetails} onChange={(d) => setPersonal(d)}></DetailsForm>
         </Box>
+
         <AppBottomButtons
           popUp={!account ? 'You need to, at least, provide your blockchain account' : undefined}
           left={{ label: 'back', primary: false, action: prevPage }}
@@ -132,12 +134,13 @@ export const Join = () => {
             action: review,
             disabled: !account,
           }}></AppBottomButtons>
-      </AppScreen>
+      </ViewportPage>
     );
   }
   pages.push(
-    <AppScreen key="4" label="Review">
-      <Box style={{ width: '100%' }}>
+    <ViewportPage key="4">
+      <ViewportHeadingLarge label="Review"></ViewportHeadingLarge>
+      <Box>
         <Box style={{ flexShrink: 0 }}>
           <PAPEntry pap={pap}></PAPEntry>
         </Box>
@@ -152,17 +155,18 @@ export const Join = () => {
       <AppBottomButtons
         left={{ label: 'back', primary: false, action: prevPage }}
         right={{ label: 'send', primary: true, action: send }}></AppBottomButtons>
-    </AppScreen>
+    </ViewportPage>
   );
   pages.push(
-    <AppScreen key="5" label="Scan to vouch">
-      <Box fill>
+    <ViewportPage key="5">
+      <ViewportHeadingLarge label="Share"></ViewportHeadingLarge>
+      <Box>
         <PAPShare cid={cid}></PAPShare>
       </Box>
       <AppBottomButtons
         left={{ label: 'back', primary: false, action: prevPage }}
         right={{ label: 'done', primary: true, action: () => navigate('..') }}></AppBottomButtons>
-    </AppScreen>
+    </ViewportPage>
   );
 
   return (

@@ -12,7 +12,7 @@ import { collections } from '../firestore/database';
 import { onSnapshot } from 'firebase/firestore';
 
 export type ProjectContextType = {
-  project?: AppProject;
+  project?: AppProject | null;
   projectId?: number;
   address?: HexStr;
   nMembers?: number;
@@ -21,7 +21,7 @@ export type ProjectContextType = {
   allVouches?: AppVouch[];
   inviteId?: string;
   resetLink: () => void;
-  applications?: AppApplication[];
+  applications?: AppApplication[] | null;
   refetchApplications: () => void;
 };
 
@@ -51,6 +51,7 @@ export const ProjectContext = (props: IProjectContext) => {
     if (projectId) {
       return getProject(projectId);
     }
+    return null;
   });
 
   // all vouches
@@ -67,6 +68,7 @@ export const ProjectContext = (props: IProjectContext) => {
 
       return logs;
     }
+    return null;
   });
 
   const [allVouches, setAllVouches] = useState<AppVouch[]>();
@@ -108,6 +110,7 @@ export const ProjectContext = (props: IProjectContext) => {
     if (projectId && aaAddress) {
       return getInviteId(projectId, aaAddress);
     }
+    return null;
   });
 
   const resetLink = () => {
@@ -125,6 +128,7 @@ export const ProjectContext = (props: IProjectContext) => {
     if (aaAddress) {
       return getApplications(aaAddress);
     }
+    return null;
   });
 
   /** autorefetch on applications changes */

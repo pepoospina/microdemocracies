@@ -9,7 +9,7 @@ import { chain } from './wallet/config';
 import { WagmiConfig, configureChains, createConfig } from 'wagmi';
 import { ALCHEMY_KEY } from './config/appConfig';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { ViewportContainer } from './components/styles/LayoutComponents.styled';
+import { ViewportContainer } from './components/app/Viewport';
 import { VoiceReadContext } from './contexts/VoiceReadContext';
 import { VoiceSendContext } from './contexts/VoiceSendContext';
 import { VouchContext } from './contexts/VouchContext';
@@ -19,7 +19,6 @@ import { CreateProject } from './pages/create/CreateProject';
 import { Join } from './pages/join/Join';
 import { LandingPage } from './pages/landing/LandingPage';
 import { ProjectHome } from './pages/project/ProjectHome';
-import { VoicePage } from './pages/voice/VoicePage';
 import { VoiceBase } from './pages/voice/VoiceBase';
 import { VoicePropose } from './pages/voice/VoicePropose';
 import { InvitePage } from './pages/vouch/InvitePage';
@@ -121,7 +120,6 @@ function App() {
                             <Route path={RouteNames.Challenges} element={<Challenges />}></Route>
                             {/* <Route path={ProjectRouteNames.Base} element={<TestComponent />}></Route> */}
                             <Route path={'voice'} element={<VoiceBase />}>
-                              <Route path={''} element={<VoicePage />}></Route>
                               <Route path={RouteNames.VoicePropose} element={<VoicePropose />}></Route>
                             </Route>
                             <Route path={RouteNames.Base} element={<ProjectHome />}></Route>

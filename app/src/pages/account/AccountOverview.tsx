@@ -1,4 +1,4 @@
-import { Box, Spinner } from 'grommet';
+import { Box, Spinner, Text } from 'grommet';
 
 import { useMemberContext } from '../../contexts/MemberContext';
 import { AccountPerson } from './AccountPerson';
@@ -9,14 +9,26 @@ import { BoxCentered } from '../../ui-components/BoxCentered';
 export const AccountOverview = () => {
   const { accountPapRead, accountRead } = useMemberContext();
 
+  console.log({ accountPapRead, accountRead });
+
   const isFounder = accountRead && accountRead.voucher > 10e70;
 
-  return accountPapRead ? (
+  if (!accountPapRead) {
+    return (
+      <BoxCentered fill>
+        <Spinner></Spinner>
+      </BoxCentered>
+    );
+  }
+
+  return (
     <Box align="center">
       {accountRead ? (
         !isFounder ? (
           <Box margin={{ bottom: 'large' }}>
-            Vouched by {COMMUNITY_MEMBER} #{accountRead?.voucher}
+            <Text>
+              Invited by {COMMUNITY_MEMBER} #{accountRead?.voucher}
+            </Text>
           </Box>
         ) : (
           <Box>Founder</Box>
@@ -26,16 +38,14 @@ export const AccountOverview = () => {
       )}
       {accountRead && !accountRead.valid ? (
         <AppCard style={{ marginBottom: '36px' }}>
-          <b>Account invalidated!</b>
+          <Text>
+            <b>Account invalidated!</b>
+          </Text>
         </AppCard>
       ) : (
         <></>
       )}
       <AccountPerson pap={accountPapRead.object}></AccountPerson>
     </Box>
-  ) : (
-    <BoxCentered fill>
-      <Spinner></Spinner>
-    </BoxCentered>
   );
 };

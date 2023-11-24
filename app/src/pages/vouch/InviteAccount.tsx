@@ -8,7 +8,7 @@ import { Entity, PAP } from '../../types';
 import { MemberContext } from '../../contexts/MemberContext';
 import { AccountPerson } from '../account/AccountPerson';
 import { AppBottomButton } from '../common/BottomButtons';
-import { ViewportPage } from '../../components/styles/LayoutComponents.styled';
+import { ViewportPage } from '../../components/app/Viewport';
 import { VouchMemberWidget } from './VouchMemberWidget';
 import { appName } from '../../config/community';
 
