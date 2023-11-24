@@ -1,3 +1,4 @@
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { alchemyProvider as wagmiAlchemyProvider } from 'wagmi/providers/alchemy';
 
@@ -8,7 +9,6 @@ import { ProjectContext } from './contexts/ProjectContext';
 import { chain } from './wallet/config';
 import { WagmiConfig, configureChains, createConfig } from 'wagmi';
 import { ALCHEMY_KEY } from './config/appConfig';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { ViewportContainer } from './components/app/Viewport';
 import { VoiceReadContext } from './contexts/VoiceReadContext';
 import { VoiceSendContext } from './contexts/VoiceSendContext';
@@ -18,6 +18,8 @@ import { Challenges } from './pages/challenges/Challenges';
 import { CreateProject } from './pages/create/CreateProject';
 import { Join } from './pages/join/Join';
 import { LandingPage } from './pages/landing/LandingPage';
+import { Test } from './pages/landing/Test';
+
 import { ProjectHome } from './pages/project/ProjectHome';
 import { VoiceBase } from './pages/voice/VoiceBase';
 import { VoicePropose } from './pages/voice/VoicePropose';
@@ -112,6 +114,7 @@ function App() {
                             </Route>
                             <Route path={RouteNames.Base} element={<ProjectHome />}></Route>
                           </Route>
+                          <Route path={'/test'} element={<Test />}></Route>
                         </Routes>
                       </ViewportContainer>
                     </BrowserRouter>
