@@ -1,4 +1,4 @@
-import { Box, Spinner, Text } from 'grommet';
+import { Anchor, Box, Spinner, Text } from 'grommet';
 
 import { useMemberContext } from '../../contexts/MemberContext';
 import { AccountPerson } from './AccountPerson';
@@ -27,7 +27,10 @@ export const AccountOverview = () => {
         !isFounder ? (
           <Box margin={{ bottom: 'large' }}>
             <Text>
-              Invited by {COMMUNITY_MEMBER} #{accountRead?.voucher}
+              Invited by{' '}
+              <Anchor>
+                {COMMUNITY_MEMBER} #{accountRead?.voucher}
+              </Anchor>
             </Text>
           </Box>
         ) : (

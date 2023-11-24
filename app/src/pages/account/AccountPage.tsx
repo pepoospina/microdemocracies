@@ -27,7 +27,7 @@ export const AccountPage = () => {
 
       <Box pad="large">
         <MemberContext tokenId={+tokenId}>
-          <Box margin={{ top: 'large' }} style={{ flexShrink: 0 }}>
+          <Box style={{ flexShrink: 0 }}>
             <AccountOverview></AccountOverview>
           </Box>
 
