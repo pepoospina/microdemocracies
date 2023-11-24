@@ -8,6 +8,7 @@ import {
   AppStatementBacking,
   AppStatementCreate,
   AppTree,
+  Entity,
   HexStr,
   SignedObject,
 } from '../@app/types';
@@ -75,6 +76,12 @@ export const setProjectMember = async (
 export const setTree = async (tree: AppTree): Promise<string> => {
   const docRef = collections.trees.doc(getTreeId(tree));
   await docRef.set(tree);
+  return docRef.id;
+};
+
+export const setEntity = async (entity: Entity<any>): Promise<string> => {
+  const docRef = collections.entities.doc(entity.cid);
+  await docRef.set(entity);
   return docRef.id;
 };
 

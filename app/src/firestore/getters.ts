@@ -1,4 +1,4 @@
-import { getDocs, where, query, and, getDoc } from 'firebase/firestore';
+import { getDocs, where, query, and, getDoc, doc as docRef } from 'firebase/firestore';
 import { collections } from './database';
 import { AppApplication, AppProject, AppPublicIdentity, HexStr, StatementBackerRead, StatementRead } from '../types';
 import { postInvite } from '../utils/project';
@@ -92,6 +92,17 @@ export const isStatementBacker = async (statementId: string, tokenId: number): P
 
 export const getPublicIdentity = async (aaAddress: HexStr) => {
   const ref = collections.identity(aaAddress);
+  const doc = await getDoc(ref);
+
+  if (!doc.exists()) return undefined;
+
+  return {
+    ...doc.data(),
+  } as unknown as AppPublicIdentity;
+};
+
+export const getEntity = async (cid: string) => {
+  const ref = docRef(collections.entities, cid);
   const doc = await getDoc(ref);
 
   if (!doc.exists()) return undefined;

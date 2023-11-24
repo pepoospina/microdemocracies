@@ -9,4 +9,5 @@ export enum CollectionNames {
   Projects = 'projects',
   Statments = 'statements',
   StatementsBackers = 'statements_backers',
+  Entities = 'entities',
 }

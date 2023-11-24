@@ -27,6 +27,7 @@ export const collections = {
     const user = doc(db, CollectionNames.Identities, aaAddress);
     return collection(user, CollectionNames.Applications);
   },
+  entities: collection(db, CollectionNames.Entities),
   members: collectionGroup(db, CollectionNames.ProjectMembers),
   identities: collection(db, CollectionNames.Projects),
   projects: collection(db, CollectionNames.Projects),
