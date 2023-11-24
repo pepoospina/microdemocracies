@@ -66,9 +66,9 @@ export const AccountPerson = (props: IAccountPerson) => {
           boxStyle={fieldStyle}
           field={{ label: 'Organization', value: props.pap.person?.personal?.organization }}></DetailField>
       </Box>
-      <Box align="center">
+      <Box>
         {props.pap.person?.platforms?.map((user, ix) => {
-          if (!user.platform || !user.username) return <></>;
+          if (!user.platform || !user.username) return <Box key={ix}></Box>;
           const platform = platforms[user.platform];
           const platformName = platform ? platform.name : 'custom';
           const field = { label: platformName, value: <PlatformUrl user={user} /> };

@@ -45,20 +45,6 @@ export const AppConnect = (props: {}) => {
           </Box>
           <Text size="large">Account Ready</Text>
         </Box>
-        <Box align="start" justify="center" style={{ margin: '24px 0px 16px 0px' }}>
-          <Box style={{ marginBottom: '24px' }}>
-            <Text>
-              <b>Account address:</b>
-            </Text>
-            <Address address={aaAddress} chainId={CHAIN_ID}></Address>
-          </Box>
-          <Box>
-            <Text>
-              <b>Controlled by:</b>
-            </Text>
-            <Address address={address} chainId={CHAIN_ID}></Address>
-          </Box>
-        </Box>
       </Box>
     </>
   );

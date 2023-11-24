@@ -10,6 +10,7 @@ import { Loading } from '../common/WaitingTransaction';
 import { ProjectCard } from '../project/ProjecCard';
 import { useNavigate } from 'react-router-dom';
 import { BoxCentered } from '../../ui-components/BoxCentered';
+import { AppBottomButton } from '../common/BottomButtons';
 
 export const AppHome = (props: {}) => {
   const { isConnected } = useAccountContext();
@@ -63,9 +64,7 @@ export const AppHome = (props: {}) => {
         {content}
       </Box>
 
-      <Box>
-        <AppButton onClick={() => navigate('/start')} icon={<Add></Add>} label="Start new"></AppButton>
-      </Box>
+      <AppBottomButton onClick={() => navigate('/start')} icon={<Add></Add>} label="Start new"></AppBottomButton>
     </ViewportPage>
   );
 };

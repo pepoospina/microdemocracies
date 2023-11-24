@@ -36,8 +36,13 @@ export const MemberContext = (props: AccountContextProps) => {
   const { address: projectAddress } = useProjectContext();
   const { aaAddress } = useAccountContext();
 
-  /** Read Account */
-  const _tokenIdProp = props.tokenId !== undefined ? BigInt(props.tokenId) : undefined;
+  /** Read Account (either one or the other) */
+  if (props.tokenId !== undefined && props.address !== undefined)
+    throw new Error('Both tokenId and address cant be provided');
+
+  const _tokenIdProp =
+    props.address === undefined ? (props.tokenId !== undefined ? BigInt(props.tokenId) : undefined) : undefined;
+
   const _addressProp = props.tokenId === undefined ? props.address || aaAddress : undefined;
 
   const [tokenId, _setTokenId] = useState<bigint>();
@@ -97,8 +102,6 @@ export const MemberContext = (props: AccountContextProps) => {
     args: tokenId ? [tokenId] : undefined,
     enabled: tokenId !== undefined && projectAddress !== undefined,
   });
-
-  console.log({ accountVouch, tokenId });
 
   const { data: voucherVouch } = useContractRead({
     address: projectAddress,
