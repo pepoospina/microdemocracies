@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { isAddress } from 'ethers/lib/utils';
 import React from 'react';
 
-import { AppHeading } from '../../ui-components';
+import { AppCard, AppHeading } from '../../ui-components';
 import { AppConnect } from '../../components/app/AppConnect';
 import { useAccountContext } from '../../wallet/AccountContext';
 import { useProjectContext } from '../../contexts/ProjectContext';
@@ -159,7 +159,13 @@ export const Join = () => {
   );
   pages.push(
     <ViewportPage key="5">
-      <ViewportHeadingLarge label="Share"></ViewportHeadingLarge>
+      <ViewportHeadingLarge label="Done!"></ViewportHeadingLarge>
+      <AppCard pad={{ vertical: 'small' }}>
+        <Text>
+          Your application was received. Wait for it to be accepted by the person who invited you, or share the QR or
+          the link below with an exiting member and ask them to accept your application.
+        </Text>
+      </AppCard>
       <Box>
         <PAPShare cid={cid}></PAPShare>
       </Box>
