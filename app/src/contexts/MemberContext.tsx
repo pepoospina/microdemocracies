@@ -114,14 +114,10 @@ export const MemberContext = (props: AccountContextProps) => {
   });
 
   const { data: accountPapRead } = useQuery(['accountPap', accountVouch?.personCid], () => {
-    console.log({ accountVouch });
     if (accountVouch?.personCid) {
-      console.log('fetching...');
       return getEntity<PAP>(accountVouch?.personCid);
     }
   });
-
-  console.log({ accountPapRead, accountVouch });
 
   const { data: voucherPapRead } = useQuery(['voucherPap', voucherVouch?.personCid], () => {
     if (voucherVouch?.personCid) {

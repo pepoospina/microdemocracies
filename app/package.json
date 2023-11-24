@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "start": "craco start",
+    "start-remote": "NODE_ENV=test-prod craco start --config craco.config.prod.js",
     "build": "craco build",
     "test": "craco test",
     "eject": "react-scripts eject",

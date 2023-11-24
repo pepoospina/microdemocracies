@@ -59,7 +59,7 @@ export const InvitePage = (): JSX.Element => {
 
           <Box direction="row" margin={{ vertical: 'large' }} gap="small">
             <AppButton onClick={() => setShowLink(false)} label="close" style={{ width: '200px' }}></AppButton>
-            <AppButton onClick={() => resetLink()} label="reset link" style={{ width: '200px' }}></AppButton>
+            <AppButton onClick={() => resetLink()} label="reset" style={{ width: '200px' }}></AppButton>
           </Box>
         </Box>
       );

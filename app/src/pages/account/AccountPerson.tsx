@@ -67,12 +67,12 @@ export const AccountPerson = (props: IAccountPerson) => {
           field={{ label: 'Organization', value: props.pap.person?.personal?.organization }}></DetailField>
       </Box>
       <Box align="center">
-        {props.pap.person?.platforms?.map((user) => {
+        {props.pap.person?.platforms?.map((user, ix) => {
           if (!user.platform || !user.username) return <></>;
           const platform = platforms[user.platform];
           const platformName = platform ? platform.name : 'custom';
           const field = { label: platformName, value: <PlatformUrl user={user} /> };
-          return <DetailField key={JSON.stringify(user)} boxStyle={fieldStyle} field={field} />;
+          return <DetailField key={ix} boxStyle={fieldStyle} field={field} />;
         })}
       </Box>
       <Box style={fieldStyle}>
