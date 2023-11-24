@@ -39,6 +39,7 @@ export const VouchMemberWidget = (props: { pap: Entity<PAP> }) => {
     /** delete applications and update */
     postDeleteApplication(pap.object.account).then(() => {
       refetchApplications();
+      refetchRegistry();
     });
   };
 
@@ -49,7 +50,6 @@ export const VouchMemberWidget = (props: { pap: Entity<PAP> }) => {
       setError(undefined);
       deleteApplications();
       refetchVouchedAccount();
-      refetchRegistry();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSuccess]);
