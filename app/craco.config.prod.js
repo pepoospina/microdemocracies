@@ -28,6 +28,4 @@ base.webpack.configure.plugins = [
   }),
 ];
 
-console.log(JSON.stringify(base));
-
 module.exports = base;
