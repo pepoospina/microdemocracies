@@ -13,7 +13,13 @@ const firebaseConfig = {
 
 export const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
-connectFirestoreEmulator(db, '127.0.0.1', 8080);
+
+const isProd = (process as any)?.NODE_ENV === 'production';
+console.log({ isProd });
+
+if (!isProd) {
+  connectFirestoreEmulator(db, '127.0.0.1', 8080);
+}
 
 export const collections = {
   tree: (root: string) => doc(db, CollectionNames.Trees, root),
