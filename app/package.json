@@ -5,10 +5,9 @@
   "scripts": {
     "start": "craco start",
     "build": "craco build",
-    "test-build": "craco build && cd build && http-server",
     "test": "craco test",
     "eject": "react-scripts eject",
-    "test-prod": "NODE_ENV=test-prod craco start",
+    "test-prod": "craco build --config craco.config.prod.js && cd build && http-server",
     "deploy": "sh ./deploy.sh "
   },
   "dependencies": {

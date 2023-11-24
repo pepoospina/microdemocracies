@@ -27,20 +27,21 @@ export const ProjectHome = (props: IProjectHome) => {
   const newStr = mobile ? 'propose' : 'Propose new';
   const membersStr = mobile ? 'Members' : 'See/Invite Members';
 
-  if (project == null) {
-    return (
-      <BoxCentered fill>
-        <AppCard>
-          <Text>Project not found</Text>
-        </AppCard>
-      </BoxCentered>
-    );
-  }
   if (project === undefined) {
     return (
       <BoxCentered fill>
         <Text>Loading micro(r)evolution details</Text>
         <Spinner></Spinner>
+      </BoxCentered>
+    );
+  }
+
+  if (project === null) {
+    return (
+      <BoxCentered fill>
+        <AppCard>
+          <Text>Project not found</Text>
+        </AppCard>
       </BoxCentered>
     );
   }

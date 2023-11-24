@@ -14,10 +14,10 @@ const firebaseConfig = {
 export const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
 
-const isProd = (process as any)?.NODE_ENV === 'production';
-console.log({ isProd });
+const isProd = process.env.NODE_ENV === 'production';
 
 if (!isProd) {
+  console.log('RUNNING ON DEVELOPMENT NODE - CONNECTING TO LOCALSTORE FIRESTORE');
   connectFirestoreEmulator(db, '127.0.0.1', 8080);
 }
 

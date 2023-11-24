@@ -1,5 +1,3 @@
-const process = process as any;
-
 export const DEBUG = true;
 
 export const ALCHEMY_KEY = process.env.ALCHEMY_KEY;
