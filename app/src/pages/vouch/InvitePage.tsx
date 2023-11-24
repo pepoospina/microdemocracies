@@ -9,7 +9,7 @@ import { useProjectContext } from '../../contexts/ProjectContext';
 import { useAccountContext } from '../../wallet/AccountContext';
 import { AppQRCode } from '../../components/AppQRCode';
 import { AppConnect } from '../../components/app/AppConnect';
-import { Camera, FormPrevious, Qr, Scan, Send, Square } from 'grommet-icons';
+import { Camera, FormPrevious, Qr, Scan, Send, Square, StatusGood } from 'grommet-icons';
 import { ViewportPage } from '../../components/app/Viewport';
 import { AppBottomButton } from '../common/BottomButtons';
 import { StatementEditable } from '../voice/StatementEditable';
@@ -87,7 +87,7 @@ export const InvitePage = (): JSX.Element => {
         </AppCard>
         <AppButton
           reverse
-          icon={<Send></Send>}
+          icon={copied ? <StatusGood></StatusGood> : <Send></Send>}
           disabled={inviteId === undefined}
           label={copied ? 'link copied!' : 'share link'}
           primary

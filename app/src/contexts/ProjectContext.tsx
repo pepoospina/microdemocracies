@@ -55,7 +55,7 @@ export const ProjectContext = (props: IProjectContext) => {
   });
 
   // all vouches
-  const { data: vouchEvents } = useQuery(['allVoucheEvents', project], async () => {
+  const { data: vouchEvents, refetch: refetchVouches } = useQuery(['allVoucheEvents', project], async () => {
     if (project) {
       const contract = getContract({
         address: project.address,
@@ -103,6 +103,7 @@ export const ProjectContext = (props: IProjectContext) => {
   const refetch = () => {
     refetchTotalSupply();
     refetchProject();
+    refetchVouches();
   };
 
   /** Member unique invite link */

@@ -160,13 +160,15 @@ export const Join = () => {
   pages.push(
     <ViewportPage key="5">
       <ViewportHeadingLarge label="Done!"></ViewportHeadingLarge>
-      <AppCard pad={{ vertical: 'small' }}>
-        <Text>
-          Your application was received. Wait for it to be accepted by the person who invited you, or share the QR or
-          the link below with an exiting member and ask them to accept your application.
-        </Text>
-      </AppCard>
-      <Box>
+
+      <Box style={{ flexShrink: 0 }} pad={{ horizontal: 'large' }}>
+        <AppCard pad={{ vertical: 'small' }} style={{ flexShrink: 0 }}>
+          <Text>
+            Your application was received. Wait for it to be accepted by the person who invited you, or share the QR or
+            the link below with an exiting member and ask them to accept your application.
+          </Text>
+        </AppCard>
+
         <PAPShare cid={cid}></PAPShare>
       </Box>
       <AppBottomButtons
