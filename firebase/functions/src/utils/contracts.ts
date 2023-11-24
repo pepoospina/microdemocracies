@@ -3,7 +3,7 @@ import { baseGoerli } from 'viem/chains';
 
 import { env } from '../config/env';
 import { registryABI, registryFactoryABI } from '../contracts/abis';
-import { HexStr } from 'src/@app/types';
+import { HexStr } from '../@app/types';
 
 // const getFactoryAddress = () => _factoryAddress(env.CHAIN_ID);
 

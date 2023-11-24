@@ -1,5 +1,6 @@
-import { hashMessage } from 'viem';
+import { getAddress, hashMessage } from 'viem';
 import {
+  AppApplication,
   AppInvite,
   AppProjectCreate,
   AppProjectMember,
@@ -7,6 +8,8 @@ import {
   AppStatementBacking,
   AppStatementCreate,
   AppTree,
+  Entity,
+  HexStr,
   SignedObject,
 } from '../@app/types';
 
@@ -76,13 +79,19 @@ export const setTree = async (tree: AppTree): Promise<string> => {
   return docRef.id;
 };
 
+export const setEntity = async (entity: Entity<any>): Promise<string> => {
+  const docRef = collections.entities.doc(entity.cid);
+  await docRef.set(entity);
+  return docRef.id;
+};
+
 export const setInvitation = async (invitation: AppInvite): Promise<string> => {
   const invitations = collections.projectInvitations(
     invitation.projectId.toString()
   );
   // delete previous invitations
   const snap = await invitations
-    .where('memberAddress', '==', invitation.memberAddress)
+    .where('memberAddress', '==', getAddress(invitation.memberAddress))
     .get();
   await Promise.all(snap.docs.map((i) => i.ref.delete()));
 
@@ -92,4 +101,24 @@ export const setInvitation = async (invitation: AppInvite): Promise<string> => {
     .doc();
   await docRef.set(invitation);
   return docRef.id;
+};
+
+export const setApplication = async (
+  application: AppApplication
+): Promise<string> => {
+  const docRef = collections.userApplications(application.memberAddress).doc();
+  await docRef.set(application);
+  return docRef.id;
+};
+
+export const deleteApplications = async (address: HexStr): Promise<void> => {
+  const snap = await collections.applications
+    .where('papEntity.object.account', '==', address)
+    .get();
+
+  await Promise.all(
+    snap.docs.map(async (doc) => {
+      await doc.ref.delete();
+    })
+  );
 };

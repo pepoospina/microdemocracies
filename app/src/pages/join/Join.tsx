@@ -1,11 +1,10 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Box, Text } from 'grommet';
 import { useState } from 'react';
 import { isAddress } from 'ethers/lib/utils';
 import React from 'react';
 
 import { AppHeading } from '../../ui-components';
-import { AppScreen } from '../../ui-components/AppFormScreen';
 import { AppConnect } from '../../components/app/AppConnect';
 import { useAccountContext } from '../../wallet/AccountContext';
 import { useProjectContext } from '../../contexts/ProjectContext';
@@ -17,6 +16,11 @@ import { DetailsAndPlatforms, PAP } from '../../types';
 import { PAPEntry } from './PAPEntry';
 import { DetailsForm } from './DetailsForm';
 import { AppBottomButtons } from '../common/BottomButtons';
+import { putObject } from '../../utils/store';
+import { postApply } from '../../utils/project';
+import { BoxCentered } from '../../ui-components/BoxCentered';
+import { Loading } from '../common/WaitingTransaction';
+import { ViewportHeadingLarge, ViewportPage } from '../../components/app/Viewport';
 
 export interface IJoinProps {
   dum?: any;
@@ -25,14 +29,18 @@ export interface IJoinProps {
 export const Join = () => {
   const navigate = useNavigate();
 
-  const { goHome, project } = useProjectContext();
+  const { project, projectId } = useProjectContext();
   const [pageIx, setPageIx] = useState<number>(0);
+  const [sending, setSending] = useState<boolean>(false);
+  const [searchParams] = useSearchParams();
+  const invitation = searchParams.get('invitation');
 
   const { aaAddress: account } = useAccountContext();
 
   const [personal, setPersonal] = useState<DetailsAndPlatforms>({});
 
   const [pap, setPap] = useState<PAP>();
+  const [cid, setCid] = useState<string>();
 
   const askPlatform = SelectedDetailsHelper.hasPlatforms(project?.selectedDetails);
   const askPersonal = SelectedDetailsHelper.hasPersonal(project?.selectedDetails);
@@ -62,10 +70,32 @@ export const Join = () => {
     }
   };
 
+  const send = async () => {
+    if (pap) {
+      setSending(true);
+      const papEntity = await putObject<PAP>(pap);
+
+      setCid(papEntity.cid);
+
+      if (invitation && projectId) {
+        const application = {
+          projectId,
+          invitationId: invitation,
+          papEntity,
+        };
+        await postApply(application);
+      }
+
+      setSending(false);
+      nextPage();
+    }
+  };
+
   const pages: React.ReactNode[] = [];
 
   pages.push(
-    <AppScreen key="0" label="Let's start!">
+    <ViewportPage key="0">
+      <ViewportHeadingLarge label="Join"></ViewportHeadingLarge>
       <Box>
         <Box pad="large">
           <Box>
@@ -81,19 +111,20 @@ export const Join = () => {
         </Box>
       </Box>
       <AppBottomButtons
-        left={{ label: 'home', primary: false, action: () => goHome() }}
+        left={{ label: 'home', primary: false, action: () => '.' }}
         right={{ label: 'next', primary: true, action: nextPage }}></AppBottomButtons>
-    </AppScreen>
+    </ViewportPage>
   );
 
   if (askPersonal || askPlatform) {
     pages.push(
-      <AppScreen key="3" label="Personal">
-        <Box>
-          <Box pad="large">
-            <DetailsForm selected={project?.selectedDetails} onChange={(d) => setPersonal(d)}></DetailsForm>
-          </Box>
+      <ViewportPage key="3">
+        <ViewportHeadingLarge label="Personal"></ViewportHeadingLarge>
+
+        <Box pad="large">
+          <DetailsForm selected={project?.selectedDetails} onChange={(d) => setPersonal(d)}></DetailsForm>
         </Box>
+
         <AppBottomButtons
           popUp={!account ? 'You need to, at least, provide your blockchain account' : undefined}
           left={{ label: 'back', primary: false, action: prevPage }}
@@ -103,28 +134,39 @@ export const Join = () => {
             action: review,
             disabled: !account,
           }}></AppBottomButtons>
-      </AppScreen>
+      </ViewportPage>
     );
   }
   pages.push(
-    <AppScreen key="4" label="Review">
-      <Box style={{ width: '100%' }}>
-        <PAPEntry pap={pap}></PAPEntry>
+    <ViewportPage key="4">
+      <ViewportHeadingLarge label="Review"></ViewportHeadingLarge>
+      <Box>
+        <Box style={{ flexShrink: 0 }}>
+          <PAPEntry pap={pap}></PAPEntry>
+        </Box>
+        {sending ? (
+          <BoxCentered fill>
+            <Loading label="Sending your application"></Loading>
+          </BoxCentered>
+        ) : (
+          <></>
+        )}
       </Box>
       <AppBottomButtons
         left={{ label: 'back', primary: false, action: prevPage }}
-        right={{ label: 'send', primary: true, action: nextPage }}></AppBottomButtons>
-    </AppScreen>
+        right={{ label: 'send', primary: true, action: send }}></AppBottomButtons>
+    </ViewportPage>
   );
   pages.push(
-    <AppScreen key="5" label="Scan to vouch">
-      <Box fill>
-        <PAPShare pap={pap}></PAPShare>
+    <ViewportPage key="5">
+      <ViewportHeadingLarge label="Share"></ViewportHeadingLarge>
+      <Box>
+        <PAPShare cid={cid}></PAPShare>
       </Box>
       <AppBottomButtons
         left={{ label: 'back', primary: false, action: prevPage }}
-        right={{ label: 'done', primary: true, action: goHome }}></AppBottomButtons>
-    </AppScreen>
+        right={{ label: 'done', primary: true, action: () => navigate('..') }}></AppBottomButtons>
+    </ViewportPage>
   );
 
   return (

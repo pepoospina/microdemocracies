@@ -7,9 +7,11 @@ import {
   GridExtendedProps,
   GridSizeType,
   ResponsiveContext,
+  Text,
 } from 'grommet';
 import { ReactNode } from 'react';
-import { IElement, useThemeContext } from '../app';
+import { IElement, useResponsive, useThemeContext } from '.';
+import { AppHeading } from '../../ui-components';
 
 export const MAX_WIDTH_LANDING = 1600;
 
@@ -30,10 +32,31 @@ export const ViewportContainer = (props: IElement) => {
   );
 };
 
+export const ViewportHeadingSmall = (props: { label: ReactNode }) => {
+  return (
+    <Box justify="center" align="center" pad="medium">
+      <Text size="22px" weight="bold">
+        {props.label}
+      </Text>
+    </Box>
+  );
+};
+
+export const ViewportHeadingLarge = (props: { label: ReactNode }) => {
+  return (
+    <Box justify="center" align="center" pad="medium" style={{ textAlign: 'center' }}>
+      <AppHeading level="1">{props.label}</AppHeading>
+    </Box>
+  );
+};
+
 export const ViewportPage = (props: { children: ReactNode[] }) => {
+  const { mobile } = useResponsive();
+  const pad = mobile ? 'none' : 'large';
   return (
     <Box
       id="viewport-page"
+      pad={pad}
       style={{
         height: '100%',
         width: '100%',
@@ -47,7 +70,7 @@ export const ViewportPage = (props: { children: ReactNode[] }) => {
       <Box id="content" style={{ flexGrow: 1, overflowY: 'auto' }}>
         {props.children[1]}
       </Box>
-      <Box id="nav" style={{ height: '60px', flexShrink: 0 }}>
+      <Box id="nav" style={{ height: '90px', flexShrink: 0 }}>
         {props.children[2]}
       </Box>
     </Box>

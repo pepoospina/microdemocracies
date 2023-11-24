@@ -53,6 +53,11 @@ export const SemaphoreContext = (props: PropsWithChildren) => {
       if (identityStr != null) {
         const identity = JSON.parse(identityStr);
 
+        const verify = await getPublicIdentity(identity.aaAddress);
+        if (verify === undefined) {
+          create = true;
+        }
+
         if (identity.aaAddress === aaAddress) {
           setIdentity(new Identity(identity.identity));
         } else {

@@ -1,6 +1,6 @@
 import { Box, Button, Text } from 'grommet';
 import { AppButton, AppCard } from '../../ui-components';
-import { ViewportPage } from '../../components/styles/LayoutComponents.styled';
+import { ViewportHeadingSmall, ViewportPage } from '../../components/app/Viewport';
 import { appName } from '../../config/community';
 import { Add } from 'grommet-icons';
 import { useAccountContext } from '../../wallet/AccountContext';
@@ -28,7 +28,12 @@ export const AppHome = (props: {}) => {
         </BoxCentered>
       );
     if (projects === undefined) return <Loading label="Loading projects"></Loading>;
-    if (projects.length === 0) return <AppCard>Your have not joined or started any micro(r)evolution yet.</AppCard>;
+    if (projects.length === 0)
+      return (
+        <AppCard>
+          <Text>Your have not joined or started any micro(r)evolution yet.</Text>
+        </AppCard>
+      );
     return (
       <Box>
         {projects.map((project) => {
@@ -52,14 +57,12 @@ export const AppHome = (props: {}) => {
 
   return (
     <ViewportPage>
-      <Box justify="center" align="center" fill>
-        <Text size="22px" weight="bold">
-          Your {appName}:
-        </Text>
-      </Box>
-      <Box fill justify="center" pad={{ horizontal: 'large' }}>
+      <ViewportHeadingSmall label={`Your micro(r)evolutions:`}></ViewportHeadingSmall>
+
+      <Box fill pad={{ horizontal: 'large' }}>
         {content}
       </Box>
+
       <Box>
         <AppButton onClick={() => navigate('/start')} icon={<Add></Add>} label="Start new"></AppButton>
       </Box>

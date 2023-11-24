@@ -7,11 +7,9 @@ import { AccountChallenge } from '../challenges/AccountChallenge';
 
 import { MemberContext } from '../../contexts/MemberContext';
 import { ChallengeContext } from '../../contexts/CurrentChallengeContext';
-import { AppScreen } from '../../ui-components/AppFormScreen';
 import { AppBottomButton } from '../common/BottomButtons';
-import { AccountCircles } from './AccountCircles';
 import { COMMUNITY_MEMBER } from '../../config/community';
-import { RouteNames } from '../../App';
+import { ViewportHeadingLarge, ViewportPage } from '../../components/app/Viewport';
 
 export const AccountPage = () => {
   const { tokenId } = useParams();
@@ -21,20 +19,25 @@ export const AccountPage = () => {
     throw new Error('tokenId undefined');
   }
 
+  console.log({ tokenId });
+
   return (
-    <AppScreen label={`${COMMUNITY_MEMBER} #${tokenId}`}>
-      <Box pad={{ top: '0', left: 'large', right: 'large' }} style={{ overflowY: 'auto' }}>
+    <ViewportPage>
+      <ViewportHeadingLarge label={`${COMMUNITY_MEMBER} #${tokenId}`} />
+
+      <Box pad="large">
         <MemberContext tokenId={+tokenId}>
-          <Box margin={{ top: 'large' }} style={{ flexShrink: 0 }}>
+          <Box style={{ flexShrink: 0 }}>
             <AccountOverview></AccountOverview>
           </Box>
-          <AccountCircles cardStyle={{ marginTop: '36px' }} />
+
           <ChallengeContext tokenId={+tokenId}>
             <AccountChallenge cardStyle={{ marginTop: '36px', marginBottom: '36px' }} />
           </ChallengeContext>
         </MemberContext>
       </Box>
-      <AppBottomButton icon={<FormPrevious />} label="home" onClick={() => navigate(RouteNames.Base)}></AppBottomButton>
-    </AppScreen>
+
+      <AppBottomButton icon={<FormPrevious />} label="back" onClick={() => navigate(-1)}></AppBottomButton>
+    </ViewportPage>
   );
 };

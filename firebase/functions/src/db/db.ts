@@ -1,22 +1,18 @@
 import { initializeApp } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
 
+import { CollectionNames } from '../@app/firestore/collectionNames';
+
 initializeApp();
 
 export const db = getFirestore();
 
-export enum CollectionNames {
-  ProjectIndexes = 'projectIndexes',
-  ProjectMembers = 'members',
-  ProjectInvitations = 'invitations',
-  Trees = 'trees',
-  Identities = 'identities',
-  Projects = 'projects',
-  Statments = 'statements',
-  StatementsBackers = 'statements_backers',
-}
-
 export const collections = {
+  userApplications: (aaAddress: string) =>
+    db
+      .collection(CollectionNames.Identities)
+      .doc(aaAddress)
+      .collection(CollectionNames.UserApplications),
   projectInvitations: (projectId: string) =>
     db
       .collection(CollectionNames.Projects)
@@ -27,6 +23,8 @@ export const collections = {
       .collection(CollectionNames.Projects)
       .doc(projectId)
       .collection(CollectionNames.ProjectMembers),
+  entities: db.collection(CollectionNames.Entities),
+  applications: db.collectionGroup(CollectionNames.Applications),
   trees: db.collection(CollectionNames.Trees),
   identities: db.collection(CollectionNames.Identities),
   projectIndexes: db.collection(CollectionNames.ProjectIndexes),

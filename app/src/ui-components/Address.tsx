@@ -30,6 +30,7 @@ export const Address = (props: IAddress): JSX.Element => {
   const url = exploreAddress !== undefined ? exploreAddress(props.address) : undefined;
 
   const style: CSSProperties = {
+    fontSize: '18px',
     color: constants.colors.links,
     textDecoration: 'none',
     ...props.style,

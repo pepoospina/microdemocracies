@@ -1,4 +1,5 @@
 import {
+  AppInvite,
   AppProjectCreate,
   AppProjectIndex,
   AppPublicIdentity,
@@ -78,4 +79,18 @@ export const getTree = async (tree: AppTree) => {
     ...doc.data(),
     id: ref.id,
   } as unknown as AppTree & { id: string };
+};
+
+export const getInvite = async (projectId: number, invitationId: string) => {
+  const ref = collections
+    .projectInvitations(projectId.toString())
+    .doc(invitationId);
+  const doc = await ref.get();
+
+  if (!doc.exists) return undefined;
+
+  return {
+    ...doc.data(),
+    id: ref.id,
+  } as unknown as AppInvite & { id: string };
 };

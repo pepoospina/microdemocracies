@@ -96,7 +96,7 @@ export const AccountChallenge = (props: IAccountChallenge) => {
                 <AppButton label="challenge" onClick={() => challenge()}></AppButton>
               )
             ) : (
-              <>Cant challenge (unexpected)</>
+              <Text>Cant challenge</Text>
             )}
           </Box>
         </Box>

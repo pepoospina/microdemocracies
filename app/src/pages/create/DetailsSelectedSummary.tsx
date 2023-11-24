@@ -9,17 +9,22 @@ export const DetailsSelectedSummary = (props: { selected?: SelectedDetails }) =>
     fontSize: '14px',
     fontWeight: '500',
   };
+
+  const tagStyle: CSSProperties = {
+    marginRight: '8px',
+  };
+
   return (
     <Box direction="row">
       {props.selected?.personal.firstName ? (
-        <AppTag>
+        <AppTag style={tagStyle}>
           <Text style={textStyle}>First Name</Text>
         </AppTag>
       ) : (
         <></>
       )}
       {props.selected?.personal.lastName ? (
-        <AppTag>
+        <AppTag style={tagStyle}>
           <Text style={textStyle}>Last Name</Text>
         </AppTag>
       ) : (
@@ -27,7 +32,7 @@ export const DetailsSelectedSummary = (props: { selected?: SelectedDetails }) =>
       )}
 
       {props.selected?.personal.nationalID ? (
-        <AppTag>
+        <AppTag style={tagStyle}>
           <Text style={textStyle}>National ID (last 4 digits)</Text>
         </AppTag>
       ) : (
@@ -37,7 +42,7 @@ export const DetailsSelectedSummary = (props: { selected?: SelectedDetails }) =>
       {Object.keys(platforms).map((platformId) => {
         if (props.selected?.platform[platformId as PlatformId]) {
           return (
-            <AppTag>
+            <AppTag style={tagStyle}>
               <Text style={textStyle}>{(platforms[platformId as PlatformId] as PlatformDetails).name}</Text>
             </AppTag>
           );

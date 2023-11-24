@@ -1,10 +1,10 @@
 import { Anchor, Box, Spinner, Text } from 'grommet';
 import { useNavigate } from 'react-router-dom';
 
-import { AppCard, AppHeading } from '../../ui-components';
+import { AppButton, AppCard, AppHeading } from '../../ui-components';
 import { useProjectContext } from '../../contexts/ProjectContext';
 import { Add, FormPrevious } from 'grommet-icons';
-import { ViewportPage } from '../../components/styles/LayoutComponents.styled';
+import { ViewportPage } from '../../components/app/Viewport';
 import { Loading } from '../common/WaitingTransaction';
 import { ProjectCard } from './ProjecCard';
 import { useVoiceRead } from '../../contexts/VoiceReadContext';
@@ -25,12 +25,23 @@ export const ProjectHome = (props: IProjectHome) => {
   const { mobile } = useResponsive();
 
   const newStr = mobile ? 'propose' : 'Propose new';
+  const membersStr = mobile ? 'Members' : 'See/Invite Members';
 
   if (project === undefined) {
     return (
       <BoxCentered fill>
         <Text>Loading micro(r)evolution details</Text>
         <Spinner></Spinner>
+      </BoxCentered>
+    );
+  }
+
+  if (project === null) {
+    return (
+      <BoxCentered fill>
+        <AppCard>
+          <Text>Project not found</Text>
+        </AppCard>
       </BoxCentered>
     );
   }
@@ -57,20 +68,12 @@ export const ProjectHome = (props: IProjectHome) => {
   const content = (() => {
     return (
       <Box style={{ overflowY: 'auto' }} margin={{ bottom: 'medium' }}>
-        <Box style={{ flexShrink: 0 }} pad={{ right: 'large' }}>
-          <ProjectCard project={project}></ProjectCard>
-
-          <Box margin={{ vertical: 'small' }} align="center">
-            <Text>
-              <Anchor onClick={() => navigate(RouteNames.Members)}>{nMembers} members</Anchor>
-            </Text>
-          </Box>
-
-          <Box margin={{ vertical: 'small' }}>
+        <Box style={{ flexShrink: 0 }} pad={{ right: 'medium' }}>
+          <Box margin={{ vertical: 'large' }}>
             <AppHeading level="3">Community's voice:</AppHeading>
           </Box>
         </Box>
-        <Box style={{ flexShrink: 0 }} pad={{ right: 'large' }}>
+        <Box style={{ flexShrink: 0 }} pad={{ right: 'medium' }}>
           {statementsContent}
         </Box>
       </Box>
@@ -79,12 +82,25 @@ export const ProjectHome = (props: IProjectHome) => {
 
   return (
     <ViewportPage>
-      <Box pad={{ horizontal: 'large' }} align="center" justify="center" fill style={{ flexShrink: '0' }}>
-        <Text size="22px" weight="bold">
-          micro(r)evolution for:
-        </Text>
+      <Box>
+        <Box pad="medium" align="center" justify="center">
+          <Text size="22px" weight="bold">
+            micro(r)evolution for:
+          </Text>
+        </Box>
+
+        <Box pad="medium">
+          <ProjectCard project={project}></ProjectCard>
+        </Box>
+
+        <Box pad="medium" direction="row" align="center" justify="between">
+          <AppHeading level="3">Members: {nMembers}</AppHeading>
+          <AppButton onClick={() => navigate(RouteNames.Members)} label={membersStr}></AppButton>
+        </Box>
       </Box>
-      <Box pad={{ left: 'large' }}>{content}</Box>
+
+      <Box pad={{ left: 'medium' }}>{content}</Box>
+
       <AppBottomButtons
         left={{
           action: () => navigate('/home'),
@@ -92,6 +108,7 @@ export const ProjectHome = (props: IProjectHome) => {
           icon: <FormPrevious />,
         }}
         right={{
+          primary: true,
           action: () => navigate('voice/propose'),
           icon: <Add></Add>,
           label: newStr,

@@ -1,28 +1,35 @@
 import { Box } from 'grommet';
 import { Add, FormPrevious } from 'grommet-icons';
-
-import { AppScreen } from '../../ui-components/AppFormScreen';
-import { VoucheCard } from './VouchCard';
-import { AppBottomButton, AppBottomButtons } from '../common/BottomButtons';
-import { useProjectContext } from '../../contexts/ProjectContext';
 import { useNavigate } from 'react-router-dom';
 
+import { VoucheCard } from './VouchCard';
+import { AppBottomButtons } from '../common/BottomButtons';
+import { useProjectContext } from '../../contexts/ProjectContext';
+import { ApplicationCard } from './ApplicationCard';
+import { ViewportHeadingLarge, ViewportPage } from '../../components/app/Viewport';
+
 export const Members = (): JSX.Element => {
-  const { allVouches } = useProjectContext();
+  const { allVouches, applications } = useProjectContext();
   const navigate = useNavigate();
 
   return (
-    <AppScreen label="Members">
+    <ViewportPage>
+      <ViewportHeadingLarge label="Members"></ViewportHeadingLarge>
       <Box pad="large">
-        <Box>
-          {allVouches?.map((vouch) => {
-            return (
-              <Box style={{ marginBottom: '16px' }}>
-                <VoucheCard vouch={vouch}></VoucheCard>
-              </Box>
-            );
-          })}
-        </Box>
+        {applications?.map((application) => {
+          return (
+            <Box style={{ marginBottom: '16px' }}>
+              <ApplicationCard application={application}></ApplicationCard>
+            </Box>
+          );
+        })}
+        {allVouches?.map((vouch) => {
+          return (
+            <Box style={{ marginBottom: '16px', flexShrink: 0 }}>
+              <VoucheCard vouch={vouch}></VoucheCard>
+            </Box>
+          );
+        })}
       </Box>
       <AppBottomButtons
         left={{
@@ -36,6 +43,6 @@ export const Members = (): JSX.Element => {
           label: 'invite',
           action: () => navigate('../invite'),
         }}></AppBottomButtons>
-    </AppScreen>
+    </ViewportPage>
   );
 };

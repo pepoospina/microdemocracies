@@ -8,32 +8,51 @@ import { Loading } from '../../pages/common/WaitingTransaction';
 import { useSemaphoreContext } from '../../contexts/SemaphoreContext';
 
 export const AppConnect = (props: {}) => {
-  const { hasInjected, connectInjected, connectMagic, signer, address, isConnecting } = useAppSigner();
+  const {
+    hasInjected,
+    connectInjected,
+    connectMagic,
+    signer,
+    address,
+    isConnecting,
+  } = useAppSigner();
   const { aaAddress } = useAccountContext();
   const { isCreatingPublicId } = useSemaphoreContext();
 
   if (isConnecting || isCreatingPublicId) {
     return (
       <Box>
-        <Loading label={isCreatingPublicId ? 'Creating Public Id - Waiting for Signatures' : 'Connecting'}></Loading>
+        <Loading
+          label={
+            isCreatingPublicId
+              ? 'Creating Public Id - Waiting for Signatures'
+              : 'Connecting'
+          }></Loading>
       </Box>
     );
   }
 
   return !signer || !aaAddress ? (
-    <Box>
-      <Box>
+    <Box margin={{ horizontal: 'small' }}>
+      <Box margin={{ vertical: 'small' }}>
         <Box>
-          <Text>Connect your Web3 Wallet {!hasInjected ? '(not found)' : ''}</Text>
+          <Text>
+            Connect your Web3 Wallet {!hasInjected ? '(not found)' : ''}
+          </Text>
         </Box>
-        <AppButton onClick={() => connectInjected()} label="Connect Wallet" disabled={!hasInjected}></AppButton>
+        <AppButton
+          onClick={() => connectInjected()}
+          label="Connect Wallet"
+          disabled={!hasInjected}></AppButton>
       </Box>
       {!hasInjected ? (
-        <Box>
+        <Box margin={{ vertical: 'small' }}>
           <Box>
-            <Text>Sign-up</Text>
+            <Text>Connect with your email</Text>
           </Box>
-          <AppButton onClick={() => connectMagic()} label="Sign-up"></AppButton>
+          <AppButton
+            onClick={() => connectMagic()}
+            label="Login with email"></AppButton>
         </Box>
       ) : (
         <></>
@@ -48,7 +67,10 @@ export const AppConnect = (props: {}) => {
           </Box>
           <Text size="large">Account Ready</Text>
         </Box>
-        <Box align="start" justify="center" style={{ margin: '24px 0px 16px 0px' }}>
+        <Box
+          align="start"
+          justify="center"
+          style={{ margin: '24px 0px 16px 0px' }}>
           <Box style={{ marginBottom: '24px' }}>
             <Text>
               <b>Account address:</b>

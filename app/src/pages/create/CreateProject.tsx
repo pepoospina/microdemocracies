@@ -22,7 +22,7 @@ import { useAccountContext } from '../../wallet/AccountContext';
 import { postMember, postProject } from '../../utils/project';
 import { RegistryCreatedEvent } from '../../utils/viem.types';
 import { putObject } from '../../utils/store';
-import { ViewportPage } from '../../components/styles/LayoutComponents.styled';
+import { ViewportHeadingLarge, ViewportPage } from '../../components/app/Viewport';
 import { Bold } from '../landing/LandingPage';
 import { AppBottomButtons } from '../common/BottomButtons';
 
@@ -193,9 +193,8 @@ export const CreateProject = () => {
     <Box style={boxStyle}>
       <Box style={{ width: '100%', flexShrink: 0 }} pad="large">
         <Box style={{ marginBottom: '24px' }}>
-          <AppHeading>Your Details</AppHeading>
           <Box>
-            <Text>Include your own deteails as a member here</Text>
+            <Text>Include your own details as a member here</Text>
           </Box>
         </Box>
         <DetailsForm selected={selectedDetails} onChange={(details) => setFounderDetails(details)}></DetailsForm>
@@ -205,9 +204,6 @@ export const CreateProject = () => {
     <Box style={boxStyle}>
       <Box style={{ width: '100%', flexShrink: 0 }} pad="large">
         <Box pad="large" style={{ flexShrink: 0 }}>
-          <AppHeading level="2" style={{ marginBottom: '16px' }}>
-            Your account
-          </AppHeading>
           <AppConnect></AppConnect>
         </Box>
       </Box>
@@ -224,11 +220,7 @@ export const CreateProject = () => {
 
   return (
     <ViewportPage>
-      <Box justify="center" align="center" style={{ flexShrink: '0', height: '50px' }}>
-        <Text size="22px" weight="bold">
-          start a micro(r)evolution
-        </Text>
-      </Box>
+      <ViewportHeadingLarge label="Start a micro(r)evolution"></ViewportHeadingLarge>
 
       <Box>
         {' '}

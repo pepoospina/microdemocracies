@@ -12,11 +12,11 @@ export const ProjectSummary = (props: {
   founderPap?: PAP;
 }) => {
   return (
-    <Box pad="large">
+    <Box pad={{ horizontal: 'large' }}>
       <Box style={{ width: '100%', flexShrink: 0 }}>
         {props.whoStatement ? (
           <>
-            <Box style={{ margin: '36px 0 12px 0', fontSize: '10px', fontWeight: '300', flexShrink: 0 }}>
+            <Box style={{ margin: '24px 0 12px 0', fontSize: '10px', fontWeight: '300', flexShrink: 0 }}>
               <AppHeading level="3">Can join anyone who:</AppHeading>
             </Box>
             <Box>
@@ -41,7 +41,7 @@ export const ProjectSummary = (props: {
 
       <Box style={{ marginTop: '36px', flexShrink: 0 }}>
         <AppHeading level="3">Your Details:</AppHeading>
-        <AccountPerson pap={props.founderPap}></AccountPerson>
+        <AccountPerson cardStyle={{ margin: '16px 0px 32px 0px' }} pap={props.founderPap}></AccountPerson>
       </Box>
     </Box>
   );

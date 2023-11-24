@@ -1,8 +1,7 @@
-import { Box } from 'grommet';
+import { Box, Text } from 'grommet';
 import { useEffect, useState } from 'react';
 
 import { AppButton, AppCard } from '../../ui-components';
-import { AppScreen } from '../../ui-components/AppFormScreen';
 import { useVoiceSend } from '../../contexts/VoiceSendContext';
 import { AppConnectButton } from '../../components/app/AppConnectButton';
 import { useNavigate } from 'react-router-dom';
@@ -13,6 +12,7 @@ import { StatementEditable } from './StatementEditable';
 import { useSemaphoreContext } from '../../contexts/SemaphoreContext';
 import { Loading } from '../common/WaitingTransaction';
 import { useVoiceRead } from '../../contexts/VoiceReadContext';
+import { ViewportHeadingLarge, ViewportPage } from '../../components/app/Viewport';
 
 export const VoicePropose = (): JSX.Element => {
   const { isConnected } = useAccountContext();
@@ -48,7 +48,9 @@ export const VoicePropose = (): JSX.Element => {
   const readyToPropose = isConnected && input && proposeStatement !== undefined && publicId && !done;
 
   return (
-    <AppScreen label="Propose Statement">
+    <ViewportPage>
+      <ViewportHeadingLarge label="Propose Statement"></ViewportHeadingLarge>
+
       <Box pad="large">
         {!done ? (
           <>
@@ -60,6 +62,11 @@ export const VoicePropose = (): JSX.Element => {
                 }}
                 placeholder="new statement..."></StatementEditable>
             </Box>
+
+            <AppCard>
+              <Text>Propose an anonymous statement and see how many members of the community back it!</Text>
+            </AppCard>
+
             <Box justify="center" style={{ margin: '36px 0', width: '100%' }}>
               {!isConnected ? <AppConnectButton label="Connect to propose"></AppConnectButton> : <></>}
               {isProposing ? (
@@ -81,6 +88,6 @@ export const VoicePropose = (): JSX.Element => {
         )}
       </Box>
       <AppBottomButton label="Back" icon={<FormPrevious />} onClick={() => navigate(-1)}></AppBottomButton>
-    </AppScreen>
+    </ViewportPage>
   );
 };
