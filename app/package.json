@@ -5,7 +5,7 @@
   "scripts": {
     "start": "craco start",
     "start-remote": "NODE_ENV=test-prod craco start --config craco.config.prod.js",
-    "build": "craco build",
+    "build": "craco build --config craco.config.prod.js",
     "test": "craco test",
     "eject": "react-scripts eject",
     "test-prod": "craco build --config craco.config.prod.js && cd build && http-server",
