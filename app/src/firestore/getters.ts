@@ -1,6 +1,14 @@
 import { getDocs, where, query, and, getDoc, doc as docRef } from 'firebase/firestore';
 import { collections } from './database';
-import { AppApplication, AppProject, AppPublicIdentity, HexStr, StatementBackerRead, StatementRead } from '../types';
+import {
+  AppApplication,
+  AppProject,
+  AppPublicIdentity,
+  Entity,
+  HexStr,
+  StatementBackerRead,
+  StatementRead,
+} from '../types';
 import { postInvite } from '../utils/project';
 import { getAddress } from 'viem';
 
@@ -101,7 +109,7 @@ export const getPublicIdentity = async (aaAddress: HexStr) => {
   } as unknown as AppPublicIdentity;
 };
 
-export const getEntity = async (cid: string) => {
+export const getEntityFirestore = async <T>(cid: string) => {
   const ref = docRef(collections.entities, cid);
   const doc = await getDoc(ref);
 
@@ -109,5 +117,5 @@ export const getEntity = async (cid: string) => {
 
   return {
     ...doc.data(),
-  } as unknown as AppPublicIdentity;
+  } as unknown as Entity<T>;
 };

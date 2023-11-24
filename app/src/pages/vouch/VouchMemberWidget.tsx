@@ -97,7 +97,9 @@ export const VouchMemberWidget = (props: { pap: Entity<PAP> }) => {
       return <WaitingTransaction></WaitingTransaction>;
     }
     if (isConnected) {
-      return <AppButton label="vouch" onClick={() => vouch()} disabled={!sendVouch && isConnected} primary></AppButton>;
+      return (
+        <AppButton label="accept" onClick={() => vouch()} disabled={!sendVouch && isConnected} primary></AppButton>
+      );
     }
 
     return <AppConnectButton></AppConnectButton>;
@@ -110,17 +112,18 @@ export const VouchMemberWidget = (props: { pap: Entity<PAP> }) => {
   return (
     <Box>
       <AppCard>
-        Entry already vouched as
-        <Anchor
-          onClick={() => {
-            if (vouchedTokenId) {
-              navigate(RouteNames.Member(vouchedTokenId));
-            }
-          }}>
-          {COMMUNITY_MEMBER} #{vouchedTokenId}
-        </Anchor>
+        <Text>
+          Application already accepted as{' '}
+          <Anchor
+            onClick={() => {
+              if (vouchedTokenId) {
+                navigate(`../${RouteNames.Member(vouchedTokenId)}`);
+              }
+            }}>
+            {COMMUNITY_MEMBER} #{vouchedTokenId}
+          </Anchor>
+        </Text>
       </AppCard>
-      <AppButton onClick={() => deleteApplications()} label="delete applications"></AppButton>
     </Box>
   );
 };

@@ -1,7 +1,7 @@
 import { Box, Text } from 'grommet';
 import { StatusGood } from 'grommet-icons';
 import { AppButton, AppHeading } from '../../ui-components';
-import { useThemeContext } from '../../components/app';
+import { useResponsive, useThemeContext } from '../../components/app';
 import { useEffect, useState } from 'react';
 import { PlatformDetails, platforms } from '../../utils/platforms';
 import { PlatformId, SelectedDetails } from '../../types';
@@ -37,6 +37,7 @@ enum Options {
 
 export const DetailsSelector = (props: { onChanged: (seleted: SelectedDetails) => void }) => {
   const { constants } = useThemeContext();
+  const { mobile } = useResponsive();
 
   const [details, setDetails] = useState<SelectedDetails>(detailsInit);
   const [showSelectPlatform, setShowSelectPlatform] = useState<boolean>(false);
@@ -89,6 +90,8 @@ export const DetailsSelector = (props: { onChanged: (seleted: SelectedDetails) =
     setDetails({ ...details });
     setShowSelectPlatform(false);
   };
+
+  const idNumberStr = mobile ? 'ID Number' : 'ID Number (Last 4 digits)';
 
   return (
     <>
@@ -152,7 +155,7 @@ export const DetailsSelector = (props: { onChanged: (seleted: SelectedDetails) =
         <Box style={{ flexGrow: 1 }}>
           <AppButton
             primary={details.personal.nationalID}
-            label="ID Number (Last 4 digits)"
+            label={idNumberStr}
             onClick={() => select(Options.IDNumber)}></AppButton>
         </Box>
         <Box justify="center" style={{ marginLeft: '12px', width: '40px', height: '40px' }}>

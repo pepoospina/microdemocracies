@@ -64,8 +64,7 @@
     "use-debounce": "^8.0.1",
     "viem": "^1.18.9",
     "wagmi": "^1.4.5",
-    "web-vitals": "^2.1.4",
-    "web3.storage": "^4.5.5"
+    "web-vitals": "^2.1.4"
   },
   "eslintConfig": {
     "extends": [
