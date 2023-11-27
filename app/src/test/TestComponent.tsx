@@ -7,7 +7,7 @@ import { useCreateProject } from '../pages/create/useCreateProject';
 import { useAccountContext } from '../wallet/AccountContext';
 
 export const TestComponent = () => {
-  const { connectInjected } = useAppSigner();
+  const { connectTest } = useAppSigner();
   const { aaAddress } = useAccountContext();
 
   const {
@@ -23,7 +23,7 @@ export const TestComponent = () => {
   } = useCreateProject();
 
   const startTest = async () => {
-    connectInjected();
+    connectTest(0);
   };
 
   useEffect(() => {
