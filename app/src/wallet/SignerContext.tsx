@@ -7,10 +7,13 @@ import { InjectedConnector } from '@wagmi/core';
 import { useConnect } from 'wagmi';
 import { HexStr } from '../types';
 import { MessageSigner } from '../utils/identity';
+import { createTestSigner } from '../test/test.signer';
+import { Signer } from '../utils/viem.types';
 
 export type SignerContextType = {
   connectMagic: () => void;
   connectInjected: () => void;
+  connectTest: (ix: number) => void;
   hasInjected: boolean;
   signer?: WalletClientSigner;
   address?: HexStr;
@@ -32,12 +35,18 @@ export const SignerContext = (props: PropsWithChildren) => {
   const signer = injectedSigner ? injectedSigner : magicSigner;
 
   useEffect(() => {
-    if (signer) {
+    if (signer && signer) {
       signer.getAddress().then((adr) => setAddress(adr));
     }
   }, [signer]);
 
   const { connectAsync } = useConnect({ connector: new InjectedConnector() });
+
+  const connectTest = (ix: number) => {
+    console.log('connecting test signer', { ix });
+    const signer = createTestSigner(ix);
+    setInjectedSigner(signer);
+  };
 
   const connectMagic = () => {
     console.log('connecting magic signer', { signer });
@@ -66,13 +75,20 @@ export const SignerContext = (props: PropsWithChildren) => {
 
   const hasInjected = (window as any).ethereum !== undefined;
 
-  const signMessage = signer ? signer.signMessage : undefined;
+  const signMessage = (() => {
+    if (!signer) return undefined;
+    const client = (signer as any).client;
+    if (client && client.account) return (message: string) => client.account.signMessage({ message });
+
+    return signer.signMessage;
+  })();
 
   return (
     <ProviderContextValue.Provider
       value={{
         connectMagic,
         connectInjected,
+        connectTest,
         isConnecting,
         errorConnecting,
         signMessage,

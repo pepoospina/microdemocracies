@@ -18,8 +18,6 @@ import { Challenges } from './pages/challenges/Challenges';
 import { CreateProject } from './pages/create/CreateProject';
 import { Join } from './pages/join/Join';
 import { LandingPage } from './pages/landing/LandingPage';
-import { Test } from './pages/landing/Test';
-
 import { ProjectHome } from './pages/project/ProjectHome';
 import { VoiceBase } from './pages/voice/VoiceBase';
 import { VoicePropose } from './pages/voice/VoicePropose';
@@ -34,6 +32,7 @@ import { AccountContext } from './wallet/AccountContext';
 import { MemberContext } from './contexts/MemberContext';
 import { SemaphoreContext } from './contexts/SemaphoreContext';
 import { AppHome } from './pages/myprojects/AppHome';
+import { TestComponent } from './test/TestComponent';
 
 const queryClient = new QueryClient();
 
@@ -114,7 +113,7 @@ function App() {
                             </Route>
                             <Route path={RouteNames.Base} element={<ProjectHome />}></Route>
                           </Route>
-                          <Route path={'/test'} element={<Test />}></Route>
+                          <Route path={'/test'} element={<TestComponent />}></Route>
                         </Routes>
                       </ViewportContainer>
                     </BrowserRouter>

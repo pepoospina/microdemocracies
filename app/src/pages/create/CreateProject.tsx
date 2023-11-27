@@ -1,11 +1,8 @@
 import { useNavigate } from 'react-router-dom';
 import { Box, Spinner, Text } from 'grommet';
 import { FormNext, FormPrevious } from 'grommet-icons';
-import { ReactNode, useCallback, useEffect, useState } from 'react';
-import { encodeFunctionData } from 'viem';
-import { utils } from 'ethers';
+import { ReactNode, useEffect, useState } from 'react';
 
-import { appName } from '../../config/community';
 import { StatementEditable } from '../voice/StatementEditable';
 import { AppHeading } from '../../ui-components';
 import { DetailsSelector } from './DetailsSelector';
@@ -13,112 +10,40 @@ import { DetailsForm } from '../join/DetailsForm';
 
 import { AppConnect } from '../../components/app/AppConnect';
 import { ProjectSummary } from './ProjectSummary';
-import { DetailsAndPlatforms, HexStr, PAP, SelectedDetails } from '../../types';
-import { getFactoryAddress, registryFactoryABI } from '../../utils/contracts.json';
-import { deriveEntity } from '../../utils/cid-hash';
 import { BoxCentered } from '../../ui-components/BoxCentered';
-import { RouteNames } from '../../App';
-import { useAccountContext } from '../../wallet/AccountContext';
-import { postMember, postProject } from '../../utils/project';
-import { RegistryCreatedEvent } from '../../utils/viem.types';
-import { putObject } from '../../utils/store';
+
 import { ViewportHeadingLarge, ViewportPage } from '../../components/app/Viewport';
 import { Bold } from '../landing/LandingPage';
 import { AppBottomButtons } from '../common/BottomButtons';
+import { useCreateProject } from './useCreateProject';
+import { RouteNames } from '../../App';
 
 const NPAGES = 4;
 
 export const CreateProject = () => {
   const navigate = useNavigate();
-
-  const { addUserOp, aaAddress, isSuccess, events, owner } = useAccountContext();
-
   const [pageIx, setPageIx] = useState(0);
-  const [founderDetails, setFounderDetails] = useState<DetailsAndPlatforms>();
-  const [whoStatement, setWhoStatement] = useState<string>('');
-  // const [whatStatement, setWhatStatement] = useState<string>('');
-  const [isCreating, setIsCreating] = useState<boolean>(false);
-  const [selectedDetails, setDetails] = useState<SelectedDetails>();
 
-  const founderPap: PAP | undefined =
-    aaAddress && founderDetails
-      ? {
-          account: aaAddress,
-          person: founderDetails,
-        }
-      : undefined;
-
-  const boxStyle: React.CSSProperties = {};
-
-  const createProject = async () => {
-    if (!aaAddress || !founderPap || !addUserOp) return;
-
-    setIsCreating(true);
-
-    const founder = await putObject(founderPap);
-    const statement = {
-      whoStatement,
-    };
-    const statementEntity = await putObject({ statement });
-    const salt = utils.keccak256(utils.toUtf8Bytes(Date.now().toString())) as HexStr;
-
-    // TODO weird encodedFunctionData asking for zero parameters
-    const callData = encodeFunctionData({
-      abi: registryFactoryABI,
-      functionName: 'create',
-      args: ['MRS', 'micro(r)evolutions ', [founderPap.account as HexStr], [founder.cid], statementEntity.cid, salt],
-    });
-
-    const registryFactoryAddress = await getFactoryAddress();
-
-    addUserOp(
-      {
-        target: registryFactoryAddress,
-        data: callData,
-        value: BigInt(0),
-      },
-      true
-    );
-  };
-
-  const registerProject = useCallback(
-    async (event: RegistryCreatedEvent) => {
-      if (!owner) throw new Error('Owner not defined');
-      if (!aaAddress) throw new Error('aaAddress not defined');
-
-      const projectId = Number(event.args.number);
-      const address = event.args.newRegistry as HexStr;
-
-      if (!selectedDetails) throw new Error('selectedDetails undefined');
-
-      /** sign the "what" of the project */
-      await postProject({
-        projectId,
-        address,
-        whatStatement: '',
-        whoStatement,
-        selectedDetails,
-      });
-
-      await postMember({
-        projectId,
-        aaAddress,
-      });
-
-      navigate(RouteNames.ProjectHome((event.args as any).number));
-      setIsCreating(false);
-    },
-    [owner, aaAddress, selectedDetails, whoStatement, navigate]
-  );
+  const {
+    founderPap,
+    whoStatement,
+    selectedDetails,
+    isCreating,
+    isSuccess,
+    projectId,
+    setFounderDetails,
+    setWhoStatement,
+    setDetails,
+    createProject,
+  } = useCreateProject();
 
   useEffect(() => {
-    if (isSuccess && events) {
-      const event = events.find((e) => e.eventName === 'RegistryCreated') as RegistryCreatedEvent | undefined;
-      if (event) {
-        registerProject(event);
-      }
+    if (isSuccess && projectId) {
+      navigate(RouteNames.ProjectHome(projectId.toString()));
     }
-  }, [isSuccess, events, navigate]);
+  }, [isSuccess, navigate, projectId]);
+
+  const boxStyle: React.CSSProperties = {};
 
   const nextPage = () => {
     if (pageIx < NPAGES - 1) {
