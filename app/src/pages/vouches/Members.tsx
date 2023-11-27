@@ -16,16 +16,16 @@ export const Members = (): JSX.Element => {
     <ViewportPage>
       <ViewportHeadingLarge label="Members"></ViewportHeadingLarge>
       <Box pad="large">
-        {applications?.map((application) => {
+        {applications?.map((application, ix) => {
           return (
-            <Box style={{ marginBottom: '16px' }}>
+            <Box key={ix} style={{ marginBottom: '16px' }}>
               <ApplicationCard application={application}></ApplicationCard>
             </Box>
           );
         })}
-        {allVouches?.map((vouch) => {
+        {allVouches?.map((vouch, ix) => {
           return (
-            <Box style={{ marginBottom: '16px', flexShrink: 0 }}>
+            <Box key={ix} style={{ marginBottom: '16px', flexShrink: 0 }}>
               <VoucheCard vouch={vouch}></VoucheCard>
             </Box>
           );

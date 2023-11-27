@@ -8,9 +8,6 @@ import { BoxCentered } from '../../ui-components/BoxCentered';
 
 export const AccountOverview = () => {
   const { accountPapRead, accountRead } = useMemberContext();
-
-  console.log({ accountPapRead, accountRead });
-
   const isFounder = accountRead && accountRead.voucher > 10e70;
 
   if (!accountPapRead) {

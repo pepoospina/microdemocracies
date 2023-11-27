@@ -19,8 +19,6 @@ export const AccountPage = () => {
     throw new Error('tokenId undefined');
   }
 
-  console.log({ tokenId });
-
   return (
     <ViewportPage>
       <ViewportHeadingLarge label={`${COMMUNITY_MEMBER} #${tokenId}`} />

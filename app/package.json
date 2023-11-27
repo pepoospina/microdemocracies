@@ -4,10 +4,11 @@
   "private": true,
   "scripts": {
     "start": "craco start",
-    "build": "craco build",
+    "start-remote": "NODE_ENV=test-prod craco start --config craco.config.prod.js",
+    "build": "craco build --config craco.config.prod.js",
     "test": "craco test",
     "eject": "react-scripts eject",
-    "test-prod": "craco build --config craco.config.prod.js && cd build && http-server",
+    "test-prod": "craco build --config craco.config.prod.js && cd build && http-server --proxy http://localhost:8080?",
     "deploy": "sh ./deploy.sh "
   },
   "dependencies": {

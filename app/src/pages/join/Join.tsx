@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { isAddress } from 'ethers/lib/utils';
 import React from 'react';
 
-import { AppHeading } from '../../ui-components';
+import { AppCard, AppHeading } from '../../ui-components';
 import { AppConnect } from '../../components/app/AppConnect';
 import { useAccountContext } from '../../wallet/AccountContext';
 import { useProjectContext } from '../../contexts/ProjectContext';
@@ -104,14 +104,14 @@ export const Join = () => {
           <StatementEditable value={project?.whoStatement}></StatementEditable>
         </Box>
         <Box pad="large" style={{ flexShrink: 0 }}>
-          <AppHeading level="2" style={{ marginBottom: '16px' }}>
+          <AppHeading level="3" style={{ marginBottom: '16px' }}>
             Select the account
           </AppHeading>
           <AppConnect></AppConnect>
         </Box>
       </Box>
       <AppBottomButtons
-        left={{ label: 'home', primary: false, action: () => '.' }}
+        left={{ label: 'home', primary: false, action: () => navigate('..') }}
         right={{ label: 'next', primary: true, action: nextPage }}></AppBottomButtons>
     </ViewportPage>
   );
@@ -159,8 +159,16 @@ export const Join = () => {
   );
   pages.push(
     <ViewportPage key="5">
-      <ViewportHeadingLarge label="Share"></ViewportHeadingLarge>
-      <Box>
+      <ViewportHeadingLarge label="Done!"></ViewportHeadingLarge>
+
+      <Box style={{ flexShrink: 0 }} pad={{ horizontal: 'large' }}>
+        <AppCard pad={{ vertical: 'small' }} style={{ flexShrink: 0 }}>
+          <Text>
+            Your application was received. Wait for it to be accepted by the person who invited you, or share the QR or
+            the link below with an exiting member and ask them to accept your application.
+          </Text>
+        </AppCard>
+
         <PAPShare cid={cid}></PAPShare>
       </Box>
       <AppBottomButtons

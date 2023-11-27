@@ -9,7 +9,7 @@ import { useAccountContext } from '../wallet/AccountContext';
 import { getContract } from 'viem';
 
 export type ConnectedMemberContextType = {
-  tokenId?: number;
+  tokenId?: number | null;
   account?: AppAccount;
   myVouches?: AppVouch[];
   myChallenge: AppChallenge | undefined | null;
@@ -27,7 +27,7 @@ export const ConnectedMemberContext = (props: ConnectedMemberContextProps) => {
 
   const { aaAddress } = useAccountContext();
 
-  const { data: tokenId } = useContractRead({
+  const { data: tokenId, isSuccess } = useContractRead({
     address: projectAddress,
     abi: registryABI,
     functionName: 'tokenIdOf',
@@ -118,10 +118,12 @@ export const ConnectedMemberContext = (props: ConnectedMemberContextProps) => {
     }
   })(_challengeRead);
 
+  const _tokenId = tokenId ? Number(tokenId) : isSuccess ? null : undefined;
+
   return (
     <ConnectedMemberContextValue.Provider
       value={{
-        tokenId: Number(tokenId),
+        tokenId: _tokenId,
         account,
         myChallenge,
         myVouches,

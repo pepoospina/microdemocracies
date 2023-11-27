@@ -29,22 +29,17 @@ export const VouchMemberWidget = (props: { pap: Entity<PAP> }) => {
 
   const { account } = useConnectedMember();
 
-  const {
-    accountRead: vouchedAccount,
-    tokenId: vouchedTokenId,
-    setAddress: setVouchedAddress,
-    refetch: refetchVouchedAccount,
-  } = useMemberContext();
+  const { accountRead: vouchedAccount, tokenId: vouchedTokenId, refetch: refetchVouchedAccount } = useMemberContext();
 
   useEffect(() => {
     setVouchParams(pap.object.account, pap.cid);
-    setVouchedAddress(pap.object.account as HexStr);
   }, []);
 
   const deleteApplications = () => {
     /** delete applications and update */
     postDeleteApplication(pap.object.account).then(() => {
       refetchApplications();
+      refetchRegistry();
     });
   };
 
@@ -55,7 +50,6 @@ export const VouchMemberWidget = (props: { pap: Entity<PAP> }) => {
       setError(undefined);
       deleteApplications();
       refetchVouchedAccount();
-      refetchRegistry();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSuccess]);

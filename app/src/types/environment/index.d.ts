@@ -4,7 +4,7 @@ declare global {
       ALCHEMY_KEY: string;
       MAGIC_API_KEY: string;
       FUNCTIONS_BASE: string;
-      NODE_ENV: 'development' | 'production';
+      NODE_ENV: 'development' | 'production' | 'test-prod';
     }
   }
 }

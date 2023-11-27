@@ -1,4 +1,4 @@
-import { Anchor, Box, Text } from 'grommet';
+import { Box, Text } from 'grommet';
 import { QrScanner } from '@yudiel/react-qr-scanner';
 import { useState } from 'react';
 
@@ -9,15 +9,17 @@ import { useProjectContext } from '../../contexts/ProjectContext';
 import { useAccountContext } from '../../wallet/AccountContext';
 import { AppQRCode } from '../../components/AppQRCode';
 import { AppConnect } from '../../components/app/AppConnect';
-import { FormPrevious } from 'grommet-icons';
+import { Camera, FormPrevious, Qr, Scan, Send, Square, StatusGood } from 'grommet-icons';
 import { ViewportPage } from '../../components/app/Viewport';
 import { AppBottomButton } from '../common/BottomButtons';
 import { StatementEditable } from '../voice/StatementEditable';
 import { ApplicationCard } from '../vouches/ApplicationCard';
+import { useCopyToClipboard } from '../../utils/copy.clipboard';
 
 export const InvitePage = (): JSX.Element => {
   const { project, projectId, inviteId, resetLink, applications } = useProjectContext();
   const { aaAddress } = useAccountContext();
+  const { copy, copied } = useCopyToClipboard();
 
   const navigate = useNavigate();
 
@@ -30,54 +32,80 @@ export const InvitePage = (): JSX.Element => {
 
   const inviteLink = `${window.origin}/p/${projectId}/join?invitation=${inviteId}`;
 
+  const share = () => {
+    if (navigator.share) {
+      navigator.share({
+        url: inviteLink,
+        text: `Join our micro(r)evolution!`,
+      });
+    } else {
+      copy(inviteLink);
+    }
+  };
+
   const content = (() => {
     if (aaAddress === undefined) return <AppConnect></AppConnect>;
-    if (scan) {
-      return (
-        <Box fill style={{ maxWidth: '500px', margin: '0 auto' }}>
-          <QrScanner onDecode={(result) => setResult(result)} onError={(error) => console.log(error?.message)} />
-        </Box>
-      );
-    }
+
     if (showLink) {
       return (
         <Box align="center" style={{ flexShrink: 0 }}>
-          <AppHeading level="3">Share to invite</AppHeading>
+          <Box pad={{ vertical: 'large' }} style={{ width: '100%' }}>
+            <AppButton onClick={() => setShowLink(false)} label="close"></AppButton>
+          </Box>
 
-          <AppCard margin={{ vertical: 'small' }}>
-            <Text>
-              Share this link with the new member you want to invite. Once they fill in their details you can approve
-              them here.
-            </Text>
-          </AppCard>
+          <AppHeading level="3">Share to invite</AppHeading>
 
           <Box pad={{ vertical: 'medium' }}>
             <AppQRCode input={inviteLink}></AppQRCode>
           </Box>
 
-          <Anchor href={inviteLink}>share link</Anchor>
-
-          <Box direction="row" margin={{ vertical: 'large' }} gap="small">
-            <AppButton onClick={() => setShowLink(false)} label="close" style={{ width: '200px' }}></AppButton>
-            <AppButton onClick={() => resetLink()} label="reset link" style={{ width: '200px' }}></AppButton>
+          <Box margin={{ vertical: 'large' }} style={{ width: '100%' }}>
+            <AppCard margin={{ vertical: 'small' }}>
+              <Text>Re-setting the link will invalidate the invitations sent with previous links</Text>
+            </AppCard>
+            <AppButton onClick={() => resetLink()} label="reset"></AppButton>
           </Box>
         </Box>
       );
     }
 
+    if (scan) {
+      return (
+        <Box fill style={{ maxWidth: '500px', margin: '0 auto', flexShrink: 0 }}>
+          <Box pad={{ vertical: 'large' }}>
+            <AppButton onClick={() => setScan(false)} label="close"></AppButton>
+          </Box>
+          <QrScanner onDecode={(result) => setResult(result)} onError={(error) => console.log(error?.message)} />
+        </Box>
+      );
+    }
+
     return (
-      <>
+      <Box style={{ flexShrink: 0 }}>
+        <AppCard margin={{ vertical: 'medium' }}>
+          <Text>Get link and share it with the new member. Once they apply, their application will appear here.</Text>
+        </AppCard>
         <AppButton
-          disabled={aaAddress === undefined || projectId === undefined}
-          label={'show invitation link'}
-          onClick={() => setShowLink(true)}
+          reverse
+          icon={copied ? <StatusGood></StatusGood> : <Send></Send>}
+          disabled={inviteId === undefined}
+          label={copied ? 'link copied!' : 'share link'}
           primary
+          onClick={() => share()}></AppButton>
+        <AppButton
+          reverse
+          icon={<Square color="black"></Square>}
+          disabled={aaAddress === undefined || projectId === undefined}
+          label={'show QR'}
+          onClick={() => setShowLink(true)}
           margin={{ vertical: 'medium' }}></AppButton>
         <AppButton
-          label={!scan ? 'scan member details' : 'cancel'}
+          reverse
+          icon={<Camera></Camera>}
+          label={!scan ? 'scan QR' : 'cancel'}
           onClick={() => setScan(!scan)}
           style={{ marginBottom: '16px' }}></AppButton>
-      </>
+      </Box>
     );
   })();
 

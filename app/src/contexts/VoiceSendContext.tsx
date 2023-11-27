@@ -1,12 +1,11 @@
 import { createContext, useContext } from 'react';
 
-import { ConnectedMemberContext, useConnectedMember } from './ConnectedAccountContext';
+import { useConnectedMember } from './ConnectedAccountContext';
 import { postStatement } from '../utils/statements';
 import { AppStatementCreate } from '../types';
 import { useProjectContext } from './ProjectContext';
 import { useSemaphoreContext } from './SemaphoreContext';
 import { hashMessage } from 'viem';
-import { serializeProof } from '../utils/identity.utils';
 
 export type VoiceSendContextType = {
   proposeStatement?: (statement: string) => Promise<boolean>;
@@ -53,7 +52,7 @@ export const VoiceSendContext = (props: IVoiceSendContext) => {
       value={{
         proposeStatement,
       }}>
-      <ConnectedMemberContext>{props.children}</ConnectedMemberContext>
+      {props.children}
     </VoiceSendContextValue.Provider>
   );
 };

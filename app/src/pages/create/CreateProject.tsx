@@ -55,9 +55,9 @@ export const CreateProject = () => {
 
     setIsCreating(true);
 
-    const entity = await deriveEntity(founderPap);
+    const founder = await putObject(founderPap);
     const statement = {
-      statement: '',
+      whoStatement,
     };
     const statementEntity = await putObject({ statement });
     const salt = utils.keccak256(utils.toUtf8Bytes(Date.now().toString())) as HexStr;
@@ -66,7 +66,7 @@ export const CreateProject = () => {
     const callData = encodeFunctionData({
       abi: registryFactoryABI,
       functionName: 'create',
-      args: ['MRS', 'micro(r)evolutions ', [founderPap.account as HexStr], [entity.cid], statementEntity.cid, salt],
+      args: ['MRS', 'micro(r)evolutions ', [founderPap.account as HexStr], [founder.cid], statementEntity.cid, salt],
     });
 
     const registryFactoryAddress = await getFactoryAddress();
@@ -193,9 +193,7 @@ export const CreateProject = () => {
     <Box style={boxStyle}>
       <Box style={{ width: '100%', flexShrink: 0 }} pad="large">
         <Box style={{ marginBottom: '24px' }}>
-          <Box>
-            <Text>Include your own details as a member here</Text>
-          </Box>
+          <AppHeading level="3">Your details:</AppHeading>
         </Box>
         <DetailsForm selected={selectedDetails} onChange={(details) => setFounderDetails(details)}></DetailsForm>
       </Box>
@@ -203,6 +201,7 @@ export const CreateProject = () => {
 
     <Box style={boxStyle}>
       <Box style={{ width: '100%', flexShrink: 0 }} pad="large">
+        <AppHeading level="3">Connect Account:</AppHeading>
         <Box pad="large" style={{ flexShrink: 0 }}>
           <AppConnect></AppConnect>
         </Box>

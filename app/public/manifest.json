@@ -1,6 +1,6 @@
 {
-  "short_name": "NS",
-  "name": "Network State Registry",
+  "short_name": "Micro(r)evolutions",
+  "name": "Change things with Micro(r)evolutions",
   "icons": [],
   "start_url": ".",
   "display": "standalone",

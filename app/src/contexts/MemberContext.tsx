@@ -18,8 +18,6 @@ export type AccountContextType = {
   voucherTokenId?: number;
   tokenId?: number;
   address?: string;
-  setTokenId: (tokenId: number) => void;
-  setAddress: (address: HexStr) => void;
 };
 
 const AccountContextValue = createContext<AccountContextType | undefined>(undefined);
@@ -38,9 +36,14 @@ export const MemberContext = (props: AccountContextProps) => {
   const { address: projectAddress } = useProjectContext();
   const { aaAddress } = useAccountContext();
 
-  /** Read Account */
-  const _tokenIdProp = props.tokenId !== undefined ? BigInt(props.tokenId) : undefined;
-  const _addressProp = props.address || aaAddress;
+  /** Read Account (either one or the other) */
+  if (props.tokenId !== undefined && props.address !== undefined)
+    throw new Error('Both tokenId and address cant be provided');
+
+  const _tokenIdProp =
+    props.address === undefined ? (props.tokenId !== undefined ? BigInt(props.tokenId) : undefined) : undefined;
+
+  const _addressProp = props.tokenId === undefined ? props.address || aaAddress : undefined;
 
   const [tokenId, _setTokenId] = useState<bigint>();
   const [address, setAddress] = useState<HexStr>();
@@ -58,11 +61,6 @@ export const MemberContext = (props: AccountContextProps) => {
       setAddress(_addressProp);
     }
   }, [_addressProp]);
-
-  /** if setTokenId is called, trigger an account read */
-  const setTokenId = (_tokenId: number) => {
-    _setTokenId(BigInt(_tokenId));
-  };
 
   const {
     data: tokenIdOfAddress,
@@ -114,14 +112,10 @@ export const MemberContext = (props: AccountContextProps) => {
   });
 
   const { data: accountPapRead } = useQuery(['accountPap', accountVouch?.personCid], () => {
-    console.log({ accountVouch });
     if (accountVouch?.personCid) {
-      console.log('fetching...');
       return getEntity<PAP>(accountVouch?.personCid);
     }
   });
-
-  console.log({ accountPapRead, accountVouch });
 
   const { data: voucherPapRead } = useQuery(['voucherPap', voucherVouch?.personCid], () => {
     if (voucherVouch?.personCid) {
@@ -146,8 +140,6 @@ export const MemberContext = (props: AccountContextProps) => {
         address,
         voucherTokenId: _accountRead !== undefined ? Number(_accountRead.voucher) : undefined,
         voucherPapRead,
-        setTokenId,
-        setAddress,
       }}>
       {props.children}
     </AccountContextValue.Provider>
