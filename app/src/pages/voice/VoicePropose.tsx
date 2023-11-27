@@ -11,13 +11,11 @@ import { useAccountContext } from '../../wallet/AccountContext';
 import { StatementEditable } from './StatementEditable';
 import { useSemaphoreContext } from '../../contexts/SemaphoreContext';
 import { Loading } from '../common/WaitingTransaction';
-import { useVoiceRead } from '../../contexts/VoiceReadContext';
 import { ViewportHeadingLarge, ViewportPage } from '../../components/app/Viewport';
 
 export const VoicePropose = (): JSX.Element => {
   const { isConnected } = useAccountContext();
-  const { proposeStatement } = useVoiceSend();
-  const { refetchStatements } = useVoiceRead();
+  const { proposeStatement, isSuccess } = useVoiceSend();
 
   const { publicId } = useSemaphoreContext();
 
@@ -30,20 +28,17 @@ export const VoicePropose = (): JSX.Element => {
   const _proposeStatement = async (input: string) => {
     if (proposeStatement) {
       setIsProposing(true);
-      const success = await proposeStatement(input);
-      if (success) {
-        setIsProposing(true);
-        setDone(true);
-      }
+      proposeStatement(input);
     }
   };
 
   useEffect(() => {
-    if (done) {
-      refetchStatements();
+    if (isSuccess) {
+      setIsProposing(false);
+      setDone(true);
       navigate('../..');
     }
-  }, [done]);
+  }, [isSuccess]);
 
   const readyToPropose = isConnected && input && proposeStatement !== undefined && publicId && !done;
 

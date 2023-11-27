@@ -1,4 +1,4 @@
-import { createContext, useContext } from 'react';
+import { createContext, useContext, useState } from 'react';
 
 import { useConnectedMember } from './ConnectedAccountContext';
 import { postStatement } from '../utils/statements';
@@ -6,9 +6,11 @@ import { AppStatementCreate } from '../types';
 import { useProjectContext } from './ProjectContext';
 import { useSemaphoreContext } from './SemaphoreContext';
 import { hashMessage } from 'viem';
+import { useVoiceRead } from './VoiceReadContext';
 
 export type VoiceSendContextType = {
   proposeStatement?: (statement: string) => Promise<boolean>;
+  isSuccess: boolean;
 };
 
 interface IVoiceSendContext {
@@ -21,6 +23,10 @@ export const VoiceSendContext = (props: IVoiceSendContext) => {
   const { tokenId } = useConnectedMember();
   const { projectId } = useProjectContext();
   const { publicId, generateProof } = useSemaphoreContext();
+
+  const { refetchStatements } = useVoiceRead();
+
+  const [isSuccess, setIsSuccess] = useState<boolean>(false);
 
   const generateStatementProof =
     projectId && publicId && generateProof !== undefined
@@ -42,7 +48,12 @@ export const VoiceSendContext = (props: IVoiceSendContext) => {
               treeId: proofAndTree.treeId,
               statement: _statement,
             };
-            return postStatement(statement);
+            const res = await postStatement(statement);
+            if (res) {
+              refetchStatements();
+              setIsSuccess(true);
+            }
+            return res;
           }
         }
       : undefined;
@@ -51,6 +62,7 @@ export const VoiceSendContext = (props: IVoiceSendContext) => {
     <VoiceSendContextValue.Provider
       value={{
         proposeStatement,
+        isSuccess,
       }}>
       {props.children}
     </VoiceSendContextValue.Provider>

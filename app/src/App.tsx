@@ -32,7 +32,8 @@ import { AccountContext } from './wallet/AccountContext';
 import { MemberContext } from './contexts/MemberContext';
 import { SemaphoreContext } from './contexts/SemaphoreContext';
 import { AppHome } from './pages/myprojects/AppHome';
-import { TestComponent } from './test/TestComponent';
+import { TestCreateProject } from './test/TestCreateProject';
+import { TestProject } from './test/TestProject';
 
 const queryClient = new QueryClient();
 
@@ -89,11 +90,11 @@ function App() {
                                 <ConnectedMemberContext>
                                   <MemberContext>
                                     <VouchContext>
-                                      <VoiceSendContext>
-                                        <VoiceReadContext>
+                                      <VoiceReadContext>
+                                        <VoiceSendContext>
                                           <ProjectBase />
-                                        </VoiceReadContext>
-                                      </VoiceSendContext>
+                                        </VoiceSendContext>
+                                      </VoiceReadContext>
                                     </VouchContext>
                                   </MemberContext>
                                 </ConnectedMemberContext>
@@ -112,8 +113,9 @@ function App() {
                               <Route path={RouteNames.VoicePropose} element={<VoicePropose />}></Route>
                             </Route>
                             <Route path={RouteNames.Base} element={<ProjectHome />}></Route>
+                            <Route path={'test'} element={<TestProject />}></Route>
                           </Route>
-                          <Route path={'/test'} element={<TestComponent />}></Route>
+                          <Route path={'/test'} element={<TestCreateProject />}></Route>
                         </Routes>
                       </ViewportContainer>
                     </BrowserRouter>
