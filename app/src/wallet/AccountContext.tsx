@@ -2,7 +2,7 @@ import { PropsWithChildren, createContext, useContext, useEffect, useState } fro
 
 import { AlchemyProvider } from '@alchemy/aa-alchemy';
 import { LightSmartContractAccount, getDefaultLightAccountFactoryAddress } from '@alchemy/aa-accounts';
-import { LocalAccountSigner, UserOperationCallData, WalletClientSigner } from '@alchemy/aa-core';
+import { UserOperationCallData, WalletClientSigner } from '@alchemy/aa-core';
 import { HexStr } from '../types';
 import { chain } from './config';
 import { useContractRead, usePublicClient } from 'wagmi';
@@ -12,7 +12,6 @@ import { useAppSigner } from './SignerContext';
 import { MessageSigner } from '../utils/identity';
 import { aaWalletAbi, getFactoryAddress, registryABI, registryFactoryABI } from '../utils/contracts.json';
 import { AccountDataContext } from './AccountDataContext';
-import { mnemonic } from '../test/.mnemonic';
 
 export type AccountContextType = {
   isConnected: boolean;
