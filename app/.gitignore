@@ -1,4 +1,4 @@
 /build
 /node_modules
 /src/config/config.prod.ts
-/src/test/.mnemonic.ts
+craco.config.test.js

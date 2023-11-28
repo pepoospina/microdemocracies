@@ -16,7 +16,7 @@ export const TestProject = () => {
   const { isConnected } = useAccountContext();
   const { projectId } = useProjectContext();
   const { proposeStatement, isSuccessStatement } = useStatementSend();
-  const { backStatement, isSuccessBacking } = useBackingSend();
+  const { backStatement } = useBackingSend();
   const { statements } = useVoiceRead();
 
   const [random, setRandom] = useState<string>();

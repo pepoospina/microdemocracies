@@ -1,6 +1,4 @@
 import { createContext, ReactNode, useCallback, useContext, useEffect, useState } from 'react';
-import { useContractWrite, usePrepareContractWrite, useWaitForTransaction } from 'wagmi';
-import { WriteContractResult } from '@wagmi/core';
 
 import { registryABI } from '../utils/contracts.json';
 import { HexStr } from '../types';
@@ -62,8 +60,6 @@ export const VouchContext = (props: VouchContextProps) => {
   const sendVouch =
     address && addUserOp && vouchParamsInternal
       ? async () => {
-          reset();
-
           const callData = encodeFunctionData({
             abi: registryABI,
             functionName: 'vouch',

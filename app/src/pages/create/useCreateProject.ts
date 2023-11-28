@@ -24,7 +24,7 @@ export interface CreateProjectStatus {
 }
 
 export const useCreateProject = (): CreateProjectStatus => {
-  const { addUserOp, aaAddress, isSuccess: isSuccessUserOp, events, owner } = useAccountContext();
+  const { addUserOp, aaAddress, isSuccess: isSuccessUserOp, events, owner, reset } = useAccountContext();
 
   const [founderDetails, setFounderDetails] = useState<DetailsAndPlatforms>();
   const [whoStatement, setWhoStatement] = useState<string>('');
@@ -109,6 +109,7 @@ export const useCreateProject = (): CreateProjectStatus => {
     if (isSuccessUserOp && events) {
       const event = events.find((e) => e.eventName === 'RegistryCreated') as RegistryCreatedEvent | undefined;
       if (event) {
+        reset();
         registerProject(event);
         setIsSuccess(true);
       }
