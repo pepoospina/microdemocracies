@@ -11,7 +11,6 @@ import { WagmiConfig, configureChains, createConfig } from 'wagmi';
 import { ALCHEMY_KEY } from './config/appConfig';
 import { ViewportContainer } from './components/app/Viewport';
 import { VoiceReadContext } from './contexts/VoiceReadContext';
-import { VoiceSendContext } from './contexts/VoiceSendContext';
 import { VouchContext } from './contexts/VouchContext';
 import { AccountPage } from './pages/account/AccountPage';
 import { Challenges } from './pages/challenges/Challenges';
@@ -91,9 +90,7 @@ function App() {
                                   <MemberContext>
                                     <VouchContext>
                                       <VoiceReadContext>
-                                        <VoiceSendContext>
-                                          <ProjectBase />
-                                        </VoiceSendContext>
+                                        <ProjectBase />
                                       </VoiceReadContext>
                                     </VouchContext>
                                   </MemberContext>

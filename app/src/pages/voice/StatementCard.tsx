@@ -3,12 +3,13 @@ import { AppStatementRead } from '../../types';
 
 import { StatementEditable } from './StatementEditable';
 import { ReactNode, useEffect, useState } from 'react';
-import { Favorite, Like, LikeFill } from 'grommet-icons';
+import { Favorite } from 'grommet-icons';
 import { useQuery } from 'react-query';
 import { countStatementBackings } from '../../firestore/getters';
 import { BoxCentered } from '../../ui-components/BoxCentered';
 import { AppButton } from '../../ui-components/AppButton';
-import { useVoiceSend } from '../../contexts/VoiceSendContext';
+import { useConnectedMember } from '../../contexts/ConnectedAccountContext';
+import { useBackingSend } from './useBackingSend';
 
 const CircleElement = (props: { icon: ReactNode; size?: string; borderWidth?: string }) => {
   return (
@@ -29,6 +30,7 @@ const CircleElement = (props: { icon: ReactNode; size?: string; borderWidth?: st
 export const StatementCard = (props: { statement: AppStatementRead; containerStyle?: React.CSSProperties }) => {
   const { statement } = props;
 
+  const { tokenId } = useConnectedMember();
   const [isBacking, setIsBacking] = useState<boolean>(false);
   const [alreadyLiked, setAlreadyLiked] = useState<boolean>();
 
@@ -40,7 +42,9 @@ export const StatementCard = (props: { statement: AppStatementRead; containerSty
     return countStatementBackings(statement.id);
   });
 
-  const { backStatement, isSuccessBacking, errorBacking } = useVoiceSend();
+  const { backStatement, isSuccessBacking, errorBacking } = useBackingSend();
+
+  const canBack = tokenId !== undefined && tokenId !== null;
 
   const back = () => {
     if (backStatement) {
@@ -94,10 +98,10 @@ export const StatementCard = (props: { statement: AppStatementRead; containerSty
           borderWidth="4px"
           icon={
             <Box>
-              <Text color="white">{!isLoading ? nBacking : <Spinner color="white"></Spinner>}</Text>
+              <Text color="white">{!isLoading ? <b>{nBacking}</b> : <Spinner color="white"></Spinner>}</Text>
             </Box>
           }></CircleElement>
-        <AppButton plain onClick={() => back()} disabled={backStatement === undefined}>
+        <AppButton plain onClick={() => back()} disabled={!canBack}>
           <CircleElement
             size="48px"
             icon={

@@ -5,7 +5,6 @@ import { useAppSigner } from '../wallet/SignerContext';
 import { BoxCentered } from '../ui-components/BoxCentered';
 import { useCreateProject } from '../pages/create/useCreateProject';
 import { useAccountContext } from '../wallet/AccountContext';
-import { useVoiceSend } from '../contexts/VoiceSendContext';
 import { useNavigate } from 'react-router-dom';
 
 export const TestCreateProject = () => {

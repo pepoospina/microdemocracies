@@ -2,7 +2,6 @@ import { Box, Text } from 'grommet';
 import { useEffect, useState } from 'react';
 
 import { AppButton, AppCard } from '../../ui-components';
-import { useVoiceSend } from '../../contexts/VoiceSendContext';
 import { AppConnectButton } from '../../components/app/AppConnectButton';
 import { useNavigate } from 'react-router-dom';
 import { AppBottomButton } from '../common/BottomButtons';
@@ -12,10 +11,11 @@ import { StatementEditable } from './StatementEditable';
 import { useSemaphoreContext } from '../../contexts/SemaphoreContext';
 import { Loading } from '../common/WaitingTransaction';
 import { ViewportHeadingLarge, ViewportPage } from '../../components/app/Viewport';
+import { useStatementSend } from './useStatementSend';
 
 export const VoicePropose = (): JSX.Element => {
   const { isConnected } = useAccountContext();
-  const { proposeStatement, isSuccessStatement } = useVoiceSend();
+  const { proposeStatement, isSuccessStatement } = useStatementSend();
 
   const { publicId } = useSemaphoreContext();
 

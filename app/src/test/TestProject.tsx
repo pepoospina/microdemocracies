@@ -2,19 +2,21 @@ import { useEffect, useState } from 'react';
 
 import { AppButton, AppHeading } from '../ui-components';
 import { BoxCentered } from '../ui-components/BoxCentered';
-import { useVoiceSend } from '../contexts/VoiceSendContext';
 import { useProjectContext } from '../contexts/ProjectContext';
 import { useVoiceRead } from '../contexts/VoiceReadContext';
 import { useAppSigner } from '../wallet/SignerContext';
 import { useAccountContext } from '../wallet/AccountContext';
 import { StatementCard } from '../pages/voice/StatementCard';
 import { Box } from 'grommet';
+import { useBackingSend } from '../pages/voice/useBackingSend';
+import { useStatementSend } from '../pages/voice/useStatementSend';
 
 export const TestProject = () => {
   const { connectTest } = useAppSigner();
   const { isConnected } = useAccountContext();
   const { projectId } = useProjectContext();
-  const { proposeStatement, isSuccessStatement, backStatement, isSuccessBacking } = useVoiceSend();
+  const { proposeStatement, isSuccessStatement } = useStatementSend();
+  const { backStatement, isSuccessBacking } = useBackingSend();
   const { statements } = useVoiceRead();
 
   const [random, setRandom] = useState<string>();
