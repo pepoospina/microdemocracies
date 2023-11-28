@@ -1,8 +1,9 @@
 import { Group } from '@semaphore-protocol/group';
 
-import { AppPublicIdentity, AppTree } from '../@app/types';
+import { AppTree } from '../@app/types';
+import { getTreeId } from '../@app/utils/identity.utils';
 
-import { getProjectIdentities, getTree } from '../db/getters';
+import { getProjectIdentities, getTree, getTreeFull } from '../db/getters';
 import { setTree } from '../db/setters';
 
 export const TREE_DEPTH = 18;
@@ -16,17 +17,13 @@ export interface SerializedSemaphoreGroup {
   merkleRoot: string;
 }
 
-export const getTreeId = (tree: AppTree) => {
-  return `${tree.projectId}-${tree.root.slice(0, 16)}`;
-};
-
-export const sortIdentities = (identities: AppPublicIdentity[]) => {
+export const sortIdentities = (identities: { publicId: string }[]) => {
   return identities.sort((a, b) =>
     a.publicId > b.publicId ? 1 : a.publicId === b.publicId ? 0 : -1
   );
 };
 
-export const getGroup = async (projectId: number) => {
+export const getLatestGroup = async (projectId: number) => {
   const identities = await getProjectIdentities(projectId);
   const identitiesSorted = sortIdentities(identities);
 
@@ -35,6 +32,20 @@ export const getGroup = async (projectId: number) => {
     id: `${projectId}`,
     depth: TREE_DEPTH, // 262,144 members
     members: identitiesSorted.map((id) => id.publicId),
+    zeroValue: '0',
+  };
+
+  return deserializeSemaphoreGroup(serializedGroup);
+};
+
+export const getGroupOfTree = async (treeId: string) => {
+  const tree = await getTreeFull(treeId);
+
+  const serializedGroup: Omit<SerializedSemaphoreGroup, 'merkleRoot'> = {
+    name: `microrevolutions-treeId:${treeId}`,
+    id: `${tree.projectId}`,
+    depth: TREE_DEPTH, // 262,144 members
+    members: tree.publicIds,
     zeroValue: '0',
   };
 
@@ -72,8 +83,11 @@ export const storeTree = async (projectId: number, group: Group) => {
   const tree: AppTree = {
     projectId,
     root: serialized.merkleRoot,
+    publicIds: group.members.map((m) => m.toString()),
   };
-  const readTree = await getTree(tree);
+
+  const treeId = getTreeId(tree.projectId, tree.root);
+  const readTree = await getTree(treeId);
 
   if (!readTree) {
     return setTree(tree);

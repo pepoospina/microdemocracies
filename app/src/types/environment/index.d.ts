@@ -5,6 +5,7 @@ declare global {
       MAGIC_API_KEY: string;
       FUNCTIONS_BASE: string;
       NODE_ENV: 'development' | 'production' | 'test-prod';
+      ALCHEMY_GAS_POLICY_ID: string;
     }
   }
 }

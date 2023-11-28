@@ -1,14 +1,6 @@
-import { getDocs, where, query, and, getDoc, doc as docRef } from 'firebase/firestore';
+import { getDocs, where, query, and, getDoc, doc as docRef, getCountFromServer } from 'firebase/firestore';
 import { collections } from './database';
-import {
-  AppApplication,
-  AppProject,
-  AppPublicIdentity,
-  Entity,
-  HexStr,
-  StatementBackerRead,
-  StatementRead,
-} from '../types';
+import { AppApplication, AppProject, AppPublicIdentity, Entity, HexStr, StatementRead } from '../types';
 import { postInvite } from '../utils/project';
 import { getAddress } from 'viem';
 
@@ -51,6 +43,13 @@ export const getTopStatements = async (projectId: number) => {
   });
 };
 
+export const countStatementBackings = async (statementId: string) => {
+  const backers = collections.statementsBackers(statementId);
+  const q = query(backers);
+  const snap = await getCountFromServer(q);
+  return snap.data().count;
+};
+
 export const getInviteId = async (projectId: number, aaAddress: HexStr) => {
   const invites = collections.projectInvites(projectId);
   const q = query(invites, where('memberAddress', '==', getAddress(aaAddress)));
@@ -74,28 +73,6 @@ export const getApplications = async (aaAddress: HexStr) => {
       ...app.data(),
     } as AppApplication;
   });
-};
-
-export const getStatementBackers = async (statementId: string) => {
-  const q = query(collections.statementsBackers, where('object.statementId', '==', statementId));
-  const querySnapshot = await getDocs(q);
-
-  return querySnapshot.docs.map((doc) => {
-    return {
-      ...doc.data(),
-      id: doc.id,
-    } as unknown as StatementBackerRead;
-  });
-};
-
-export const isStatementBacker = async (statementId: string, tokenId: number): Promise<boolean> => {
-  const q = query(
-    collections.statementsBackers,
-    and(where('object.statementId', '==', statementId), where('object.backer', '==', tokenId))
-  );
-  const querySnapshot = await getDocs(q);
-
-  return querySnapshot.docs.length === 1;
 };
 
 export const getPublicIdentity = async (aaAddress: HexStr) => {

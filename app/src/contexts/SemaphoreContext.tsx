@@ -4,7 +4,7 @@ import { Identity } from '@semaphore-protocol/identity';
 
 import { useAccountContext } from '../wallet/AccountContext';
 
-import { AppPublicIdentity } from '../types';
+import { AppGetProof, AppPublicIdentity } from '../types';
 import { getPublicIdentity } from '../firestore/getters';
 import { getControlMessage } from '../utils/identity.utils';
 import { ProofAndTree, generateProof as _generateProof } from '../utils/identity';
@@ -14,7 +14,7 @@ import { useAppSigner } from '../wallet/SignerContext';
 
 export type SemaphoreContextType = {
   publicId?: string;
-  generateProof?: (signal: string, nullifier: string, projectId: number) => Promise<ProofAndTree>;
+  generateProof?: (input: AppGetProof) => Promise<ProofAndTree>;
   isCreatingPublicId: boolean;
   errorCreating?: Error;
 };
@@ -111,10 +111,10 @@ export const SemaphoreContext = (props: PropsWithChildren) => {
     setIsCreatingPublicId(false);
   };
 
-  // exposes a call to the generateProof function using the connected identity (which is sensistive)
+  // exposes a call to the generateProof function using the connected identity
   const generateProof = identity
-    ? async (signal: string, nullifier: string, projectId: number) => {
-        return _generateProof(identity, projectId, nullifier, signal);
+    ? async (input: { signal: string; nullifier: string; projectId?: number; treeId?: string }) => {
+        return _generateProof({ identity, ...input });
       }
     : undefined;
 

@@ -98,8 +98,10 @@ export const Join = () => {
       <ViewportHeadingLarge label="Join"></ViewportHeadingLarge>
       <Box>
         <Box pad="large">
-          <Box>
-            <Text>You are about to join a micro(r)evolution addressed to anyone who:</Text>
+          <Box margin={{ bottom: 'small' }}>
+            <Text>
+              This micro(r)evolution is for <b>anyone who</b>:
+            </Text>
           </Box>
           <StatementEditable value={project?.whoStatement}></StatementEditable>
         </Box>
@@ -165,7 +167,7 @@ export const Join = () => {
         <AppCard pad={{ vertical: 'small' }} style={{ flexShrink: 0 }}>
           <Text>
             Your application was received. Wait for it to be accepted by the person who invited you, or share the QR or
-            the link below with an exiting member and ask them to accept your application.
+            the link below with an existing member and ask them to accept your application.
           </Text>
         </AppCard>
 

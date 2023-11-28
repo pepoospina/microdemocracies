@@ -11,15 +11,12 @@ import { WagmiConfig, configureChains, createConfig } from 'wagmi';
 import { ALCHEMY_KEY } from './config/appConfig';
 import { ViewportContainer } from './components/app/Viewport';
 import { VoiceReadContext } from './contexts/VoiceReadContext';
-import { VoiceSendContext } from './contexts/VoiceSendContext';
 import { VouchContext } from './contexts/VouchContext';
 import { AccountPage } from './pages/account/AccountPage';
 import { Challenges } from './pages/challenges/Challenges';
 import { CreateProject } from './pages/create/CreateProject';
 import { Join } from './pages/join/Join';
 import { LandingPage } from './pages/landing/LandingPage';
-import { Test } from './pages/landing/Test';
-
 import { ProjectHome } from './pages/project/ProjectHome';
 import { VoiceBase } from './pages/voice/VoiceBase';
 import { VoicePropose } from './pages/voice/VoicePropose';
@@ -34,6 +31,8 @@ import { AccountContext } from './wallet/AccountContext';
 import { MemberContext } from './contexts/MemberContext';
 import { SemaphoreContext } from './contexts/SemaphoreContext';
 import { AppHome } from './pages/myprojects/AppHome';
+import { TestCreateProject } from './test/TestCreateProject';
+import { TestProject } from './test/TestProject';
 
 const queryClient = new QueryClient();
 
@@ -90,11 +89,9 @@ function App() {
                                 <ConnectedMemberContext>
                                   <MemberContext>
                                     <VouchContext>
-                                      <VoiceSendContext>
-                                        <VoiceReadContext>
-                                          <ProjectBase />
-                                        </VoiceReadContext>
-                                      </VoiceSendContext>
+                                      <VoiceReadContext>
+                                        <ProjectBase />
+                                      </VoiceReadContext>
                                     </VouchContext>
                                   </MemberContext>
                                 </ConnectedMemberContext>
@@ -113,8 +110,9 @@ function App() {
                               <Route path={RouteNames.VoicePropose} element={<VoicePropose />}></Route>
                             </Route>
                             <Route path={RouteNames.Base} element={<ProjectHome />}></Route>
+                            <Route path={'test'} element={<TestProject />}></Route>
                           </Route>
-                          <Route path={'/test'} element={<Test />}></Route>
+                          <Route path={'/test'} element={<TestCreateProject />}></Route>
                         </Routes>
                       </ViewportContainer>
                     </BrowserRouter>

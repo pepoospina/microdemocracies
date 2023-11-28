@@ -8,27 +8,35 @@ initializeApp();
 export const db = getFirestore();
 
 export const collections = {
-  userApplications: (aaAddress: string) =>
-    db
-      .collection(CollectionNames.Identities)
-      .doc(aaAddress)
-      .collection(CollectionNames.UserApplications),
+  projects: db.collection(CollectionNames.Projects),
   projectInvitations: (projectId: string) =>
     db
       .collection(CollectionNames.Projects)
       .doc(projectId)
       .collection(CollectionNames.ProjectInvitations),
+  userApplications: (aaAddress: string) =>
+    db
+      .collection(CollectionNames.Identities)
+      .doc(aaAddress)
+      .collection(CollectionNames.UserApplications),
+  applications: db.collectionGroup(CollectionNames.Applications),
   projectMembers: (projectId: string) =>
     db
       .collection(CollectionNames.Projects)
       .doc(projectId)
       .collection(CollectionNames.ProjectMembers),
-  entities: db.collection(CollectionNames.Entities),
-  applications: db.collectionGroup(CollectionNames.Applications),
-  trees: db.collection(CollectionNames.Trees),
   identities: db.collection(CollectionNames.Identities),
-  projectIndexes: db.collection(CollectionNames.ProjectIndexes),
-  projects: db.collection(CollectionNames.Projects),
+  treeIdentities: (treeId: string) =>
+    db
+      .collection(CollectionNames.Trees)
+      .doc(treeId)
+      .collection(CollectionNames.TreeIdentities),
+  entities: db.collection(CollectionNames.Entities),
+  trees: db.collection(CollectionNames.Trees),
   statements: db.collection(CollectionNames.Statments),
-  statementsBackers: db.collection(CollectionNames.StatementsBackers),
+  statementsBackers: (statementId: string) =>
+    db
+      .collection(CollectionNames.Statments)
+      .doc(statementId)
+      .collection(CollectionNames.StatementsBackers),
 };

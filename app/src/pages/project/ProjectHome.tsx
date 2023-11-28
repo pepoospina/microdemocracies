@@ -6,7 +6,7 @@ import { useProjectContext } from '../../contexts/ProjectContext';
 import { Add, FormPrevious } from 'grommet-icons';
 import { ViewportPage } from '../../components/app/Viewport';
 import { Loading } from '../common/WaitingTransaction';
-import { ProjectCard } from './ProjecCard';
+import { ProjectCard } from './ProjectCard';
 import { useVoiceRead } from '../../contexts/VoiceReadContext';
 import { StatementEditable } from '../voice/StatementEditable';
 import { RouteNames } from '../../App';
@@ -14,6 +14,7 @@ import { useResponsive } from '../../components/app';
 import { AppBottomButtons } from '../common/BottomButtons';
 import { BoxCentered } from '../../ui-components/BoxCentered';
 import { useConnectedMember } from '../../contexts/ConnectedAccountContext';
+import { StatementCard } from '../voice/StatementCard';
 
 export interface IProjectHome {
   dum?: any;
@@ -60,8 +61,8 @@ export const ProjectHome = (props: IProjectHome) => {
 
     return statements.map((statement) => {
       return (
-        <Box key={statement.id} style={{ marginBottom: '16px' }}>
-          <StatementEditable value={statement.statement} key={statement.id}></StatementEditable>
+        <Box key={statement.id} style={{ marginBottom: '32px' }}>
+          <StatementCard statement={statement} key={statement.id}></StatementCard>
         </Box>
       );
     });

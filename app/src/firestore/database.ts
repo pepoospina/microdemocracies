@@ -38,5 +38,8 @@ export const collections = {
   identities: collection(db, CollectionNames.Projects),
   projects: collection(db, CollectionNames.Projects),
   statements: collection(db, CollectionNames.Statments),
-  statementsBackers: collection(db, CollectionNames.StatementsBackers),
+  statementsBackers: (statementId: string) => {
+    const statement = doc(db, CollectionNames.Statments, statementId);
+    return collection(statement, CollectionNames.StatementsBackers);
+  },
 };

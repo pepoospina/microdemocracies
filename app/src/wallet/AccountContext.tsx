@@ -2,16 +2,17 @@ import { PropsWithChildren, createContext, useContext, useEffect, useState } fro
 
 import { AlchemyProvider } from '@alchemy/aa-alchemy';
 import { LightSmartContractAccount, getDefaultLightAccountFactoryAddress } from '@alchemy/aa-accounts';
-import { UserOperationCallData, WalletClientSigner } from '@alchemy/aa-core';
+import { LocalAccountSigner, UserOperationCallData, WalletClientSigner } from '@alchemy/aa-core';
 import { HexStr } from '../types';
 import { chain } from './config';
 import { useContractRead, usePublicClient } from 'wagmi';
-import { ALCHEMY_KEY } from '../config/appConfig';
+import { ALCHEMY_GAS_POLICY_ID, ALCHEMY_KEY } from '../config/appConfig';
 import { DecodeEventLogReturnType, decodeEventLog, getAddress } from 'viem';
 import { useAppSigner } from './SignerContext';
 import { MessageSigner } from '../utils/identity';
 import { aaWalletAbi, getFactoryAddress, registryABI, registryFactoryABI } from '../utils/contracts.json';
 import { AccountDataContext } from './AccountDataContext';
+import { mnemonic } from '../test/.mnemonic';
 
 export type AccountContextType = {
   isConnected: boolean;
@@ -81,16 +82,17 @@ export const AccountContext = (props: PropsWithChildren) => {
     const provider = new AlchemyProvider({
       apiKey: ALCHEMY_KEY,
       chain: chain as any,
-    }).connect(
-      (rpcClient) =>
-        new LightSmartContractAccount({
-          chain: rpcClient.chain,
-          owner: signer,
-          factoryAddress: getDefaultLightAccountFactoryAddress(chain as any),
-          rpcClient,
-        })
-    );
-    provider.withAlchemyGasManager({ policyId: '4bb896df-1684-4e86-b732-07f696ecf2be' });
+    }).connect((rpcClient) => {
+      return new LightSmartContractAccount({
+        chain: rpcClient.chain,
+        owner: signer,
+        factoryAddress: getDefaultLightAccountFactoryAddress(chain as any),
+        rpcClient,
+      });
+    });
+
+    provider.withAlchemyGasManager({ policyId: ALCHEMY_GAS_POLICY_ID });
+
     setAlchemyProviderAA(provider);
     console.log('created aa provider', { provider });
   };

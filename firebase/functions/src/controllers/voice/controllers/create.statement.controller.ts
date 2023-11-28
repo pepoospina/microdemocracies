@@ -6,6 +6,8 @@ import { AppStatementCreate } from '../../../@app/types';
 
 import { TREE_DEPTH } from '../../../utils/groups';
 import { setStatement } from '../../../db/setters';
+import { getTree } from '../../../db/getters';
+import { getTreeId } from '../../../@app/utils/identity.utils';
 
 import { statementValidationScheme } from './voice.schemas';
 
@@ -17,10 +19,20 @@ export const createStatementController: RequestHandler = async (
     request.body
   )) as AppStatementCreate;
 
-  // const statement = request.body as AppStatementCreate;
+  /** the proof must be
+   * - of a tree that is a tree of the project (can be an old one)
+   * - valid proof
+   */
+  const tree = await getTree(
+    getTreeId(statement.projectId, statement.proof.merkleTreeRoot)
+  );
 
-  // store identity if proof valid
-  // const proof = deserializeProof();
+  if (!tree) {
+    throw new Error(
+      `Tree not found in project ${statement.projectId} with root ${statement.proof}`
+    );
+  }
+
   const result = await verifyProof(statement.proof, TREE_DEPTH);
 
   if (!result) {

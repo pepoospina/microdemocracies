@@ -2,7 +2,6 @@ import { Box, Text } from 'grommet';
 import { useEffect, useState } from 'react';
 
 import { AppButton, AppCard } from '../../ui-components';
-import { useVoiceSend } from '../../contexts/VoiceSendContext';
 import { AppConnectButton } from '../../components/app/AppConnectButton';
 import { useNavigate } from 'react-router-dom';
 import { AppBottomButton } from '../common/BottomButtons';
@@ -11,13 +10,12 @@ import { useAccountContext } from '../../wallet/AccountContext';
 import { StatementEditable } from './StatementEditable';
 import { useSemaphoreContext } from '../../contexts/SemaphoreContext';
 import { Loading } from '../common/WaitingTransaction';
-import { useVoiceRead } from '../../contexts/VoiceReadContext';
 import { ViewportHeadingLarge, ViewportPage } from '../../components/app/Viewport';
+import { useStatementSend } from './useStatementSend';
 
 export const VoicePropose = (): JSX.Element => {
   const { isConnected } = useAccountContext();
-  const { proposeStatement } = useVoiceSend();
-  const { refetchStatements } = useVoiceRead();
+  const { proposeStatement, isSuccessStatement } = useStatementSend();
 
   const { publicId } = useSemaphoreContext();
 
@@ -30,20 +28,17 @@ export const VoicePropose = (): JSX.Element => {
   const _proposeStatement = async (input: string) => {
     if (proposeStatement) {
       setIsProposing(true);
-      const success = await proposeStatement(input);
-      if (success) {
-        setIsProposing(true);
-        setDone(true);
-      }
+      proposeStatement(input);
     }
   };
 
   useEffect(() => {
-    if (done) {
-      refetchStatements();
+    if (isSuccessStatement) {
+      setIsProposing(false);
+      setDone(true);
       navigate('../..');
     }
-  }, [done]);
+  }, [isSuccessStatement]);
 
   const readyToPropose = isConnected && input && proposeStatement !== undefined && publicId && !done;
 

@@ -5,6 +5,7 @@ export enum CollectionNames {
   UserApplications = 'applications',
   Applications = 'applications',
   Trees = 'trees',
+  TreeIdentities = 'tree-identities',
   Identities = 'identities',
   Projects = 'projects',
   Statments = 'statements',
