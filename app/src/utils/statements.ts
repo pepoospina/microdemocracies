@@ -37,7 +37,7 @@ export const postBacking = async (backing: AppBackingCreate) => {
   });
 
   const body = await res.json();
-  return body.success;
+  return body;
 };
 
 export const postIdentity = async (publicIdentity: AppPublicIdentity) => {

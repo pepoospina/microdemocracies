@@ -12,6 +12,8 @@ export type VoiceSendContextType = {
   isSuccessStatement: boolean;
   backStatement?: (statementId: string, treeId: string) => Promise<boolean>;
   isSuccessBacking: boolean;
+  isErrorBacking: boolean;
+  errorBacking?: string;
 };
 
 interface IVoiceSendContext {
@@ -28,6 +30,8 @@ export const VoiceSendContext = (props: IVoiceSendContext) => {
 
   const [isSuccessStatement, setIsSuccessStatement] = useState<boolean>(false);
   const [isSuccessBacking, setIsSuccessBacking] = useState<boolean>(false);
+  const [isErrorBacking, setIsErrorBacking] = useState<boolean>(false);
+  const [errorBacking, setErrorBacking] = useState<string>();
 
   const generateStatementProof =
     projectId && publicId && generateProof !== undefined
@@ -70,6 +74,8 @@ export const VoiceSendContext = (props: IVoiceSendContext) => {
   const backStatement = generateBackingProof
     ? async (statementId: string, treeId: string) => {
         setIsSuccessBacking(false);
+        setErrorBacking(undefined);
+
         const proofAndTree = await generateBackingProof(statementId, treeId);
 
         const backing: AppBackingCreate = {
@@ -79,8 +85,11 @@ export const VoiceSendContext = (props: IVoiceSendContext) => {
 
         const res = await postBacking(backing);
 
-        if (res) {
+        if (res.success) {
           setIsSuccessBacking(true);
+        } else {
+          setIsErrorBacking(true);
+          setErrorBacking(res.error);
         }
         return res;
       }
@@ -93,6 +102,8 @@ export const VoiceSendContext = (props: IVoiceSendContext) => {
         isSuccessStatement,
         backStatement,
         isSuccessBacking,
+        isErrorBacking,
+        errorBacking,
       }}>
       {props.children}
     </VoiceSendContextValue.Provider>

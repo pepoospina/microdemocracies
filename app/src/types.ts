@@ -109,16 +109,7 @@ export interface SemaphoreProofStrings {
   proof: PackedProofString;
 }
 
-export type PackedProofString = [
-  string,
-  string,
-  string,
-  string,
-  string,
-  string,
-  string,
-  string
-];
+export type PackedProofString = [string, string, string, string, string, string, string, string];
 
 export interface AppStatement {
   projectId: number;
@@ -126,6 +117,8 @@ export interface AppStatement {
   treeId: string;
   proof: SemaphoreProofStrings;
 }
+
+export type AppStatementRead = AppStatement & { id: string };
 
 export type AppStatementCreate = AppStatement;
 

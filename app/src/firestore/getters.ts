@@ -1,4 +1,4 @@
-import { getDocs, where, query, and, getDoc, doc as docRef } from 'firebase/firestore';
+import { getDocs, where, query, and, getDoc, doc as docRef, getCountFromServer } from 'firebase/firestore';
 import { collections } from './database';
 import { AppApplication, AppProject, AppPublicIdentity, Entity, HexStr, StatementRead } from '../types';
 import { postInvite } from '../utils/project';
@@ -41,6 +41,13 @@ export const getTopStatements = async (projectId: number) => {
       id: doc.id,
     } as unknown as StatementRead;
   });
+};
+
+export const countStatementBackings = async (statementId: string) => {
+  const backers = collections.statementsBackers(statementId);
+  const q = query(backers);
+  const snap = await getCountFromServer(q);
+  return snap.data().count;
 };
 
 export const getInviteId = async (projectId: number, aaAddress: HexStr) => {
