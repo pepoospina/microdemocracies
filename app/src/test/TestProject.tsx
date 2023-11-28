@@ -8,6 +8,7 @@ import { useVoiceRead } from '../contexts/VoiceReadContext';
 import { useAppSigner } from '../wallet/SignerContext';
 import { useAccountContext } from '../wallet/AccountContext';
 import { StatementCard } from '../pages/voice/StatementCard';
+import { Box } from 'grommet';
 
 export const TestProject = () => {
   const { connectTest } = useAppSigner();
@@ -39,22 +40,28 @@ export const TestProject = () => {
   }, [isSuccessStatement]);
 
   /** statement posted => post backing */
-  useEffect(() => {
+  const runBackStatement = async () => {
     if (random && statements) {
       const found = statements.find((s) => s.statement.includes(random));
       if (found && backStatement) {
         console.log('[TEST] statement found', { found });
-        backStatement(found.id, found.treeId);
+        const res = await backStatement(found.id, found.treeId);
+        console.log('backing posted', res);
+
+        /** try again */
+        try {
+          const res = await backStatement(found.id, found.treeId);
+          console.error('did not failed', res);
+        } catch (e) {
+          console.log('failed as expected', e);
+        }
       }
     }
-  }, [statements, random]);
+  };
 
-  /** backing posted */
   useEffect(() => {
-    if (isSuccessBacking) {
-      console.log('[TEST] backing posted');
-    }
-  }, [isSuccessBacking]);
+    runBackStatement();
+  }, [statements, random]);
 
   return (
     <BoxCentered fill gap="large">
@@ -66,13 +73,17 @@ export const TestProject = () => {
         label="Start Test"
         primary></AppButton>
 
-      {statements ? (
-        statements.map((statement, ix) => {
-          return <StatementCard key={ix} statement={statement}></StatementCard>;
-        })
-      ) : (
-        <></>
-      )}
+      <Box style={{ overflowY: 'auto' }}>
+        {statements ? (
+          statements.map((statement, ix) => {
+            return (
+              <StatementCard containerStyle={{ marginBottom: '22px' }} key={ix} statement={statement}></StatementCard>
+            );
+          })
+        ) : (
+          <></>
+        )}
+      </Box>
     </BoxCentered>
   );
 };

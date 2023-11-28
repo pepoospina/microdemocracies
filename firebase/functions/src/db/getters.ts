@@ -90,6 +90,18 @@ export const getTree = async (treeId: string) => {
   } as unknown as AppTree & { id: string };
 };
 
+export const hasBackingWithNullifierHash = async (
+  statementId: string,
+  nullifierHash: string
+) => {
+  const q = collections
+    .statementsBackers(statementId)
+    .where('proof.nullifierHash', '==', nullifierHash);
+  const snap = await q.get();
+
+  return !snap.empty;
+};
+
 export const getInvite = async (projectId: number, invitationId: string) => {
   const ref = collections
     .projectInvitations(projectId.toString())

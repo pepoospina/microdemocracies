@@ -12,7 +12,7 @@ const CircleButton = (props: { icon: ReactNode }) => {
 
 export const StatementCard = (props: { statement: AppStatement; containerStyle?: React.CSSProperties }) => {
   return (
-    <Box style={{ position: 'relative', ...props.containerStyle }}>
+    <Box style={{ position: 'relative', flexShrink: 0, ...props.containerStyle }}>
       <StatementEditable value={props.statement.statement}></StatementEditable>
       <BoxCentered
         style={{

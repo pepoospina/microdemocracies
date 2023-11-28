@@ -39,6 +39,7 @@ export const VoiceSendContext = (props: IVoiceSendContext) => {
   const proposeStatement =
     generateStatementProof !== undefined && projectId !== undefined
       ? async (_statement: string) => {
+          setIsSuccessStatement(false);
           if (projectId) {
             const statementHash = hashMessage(_statement);
             const nullifier = Date.now().toString();
@@ -68,6 +69,7 @@ export const VoiceSendContext = (props: IVoiceSendContext) => {
 
   const backStatement = generateBackingProof
     ? async (statementId: string, treeId: string) => {
+        setIsSuccessBacking(false);
         const proofAndTree = await generateBackingProof(statementId, treeId);
 
         const backing: AppBackingCreate = {

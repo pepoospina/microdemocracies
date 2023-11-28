@@ -5,7 +5,11 @@ import { BigNumber } from '@ethersproject/bignumber';
 
 import { AppBackingCreate } from '../../../@app/types';
 import { getTreeId } from '../../../@app/utils/identity.utils';
-import { getStatement, getTree } from '../../../db/getters';
+import {
+  getStatement,
+  getTree,
+  hasBackingWithNullifierHash,
+} from '../../../db/getters';
 import { setStatementBacker } from '../../../db/setters';
 import { TREE_DEPTH } from '../../../utils/groups';
 
@@ -23,11 +27,14 @@ export const backStatementController: RequestHandler = async (
   /** the backing must have
    * - a proof of the same tree as the statement
    * - a nullifier that is the statementId
+   * - no previous backing with the same nullifierHash
+   * - a valid proof
    * - a signal that is the statementId
    *
    * also check the tree is stored (this should always be the case)
    */
 
+  /** a proof of the same tree as the statement */
   const statement = await getStatement(backing.statementId);
   const proofTreeId = getTreeId(
     statement.projectId,
@@ -46,6 +53,7 @@ export const backStatementController: RequestHandler = async (
     throw new Error(`Three with id ${proofTreeId} not found`);
   }
 
+  /** a nullifier that is the statementId */
   const expectedNullifier = BigNumber.from(backing.statementId).toString();
   if (backing.proof.externalNullifier !== expectedNullifier) {
     throw new Error(
@@ -53,6 +61,18 @@ export const backStatementController: RequestHandler = async (
     );
   }
 
+  /** no previous backing with the same nullifierHash */
+  const preExist = await hasBackingWithNullifierHash(
+    backing.statementId,
+    backing.proof.nullifierHash
+  );
+  if (preExist) {
+    throw new Error(
+      `Backing with this nullifierHash ${backing.proof.nullifierHash} already posted`
+    );
+  }
+
+  /** a valid proof */
   const result = await verifyProof(backing.proof, TREE_DEPTH);
 
   if (!result) {
