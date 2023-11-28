@@ -6,7 +6,7 @@ import { useProjectContext } from '../../contexts/ProjectContext';
 import { Add, FormPrevious } from 'grommet-icons';
 import { ViewportPage } from '../../components/app/Viewport';
 import { Loading } from '../common/WaitingTransaction';
-import { ProjectCard } from './ProjecCard';
+import { ProjectCard } from './ProjectCard';
 import { useVoiceRead } from '../../contexts/VoiceReadContext';
 import { StatementEditable } from '../voice/StatementEditable';
 import { RouteNames } from '../../App';

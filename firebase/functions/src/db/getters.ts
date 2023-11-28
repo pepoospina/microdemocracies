@@ -1,35 +1,22 @@
 import {
   AppInvite,
   AppProjectCreate,
-  AppProjectIndex,
   AppPublicIdentity,
   AppStatement,
   AppTree,
-  SignedObject,
 } from '../@app/types';
 
-import { getTreeId } from '../utils/groups';
+import { sortIdentities } from '../utils/groups';
 import { collections } from './db';
 
-export const getStatement = async (
-  statementId: string
-): Promise<SignedObject<AppStatement>> => {
+export const getStatement = async (statementId: string) => {
   const ref = collections.statements.doc(statementId);
   const doc = await ref.get();
   if (!doc.exists) throw new Error(`Statement ${statementId} not found`);
   const statement = doc.data();
   if (!statement) throw new Error(`Statement not found`);
 
-  return doc.data() as unknown as SignedObject<AppStatement>;
-};
-
-export const getProjectIndex = async (
-  projectId: string
-): Promise<AppProjectIndex | undefined> => {
-  const ref = collections.projectIndexes.doc(projectId);
-  const doc = await ref.get();
-  if (!doc.exists) return undefined;
-  return doc.data() as unknown as AppProjectIndex;
+  return doc.data() as unknown as AppStatement;
 };
 
 export const getProject = async (
@@ -69,8 +56,30 @@ export const getProjectIdentities = async (
   return allDocs.filter((doc) => doc !== undefined) as AppPublicIdentity[];
 };
 
-export const getTree = async (tree: AppTree) => {
-  const ref = collections.trees.doc(getTreeId(tree));
+export const getTreeFull = async (treeId: string): Promise<AppTree> => {
+  const tree = await getTree(treeId);
+
+  if (!tree) throw new Error('tree not found');
+
+  const refs = await collections.treeIdentities(treeId).listDocuments();
+  const _publicIds = await Promise.all(
+    refs.map(async (ref) => {
+      const doc = await ref.get();
+      return doc.data() as { publicId: string };
+    })
+  );
+
+  const publicIds = sortIdentities(_publicIds);
+
+  return {
+    projectId: tree.projectId,
+    root: tree.root,
+    publicIds: publicIds.map((p) => p.publicId),
+  };
+};
+
+export const getTree = async (treeId: string) => {
+  const ref = collections.trees.doc(treeId);
   const doc = await ref.get();
 
   if (!doc.exists) return undefined;

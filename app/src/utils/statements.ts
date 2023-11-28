@@ -1,7 +1,14 @@
 import stringify from 'canonical-json';
-import { FUNCTIONS_BASE } from '../config/appConfig';
 
-import { AppStatementCreate, AppPublicIdentity, AppGetMerklePass, AppReturnMerklePass } from '../types';
+import { FUNCTIONS_BASE } from '../config/appConfig';
+import {
+  AppStatementCreate,
+  AppPublicIdentity,
+  AppGetMerklePass,
+  AppReturnMerklePass,
+  AppBackingCreate,
+} from '../types';
+
 import { MessageSigner } from './identity';
 
 export const signObject = async <T>(object: T, signMessage: MessageSigner) => {
@@ -16,6 +23,17 @@ export const postStatement = async (statement: AppStatementCreate) => {
     method: 'post',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(statement),
+  });
+
+  const body = await res.json();
+  return body.success;
+};
+
+export const postBacking = async (backing: AppBackingCreate) => {
+  const res = await fetch(FUNCTIONS_BASE + '/voice/statement/back', {
+    method: 'post',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(backing),
   });
 
   const body = await res.json();

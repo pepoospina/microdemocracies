@@ -7,7 +7,7 @@ import { useAccountContext } from '../../wallet/AccountContext';
 import { AppConnect } from '../../components/app/AppConnect';
 import { useAccountDataContext } from '../../wallet/AccountDataContext';
 import { Loading } from '../common/WaitingTransaction';
-import { ProjectCard } from '../project/ProjecCard';
+import { ProjectCard } from '../project/ProjectCard';
 import { useNavigate } from 'react-router-dom';
 import { BoxCentered } from '../../ui-components/BoxCentered';
 import { AppBottomButton } from '../common/BottomButtons';

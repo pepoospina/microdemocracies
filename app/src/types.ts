@@ -125,16 +125,13 @@ export interface AppStatement {
   statement: string;
   treeId: string;
   proof: SemaphoreProofStrings;
-  backers: number[] | undefined;
 }
 
-export type AppStatementCreate = Omit<AppStatement, 'backers'>;
+export type AppStatementCreate = AppStatement;
 
-export interface AppStatementBacking {
-  backer: number;
-  statement: string;
+export interface AppBackingCreate {
   statementId: string;
-  projectId: number;
+  proof: SemaphoreProofStrings;
 }
 
 export interface SignedObject<T> {
@@ -142,10 +139,7 @@ export interface SignedObject<T> {
   signature: HexStr;
 }
 
-export type StatementRead = AppStatement & { id: string };
-export type StatementBackerRead = SignedObject<AppStatementBacking> & {
-  id: string;
-};
+export type StatementRead = AppStatement & { id: string; treeId: string };
 
 export interface AppPublicIdentity {
   publicId: string;
@@ -154,8 +148,16 @@ export interface AppPublicIdentity {
   signature: HexStr;
 }
 
+export interface AppGetProof {
+  projectId?: number;
+  treeId?: string;
+  signal: string;
+  nullifier: string;
+}
+
 export interface AppGetMerklePass {
-  projectId: number;
+  projectId?: number;
+  treeId?: string;
   publicId: string;
 }
 
@@ -177,6 +179,7 @@ export interface AppProjectIndex {
 export interface AppTree {
   projectId: number;
   root: string;
+  publicIds: string[];
 }
 
 export interface AppInvite {

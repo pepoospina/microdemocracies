@@ -2,7 +2,7 @@ import { Identity } from '@semaphore-protocol/identity';
 import { SemaphoreProof, generateProof as _generateProof } from '@semaphore-protocol/proof';
 import { getPublicIdentity } from '../firestore/getters';
 
-import { AppPublicIdentity, HexStr } from '../types';
+import { AppGetProof, AppPublicIdentity, HexStr } from '../types';
 
 import { getMerklePass, postIdentity } from './statements';
 import { getControlMessage } from './identity.utils';
@@ -48,12 +48,9 @@ export const connectIdentity = async (owner: HexStr, aaAddress: HexStr, signMess
   return identity;
 };
 
-export const generateProof = async (
-  identity: Identity,
-  projectId: number,
-  signal: string,
-  nullifier: string
-): Promise<ProofAndTree> => {
+export const generateProof = async (input: AppGetProof & { identity: Identity }): Promise<ProofAndTree> => {
+  const { projectId, treeId, identity, signal, nullifier } = input;
+
   /**
    * Get the merkle pass as computed by the backend. It builds a tree
    * with the current list of project members and return the merkle pass
@@ -61,6 +58,7 @@ export const generateProof = async (
    */
   const treePass = await getMerklePass({
     projectId,
+    treeId,
     publicId: identity.getCommitment().toString(),
   });
 

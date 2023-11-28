@@ -1,8 +1,7 @@
 import { createContext, useContext, useState } from 'react';
 
-import { useConnectedMember } from './ConnectedAccountContext';
-import { postStatement } from '../utils/statements';
-import { AppStatementCreate } from '../types';
+import { postBacking, postStatement } from '../utils/statements';
+import { AppBackingCreate, AppStatementCreate } from '../types';
 import { useProjectContext } from './ProjectContext';
 import { useSemaphoreContext } from './SemaphoreContext';
 import { hashMessage } from 'viem';
@@ -10,7 +9,9 @@ import { useVoiceRead } from './VoiceReadContext';
 
 export type VoiceSendContextType = {
   proposeStatement?: (statement: string) => Promise<boolean>;
-  isSuccess: boolean;
+  isSuccessStatement: boolean;
+  backStatement?: (statementId: string, treeId: string) => Promise<boolean>;
+  isSuccessBacking: boolean;
 };
 
 interface IVoiceSendContext {
@@ -20,26 +21,26 @@ interface IVoiceSendContext {
 const VoiceSendContextValue = createContext<VoiceSendContextType | undefined>(undefined);
 
 export const VoiceSendContext = (props: IVoiceSendContext) => {
-  const { tokenId } = useConnectedMember();
   const { projectId } = useProjectContext();
   const { publicId, generateProof } = useSemaphoreContext();
 
   const { refetchStatements } = useVoiceRead();
 
-  const [isSuccess, setIsSuccess] = useState<boolean>(false);
+  const [isSuccessStatement, setIsSuccessStatement] = useState<boolean>(false);
+  const [isSuccessBacking, setIsSuccessBacking] = useState<boolean>(false);
 
   const generateStatementProof =
     projectId && publicId && generateProof !== undefined
       ? async (signal: string, nullifier: string) => {
-          return generateProof(signal, nullifier, projectId);
+          return generateProof({ signal, nullifier, projectId });
         }
       : undefined;
 
   const proposeStatement =
-    tokenId !== undefined && generateStatementProof !== undefined && projectId !== undefined
+    generateStatementProof !== undefined && projectId !== undefined
       ? async (_statement: string) => {
           if (projectId) {
-            const statementHash = await hashMessage(_statement);
+            const statementHash = hashMessage(_statement);
             const nullifier = Date.now().toString();
             const proofAndTree = await generateStatementProof(statementHash, nullifier);
             const statement: AppStatementCreate = {
@@ -51,18 +52,45 @@ export const VoiceSendContext = (props: IVoiceSendContext) => {
             const res = await postStatement(statement);
             if (res) {
               refetchStatements();
-              setIsSuccess(true);
+              setIsSuccessStatement(true);
             }
             return res;
           }
         }
       : undefined;
 
+  const generateBackingProof =
+    generateProof !== undefined
+      ? async (statementId: string, treeId: string) => {
+          return generateProof({ signal: statementId, nullifier: statementId, treeId });
+        }
+      : undefined;
+
+  const backStatement = generateBackingProof
+    ? async (statementId: string, treeId: string) => {
+        const proofAndTree = await generateBackingProof(statementId, treeId);
+
+        const backing: AppBackingCreate = {
+          statementId,
+          proof: proofAndTree.proof,
+        };
+
+        const res = await postBacking(backing);
+
+        if (res) {
+          setIsSuccessBacking(true);
+        }
+        return res;
+      }
+    : undefined;
+
   return (
     <VoiceSendContextValue.Provider
       value={{
         proposeStatement,
-        isSuccess,
+        isSuccessStatement,
+        backStatement,
+        isSuccessBacking,
       }}>
       {props.children}
     </VoiceSendContextValue.Provider>

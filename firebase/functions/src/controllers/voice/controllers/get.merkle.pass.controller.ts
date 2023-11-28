@@ -2,7 +2,11 @@ import { RequestHandler } from 'express';
 import { logger } from 'firebase-functions/v1';
 
 import { AppGetMerklePass } from '../../../@app/types';
-import { getGroup, storeTree } from '../../../utils/groups';
+import {
+  getGroupOfTree,
+  getLatestGroup,
+  storeTree,
+} from '../../../utils/groups';
 
 import { getIdentitiesValidationScheme } from './voice.schemas';
 
@@ -14,8 +18,21 @@ export const getMerklePassController: RequestHandler = async (
     request.body
   )) as AppGetMerklePass;
 
-  const group = await getGroup(payload.projectId);
-  const treeId = await storeTree(payload.projectId, group);
+  let treeId: string | undefined = undefined;
+
+  const group = await (async () => {
+    if (payload.projectId && !payload.treeId) {
+      const group = await getLatestGroup(payload.projectId);
+      /** always store a tree if not yet created */
+      treeId = await storeTree(payload.projectId, group);
+      return group;
+    }
+    if (payload.treeId) {
+      treeId = payload.treeId;
+      return getGroupOfTree(payload.treeId);
+    }
+    throw new Error('Unexpeted case, provide projecId or treeId');
+  })();
 
   const leafIndex = group.indexOf(BigInt(payload.publicId));
   const merklePass = group.generateMerkleProof(leafIndex);

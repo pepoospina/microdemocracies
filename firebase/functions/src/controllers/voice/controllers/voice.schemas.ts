@@ -9,13 +9,8 @@ export const statementValidationScheme = object({
 }).noUnknown(true);
 
 export const backStatementValidationScheme = object({
-  object: object({
-    backer: number().required(),
-    statement: string().max(MAX_STATEMENT_LENGTH).required(),
-    projectId: number().required(),
-    statementId: string().required(),
-  }),
-  signature: string().required(),
+  statementId: string().required(),
+  proof: object().shape({}).required(),
 }).noUnknown(true);
 
 export const identityValidationScheme = object({
@@ -26,6 +21,7 @@ export const identityValidationScheme = object({
 }).noUnknown(true);
 
 export const getIdentitiesValidationScheme = object({
-  projectId: number().required(),
+  treeId: string().optional(),
+  projectId: number().optional(),
   publicId: string().required(),
 }).noUnknown(true);

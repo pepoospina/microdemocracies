@@ -1,33 +1,33 @@
-import { getAddress, hashMessage } from 'viem';
+import { getAddress } from 'viem';
 import {
   AppApplication,
+  AppBackingCreate,
   AppInvite,
   AppProjectCreate,
   AppProjectMember,
   AppPublicIdentity,
-  AppStatementBacking,
   AppStatementCreate,
   AppTree,
   Entity,
   HexStr,
-  SignedObject,
 } from '../@app/types';
 
-import { getTreeId } from '../utils/groups';
-import { collections } from './db';
+import {
+  getBackingId,
+  getStatementId,
+  getTreeId,
+} from '../@app/utils/identity.utils';
+
+import { collections, db } from './db';
 
 export const setStatementBacker = async (
-  statement: SignedObject<AppStatementBacking>,
-  id: string
+  backing: AppBackingCreate
 ): Promise<string> => {
-  const docRef = collections.statementsBackers.doc(id);
-  await docRef.set(statement);
+  const docRef = collections
+    .statementsBackers(backing.statementId)
+    .doc(getBackingId(backing));
+  await docRef.set(backing);
   return docRef.id;
-};
-
-export const getStatementId = (statement: AppStatementCreate) => {
-  const hash = hashMessage(JSON.stringify(statement.proof));
-  return hash.slice(0, 18);
 };
 
 export const setStatement = async (
@@ -74,9 +74,24 @@ export const setProjectMember = async (
 };
 
 export const setTree = async (tree: AppTree): Promise<string> => {
-  const docRef = collections.trees.doc(getTreeId(tree));
-  await docRef.set(tree);
-  return docRef.id;
+  const treeRef = collections.trees.doc(getTreeId(tree.projectId, tree.root));
+  await treeRef.set({ root: tree.root, projectId: tree.projectId });
+
+  /** store the tree members on a subcollection */
+  const treeIdentities = collections.treeIdentities(treeRef.id);
+  const refs = tree.publicIds.map((publicId) => {
+    return { ref: treeIdentities.doc(), data: { publicId } };
+  });
+
+  var batch = db.batch();
+
+  refs.map((ref) => {
+    batch.set(ref.ref, ref.data);
+  });
+
+  await batch.commit();
+
+  return treeRef.id;
 };
 
 export const setEntity = async (entity: Entity<any>): Promise<string> => {

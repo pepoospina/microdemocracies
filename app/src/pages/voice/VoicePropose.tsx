@@ -15,7 +15,7 @@ import { ViewportHeadingLarge, ViewportPage } from '../../components/app/Viewpor
 
 export const VoicePropose = (): JSX.Element => {
   const { isConnected } = useAccountContext();
-  const { proposeStatement, isSuccess } = useVoiceSend();
+  const { proposeStatement, isSuccessStatement } = useVoiceSend();
 
   const { publicId } = useSemaphoreContext();
 
@@ -33,12 +33,12 @@ export const VoicePropose = (): JSX.Element => {
   };
 
   useEffect(() => {
-    if (isSuccess) {
+    if (isSuccessStatement) {
       setIsProposing(false);
       setDone(true);
       navigate('../..');
     }
-  }, [isSuccess]);
+  }, [isSuccessStatement]);
 
   const readyToPropose = isConnected && input && proposeStatement !== undefined && publicId && !done;
 
