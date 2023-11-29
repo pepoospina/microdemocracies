@@ -4,7 +4,7 @@ import { FormNext, FormPrevious } from 'grommet-icons';
 import { ReactNode, useEffect, useState } from 'react';
 
 import { StatementEditable } from '../voice/StatementEditable';
-import { AppHeading } from '../../ui-components';
+import { AppCard, AppHeading } from '../../ui-components';
 import { DetailsSelector } from './DetailsSelector';
 import { DetailsForm } from '../join/DetailsForm';
 
@@ -95,7 +95,7 @@ export const CreateProject = () => {
     <Box style={boxStyle}>
       <Box style={{ width: '100%', flexShrink: 0 }} pad="large">
         <Box style={{ marginBottom: '12px', fontSize: '10px', fontWeight: '300', flexShrink: 0 }}>
-          <AppHeading level="3">This micro(r)revolution is for anyone who:</AppHeading>
+          <AppHeading level="3">This micro(r)evolution is for anyone who:</AppHeading>
           <Text style={{ margin: '12px 0px 0px 0px' }}>
             <Bold>Examples are:</Bold> "LIVES IN...", "STUDIES AT...", "WANTS TO...", etc.
           </Text>
@@ -147,7 +147,16 @@ export const CreateProject = () => {
       <ViewportHeadingLarge label="Start a micro(r)evolution"></ViewportHeadingLarge>
 
       <Box>
-        {' '}
+        <Box pad={{ horizontal: 'large' }} style={{ flexShrink: 0 }}>
+          <AppCard>
+            <Text>
+              <b style={{ color: 'red' }}>TRYOUT ONLY!</b> This app is currenty under development. Do not use it to
+              create real communities just yet. You can use it to make tryouts of the process though. It will be ready
+              very soon.
+            </Text>
+          </AppCard>
+        </Box>
+
         {pages.map((page, ix) => {
           return (
             <div key={ix} style={{ height: '100%', width: '100%', display: pageIx === ix ? 'block' : 'none' }}>

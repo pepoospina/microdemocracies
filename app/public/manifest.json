@@ -1,8 +1,8 @@
 {
   "short_name": "Micro(r)evolutions",
-  "name": "Change things with Micro(r)evolutions",
+  "name": "Micro(r)evolutions",
   "icons": [],
-  "start_url": ".",
+  "start_url": "/home",
   "display": "standalone",
   "theme_color": "#000000",
   "background_color": "#ffffff"
