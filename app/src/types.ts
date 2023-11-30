@@ -122,6 +122,12 @@ export type AppStatementRead = AppStatement & { id: string };
 
 export type AppStatementCreate = AppStatement;
 
+export enum StatmentReactions {
+  Back = 'back',
+  DontBack = 'dontBack',
+  Flag = 'flag',
+}
+
 export interface AppBackingCreate {
   statementId: string;
   proof: SemaphoreProofStrings;

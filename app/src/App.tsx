@@ -1,3 +1,4 @@
+import { I18nextProvider } from 'react-i18next';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { alchemyProvider as wagmiAlchemyProvider } from 'wagmi/providers/alchemy';
@@ -34,6 +35,8 @@ import { AppHome } from './pages/myprojects/AppHome';
 import { TestCreateProject } from './test/TestCreateProject';
 import { TestProject } from './test/TestProject';
 
+import { i18n } from './i18n/i18n';
+
 const queryClient = new QueryClient();
 
 export const RouteNames = {
@@ -65,64 +68,66 @@ function App() {
 
   return (
     <div className="App">
-      <QueryClientProvider client={queryClient}>
-        <WagmiConfig config={config}>
-          <SignerContext>
-            <AccountContext>
-              <SemaphoreContext>
-                <GlobalStyles />
-                <ThemedApp>
-                  <ResponsiveApp>
-                    <BrowserRouter>
-                      <ViewportContainer>
-                        <Routes>
-                          {/* Landing and project create */}
-                          <Route path={RouteNames.Base} element={<LandingPage />}></Route>
-                          <Route path={RouteNames.Projects} element={<AppHome></AppHome>}></Route>
-                          <Route path={RouteNames.Start} element={<CreateProject />}></Route>
+      <I18nextProvider i18n={i18n}>
+        <QueryClientProvider client={queryClient}>
+          <WagmiConfig config={config}>
+            <SignerContext>
+              <AccountContext>
+                <SemaphoreContext>
+                  <GlobalStyles />
+                  <ThemedApp>
+                    <ResponsiveApp>
+                      <BrowserRouter>
+                        <ViewportContainer>
+                          <Routes>
+                            {/* Landing and project create */}
+                            <Route path={RouteNames.Base} element={<LandingPage />}></Route>
+                            <Route path={RouteNames.Projects} element={<AppHome></AppHome>}></Route>
+                            <Route path={RouteNames.Start} element={<CreateProject />}></Route>
 
-                          {/* Project-Specific */}
-                          <Route
-                            path={`/p/:projectId`}
-                            element={
-                              <ProjectContext>
-                                <ConnectedMemberContext>
-                                  <MemberContext>
-                                    <VouchContext>
-                                      <VoiceReadContext>
-                                        <ProjectBase />
-                                      </VoiceReadContext>
-                                    </VouchContext>
-                                  </MemberContext>
-                                </ConnectedMemberContext>
-                              </ProjectContext>
-                            }>
-                            <Route path={RouteNames.Base} element={<ProjectHome />}></Route>
-                            <Route path={`member/:tokenId/*`} element={<AccountPage />}></Route>
-                            <Route path={`${RouteNames.Invite}/:hash`} element={<InviteAccount />}></Route>
-                            <Route path={RouteNames.Join} element={<Join />}></Route>
-                            <Route path={RouteNames.Invite} element={<InvitePage />}></Route>
-                            <Route path={RouteNames.MyVouches} element={<Vouches />}></Route>
-                            <Route path={RouteNames.Members} element={<Members />}></Route>
-                            <Route path={RouteNames.Challenges} element={<Challenges />}></Route>
-                            {/* <Route path={ProjectRouteNames.Base} element={<TestComponent />}></Route> */}
-                            <Route path={'voice'} element={<VoiceBase />}>
-                              <Route path={RouteNames.VoicePropose} element={<VoicePropose />}></Route>
+                            {/* Project-Specific */}
+                            <Route
+                              path={`/p/:projectId`}
+                              element={
+                                <ProjectContext>
+                                  <ConnectedMemberContext>
+                                    <MemberContext>
+                                      <VouchContext>
+                                        <VoiceReadContext>
+                                          <ProjectBase />
+                                        </VoiceReadContext>
+                                      </VouchContext>
+                                    </MemberContext>
+                                  </ConnectedMemberContext>
+                                </ProjectContext>
+                              }>
+                              <Route path={RouteNames.Base} element={<ProjectHome />}></Route>
+                              <Route path={`member/:tokenId/*`} element={<AccountPage />}></Route>
+                              <Route path={`${RouteNames.Invite}/:hash`} element={<InviteAccount />}></Route>
+                              <Route path={RouteNames.Join} element={<Join />}></Route>
+                              <Route path={RouteNames.Invite} element={<InvitePage />}></Route>
+                              <Route path={RouteNames.MyVouches} element={<Vouches />}></Route>
+                              <Route path={RouteNames.Members} element={<Members />}></Route>
+                              <Route path={RouteNames.Challenges} element={<Challenges />}></Route>
+                              {/* <Route path={ProjectRouteNames.Base} element={<TestComponent />}></Route> */}
+                              <Route path={'voice'} element={<VoiceBase />}>
+                                <Route path={RouteNames.VoicePropose} element={<VoicePropose />}></Route>
+                              </Route>
+                              <Route path={RouteNames.Base} element={<ProjectHome />}></Route>
+                              <Route path={'test'} element={<TestProject />}></Route>
                             </Route>
-                            <Route path={RouteNames.Base} element={<ProjectHome />}></Route>
-                            <Route path={'test'} element={<TestProject />}></Route>
-                          </Route>
-                          <Route path={'/test'} element={<TestCreateProject />}></Route>
-                        </Routes>
-                      </ViewportContainer>
-                    </BrowserRouter>
-                  </ResponsiveApp>
-                </ThemedApp>
-              </SemaphoreContext>
-            </AccountContext>
-          </SignerContext>
-        </WagmiConfig>
-      </QueryClientProvider>
+                            <Route path={'/test'} element={<TestCreateProject />}></Route>
+                          </Routes>
+                        </ViewportContainer>
+                      </BrowserRouter>
+                    </ResponsiveApp>
+                  </ThemedApp>
+                </SemaphoreContext>
+              </AccountContext>
+            </SignerContext>
+          </WagmiConfig>
+        </QueryClientProvider>
+      </I18nextProvider>
     </div>
   );
 }

@@ -1,8 +1,9 @@
 import { useState } from 'react';
 
 import { postBacking } from '../../utils/statements';
-import { AppBackingCreate } from '../../types';
+import { AppBackingCreate, StatmentReactions as StatementReactions } from '../../types';
 import { useSemaphoreContext } from '../../contexts/SemaphoreContext';
+import { getSupportNullifier } from '../../utils/identity.utils';
 
 export type VoiceSendContextType = {
   backStatement?: (statementId: string, treeId: string) => Promise<boolean>;
@@ -21,7 +22,11 @@ export const useBackingSend = (): VoiceSendContextType => {
   const generateBackingProof =
     generateProof !== undefined
       ? async (statementId: string, treeId: string) => {
-          return generateProof({ signal: statementId, nullifier: statementId, treeId });
+          return generateProof({
+            signal: StatementReactions.Back,
+            nullifier: getSupportNullifier(statementId),
+            treeId,
+          });
         }
       : undefined;
 
