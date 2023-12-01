@@ -41,9 +41,9 @@ export const getBackingId = (backing: AppBackingCreate) => {
 };
 
 export const getSupportNullifier = (statementId: string) => {
-  return `${statementId}-support`;
+  return `${statementId}`;
 };
 
 export const getFlagNullifier = (statementId: string) => {
-  return `${statementId}-flag`;
+  return `${statementId}`;
 };

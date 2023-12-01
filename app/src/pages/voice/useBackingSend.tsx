@@ -4,6 +4,7 @@ import { postBacking } from '../../utils/statements';
 import { AppBackingCreate, StatmentReactions as StatementReactions } from '../../types';
 import { useSemaphoreContext } from '../../contexts/SemaphoreContext';
 import { getSupportNullifier } from '../../utils/identity.utils';
+import { hashMessage } from 'viem';
 
 export type VoiceSendContextType = {
   backStatement?: (statementId: string, treeId: string) => Promise<boolean>;
@@ -23,7 +24,7 @@ export const useBackingSend = (): VoiceSendContextType => {
     generateProof !== undefined
       ? async (statementId: string, treeId: string) => {
           return generateProof({
-            signal: StatementReactions.Back,
+            signal: hashMessage(StatementReactions.Back),
             nullifier: getSupportNullifier(statementId),
             treeId,
           });
