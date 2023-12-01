@@ -76,6 +76,11 @@ export const CreateProject = () => {
     return 'next';
   })();
 
+  const nextPrimary = (() => {
+    if (pageIx === 3) return true;
+    return false;
+  })();
+
   const nextDisabled = (() => {
     if (pageIx === 2 && !founderPap) return true;
     if (pageIx === 3 && !whoStatement) return true;
@@ -180,6 +185,7 @@ export const CreateProject = () => {
           icon: <FormNext></FormNext>,
           label: nextStr,
           disabled: nextDisabled,
+          primary: nextPrimary,
         }}></AppBottomButtons>
     </ViewportPage>
   );
