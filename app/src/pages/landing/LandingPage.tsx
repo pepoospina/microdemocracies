@@ -105,6 +105,7 @@ export const LandingPage = () => {
         <Box fill align="center">
           <Box style={{ flexGrow: '1', width: '100%', flexShrink: '0' }} justify="center" align="center">
             <AppCarousel
+              swipeTreshold={0.15}
               disableSwipeByMouse
               infinite={false}
               activeSlideIndex={activeSlideIndex}

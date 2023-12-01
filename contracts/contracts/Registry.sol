@@ -18,9 +18,9 @@ import "@openzeppelin/contracts/proxy/utils/Initializable.sol";
 contract Registry is Context, IERC721, IERC721Metadata, Initializable {
     using PRBMathUD60x18 for uint256;
 
-    uint256 public constant PENDING_PERIOD = 180 days;
-    uint256 public constant VOTING_PERIOD = 15 days;
-    uint256 public constant QUIET_ENDING_PERIOD = 2 days;
+    uint256 public PENDING_PERIOD;
+    uint256 public VOTING_PERIOD;
+    uint256 public QUIET_ENDING_PERIOD;
     
     string public statementCid;
 
@@ -101,12 +101,23 @@ contract Registry is Context, IERC721, IERC721Metadata, Initializable {
     error UnexpectedExecutedCondition();
 
     /** Constructor */
-    function initRegistry (string memory __symbol, string memory __name, address[] memory addresses, string[] memory foundersCids, string memory _statementCid) external initializer {
+    function initRegistry (
+        string memory __symbol, 
+        string memory __name, 
+        address[] memory addresses, 
+        string[] memory foundersCids, 
+        string memory _statementCid, 
+        uint256 _PENDING_PERIOD,
+        uint256 _VOTING_PERIOD, 
+        uint256 _QUIET_ENDING_PERIOD ) external initializer {
         statementCid = _statementCid;
         _symbol = __symbol;
         _name = __name;
         __totalSupply = 0;
         _nEntries = 0;
+        PENDING_PERIOD = _PENDING_PERIOD;
+        VOTING_PERIOD = _VOTING_PERIOD;
+        QUIET_ENDING_PERIOD = _QUIET_ENDING_PERIOD;
 
         for (uint8 ix = 0; ix < addresses.length; ix++) {
             /** special case of founder vouchers being a dumb token ID */

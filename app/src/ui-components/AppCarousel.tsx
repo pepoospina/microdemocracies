@@ -623,9 +623,11 @@ export function AppCarousel({ responsiveProps = [], ...props }: ReactSimplyCarou
         const mousePosDiff =
           (itemsListDragStartPosRef.current - dragPos) * ((isTouch ? touchSwipeRatio : mouseSwipeRatio) || swipeRatio);
 
-        const activeSlideHalfWidth = activeSlideWidth / 2;
-
-        const treshold = (isTouch ? touchSwipeTreshold : mouseSwipeTreshold) || swipeTreshold || activeSlideHalfWidth;
+        const treshold = (() => {
+          if (isTouch && touchSwipeTreshold) return touchSwipeTreshold;
+          if (!isTouch && mouseSwipeTreshold) return mouseSwipeTreshold;
+          return activeSlideWidth * (swipeTreshold ? swipeTreshold : 0.5);
+        })();
 
         const nextActiveSlide =
           // eslint-disable-next-line no-nested-ternary

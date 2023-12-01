@@ -1,6 +1,6 @@
 import { PropsWithChildren, createContext, useContext, useEffect, useState } from 'react';
 
-import { createMagicSigner } from './magic.signer';
+import { createMagicSigner, magic } from './magic.signer';
 import { WalletClientSigner } from '@alchemy/aa-core';
 import { createInjectedSigner } from './injected.signer';
 import { InjectedConnector } from '@wagmi/core';
@@ -33,6 +33,11 @@ export const SignerContext = (props: PropsWithChildren) => {
   const [errorConnecting, setErrorConnecting] = useState<Error>();
 
   const signer = injectedSigner ? injectedSigner : magicSigner;
+
+  useEffect(() => {
+    magic.preload();
+    console.log({ magic });
+  }, []);
 
   useEffect(() => {
     if (signer && signer) {
