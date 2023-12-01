@@ -1,9 +1,5 @@
 import { hashMessage } from 'viem';
-import {
-  AppBackingCreate,
-  AppStatementCreate,
-  SemaphoreProofStrings,
-} from '../types';
+import { AppBackingCreate, AppStatementCreate, SemaphoreProofStrings, StatmentReactions } from '../types';
 
 export const getIdentityId = (publicId: string) => {
   return publicId.slice(0, 16);
@@ -42,4 +38,12 @@ export const getStatementId = (statement: AppStatementCreate) => {
 export const getBackingId = (backing: AppBackingCreate) => {
   const hash = hashMessage(JSON.stringify(backing.proof));
   return hash.slice(0, 18);
+};
+
+export const getSupportNullifier = (statementId: string) => {
+  return `${statementId}-support`;
+};
+
+export const getFlagNullifier = (statementId: string) => {
+  return `${statementId}-flag`;
 };

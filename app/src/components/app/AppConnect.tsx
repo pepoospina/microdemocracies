@@ -1,14 +1,15 @@
 import { Box, Text } from 'grommet';
 import { StatusGood } from 'grommet-icons';
-import { AppButton, Address } from '../../ui-components';
-import { CHAIN_ID } from '../../config/appConfig';
+import { AppButton } from '../../ui-components';
 import { useAccountContext } from '../../wallet/AccountContext';
 import { useAppSigner } from '../../wallet/SignerContext';
 import { Loading } from '../../pages/common/WaitingTransaction';
 import { useSemaphoreContext } from '../../contexts/SemaphoreContext';
+import { useTranslation } from 'react-i18next';
 
 export const AppConnect = (props: {}) => {
-  const { hasInjected, connectInjected, connectMagic, signer, address, isConnecting } = useAppSigner();
+  const { t } = useTranslation();
+  const { hasInjected, connectInjected, connectMagic, signer, isConnecting } = useAppSigner();
   const { aaAddress } = useAccountContext();
   const { isCreatingPublicId } = useSemaphoreContext();
 
@@ -23,17 +24,19 @@ export const AppConnect = (props: {}) => {
   return !signer || !aaAddress ? (
     <Box margin={{ horizontal: 'small' }}>
       <Box margin={{ vertical: 'small' }}>
-        <Box>
-          <Text>Connect your Web3 Wallet {!hasInjected ? '(not found)' : ''}</Text>
+        <Box margin={{ bottom: '6px' }}>
+          <Text>
+            {t('connectWallet')} {!hasInjected ? `(${t('notFound')})` : ''}
+          </Text>
         </Box>
-        <AppButton onClick={() => connectInjected()} label="Connect Wallet" disabled={!hasInjected}></AppButton>
+        <AppButton onClick={() => connectInjected()} label={t('connectWalletBtn')} disabled={!hasInjected}></AppButton>
       </Box>
 
       <Box margin={{ vertical: 'small' }}>
-        <Box>
-          <Text>Connect with your email</Text>
+        <Box margin={{ bottom: '6px' }}>
+          <Text>{t('connectWithEmail')}</Text>
         </Box>
-        <AppButton onClick={() => connectMagic()} label="Login with email"></AppButton>
+        <AppButton onClick={() => connectMagic()} label={t('connectWithEmailBtn')}></AppButton>
       </Box>
     </Box>
   ) : (
@@ -43,7 +46,7 @@ export const AppConnect = (props: {}) => {
           <Box style={{ marginRight: '16px' }}>
             <StatusGood size="48px" />
           </Box>
-          <Text size="large">Account Ready</Text>
+          <Text size="large">{t('accountReady')}</Text>
         </Box>
       </Box>
     </>

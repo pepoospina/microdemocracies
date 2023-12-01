@@ -1,5 +1,4 @@
 import { Box, Text } from 'grommet';
-import { appName } from '../../config/community';
 import { AppButton } from '../../ui-components';
 import { useNavigate } from 'react-router-dom';
 import { RouteNames } from '../../App';
@@ -8,6 +7,7 @@ import { FormNext, FormPrevious } from 'grommet-icons';
 import { useState, useCallback, useEffect } from 'react';
 import { AppCarousel } from '../../ui-components/AppCarousel';
 import { LearnMoreItem } from './LearnMoreItem';
+import { Trans, useTranslation } from 'react-i18next';
 
 export const Bold = (props: React.PropsWithChildren) => {
   return <span style={{ fontWeight: '400' }}>{props.children}</span>;
@@ -18,14 +18,15 @@ const N_SLIDES = 4;
 export const LandingPage = () => {
   const navigate = useNavigate();
   const { mobile } = useResponsive();
+  const { t } = useTranslation();
 
   const logoSize = mobile ? '36px' : '48px';
 
   const [activeSlideIndex, setActiveSlideIndex] = useState(0);
 
   const btnText = (() => {
-    if (activeSlideIndex === N_SLIDES - 1) return 'start now';
-    return 'next';
+    if (activeSlideIndex === N_SLIDES - 1) return t('startNow');
+    return t('next');
   })();
 
   const btnClick = () => {
@@ -96,7 +97,7 @@ export const LandingPage = () => {
     <Box fill align="center">
       <Box justify="center" align="center" style={{ flexShrink: '0', marginTop: '6vh' }}>
         <Text size={logoSize} weight="bold">
-          {appName}
+          {t('appName')}
         </Text>
       </Box>
 
@@ -104,6 +105,7 @@ export const LandingPage = () => {
         <Box fill align="center">
           <Box style={{ flexGrow: '1', width: '100%', flexShrink: '0' }} justify="center" align="center">
             <AppCarousel
+              swipeTreshold={0.15}
               disableSwipeByMouse
               infinite={false}
               activeSlideIndex={activeSlideIndex}
@@ -131,54 +133,34 @@ export const LandingPage = () => {
               easing="cubic-bezier(0.25, 0.1, 0.25, 1)">
               <Box style={boxStyle}>
                 <LearnMoreItem
-                  mainText={
-                    <>
-                      Find something you know <Bold>needs</Bold> to change.
-                    </>
-                  }
+                  mainText={<Trans i18nKey="carousel01" components={{ Bold: <Bold /> }}></Trans>}
                   secondaryText={
-                    <>
-                      Dare others to change it, <Bold>together</Bold>.
-                    </>
+                    <Trans i18nKey="carousel01sub" components={{ Bold: <Bold /> }}></Trans>
                   }></LearnMoreItem>
               </Box>
 
               <Box style={boxStyle}>
                 <LearnMoreItem
-                  mainText={
-                    <>
-                      Talk <Bold>without fear</Bold>.
-                    </>
-                  }
+                  mainText={<Trans i18nKey="carousel02" components={{ Bold: <Bold /> }}></Trans>}
                   secondaryText={
-                    <>
-                      Hold <Bold>anonymous</Bold> conversations, <Bold>restricted</Bold> to members.
-                    </>
+                    <Trans i18nKey="carousel02sub" components={{ Bold: <Bold /> }}></Trans>
                   }></LearnMoreItem>
               </Box>
 
               <Box style={boxStyle}>
                 <LearnMoreItem
-                  mainText={
-                    <>
-                      Amplify your <Bold>voice</Bold>.
-                    </>
-                  }
+                  mainText={<Trans i18nKey="carousel03" components={{ Bold: <Bold /> }}></Trans>}
                   secondaryText={
-                    <>
-                      Anonymously <Bold>back</Bold> the statements you agree with.
-                    </>
+                    <Trans i18nKey="carousel03sub" components={{ Bold: <Bold /> }}></Trans>
                   }></LearnMoreItem>
               </Box>
 
               <Box style={boxStyle}>
                 <LearnMoreItem
-                  mainText={
-                    <>
-                      Raise and handle funds <Bold>transparently</Bold>, no banks.
-                    </>
-                  }
-                  secondaryText={<>(coming soon)</>}></LearnMoreItem>
+                  mainText={<Trans i18nKey="carousel04" components={{ Bold: <Bold /> }}></Trans>}
+                  secondaryText={
+                    <Trans i18nKey="carousel04sub" components={{ Bold: <Bold /> }}></Trans>
+                  }></LearnMoreItem>
               </Box>
             </AppCarousel>
           </Box>
@@ -187,7 +169,7 @@ export const LandingPage = () => {
 
       <Box justify="center" align="center" style={{ flexShrink: '0', marginBottom: '6vh' }}>
         {showOpenApp ? (
-          <AppButton onClick={goApp} label={'Open app'} style={{ margin: '12px 0px', width: '200px' }} />
+          <AppButton onClick={goApp} label={t('openApp')} style={{ margin: '12px 0px', width: '200px' }} />
         ) : (
           <></>
         )}

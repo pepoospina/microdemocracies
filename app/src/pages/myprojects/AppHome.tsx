@@ -1,7 +1,6 @@
 import { Box, Button, Text } from 'grommet';
-import { AppButton, AppCard } from '../../ui-components';
+import { AppCard } from '../../ui-components';
 import { ViewportHeadingSmall, ViewportPage } from '../../components/app/Viewport';
-import { appName } from '../../config/community';
 import { Add } from 'grommet-icons';
 import { useAccountContext } from '../../wallet/AccountContext';
 import { AppConnect } from '../../components/app/AppConnect';
@@ -11,11 +10,13 @@ import { ProjectCard } from '../project/ProjectCard';
 import { useNavigate } from 'react-router-dom';
 import { BoxCentered } from '../../ui-components/BoxCentered';
 import { AppBottomButton } from '../common/BottomButtons';
+import { useTranslation } from 'react-i18next';
 
 export const AppHome = (props: {}) => {
   const { isConnected } = useAccountContext();
   const { projects } = useAccountDataContext();
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const projectClicked = (projectId: number) => {
     navigate(`/p/${projectId}`);
@@ -32,7 +33,7 @@ export const AppHome = (props: {}) => {
     if (projects.length === 0)
       return (
         <AppCard>
-          <Text>Your have not joined or started any micro(r)evolution yet.</Text>
+          <Text>{t('noProjects')}</Text>
         </AppCard>
       );
     return (
@@ -58,13 +59,13 @@ export const AppHome = (props: {}) => {
 
   return (
     <ViewportPage>
-      <ViewportHeadingSmall label={`Your micro(r)evolutions:`}></ViewportHeadingSmall>
+      <ViewportHeadingSmall label={`${t('yourProjects')}:`}></ViewportHeadingSmall>
 
       <Box fill pad={{ horizontal: 'large' }}>
         {content}
       </Box>
 
-      <AppBottomButton onClick={() => navigate('/start')} icon={<Add></Add>} label="Start new"></AppBottomButton>
+      <AppBottomButton onClick={() => navigate('/start')} icon={<Add></Add>} label={t('startNew')}></AppBottomButton>
     </ViewportPage>
   );
 };

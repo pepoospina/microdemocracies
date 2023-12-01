@@ -147,15 +147,18 @@ export const CreateProject = () => {
       <ViewportHeadingLarge label="Start a micro(r)evolution"></ViewportHeadingLarge>
 
       <Box>
-        <Box pad={{ horizontal: 'large' }} style={{ flexShrink: 0 }}>
-          <AppCard>
-            <Text>
-              <b style={{ color: 'red' }}>TRYOUT ONLY!</b> This app is currenty under development. Do not use it to
-              create real communities just yet. You can use it to make tryouts of the process though. It will be ready
-              very soon.
-            </Text>
-          </AppCard>
-        </Box>
+        {pageIx === 0 ? (
+          <Box pad={{ horizontal: 'large' }} style={{ flexShrink: 0 }}>
+            <AppCard>
+              <Text>
+                <b style={{ color: 'red' }}>TRYOUT ONLY!</b> This app is currenty under development. Do not use it to
+                create real communities just yet.
+              </Text>
+            </AppCard>
+          </Box>
+        ) : (
+          <></>
+        )}
 
         {pages.map((page, ix) => {
           return (
