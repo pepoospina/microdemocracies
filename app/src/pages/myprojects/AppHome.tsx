@@ -40,7 +40,7 @@ export const AppHome = (props: {}) => {
       <Box>
         {projects.map((project, ix) => {
           return (
-            <Box key={ix} style={{ position: 'relative', marginBottom: '16px' }}>
+            <Box key={ix} style={{ position: 'relative', marginBottom: '16px', flexShrink: 0 }}>
               <ProjectCard project={project}></ProjectCard>
               <Button
                 onClick={() => projectClicked(project.projectId)}
