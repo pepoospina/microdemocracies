@@ -19,7 +19,7 @@ i18n.use(initReactI18next).init({
         carousel03: 'Amplify your <Bold>voice</Bold>',
         carousel03sub: 'Anonymously <Bold>back</Bold> the statements you agree with',
         carousel04: 'Raise and spend funds <Bold>transparently</Bold>',
-        carousel04sub: '<Bold>Collectively</Bold> control how to manage the community funds, no banks need',
+        carousel04sub: '<Bold>Collectively</Bold> control the community funds, no banks need. (coming soon)',
         connectWallet: 'Connect your Web3 Wallet',
         connectWalletBtn: 'Connect Wallet',
         notFound: 'not found',

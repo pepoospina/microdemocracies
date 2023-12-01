@@ -8,7 +8,6 @@ import { useConnect } from 'wagmi';
 import { HexStr } from '../types';
 import { MessageSigner } from '../utils/identity';
 import { createTestSigner } from '../test/test.signer';
-import { Signer } from '../utils/viem.types';
 
 export type SignerContextType = {
   connectMagic: () => void;
@@ -35,8 +34,12 @@ export const SignerContext = (props: PropsWithChildren) => {
   const signer = injectedSigner ? injectedSigner : magicSigner;
 
   useEffect(() => {
-    magic.preload();
-    console.log({ magic });
+    magic.user.isLoggedIn().then((res) => {
+      if (res) {
+        console.log('Autoconnecting Magic');
+        connectMagic();
+      }
+    });
   }, []);
 
   useEffect(() => {
