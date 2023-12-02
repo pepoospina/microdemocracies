@@ -6,6 +6,8 @@ import { Address } from '../../ui-components';
 import { PlatformUrl } from './PlatformUrl';
 import { CHAIN_ID } from '../../config/appConfig';
 import { platforms } from '../../utils/platforms';
+import { useTranslation } from 'react-i18next';
+import { cap } from '../../utils/general';
 
 interface IAccountPerson extends BoxExtendedProps {
   pap?: PAP;
@@ -37,6 +39,8 @@ export const DetailField = (props: IDetailField) => {
 };
 
 export const AccountPerson = (props: IAccountPerson) => {
+  const { t } = useTranslation();
+
   const fieldStyle: CSSProperties = {
     margin: '8px 0px 0px 0px',
   };
@@ -46,10 +50,10 @@ export const AccountPerson = (props: IAccountPerson) => {
       <Box>
         <DetailField
           boxStyle={fieldStyle}
-          field={{ label: 'First Name', value: props.pap.person?.personal?.firstName }}></DetailField>
+          field={{ label: t('firstName'), value: props.pap.person?.personal?.firstName }}></DetailField>
         <DetailField
           boxStyle={fieldStyle}
-          field={{ label: 'Last Name', value: props.pap.person?.personal?.lastName }}></DetailField>
+          field={{ label: t('lastName'), value: props.pap.person?.personal?.lastName }}></DetailField>
         <DetailField
           boxStyle={fieldStyle}
           field={{ label: 'Place of Birth', value: props.pap.person?.personal?.placeOfBirth }}></DetailField>
@@ -61,7 +65,7 @@ export const AccountPerson = (props: IAccountPerson) => {
           field={{ label: 'Nationality', value: props.pap.person?.personal?.nationality }}></DetailField>
         <DetailField
           boxStyle={fieldStyle}
-          field={{ label: 'National ID (last 4 digits)', value: props.pap.person?.personal?.nationalID }}></DetailField>
+          field={{ label: t('IDNumberLong'), value: props.pap.person?.personal?.nationalID }}></DetailField>
         <DetailField
           boxStyle={fieldStyle}
           field={{ label: 'Organization', value: props.pap.person?.personal?.organization }}></DetailField>
@@ -76,7 +80,7 @@ export const AccountPerson = (props: IAccountPerson) => {
         })}
       </Box>
       <Box style={fieldStyle}>
-        <Text style={{ fontWeight: 'bold' }}>Account:</Text>
+        <Text style={{ fontWeight: 'bold' }}>{cap(t('account'))}:</Text>
         <Address digits={8} address={props.pap.account as HexStr} chainId={CHAIN_ID}></Address>
       </Box>
     </Box>

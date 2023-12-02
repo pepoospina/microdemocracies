@@ -5,6 +5,8 @@ import { useResponsive, useThemeContext } from '../../components/app';
 import { useEffect, useState } from 'react';
 import { PlatformDetails, platforms } from '../../utils/platforms';
 import { PlatformId, SelectedDetails } from '../../types';
+import { t } from 'i18next';
+import { cap as cap } from '../../utils/general';
 
 const detailsInit: SelectedDetails = {
   personal: {
@@ -53,7 +55,7 @@ export const DetailsSelector = (props: { onChanged: (seleted: SelectedDetails) =
     }
     return selected;
   }, []);
-  const platformsSelectedText = platformsSelected.length ? platformsSelected.join(' and ') : 'Social';
+  const platformsSelectedText = platformsSelected.length ? platformsSelected.join(` ${t('and')} `) : t('social');
 
   useEffect(() => {
     if (props.onChanged) {
@@ -91,20 +93,20 @@ export const DetailsSelector = (props: { onChanged: (seleted: SelectedDetails) =
     setShowSelectPlatform(false);
   };
 
-  const idNumberStr = mobile ? 'ID Number' : 'ID Number (Last 4 digits)';
+  const idNumberStr = mobile ? t('IDNumber') : t('IDNumberLong');
 
   return (
     <>
       <Box style={{ marginBottom: '12px', fontSize: '10px', fontWeight: '300' }}>
-        <AppHeading level="3">To join, participants should give their:</AppHeading>
-        <Text style={{ margin: '12px 0px 0px 0px' }}>Select one, none, or many of the options below.</Text>
+        <AppHeading level="3">{t('toJoinMsg')}:</AppHeading>
+        <Text style={{ margin: '12px 0px 0px 0px' }}>{t('selectMsgOpts')}.</Text>
       </Box>
 
       <Box direction="row" align="center" style={{ marginBottom: '12px' }}>
         <Box style={{ flexGrow: 1 }}>
           <AppButton
             primary={nameAndLastname}
-            label="Name and Lastname"
+            label={t('nameAndLastName')}
             onClick={() => select(Options.NameAndLastame)}></AppButton>
         </Box>
         <Box justify="center" style={{ marginLeft: '12px', width: '40px', height: '40px' }}>
@@ -116,11 +118,7 @@ export const DetailsSelector = (props: { onChanged: (seleted: SelectedDetails) =
         <Box style={{ flexGrow: 1 }}>
           <AppButton
             primary={platformSelected}
-            label={
-              showSelectPlatform
-                ? 'Hide List'
-                : `${platformsSelectedText} Account${platformsSelected.length > 1 ? 's' : ''}`
-            }
+            label={showSelectPlatform ? t('hideList') : `${platformsSelectedText}`}
             onClick={() => setShowSelectPlatform(!showSelectPlatform)}></AppButton>
         </Box>
         <Box justify="center" style={{ marginLeft: '12px', width: '40px', height: '40px' }}>
@@ -131,7 +129,7 @@ export const DetailsSelector = (props: { onChanged: (seleted: SelectedDetails) =
         {showSelectPlatform ? (
           <>
             <Box style={{ margin: '22px 0px 8px 0px', fontSize: '10px', fontWeight: '300' }}>
-              <Text>Chose the platform(s) account(s) that will be asked to participants.</Text>
+              <Text>{t('choosePlatformsMsg')}.</Text>
             </Box>
             <Box style={{ marginBottom: '32px' }}>
               {Object.keys(platforms).map((platformID) => {

@@ -169,7 +169,7 @@ export const LandingPage = () => {
 
       <Box justify="center" align="center" style={{ flexShrink: '0', marginBottom: '6vh' }}>
         {showOpenApp ? (
-          <AppButton onClick={goApp} label={t('openApp')} style={{ margin: '12px 0px', width: '200px' }} />
+          <AppButton onClick={goApp} label={t('openApp')} style={{ margin: '12px 0px', width: '220px' }} />
         ) : (
           <></>
         )}
@@ -177,7 +177,7 @@ export const LandingPage = () => {
           primary={btnPrimary}
           onClick={btnClick}
           label={btnText}
-          style={{ margin: '12px 0px', width: '200px' }}
+          style={{ margin: '12px 0px', width: '220px' }}
         />
       </Box>
     </Box>

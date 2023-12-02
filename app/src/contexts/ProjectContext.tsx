@@ -21,6 +21,7 @@ export type ProjectContextType = {
   allVouches?: AppVouch[];
   inviteId?: string;
   resetLink: () => void;
+  resettingLink: boolean;
   applications?: AppApplication[] | null;
   refetchApplications: () => void;
 };
@@ -38,6 +39,7 @@ export const ProjectContext = (props: IProjectContext) => {
   const { projectId: routeProjectId } = useParams();
 
   const [projectId, _setProjectId] = useState<number>();
+  const [resettingLink, setResettingLink] = useState<boolean>(false);
 
   /** from route param to projectId */
   useEffect(() => {
@@ -116,11 +118,15 @@ export const ProjectContext = (props: IProjectContext) => {
 
   const resetLink = () => {
     if (projectId && aaAddress) {
+      setResettingLink(true);
       postInvite({
         projectId,
         memberAddress: aaAddress,
         creationDate: 0, //ignored
-      }).then((id) => refetchInvite());
+      }).then((id) => {
+        refetchInvite();
+        setResettingLink(false);
+      });
     }
   };
 
@@ -154,6 +160,7 @@ export const ProjectContext = (props: IProjectContext) => {
         allVouches,
         inviteId,
         resetLink,
+        resettingLink,
         applications,
         refetchApplications,
       }}>

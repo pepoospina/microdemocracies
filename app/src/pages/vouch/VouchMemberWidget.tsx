@@ -3,19 +3,20 @@ import { useEffect, useState } from 'react';
 
 import { RouteNames } from '../../App';
 import { AppConnectButton } from '../../components/app/AppConnectButton';
-import { COMMUNITY_MEMBER } from '../../config/community';
 import { useConnectedMember } from '../../contexts/ConnectedAccountContext';
 import { useMemberContext } from '../../contexts/MemberContext';
 import { useProjectContext } from '../../contexts/ProjectContext';
 import { useVouch } from '../../contexts/VouchContext';
-import { Entity, PAP, HexStr } from '../../types';
+import { Entity, PAP } from '../../types';
 import { AppCard, AppButton } from '../../ui-components';
 import { useAccountContext } from '../../wallet/AccountContext';
 import { WaitingTransaction } from '../common/WaitingTransaction';
 import { useNavigate } from 'react-router-dom';
 import { postDeleteApplication } from '../../utils/project';
+import { useTranslation } from 'react-i18next';
 
 export const VouchMemberWidget = (props: { pap: Entity<PAP> }) => {
+  const { t } = useTranslation();
   const { pap } = props;
 
   const navigate = useNavigate();
@@ -76,7 +77,7 @@ export const VouchMemberWidget = (props: { pap: Entity<PAP> }) => {
     if (isConnected && (!account || !account.valid)) {
       return (
         <AppCard style={{ marginBottom: '16px' }}>
-          <Text>Only existing {COMMUNITY_MEMBER}s can vouch.</Text>
+          <Text>{t('onlyMembersCanInvite')}.</Text>
         </AppCard>
       );
     }
@@ -114,7 +115,7 @@ export const VouchMemberWidget = (props: { pap: Entity<PAP> }) => {
                 navigate(`../${RouteNames.Member(vouchedTokenId)}`);
               }
             }}>
-            {COMMUNITY_MEMBER} #{vouchedTokenId}
+            {t('member')} #{vouchedTokenId}
           </Anchor>
         </Text>
       </AppCard>

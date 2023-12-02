@@ -6,6 +6,7 @@ import { useAppSigner } from '../../wallet/SignerContext';
 import { Loading } from '../../pages/common/WaitingTransaction';
 import { useSemaphoreContext } from '../../contexts/SemaphoreContext';
 import { useTranslation } from 'react-i18next';
+import { cap } from '../../utils/general';
 
 export const AppConnect = (props: {}) => {
   const { t } = useTranslation();
@@ -16,7 +17,7 @@ export const AppConnect = (props: {}) => {
   if (isConnecting || isCreatingPublicId) {
     return (
       <Box>
-        <Loading label={isCreatingPublicId ? 'Creating Public Id - Waiting for Signatures' : 'Connecting'}></Loading>
+        <Loading label={isCreatingPublicId ? t('waitingSignatures') : cap(t('connecting'))}></Loading>
       </Box>
     );
   }

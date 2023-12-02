@@ -17,10 +17,12 @@ import { Bold } from '../landing/LandingPage';
 import { AppBottomButtons } from '../common/BottomButtons';
 import { useCreateProject } from './useCreateProject';
 import { RouteNames } from '../../App';
+import { Trans, useTranslation } from 'react-i18next';
 
 const NPAGES = 4;
 
 export const CreateProject = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [pageIx, setPageIx] = useState(0);
 
@@ -65,15 +67,15 @@ export const CreateProject = () => {
   };
 
   const prevStr = (() => {
-    if (pageIx === 0) return 'back';
-    return 'prev';
+    if (pageIx === 0) return t('back');
+    return t('prev');
   })();
 
   const nextStr = (() => {
-    if (pageIx === 1) return 'next';
-    if (pageIx === 2) return 'review';
-    if (pageIx === 3) return 'create';
-    return 'next';
+    if (pageIx === 1) return t('next');
+    if (pageIx === 2) return t('review');
+    if (pageIx === 3) return t('create');
+    return t('next');
   })();
 
   const nextPrimary = (() => {
@@ -90,7 +92,7 @@ export const CreateProject = () => {
   if (isCreating) {
     return (
       <BoxCentered fill>
-        <Text>Creating your micro(r)evolution</Text>
+        <Text>{t('creatingProject')}</Text>
         <Spinner></Spinner>
       </BoxCentered>
     );
@@ -100,9 +102,9 @@ export const CreateProject = () => {
     <Box style={boxStyle}>
       <Box style={{ width: '100%', flexShrink: 0 }} pad="large">
         <Box style={{ marginBottom: '12px', fontSize: '10px', fontWeight: '300', flexShrink: 0 }}>
-          <AppHeading level="3">This micro(r)evolution is for anyone who:</AppHeading>
+          <AppHeading level="3">{t('whoTitle')}:</AppHeading>
           <Text style={{ margin: '12px 0px 0px 0px' }}>
-            <Bold>Examples are:</Bold> "LIVES IN...", "STUDIES AT...", "WANTS TO...", etc.
+            <Trans i18nKey="examplesWho" components={{ Bold: <Bold></Bold> }}></Trans>
           </Text>
         </Box>
         <Box>
@@ -111,7 +113,7 @@ export const CreateProject = () => {
               if (value) setWhoStatement(value);
             }}
             editable
-            placeholder="WANTS TO..."></StatementEditable>
+            placeholder={`${t('wantsTo')}...`}></StatementEditable>
         </Box>
       </Box>
 
@@ -123,7 +125,7 @@ export const CreateProject = () => {
     <Box style={boxStyle}>
       <Box style={{ width: '100%', flexShrink: 0 }} pad="large">
         <Box style={{ marginBottom: '24px' }}>
-          <AppHeading level="3">Your details:</AppHeading>
+          <AppHeading level="3">{t('yourDetails')}:</AppHeading>
         </Box>
         <DetailsForm selected={selectedDetails} onChange={(details) => setFounderDetails(details)}></DetailsForm>
       </Box>
@@ -131,7 +133,7 @@ export const CreateProject = () => {
 
     <Box style={boxStyle}>
       <Box style={{ width: '100%', flexShrink: 0 }} pad="large">
-        <AppHeading level="3">Connect Account:</AppHeading>
+        <AppHeading level="3">{t('connectAccount')}:</AppHeading>
         <Box pad="large" style={{ flexShrink: 0 }}>
           <AppConnect></AppConnect>
         </Box>
@@ -149,15 +151,14 @@ export const CreateProject = () => {
 
   return (
     <ViewportPage>
-      <ViewportHeadingLarge label="Start a micro(r)evolution"></ViewportHeadingLarge>
+      <ViewportHeadingLarge label={t('startProject')}></ViewportHeadingLarge>
 
       <Box>
         {pageIx === 0 ? (
           <Box pad={{ horizontal: 'large' }} style={{ flexShrink: 0 }}>
             <AppCard>
               <Text>
-                <b style={{ color: 'red' }}>TRYOUT ONLY!</b> This app is currenty under development. Do not use it to
-                create real communities just yet.
+                <Trans i18nKey={'tryoutMsg'} components={{ Bold: <Bold></Bold> }}></Trans>
               </Text>
             </AppCard>
           </Box>

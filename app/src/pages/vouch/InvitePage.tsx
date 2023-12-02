@@ -9,15 +9,17 @@ import { useProjectContext } from '../../contexts/ProjectContext';
 import { useAccountContext } from '../../wallet/AccountContext';
 import { AppQRCode } from '../../components/AppQRCode';
 import { AppConnect } from '../../components/app/AppConnect';
-import { Camera, FormPrevious, Qr, Scan, Send, Square, StatusGood } from 'grommet-icons';
-import { ViewportPage } from '../../components/app/Viewport';
+import { Camera, FormPrevious, Send, Square, StatusGood } from 'grommet-icons';
+import { ViewportHeadingLarge, ViewportPage } from '../../components/app/Viewport';
 import { AppBottomButton } from '../common/BottomButtons';
 import { StatementEditable } from '../voice/StatementEditable';
 import { ApplicationCard } from '../vouches/ApplicationCard';
 import { useCopyToClipboard } from '../../utils/copy.clipboard';
+import { useTranslation } from 'react-i18next';
 
 export const InvitePage = (): JSX.Element => {
-  const { project, projectId, inviteId, resetLink, applications } = useProjectContext();
+  const { t } = useTranslation();
+  const { project, projectId, inviteId, resetLink, applications, resettingLink } = useProjectContext();
   const { aaAddress } = useAccountContext();
   const { copy, copied } = useCopyToClipboard();
 
@@ -36,7 +38,7 @@ export const InvitePage = (): JSX.Element => {
     if (navigator.share) {
       navigator.share({
         url: inviteLink,
-        text: `Join our micro(r)evolution!`,
+        text: t('joinOurMsg'),
       });
     } else {
       copy(inviteLink);
@@ -50,20 +52,13 @@ export const InvitePage = (): JSX.Element => {
       return (
         <Box align="center" style={{ flexShrink: 0 }}>
           <Box pad={{ vertical: 'large' }} style={{ width: '100%' }}>
-            <AppButton onClick={() => setShowLink(false)} label="close"></AppButton>
+            <AppButton onClick={() => setShowLink(false)} label={t('close')}></AppButton>
           </Box>
 
-          <AppHeading level="3">Share to invite</AppHeading>
+          <AppHeading level="3">{t('shareToInvite')}</AppHeading>
 
           <Box pad={{ vertical: 'medium' }}>
             <AppQRCode input={inviteLink}></AppQRCode>
-          </Box>
-
-          <Box margin={{ vertical: 'large' }} style={{ width: '100%' }}>
-            <AppCard margin={{ vertical: 'small' }}>
-              <Text>Re-setting the link will invalidate the invitations sent with previous links</Text>
-            </AppCard>
-            <AppButton onClick={() => resetLink()} label="reset"></AppButton>
           </Box>
         </Box>
       );
@@ -83,42 +78,49 @@ export const InvitePage = (): JSX.Element => {
     return (
       <Box style={{ flexShrink: 0 }}>
         <AppCard margin={{ vertical: 'medium' }}>
-          <Text>Get link and share it with the new member. Once they apply, their application will appear here.</Text>
+          <Text>{t('shareLinkMsg')}.</Text>
         </AppCard>
         <AppButton
           reverse
           icon={copied ? <StatusGood></StatusGood> : <Send></Send>}
           disabled={inviteId === undefined}
-          label={copied ? 'link copied!' : 'share link'}
+          label={copied ? t('linkCopied') : t('shareLink')}
           primary
           onClick={() => share()}></AppButton>
         <AppButton
           reverse
           icon={<Square color="black"></Square>}
           disabled={aaAddress === undefined || projectId === undefined}
-          label={'show QR'}
+          label={t('showQr')}
           onClick={() => setShowLink(true)}
           margin={{ vertical: 'medium' }}></AppButton>
         <AppButton
           reverse
           icon={<Camera></Camera>}
-          label={!scan ? 'scan QR' : 'cancel'}
+          label={!scan ? t('scanQr') : t('cancel')}
           onClick={() => setScan(!scan)}
           style={{ marginBottom: '16px' }}></AppButton>
+        <Box>
+          <AppButton
+            onClick={() => resetLink()}
+            label={resettingLink ? t('resetting') : t('reset')}
+            disabled={resettingLink}></AppButton>
+          <AppCard margin={{ vertical: 'small' }}>
+            <Text>{t('resettingMsg')}</Text>
+          </AppCard>
+        </Box>
       </Box>
     );
   })();
 
   return (
     <ViewportPage>
-      <Box align="center" pad={{ vertical: 'medium' }}>
-        <AppHeading level="1">Invite new member</AppHeading>
-      </Box>
+      <ViewportHeadingLarge label={t('inviteTitle')}></ViewportHeadingLarge>
 
       <Box fill pad={{ horizontal: 'large' }}>
         <Box style={{ flexShrink: 0 }}>
           <Box style={{ margin: '36px 0px' }}>
-            <Text style={{ marginBottom: '16px' }}>Remember, this micro(r)evolution is for anyone who:</Text>
+            <Text style={{ marginBottom: '16px' }}>{t('rememberInviteMsg')}:</Text>
             <StatementEditable value={project?.whoStatement}></StatementEditable>
           </Box>
 
@@ -134,7 +136,10 @@ export const InvitePage = (): JSX.Element => {
         {content}
       </Box>
 
-      <AppBottomButton icon={<FormPrevious />} label="back" onClick={() => navigate('../members')}></AppBottomButton>
+      <AppBottomButton
+        icon={<FormPrevious />}
+        label={t('back')}
+        onClick={() => navigate('../members')}></AppBottomButton>
     </ViewportPage>
   );
 };

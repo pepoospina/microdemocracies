@@ -7,14 +7,17 @@ import { AppBottomButtons } from '../common/BottomButtons';
 import { useProjectContext } from '../../contexts/ProjectContext';
 import { ApplicationCard } from './ApplicationCard';
 import { ViewportHeadingLarge, ViewportPage } from '../../components/app/Viewport';
+import { cap } from '../../utils/general';
+import { useTranslation } from 'react-i18next';
 
 export const Members = (): JSX.Element => {
+  const { t } = useTranslation();
   const { allVouches, applications } = useProjectContext();
   const navigate = useNavigate();
 
   return (
     <ViewportPage>
-      <ViewportHeadingLarge label="Members"></ViewportHeadingLarge>
+      <ViewportHeadingLarge label={cap(t('members'))}></ViewportHeadingLarge>
       <Box pad="large">
         {applications?.map((application, ix) => {
           return (
@@ -34,13 +37,13 @@ export const Members = (): JSX.Element => {
       <AppBottomButtons
         left={{
           icon: <FormPrevious />,
-          label: 'back',
+          label: t('back'),
           action: () => navigate('..'),
         }}
         right={{
           primary: true,
           icon: <Add />,
-          label: 'invite',
+          label: t('invite'),
           action: () => navigate('../invite'),
         }}></AppBottomButtons>
     </ViewportPage>

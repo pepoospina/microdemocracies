@@ -3,10 +3,11 @@ import { Anchor, Box, Spinner, Text } from 'grommet';
 import { useMemberContext } from '../../contexts/MemberContext';
 import { AccountPerson } from './AccountPerson';
 import { AppCard } from '../../ui-components';
-import { COMMUNITY_MEMBER } from '../../config/community';
 import { BoxCentered } from '../../ui-components/BoxCentered';
+import { useTranslation } from 'react-i18next';
 
 export const AccountOverview = () => {
+  const { t } = useTranslation();
   const { accountPapRead, accountRead } = useMemberContext();
   const isFounder = accountRead && accountRead.voucher > 10e70;
 
@@ -24,14 +25,14 @@ export const AccountOverview = () => {
         !isFounder ? (
           <Box margin={{ bottom: 'large' }}>
             <Text>
-              Invited by{' '}
+              {t('invitedBy')}{' '}
               <Anchor>
-                {COMMUNITY_MEMBER} #{accountRead?.voucher}
+                {t('member')} #{accountRead?.voucher}
               </Anchor>
             </Text>
           </Box>
         ) : (
-          <Box>Founder</Box>
+          <Box>{t('founder')}</Box>
         )
       ) : (
         <></>
@@ -39,7 +40,7 @@ export const AccountOverview = () => {
       {accountRead && !accountRead.valid ? (
         <AppCard style={{ marginBottom: '36px' }}>
           <Text>
-            <b>Account invalidated!</b>
+            <b>{t('accountInvalidated')}!</b>
           </Text>
         </AppCard>
       ) : (

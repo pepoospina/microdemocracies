@@ -10,9 +10,10 @@ import { AccountPerson } from '../account/AccountPerson';
 import { AppBottomButton } from '../common/BottomButtons';
 import { ViewportPage } from '../../components/app/Viewport';
 import { VouchMemberWidget } from './VouchMemberWidget';
-import { appName } from '../../config/community';
+import { useTranslation } from 'react-i18next';
 
 export const InviteAccount = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { hash } = useParams();
 
@@ -54,7 +55,7 @@ export const InviteAccount = () => {
     <ViewportPage>
       <Box justify="center" align="center" style={{ flexShrink: '0', height: '50px' }}>
         <Text size="22px" weight="bold">
-          {appName}
+          {t('appName')}
         </Text>
       </Box>
 

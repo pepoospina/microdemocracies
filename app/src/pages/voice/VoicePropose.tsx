@@ -12,8 +12,10 @@ import { useSemaphoreContext } from '../../contexts/SemaphoreContext';
 import { Loading } from '../common/WaitingTransaction';
 import { ViewportHeadingLarge, ViewportPage } from '../../components/app/Viewport';
 import { useStatementSend } from './useStatementSend';
+import { useTranslation } from 'react-i18next';
 
 export const VoicePropose = (): JSX.Element => {
+  const { t } = useTranslation();
   const { isConnected } = useAccountContext();
   const { proposeStatement, isSuccessStatement } = useStatementSend();
 
@@ -44,7 +46,7 @@ export const VoicePropose = (): JSX.Element => {
 
   return (
     <ViewportPage>
-      <ViewportHeadingLarge label="Propose Statement"></ViewportHeadingLarge>
+      <ViewportHeadingLarge label={t('proposeStatement')}></ViewportHeadingLarge>
 
       <Box pad="large">
         {!done ? (
@@ -55,22 +57,22 @@ export const VoicePropose = (): JSX.Element => {
                 onChanged={(value?: string) => {
                   if (value) setInput(value);
                 }}
-                placeholder="new statement..."></StatementEditable>
+                placeholder={`${t('newStatement')}...`}></StatementEditable>
             </Box>
 
             <AppCard>
-              <Text>Propose an anonymous statement and see how many members of the community back it!</Text>
+              <Text>{t('proposeInfo')}!</Text>
             </AppCard>
 
             <Box justify="center" style={{ margin: '36px 0', width: '100%' }}>
-              {!isConnected ? <AppConnectButton label="Connect to propose"></AppConnectButton> : <></>}
+              {!isConnected ? <AppConnectButton label={t('connectToPropose')}></AppConnectButton> : <></>}
               {isProposing ? (
                 <Box>
-                  <Loading label="sending anonymous proposal"></Loading>
+                  <Loading label={t('sendingProposal')}></Loading>
                 </Box>
               ) : (
                 <AppButton
-                  label="propose statement"
+                  label={t('proposeStatementBtn')}
                   onClick={() => {
                     if (input) _proposeStatement(input);
                   }}
@@ -79,10 +81,10 @@ export const VoicePropose = (): JSX.Element => {
             </Box>
           </>
         ) : (
-          <AppCard>Statement Proposed!</AppCard>
+          <AppCard>{t('statementProposed')}!</AppCard>
         )}
       </Box>
-      <AppBottomButton label="Back" icon={<FormPrevious />} onClick={() => navigate(-1)}></AppBottomButton>
+      <AppBottomButton label={t('back')} icon={<FormPrevious />} onClick={() => navigate(-1)}></AppBottomButton>
     </ViewportPage>
   );
 };

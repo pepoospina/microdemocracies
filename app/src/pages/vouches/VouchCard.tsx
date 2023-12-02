@@ -3,14 +3,16 @@ import { AppVouch } from '../../types';
 import { AppButton, AppCard } from '../../ui-components';
 import { useNavigate } from 'react-router-dom';
 import { DateManager } from '../../utils/date.manager';
-import { COMMUNITY_MEMBER } from '../../config/community';
 import { RouteNames } from '../../App';
+import { t } from 'i18next';
+import { useTranslation } from 'react-i18next';
 
 interface IVouchCard {
   vouch?: AppVouch;
 }
 
 export const VoucheCard = (props: IVouchCard): JSX.Element => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const vouch = props.vouch;
 
@@ -32,18 +34,18 @@ export const VoucheCard = (props: IVouchCard): JSX.Element => {
             {isFounder ? (
               <Text>
                 <Anchor>
-                  {COMMUNITY_MEMBER} #{vouch.to.toString()}
+                  {t('member')} #{vouch.to.toString()}
                 </Anchor>{' '}
-                founded the community
+                {t('foundedCommunity')}
               </Text>
             ) : (
               <Text>
                 <Anchor>
-                  {COMMUNITY_MEMBER} #{vouch.to.toString()}
+                  {t('member')} #{vouch.to.toString()}
                 </Anchor>{' '}
                 vouched by{' '}
                 <Anchor>
-                  {COMMUNITY_MEMBER} #{vouch.from.toString()}
+                  {t('member')} #{vouch.from.toString()}
                 </Anchor>{' '}
               </Text>
             )}
