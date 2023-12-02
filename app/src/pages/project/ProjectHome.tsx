@@ -29,7 +29,7 @@ export const ProjectHome = (props: IProjectHome) => {
   const { statements } = useVoiceRead();
   const { mobile } = useResponsive();
 
-  const newStr = mobile ? cap(t('propose')) : cap(t('propose new'));
+  const newStr = mobile ? cap(t('propose')) : cap(t('proposeNew'));
   const membersStr = mobile ? cap(t('members')) : t('seeInviteMembers');
 
   if (project === undefined) {

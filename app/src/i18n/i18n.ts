@@ -139,7 +139,7 @@ i18n.use(initReactI18next).init({
         member: 'miembro',
         seeInviteMembers: 'Ver/Invitar Miembros',
         propose: 'proponer',
-        proposeNew: 'proponerNuevo',
+        proposeNew: 'proponer',
         proposeStatement: 'Proponer Declaración',
         proposeStatementBtn: 'Proponer Declaración',
         statementProposed: 'Declaración Propuesta',
