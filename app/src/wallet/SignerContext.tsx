@@ -4,7 +4,7 @@ import { createMagicSigner, magic } from './magic.signer';
 import { WalletClientSigner } from '@alchemy/aa-core';
 import { createInjectedSigner } from './injected.signer';
 import { InjectedConnector } from '@wagmi/core';
-import { useConnect } from 'wagmi';
+import { useConnect, useDisconnect } from 'wagmi';
 import { HexStr } from '../types';
 import { MessageSigner } from '../utils/identity';
 import { createTestSigner } from '../test/test.signer';
@@ -19,6 +19,7 @@ export type SignerContextType = {
   signMessage?: MessageSigner;
   isConnecting: boolean;
   errorConnecting?: Error;
+  disconnect: () => void;
 };
 
 const ProviderContextValue = createContext<SignerContextType | undefined>(undefined);
@@ -49,6 +50,7 @@ export const SignerContext = (props: PropsWithChildren) => {
   }, [signer]);
 
   const { connectAsync } = useConnect({ connector: new InjectedConnector() });
+  const { disconnect: disconnectInjected } = useDisconnect();
 
   const connectTest = (ix: number) => {
     console.log('connecting test signer', { ix });
@@ -91,6 +93,13 @@ export const SignerContext = (props: PropsWithChildren) => {
     return signer.signMessage;
   })();
 
+  const disconnect = () => {
+    disconnectInjected();
+    setInjectedSigner(undefined);
+    magic.user.logout();
+    setMagicSigner(undefined);
+  };
+
   return (
     <ProviderContextValue.Provider
       value={{
@@ -103,6 +112,7 @@ export const SignerContext = (props: PropsWithChildren) => {
         hasInjected,
         signer,
         address,
+        disconnect,
       }}>
       {props.children}
     </ProviderContextValue.Provider>
