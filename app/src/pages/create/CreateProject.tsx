@@ -168,7 +168,7 @@ export const CreateProject = () => {
       <ViewportHeadingLarge label={t('startProject')}></ViewportHeadingLarge>
 
       <Box style={{ flexGrow: '1' }} justify="center">
-        {/* {pageIx === 0 ? (
+        {pageIx === 0 ? (
           <Box pad={{ horizontal: 'large' }} style={{ flexShrink: 0 }}>
             <AppCard>
               <Text>
@@ -178,7 +178,7 @@ export const CreateProject = () => {
           </Box>
         ) : (
           <></>
-        )} */}
+        )}
 
         {pages.map((page, ix) => {
           return (

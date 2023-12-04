@@ -1,4 +1,3 @@
-import { changeLanguage } from 'i18next';
 import { PropsWithChildren, createContext, useContext, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -29,18 +28,19 @@ export const AppLanguage = (props: PropsWithChildren): JSX.Element => {
     } else {
       const local = navigator.language;
       if (local.includes('en')) {
-        changeLanguage(Language.ENG);
+        i18n.changeLanguage(Language.ENG);
       }
       if (local.includes('es')) {
-        changeLanguage(Language.SPA);
+        i18n.changeLanguage(Language.SPA);
       }
       if (local.includes('cat')) {
-        changeLanguage(Language.CAT);
+        i18n.changeLanguage(Language.CAT);
       }
       if (local.includes('he')) {
-        changeLanguage(Language.HEB);
+        i18n.changeLanguage(Language.HEB);
       }
-      changeLanguage(Language.ENG);
+
+      i18n.changeLanguage(Language.ENG);
     }
   }, [i18n]);
 
