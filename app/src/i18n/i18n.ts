@@ -17,7 +17,7 @@ i18n.use(initReactI18next).init({
         invite: 'invite',
         noProjects: 'Your have not joined or started any micro(r)evolution yet.',
         yourProjects: `Your micro(r)evolutions`,
-        carousel01: 'Find something you know <Bold>need</Bold> to change',
+        carousel01: 'Find something you know <Bold>needs</Bold> to change',
         carousel01sub: 'Dare others to change it, <Bold>together</Bold>',
         carousel02: 'Talk <Bold>without fear</Bold>',
         carousel02sub: 'Post <Bold>anonymously</Bold> into the community board, but only if you are a member',
