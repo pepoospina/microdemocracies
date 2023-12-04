@@ -3,7 +3,7 @@ import { initReactI18next } from 'react-i18next';
 
 i18n.use(initReactI18next).init({
   resources: {
-    en: {
+    ENG: {
       translation: {
         appName: 'micro(r)evolutions',
         startNow: 'start now',
@@ -105,7 +105,7 @@ i18n.use(initReactI18next).init({
         details: 'details',
       },
     },
-    es: {
+    SPA: {
       translation: {
         appName: 'micro(r)evoluciones',
         startNow: 'iniciar una',
@@ -200,14 +200,14 @@ i18n.use(initReactI18next).init({
         connectedAs: 'Estás conectado',
         wallet: 'Wallet',
         owner: 'Owner',
-        logout: 'desconectar',
+        logout: 'salir',
         details: 'detalles',
       },
     },
     // Add other languages here
   },
-  lng: 'es', // default language
-  fallbackLng: 'en',
+  lng: 'SPA', // default language
+  fallbackLng: 'ENG',
 
   interpolation: {
     escapeValue: false,

@@ -15,6 +15,7 @@ import { useAppSigner } from '../../wallet/SignerContext';
 import { CHAIN_ID } from '../../config/appConfig';
 import { useState } from 'react';
 import { useSemaphoreContext } from '../../contexts/SemaphoreContext';
+import { LanguageSelector } from '../account/LanguageSelector';
 
 export const AppHome = (props: {}) => {
   const { address } = useAppSigner();
@@ -56,9 +57,6 @@ export const AppHome = (props: {}) => {
 
     return (
       <Box>
-        <AppHeading level="2" style={{ marginBottom: '16px' }}>
-          {t('connectedAs')}
-        </AppHeading>
         <Box direction="row" justify="between" gap="small">
           <Box>
             {showAddresses ? (
@@ -74,6 +72,7 @@ export const AppHome = (props: {}) => {
               <AppButton onClick={() => clickShow()} label={t('details')}></AppButton>
             )}
           </Box>
+          <LanguageSelector></LanguageSelector>
           <AppButton reverse icon={<Logout></Logout>} label={t('logout')} onClick={() => disconnect()}></AppButton>
         </Box>
       </Box>
