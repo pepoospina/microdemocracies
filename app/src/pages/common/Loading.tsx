@@ -17,5 +17,6 @@ export const Loading = (props: { label?: string }) => {
 };
 
 export const WaitingTransaction = () => {
+  const { t } = useTranslation();
   return <Loading label={t('waitingTx')}></Loading>;
 };

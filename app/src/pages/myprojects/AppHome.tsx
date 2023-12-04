@@ -51,7 +51,7 @@ export const AppHome = (props: {}) => {
     return (
       <Box>
         <Box direction="row" justify="between" gap="small">
-          <AppButton onClick={() => setShowDetails(!showDetails)} label={t('options')}></AppButton>
+          <AppButton onClick={() => setShowDetails(!showDetails)} label={t('details')}></AppButton>
           <LanguageSelector></LanguageSelector>
           <AppButton reverse icon={<Logout></Logout>} label={t('logout')} onClick={() => disconnect()}></AppButton>
         </Box>
