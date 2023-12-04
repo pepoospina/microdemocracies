@@ -1,7 +1,7 @@
 import { Box, Button, Text } from 'grommet';
-import { Address, AppButton, AppCard, AppHeading } from '../../ui-components';
+import { Address, AppButton, AppButtonResponsive, AppCard, AppHeading } from '../../ui-components';
 import { ViewportPage } from '../../components/app/Viewport';
-import { Add, Logout } from 'grommet-icons';
+import { Add, Logout, View } from 'grommet-icons';
 import { useAccountContext } from '../../wallet/AccountContext';
 import { AppConnect } from '../../components/app/AppConnect';
 import { useAccountDataContext } from '../../wallet/AccountDataContext';
@@ -16,6 +16,7 @@ import { CHAIN_ID } from '../../config/appConfig';
 import { useState } from 'react';
 import { useSemaphoreContext } from '../../contexts/SemaphoreContext';
 import { LanguageSelector } from '../account/LanguageSelector';
+import { useResponsive, useThemeContext } from '../../components/app';
 
 export const AppHome = (props: {}) => {
   const { address } = useAppSigner();
@@ -24,6 +25,9 @@ export const AppHome = (props: {}) => {
   const { projects } = useAccountDataContext();
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const { constants } = useThemeContext();
+
+  const { mobile } = useResponsive();
 
   const [showDetails, setShowDetails] = useState<boolean>(false);
 
@@ -51,9 +55,16 @@ export const AppHome = (props: {}) => {
     return (
       <Box>
         <Box direction="row" justify="between" gap="small">
-          <AppButton onClick={() => setShowDetails(!showDetails)} label={t('details')}></AppButton>
+          <AppButtonResponsive
+            onClick={() => setShowDetails(!showDetails)}
+            icon={<View></View>}
+            label={t('details')}></AppButtonResponsive>
           <LanguageSelector></LanguageSelector>
-          <AppButton reverse icon={<Logout></Logout>} label={t('logout')} onClick={() => disconnect()}></AppButton>
+          <AppButtonResponsive
+            reverse
+            icon={<Logout></Logout>}
+            label={t('logout')}
+            onClick={() => disconnect()}></AppButtonResponsive>
         </Box>
         {showDetails ? (
           <Box pad={{ top: 'medium' }}>

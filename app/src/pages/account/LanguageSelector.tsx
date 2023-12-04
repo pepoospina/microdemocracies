@@ -1,16 +1,20 @@
-import { Box, DropButton, Image } from 'grommet';
-import { AppButton } from '../../ui-components';
+import { Box, Image } from 'grommet';
+import { AppButton, AppCircleDropButtonResponsive } from '../../ui-components';
 import { useResponsive } from '../../components/app';
 import { useState } from 'react';
 import { Language, useAppLanguage } from '../../components/app/AppLanguage';
 
-const LanguageValue = (key: Language) => {
+const LanguageValue = (key: Language, hideIfMobile: boolean = false) => {
+  const { mobile } = useResponsive();
+
   const flag = (() => {
     return <Image style={{ width: '24px' }} src={`/icons/${key}.\svg`}></Image>;
   })();
+
   return (
-    <Box direction="row" align="center" gap="small" justify="center">
-      {`(${key})`} {flag}
+    <Box direction="row" align="center" gap={mobile ? 'small' : '0px'} justify="center">
+      {mobile && hideIfMobile ? '' : `(${key}) `}
+      {flag}
     </Box>
   );
 };
@@ -29,8 +33,8 @@ export const LanguageSelector = (props: {}) => {
   };
 
   return (
-    <DropButton
-      label={LanguageValue(selected)}
+    <AppCircleDropButtonResponsive
+      label={LanguageValue(selected, true)}
       open={showDrop}
       onClose={() => setShowDrop(false)}
       onOpen={() => setShowDrop(true)}
@@ -40,12 +44,12 @@ export const LanguageSelector = (props: {}) => {
             return (
               <AppButton
                 style={{ width: `${width - 40}px` }}
-                label={LanguageValue(key as Language)}
+                label={LanguageValue(key as Language, false)}
                 onClick={() => changeLanguage(key as Language)}></AppButton>
             );
           })}
         </Box>
       }
-      dropProps={{ style: { width: `${width + 40}px`, marginTop: '60px' } }}></DropButton>
+      dropProps={{ style: { width: `${width + 40}px`, marginTop: '60px' } }}></AppCircleDropButtonResponsive>
   );
 };
