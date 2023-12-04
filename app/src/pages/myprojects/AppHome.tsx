@@ -13,23 +13,43 @@ import { AppBottomButton } from '../common/BottomButtons';
 import { useTranslation } from 'react-i18next';
 import { useAppSigner } from '../../wallet/SignerContext';
 import { CHAIN_ID } from '../../config/appConfig';
+import { useState } from 'react';
+import { useSemaphoreContext } from '../../contexts/SemaphoreContext';
 
 export const AppHome = (props: {}) => {
-  const { address, disconnect } = useAppSigner();
+  const { address } = useAppSigner();
+  const { disconnect } = useSemaphoreContext();
   const { isConnected, aaAddress } = useAccountContext();
   const { projects } = useAccountDataContext();
   const navigate = useNavigate();
   const { t } = useTranslation();
 
+  const [showAddresses, setShowAddresses] = useState<boolean>(false);
+
   const projectClicked = (projectId: number) => {
     navigate(`/p/${projectId}`);
   };
 
+  const clickShow = () => {
+    setShowAddresses(true);
+    setTimeout(() => {
+      setShowAddresses(false);
+    }, 5000);
+  };
+
   const userContent = (() => {
-    if (!isConnected || !address || !aaAddress) {
+    if (!isConnected) {
       return (
         <BoxCentered fill>
           <AppConnect></AppConnect>
+        </BoxCentered>
+      );
+    }
+
+    if (!address || !aaAddress) {
+      return (
+        <BoxCentered fill>
+          <Loading></Loading>
         </BoxCentered>
       );
     }
@@ -39,23 +59,22 @@ export const AppHome = (props: {}) => {
         <AppHeading level="2" style={{ marginBottom: '16px' }}>
           {t('connectedAs')}
         </AppHeading>
-        <Box direction="row" justify="between">
+        <Box direction="row" justify="between" gap="small">
           <Box>
-            <Box direction="row">
-              <Text>{t('wallet')}</Text>: {<Address address={aaAddress} chainId={CHAIN_ID}></Address>}
-            </Box>
-            <Box direction="row">
-              <Text>{t('owner')}</Text>: {<Address address={address} chainId={CHAIN_ID}></Address>}
-            </Box>
+            {showAddresses ? (
+              <>
+                <Box direction="row" margin={{ bottom: 'small' }}>
+                  <Text>{t('wallet')}</Text>: {<Address address={aaAddress} chainId={CHAIN_ID}></Address>}
+                </Box>
+                <Box direction="row">
+                  <Text>{t('owner')}</Text>: {<Address address={address} chainId={CHAIN_ID}></Address>}
+                </Box>
+              </>
+            ) : (
+              <AppButton onClick={() => clickShow()} label={t('details')}></AppButton>
+            )}
           </Box>
-          <Box style={{ flexShrink: 0 }} pad={{ horizontal: 'small ' }} align="center">
-            <AppButton style={{ textTransform: 'none' }} onClick={() => disconnect()}>
-              <Box align="center">
-                <Logout></Logout>
-                <Text style={{ textAlign: 'center' }}>{t('logout')}</Text>
-              </Box>
-            </AppButton>
-          </Box>
+          <AppButton reverse icon={<Logout></Logout>} label={t('logout')} onClick={() => disconnect()}></AppButton>
         </Box>
       </Box>
     );

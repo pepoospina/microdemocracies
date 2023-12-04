@@ -98,7 +98,6 @@ export const DetailsSelector = (props: { onChanged: (seleted: SelectedDetails) =
   return (
     <>
       <Box style={{ marginBottom: '12px', fontSize: '10px', fontWeight: '300' }}>
-        <AppHeading level="3">{t('toJoinMsg')}:</AppHeading>
         <Text style={{ margin: '12px 0px 0px 0px' }}>{t('selectMsgOpts')}.</Text>
       </Box>
 

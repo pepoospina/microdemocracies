@@ -10,14 +10,30 @@ import { cap } from '../../utils/general';
 
 export const AppConnect = (props: {}) => {
   const { t } = useTranslation();
-  const { hasInjected, connectInjected, connectMagic, signer, isConnecting } = useAppSigner();
+  const { hasInjected, connectInjected, connectMagic, signer, isConnecting, isChecking } = useAppSigner();
   const { aaAddress } = useAccountContext();
   const { isCreatingPublicId } = useSemaphoreContext();
 
-  if (isConnecting || isCreatingPublicId) {
+  if (isChecking) {
     return (
       <Box>
-        <Loading label={isCreatingPublicId ? t('waitingSignatures') : cap(t('connecting'))}></Loading>
+        <Loading label={cap(t('loading'))}></Loading>
+      </Box>
+    );
+  }
+
+  if (isConnecting) {
+    return (
+      <Box>
+        <Loading label={cap(t('connecting'))}></Loading>
+      </Box>
+    );
+  }
+
+  if (isCreatingPublicId) {
+    return (
+      <Box>
+        <Loading label={t('waitingSignatures')}></Loading>
       </Box>
     );
   }

@@ -18,6 +18,7 @@ export type SignerContextType = {
   address?: HexStr;
   signMessage?: MessageSigner;
   isConnecting: boolean;
+  isChecking: boolean;
   errorConnecting?: Error;
   disconnect: () => void;
 };
@@ -30,15 +31,19 @@ export const SignerContext = (props: PropsWithChildren) => {
   const [injectedSigner, setInjectedSigner] = useState<WalletClientSigner>();
 
   const [isConnecting, setIsConnecting] = useState<boolean>(false);
+  const [isChecking, setIsChecking] = useState<boolean>(true);
   const [errorConnecting, setErrorConnecting] = useState<Error>();
 
   const signer = injectedSigner ? injectedSigner : magicSigner;
 
   useEffect(() => {
+    setIsChecking(true);
     magic.user.isLoggedIn().then((res) => {
       if (res) {
         console.log('Autoconnecting Magic');
         connectMagic();
+      } else {
+        setIsChecking(false);
       }
     });
   }, []);
@@ -60,8 +65,11 @@ export const SignerContext = (props: PropsWithChildren) => {
 
   const connectMagic = () => {
     console.log('connecting magic signer', { signer });
+    setIsChecking(false);
+    setIsConnecting(true);
     createMagicSigner().then((signer) => {
       console.log('connected magic signer', { signer });
+      setIsConnecting(false);
       setMagicSigner(signer);
     });
   };
@@ -96,6 +104,7 @@ export const SignerContext = (props: PropsWithChildren) => {
   const disconnect = () => {
     disconnectInjected();
     setInjectedSigner(undefined);
+
     magic.user.logout();
     setMagicSigner(undefined);
   };
@@ -107,6 +116,7 @@ export const SignerContext = (props: PropsWithChildren) => {
         connectInjected,
         connectTest,
         isConnecting,
+        isChecking,
         errorConnecting,
         signMessage,
         hasInjected,

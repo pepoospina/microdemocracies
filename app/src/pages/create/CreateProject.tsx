@@ -19,7 +19,7 @@ import { useCreateProject } from './useCreateProject';
 import { RouteNames } from '../../App';
 import { Trans, useTranslation } from 'react-i18next';
 
-const NPAGES = 4;
+const NPAGES = 5;
 
 export const CreateProject = () => {
   const { t } = useTranslation();
@@ -45,7 +45,14 @@ export const CreateProject = () => {
     }
   }, [isSuccess, navigate, projectId]);
 
-  const boxStyle: React.CSSProperties = {};
+  const boxStyle: React.CSSProperties = {
+    flexGrow: '1',
+    justifyContent: 'center',
+  };
+
+  const headingStyle: React.CSSProperties = {
+    marginBottom: '4vw',
+  };
 
   const nextPage = () => {
     if (pageIx < NPAGES - 1) {
@@ -73,19 +80,20 @@ export const CreateProject = () => {
 
   const nextStr = (() => {
     if (pageIx === 1) return t('next');
-    if (pageIx === 2) return t('review');
-    if (pageIx === 3) return t('create');
+    if (pageIx === 2) return t('next');
+    if (pageIx === 3) return t('review');
+    if (pageIx === 4) return t('create');
     return t('next');
   })();
 
   const nextPrimary = (() => {
-    if (pageIx === 3) return true;
+    if (pageIx === 4) return true;
     return false;
   })();
 
   const nextDisabled = (() => {
-    if (pageIx === 2 && !founderPap) return true;
-    if (pageIx === 3 && !whoStatement) return true;
+    if (pageIx === 3 && !founderPap) return true;
+    if (pageIx === 4 && !whoStatement) return true;
     return false;
   })();
 
@@ -99,41 +107,47 @@ export const CreateProject = () => {
   }
 
   const pages: ReactNode[] = [
-    <Box style={boxStyle}>
-      <Box style={{ width: '100%', flexShrink: 0 }} pad="large">
-        <Box style={{ marginBottom: '12px', fontSize: '10px', fontWeight: '300', flexShrink: 0 }}>
-          <AppHeading level="3">{t('whoTitle')}:</AppHeading>
-          <Text style={{ margin: '12px 0px 0px 0px' }}>
-            <Trans i18nKey="examplesWho" components={{ Bold: <Bold></Bold> }}></Trans>
-          </Text>
-        </Box>
-        <Box>
-          <StatementEditable
-            onChanged={(value) => {
-              if (value) setWhoStatement(value);
-            }}
-            editable
-            placeholder={`${t('wantsTo')}...`}></StatementEditable>
-        </Box>
+    <Box style={boxStyle} pad="large">
+      <Box style={{ marginBottom: '12px', fontSize: '10px', fontWeight: '300', flexShrink: 0 }}>
+        <AppHeading style={headingStyle} level="3">
+          {t('whoTitle')}:
+        </AppHeading>
+        <Text style={{ margin: '12px 0px 0px 0px' }}>
+          <Trans i18nKey="examplesWho" components={{ Bold: <Bold></Bold> }}></Trans>
+        </Text>
       </Box>
+      <Box>
+        <StatementEditable
+          onChanged={(value) => {
+            if (value) setWhoStatement(value);
+          }}
+          editable
+          placeholder={`${t('wantsTo')}...`}></StatementEditable>
+      </Box>
+    </Box>,
 
-      <Box style={{ width: '100%', flexShrink: 0, overflowY: 'auto' }} pad="large">
-        <DetailsSelector onChanged={(details) => setDetails(details)}></DetailsSelector>
-      </Box>
+    <Box style={boxStyle} pad="large">
+      <AppHeading style={headingStyle} level="3">
+        {t('toJoinMsg')}:
+      </AppHeading>
+      <DetailsSelector onChanged={(details) => setDetails(details)}></DetailsSelector>
     </Box>,
 
     <Box style={boxStyle}>
       <Box style={{ width: '100%', flexShrink: 0 }} pad="large">
-        <Box style={{ marginBottom: '24px' }}>
-          <AppHeading level="3">{t('yourDetails')}:</AppHeading>
-        </Box>
+        <AppHeading style={headingStyle} level="3">
+          {t('yourDetails')}:
+        </AppHeading>
+
         <DetailsForm selected={selectedDetails} onChange={(details) => setFounderDetails(details)}></DetailsForm>
       </Box>
     </Box>,
 
     <Box style={boxStyle}>
       <Box style={{ width: '100%', flexShrink: 0 }} pad="large">
-        <AppHeading level="3">{t('connectAccount')}:</AppHeading>
+        <AppHeading style={headingStyle} level="3">
+          {t('connectAccount')}:
+        </AppHeading>
         <Box pad="large" style={{ flexShrink: 0 }}>
           <AppConnect></AppConnect>
         </Box>
@@ -153,8 +167,8 @@ export const CreateProject = () => {
     <ViewportPage>
       <ViewportHeadingLarge label={t('startProject')}></ViewportHeadingLarge>
 
-      <Box>
-        {pageIx === 0 ? (
+      <Box style={{ flexGrow: '1' }} justify="center">
+        {/* {pageIx === 0 ? (
           <Box pad={{ horizontal: 'large' }} style={{ flexShrink: 0 }}>
             <AppCard>
               <Text>
@@ -164,11 +178,11 @@ export const CreateProject = () => {
           </Box>
         ) : (
           <></>
-        )}
+        )} */}
 
         {pages.map((page, ix) => {
           return (
-            <div key={ix} style={{ height: '100%', width: '100%', display: pageIx === ix ? 'block' : 'none' }}>
+            <div key={ix} style={{ width: '100%', display: pageIx === ix ? 'block' : 'none' }}>
               {page}
             </div>
           );
