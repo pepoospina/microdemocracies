@@ -41,5 +41,5 @@ export const AppCircleDropButton = (props: DropButtonExtendedProps) => {
 
 export const AppCircleDropButtonResponsive = (props: DropButtonExtendedProps) => {
   const { mobile } = useResponsive();
-  return mobile ? <DropButton {...props}></DropButton> : <AppCircleDropButton {...props}></AppCircleDropButton>;
+  return !mobile ? <DropButton {...props}></DropButton> : <AppCircleDropButton {...props}></AppCircleDropButton>;
 };
