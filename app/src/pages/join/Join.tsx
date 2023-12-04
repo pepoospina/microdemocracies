@@ -19,7 +19,7 @@ import { AppBottomButtons } from '../common/BottomButtons';
 import { putObject } from '../../utils/store';
 import { postApply } from '../../utils/project';
 import { BoxCentered } from '../../ui-components/BoxCentered';
-import { Loading } from '../common/WaitingTransaction';
+import { Loading } from '../common/Loading';
 import { ViewportHeadingLarge, ViewportPage } from '../../components/app/Viewport';
 
 export interface IJoinProps {

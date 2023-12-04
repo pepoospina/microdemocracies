@@ -3,7 +3,7 @@ import { StatusGood } from 'grommet-icons';
 import { AppButton } from '../../ui-components';
 import { useAccountContext } from '../../wallet/AccountContext';
 import { useAppSigner } from '../../wallet/SignerContext';
-import { Loading } from '../../pages/common/WaitingTransaction';
+import { Loading } from '../../pages/common/Loading';
 import { useSemaphoreContext } from '../../contexts/SemaphoreContext';
 import { useTranslation } from 'react-i18next';
 import { cap } from '../../utils/general';

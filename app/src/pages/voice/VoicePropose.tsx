@@ -9,7 +9,7 @@ import { FormPrevious } from 'grommet-icons';
 import { useAccountContext } from '../../wallet/AccountContext';
 import { StatementEditable } from './StatementEditable';
 import { useSemaphoreContext } from '../../contexts/SemaphoreContext';
-import { Loading } from '../common/WaitingTransaction';
+import { Loading } from '../common/Loading';
 import { ViewportHeadingLarge, ViewportPage } from '../../components/app/Viewport';
 import { useStatementSend } from './useStatementSend';
 import { useTranslation } from 'react-i18next';

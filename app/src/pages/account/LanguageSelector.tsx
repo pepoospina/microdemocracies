@@ -1,14 +1,8 @@
 import { Box, DropButton, Image } from 'grommet';
 import { AppButton } from '../../ui-components';
-import { useTranslation } from 'react-i18next';
 import { useResponsive } from '../../components/app';
 import { useState } from 'react';
-
-export enum Language {
-  ENG = 'ENG',
-  SPA = 'SPA',
-  CAT = 'CAT',
-}
+import { Language, useAppLanguage } from '../../components/app/AppLanguage';
 
 const LanguageValue = (key: Language) => {
   const flag = (() => {
@@ -22,9 +16,7 @@ const LanguageValue = (key: Language) => {
 };
 
 export const LanguageSelector = (props: {}) => {
-  const { i18n } = useTranslation();
-  const selected = i18n.language as Language;
-
+  const { selected, change } = useAppLanguage();
   const { vw } = useResponsive();
 
   const [showDrop, setShowDrop] = useState<boolean>();
@@ -32,7 +24,7 @@ export const LanguageSelector = (props: {}) => {
   const width = vw > 600 ? 240 : 200;
 
   const changeLanguage = (key: Language) => {
-    i18n.changeLanguage(key);
+    change(key);
     setShowDrop(false);
   };
 
@@ -44,18 +36,14 @@ export const LanguageSelector = (props: {}) => {
       onOpen={() => setShowDrop(true)}
       dropContent={
         <Box style={{ width: `${width}px` }} pad="20px" gap="small">
-          <AppButton
-            style={{ width: `${width - 40}px` }}
-            label={LanguageValue(Language.ENG)}
-            onClick={() => changeLanguage(Language.ENG)}></AppButton>
-          <AppButton
-            style={{ width: `${width - 40}px` }}
-            label={LanguageValue(Language.SPA)}
-            onClick={() => changeLanguage(Language.SPA)}></AppButton>
-          <AppButton
-            style={{ width: `${width - 40}px` }}
-            label={LanguageValue(Language.CAT)}
-            onClick={() => changeLanguage(Language.CAT)}></AppButton>
+          {Object.keys(Language).map((key: string) => {
+            return (
+              <AppButton
+                style={{ width: `${width - 40}px` }}
+                label={LanguageValue(key as Language)}
+                onClick={() => changeLanguage(key as Language)}></AppButton>
+            );
+          })}
         </Box>
       }
       dropProps={{ style: { width: `${width + 40}px`, marginTop: '60px' } }}></DropButton>

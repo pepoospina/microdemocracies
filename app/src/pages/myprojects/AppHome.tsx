@@ -5,7 +5,7 @@ import { Add, Logout } from 'grommet-icons';
 import { useAccountContext } from '../../wallet/AccountContext';
 import { AppConnect } from '../../components/app/AppConnect';
 import { useAccountDataContext } from '../../wallet/AccountDataContext';
-import { Loading } from '../common/WaitingTransaction';
+import { Loading } from '../common/Loading';
 import { ProjectCard } from '../project/ProjectCard';
 import { useNavigate } from 'react-router-dom';
 import { BoxCentered } from '../../ui-components/BoxCentered';
@@ -25,17 +25,10 @@ export const AppHome = (props: {}) => {
   const navigate = useNavigate();
   const { t } = useTranslation();
 
-  const [showAddresses, setShowAddresses] = useState<boolean>(false);
+  const [showDetails, setShowDetails] = useState<boolean>(false);
 
   const projectClicked = (projectId: number) => {
     navigate(`/p/${projectId}`);
-  };
-
-  const clickShow = () => {
-    setShowAddresses(true);
-    setTimeout(() => {
-      setShowAddresses(false);
-    }, 5000);
   };
 
   const userContent = (() => {
@@ -58,23 +51,22 @@ export const AppHome = (props: {}) => {
     return (
       <Box>
         <Box direction="row" justify="between" gap="small">
-          <Box>
-            {showAddresses ? (
-              <>
-                <Box direction="row" margin={{ bottom: 'small' }}>
-                  <Text>{t('wallet')}</Text>: {<Address address={aaAddress} chainId={CHAIN_ID}></Address>}
-                </Box>
-                <Box direction="row">
-                  <Text>{t('owner')}</Text>: {<Address address={address} chainId={CHAIN_ID}></Address>}
-                </Box>
-              </>
-            ) : (
-              <AppButton onClick={() => clickShow()} label={t('details')}></AppButton>
-            )}
-          </Box>
+          <AppButton onClick={() => setShowDetails(!showDetails)} label={t('options')}></AppButton>
           <LanguageSelector></LanguageSelector>
           <AppButton reverse icon={<Logout></Logout>} label={t('logout')} onClick={() => disconnect()}></AppButton>
         </Box>
+        {showDetails ? (
+          <Box pad={{ top: 'medium' }}>
+            <Box direction="row" margin={{ bottom: 'small' }}>
+              <Text>{t('wallet')}</Text>: {<Address address={aaAddress} chainId={CHAIN_ID}></Address>}
+            </Box>
+            <Box direction="row">
+              <Text>{t('owner')}</Text>: {<Address address={address} chainId={CHAIN_ID}></Address>}
+            </Box>
+          </Box>
+        ) : (
+          <></>
+        )}
       </Box>
     );
   })();

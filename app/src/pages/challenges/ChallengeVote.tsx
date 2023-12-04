@@ -4,7 +4,7 @@ import { useCurrentChallenge } from '../../contexts/CurrentChallengeContext';
 import { AppConnectButton } from '../../components/app/AppConnectButton';
 import { useConnectedMember } from '../../contexts/ConnectedAccountContext';
 import { useEffect, useState } from 'react';
-import { WaitingTransaction } from '../common/WaitingTransaction';
+import { WaitingTransaction } from '../common/Loading';
 import { BoxCentered } from '../../ui-components/BoxCentered';
 import { useAccountContext } from '../../wallet/AccountContext';
 import { useTranslation } from 'react-i18next';

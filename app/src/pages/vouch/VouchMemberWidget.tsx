@@ -10,7 +10,7 @@ import { useVouch } from '../../contexts/VouchContext';
 import { Entity, PAP } from '../../types';
 import { AppCard, AppButton } from '../../ui-components';
 import { useAccountContext } from '../../wallet/AccountContext';
-import { WaitingTransaction } from '../common/WaitingTransaction';
+import { WaitingTransaction } from '../common/Loading';
 import { useNavigate } from 'react-router-dom';
 import { postDeleteApplication } from '../../utils/project';
 import { useTranslation } from 'react-i18next';
