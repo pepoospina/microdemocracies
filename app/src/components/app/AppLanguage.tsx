@@ -39,8 +39,6 @@ export const AppLanguage = (props: PropsWithChildren): JSX.Element => {
       if (local.includes('he')) {
         i18n.changeLanguage(Language.HEB);
       }
-
-      i18n.changeLanguage(Language.ENG);
     }
   }, [i18n]);
 
