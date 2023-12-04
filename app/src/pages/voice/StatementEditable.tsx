@@ -1,9 +1,10 @@
-import { Box } from 'grommet';
+import { Box, Text } from 'grommet';
 import { useEffect, useState } from 'react';
 import ReactQuill, { Quill } from 'react-quill';
 import 'react-quill/dist/quill.bubble.css';
 import './statements.css';
 import { useThemeContext } from '../../components/app';
+import { useTranslation } from 'react-i18next';
 
 export interface IStatementEditable {
   placeholder?: string;
@@ -14,6 +15,7 @@ export interface IStatementEditable {
 }
 
 export const StatementEditable = (props: IStatementEditable) => {
+  const { t } = useTranslation();
   const { constants } = useThemeContext();
   const [text, setText] = useState<string>();
 
@@ -57,25 +59,34 @@ export const StatementEditable = (props: IStatementEditable) => {
   };
 
   return (
-    <Box
-      style={{
-        backgroundColor: constants.colors.primary,
-        color: constants.colors.textOnPrimary,
-        fontSize: '48px',
-        borderRadius: '6px',
-        ...props.containerStyle,
-      }}
-      pad="small">
-      <Box>
-        <ReactQuill
-          placeholder={props.placeholder}
-          theme="bubble"
-          modules={modules}
-          value={text}
-          onChange={setText}
-          readOnly={!editable}
-        />
+    <>
+      <Box
+        style={{
+          backgroundColor: constants.colors.primary,
+          color: constants.colors.textOnPrimary,
+          fontSize: '48px',
+          borderRadius: '6px',
+          ...props.containerStyle,
+        }}
+        pad="small">
+        <Box>
+          <ReactQuill
+            placeholder={props.placeholder}
+            theme="bubble"
+            modules={modules}
+            value={text}
+            onChange={setText}
+            readOnly={!editable}
+          />
+        </Box>
       </Box>
-    </Box>
+      {editable ? (
+        <Box pad="small">
+          <Text style={{ textAlign: 'center', color: constants.colors.primaryLight }}>{t('helpEditable')}</Text>
+        </Box>
+      ) : (
+        <></>
+      )}
+    </>
   );
 };

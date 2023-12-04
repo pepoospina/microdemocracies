@@ -2,10 +2,12 @@ import { AppForm, AppFormField, AppInput, FieldLabel } from '../../ui-components
 import { PlatformDetails, platforms } from '../../utils/platforms';
 import { DetailsAndPlatforms, PersonDetails, PlatformAccount, PlatformId, SelectedDetails } from '../../types';
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 
 const formInit = {};
 
 export const DetailsForm = (props: { selected?: SelectedDetails; onChange: (values: DetailsAndPlatforms) => void }) => {
+  const { t } = useTranslation();
   const [formValues, setFormValuesState] = useState<any>(formInit);
 
   useEffect(() => {
@@ -38,7 +40,7 @@ export const DetailsForm = (props: { selected?: SelectedDetails; onChange: (valu
       {props.selected?.personal.firstName ? (
         <AppFormField
           name="firstName"
-          label={<FieldLabel label="First Name"></FieldLabel>}
+          label={<FieldLabel label={t('firstName')}></FieldLabel>}
           style={{ marginBottom: localConstants.marginBottom }}>
           <AppInput name="firstName" placeholder=""></AppInput>
         </AppFormField>
@@ -49,7 +51,7 @@ export const DetailsForm = (props: { selected?: SelectedDetails; onChange: (valu
       {props.selected?.personal.lastName ? (
         <AppFormField
           name="lastName"
-          label={<FieldLabel label="Last Name"></FieldLabel>}
+          label={<FieldLabel label={t('lastName')}></FieldLabel>}
           style={{ marginBottom: localConstants.marginBottom }}>
           <AppInput name="lastName" placeholder=""></AppInput>
         </AppFormField>
@@ -60,7 +62,7 @@ export const DetailsForm = (props: { selected?: SelectedDetails; onChange: (valu
       {props.selected?.personal.nationalID ? (
         <AppFormField
           name="nationalID"
-          label={<FieldLabel label="ID (last 4 digits)"></FieldLabel>}
+          label={<FieldLabel label={t('IDNumberLong')}></FieldLabel>}
           style={{ marginBottom: localConstants.marginBottom }}>
           <AppInput name="nationalID" placeholder=""></AppInput>
         </AppFormField>
@@ -75,7 +77,7 @@ export const DetailsForm = (props: { selected?: SelectedDetails; onChange: (valu
           return (
             <AppFormField
               name={platformId}
-              label={<FieldLabel label={`${platform.name} username`}></FieldLabel>}
+              label={<FieldLabel label={`${platform.name} ${t('username')}`}></FieldLabel>}
               style={{ marginBottom: localConstants.marginBottom }}>
               <AppInput name={platformId} placeholder=""></AppInput>
             </AppFormField>

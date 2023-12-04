@@ -17,13 +17,14 @@ export type SemaphoreContextType = {
   generateProof?: (input: AppGetProof) => Promise<ProofAndTree>;
   isCreatingPublicId: boolean;
   errorCreating?: Error;
+  disconnect: () => void;
 };
 
 const SemaphoreContextValue = createContext<SemaphoreContextType | undefined>(undefined);
 
 export const SemaphoreContext = (props: PropsWithChildren) => {
   const { owner, aaAddress } = useAccountContext();
-  const { signMessage } = useAppSigner();
+  const { signMessage, disconnect: disconnectSigner } = useAppSigner();
 
   // console.log({ walletClient, isError, isLoading });
   const [isCreatingPublicId, setIsCreatingPublicId] = useState<boolean>(false);
@@ -118,6 +119,13 @@ export const SemaphoreContext = (props: PropsWithChildren) => {
       }
     : undefined;
 
+  const disconnect = () => {
+    localStorage.removeItem('identity');
+    setIdentity(undefined);
+    setPublicId(undefined);
+    disconnectSigner();
+  };
+
   return (
     <SemaphoreContextValue.Provider
       value={{
@@ -125,6 +133,7 @@ export const SemaphoreContext = (props: PropsWithChildren) => {
         generateProof,
         isCreatingPublicId,
         errorCreating,
+        disconnect,
       }}>
       {props.children}
     </SemaphoreContextValue.Provider>

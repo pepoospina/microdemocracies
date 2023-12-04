@@ -4,7 +4,7 @@ import { createMagicSigner, magic } from './magic.signer';
 import { WalletClientSigner } from '@alchemy/aa-core';
 import { createInjectedSigner } from './injected.signer';
 import { InjectedConnector } from '@wagmi/core';
-import { useConnect } from 'wagmi';
+import { useConnect, useDisconnect } from 'wagmi';
 import { HexStr } from '../types';
 import { MessageSigner } from '../utils/identity';
 import { createTestSigner } from '../test/test.signer';
@@ -18,7 +18,9 @@ export type SignerContextType = {
   address?: HexStr;
   signMessage?: MessageSigner;
   isConnecting: boolean;
+  isChecking: boolean;
   errorConnecting?: Error;
+  disconnect: () => void;
 };
 
 const ProviderContextValue = createContext<SignerContextType | undefined>(undefined);
@@ -29,15 +31,19 @@ export const SignerContext = (props: PropsWithChildren) => {
   const [injectedSigner, setInjectedSigner] = useState<WalletClientSigner>();
 
   const [isConnecting, setIsConnecting] = useState<boolean>(false);
+  const [isChecking, setIsChecking] = useState<boolean>(true);
   const [errorConnecting, setErrorConnecting] = useState<Error>();
 
   const signer = injectedSigner ? injectedSigner : magicSigner;
 
   useEffect(() => {
+    setIsChecking(true);
     magic.user.isLoggedIn().then((res) => {
       if (res) {
         console.log('Autoconnecting Magic');
         connectMagic();
+      } else {
+        setIsChecking(false);
       }
     });
   }, []);
@@ -49,6 +55,7 @@ export const SignerContext = (props: PropsWithChildren) => {
   }, [signer]);
 
   const { connectAsync } = useConnect({ connector: new InjectedConnector() });
+  const { disconnect: disconnectInjected } = useDisconnect();
 
   const connectTest = (ix: number) => {
     console.log('connecting test signer', { ix });
@@ -58,8 +65,11 @@ export const SignerContext = (props: PropsWithChildren) => {
 
   const connectMagic = () => {
     console.log('connecting magic signer', { signer });
+    setIsChecking(false);
+    setIsConnecting(true);
     createMagicSigner().then((signer) => {
       console.log('connected magic signer', { signer });
+      setIsConnecting(false);
       setMagicSigner(signer);
     });
   };
@@ -91,6 +101,14 @@ export const SignerContext = (props: PropsWithChildren) => {
     return signer.signMessage;
   })();
 
+  const disconnect = () => {
+    disconnectInjected();
+    setInjectedSigner(undefined);
+
+    magic.user.logout();
+    setMagicSigner(undefined);
+  };
+
   return (
     <ProviderContextValue.Provider
       value={{
@@ -98,11 +116,13 @@ export const SignerContext = (props: PropsWithChildren) => {
         connectInjected,
         connectTest,
         isConnecting,
+        isChecking,
         errorConnecting,
         signMessage,
         hasInjected,
         signer,
         address,
+        disconnect,
       }}>
       {props.children}
     </ProviderContextValue.Provider>

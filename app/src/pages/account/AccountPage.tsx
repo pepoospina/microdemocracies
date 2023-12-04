@@ -8,10 +8,12 @@ import { AccountChallenge } from '../challenges/AccountChallenge';
 import { MemberContext } from '../../contexts/MemberContext';
 import { ChallengeContext } from '../../contexts/CurrentChallengeContext';
 import { AppBottomButton } from '../common/BottomButtons';
-import { COMMUNITY_MEMBER } from '../../config/community';
 import { ViewportHeadingLarge, ViewportPage } from '../../components/app/Viewport';
+import { useTranslation } from 'react-i18next';
+import { cap } from '../../utils/general';
 
 export const AccountPage = () => {
+  const { t } = useTranslation();
   const { tokenId } = useParams();
   const navigate = useNavigate();
 
@@ -21,7 +23,7 @@ export const AccountPage = () => {
 
   return (
     <ViewportPage>
-      <ViewportHeadingLarge label={`${COMMUNITY_MEMBER} #${tokenId}`} />
+      <ViewportHeadingLarge label={`${cap(t('member'))} #${tokenId}`} />
 
       <Box pad="large">
         <MemberContext tokenId={+tokenId}>

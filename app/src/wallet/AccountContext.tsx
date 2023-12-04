@@ -42,6 +42,10 @@ export const AccountContext = (props: PropsWithChildren) => {
   const [error, setError] = useState<Error>();
   const [events, setEvents] = useState<DecodeEventLogReturnType[]>();
 
+  const logout = () => {
+    setAaAddress(undefined);
+  };
+
   const isConnected = alchemyProviderAA !== undefined;
 
   const signMessageAA = alchemyProviderAA ? (message: string) => alchemyProviderAA.signMessage(message) : undefined;
@@ -98,8 +102,11 @@ export const AccountContext = (props: PropsWithChildren) => {
 
   /** keep the alchemy provider in sync with selected signer */
   useEffect(() => {
-    if (!signer) return;
-    setProvider(signer);
+    if (!signer) {
+      setAlchemyProviderAA(undefined);
+    } else {
+      setProvider(signer);
+    }
   }, [signer]);
 
   useEffect(() => {
@@ -108,6 +115,8 @@ export const AccountContext = (props: PropsWithChildren) => {
         setAaAddress(getAddress(address));
         console.log('computed aa address', { aaAddress: address });
       });
+    } else {
+      setAaAddress(undefined);
     }
   }, [alchemyProviderAA]);
 

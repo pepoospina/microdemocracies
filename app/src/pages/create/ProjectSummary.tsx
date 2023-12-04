@@ -4,6 +4,7 @@ import { DetailsSelectedSummary } from './DetailsSelectedSummary';
 import { AppCard, AppHeading } from '../../ui-components';
 import { PAP, SelectedDetails } from '../../types';
 import { AccountPerson } from '../account/AccountPerson';
+import { useTranslation } from 'react-i18next';
 
 export const ProjectSummary = (props: {
   whatStatement?: string;
@@ -11,13 +12,15 @@ export const ProjectSummary = (props: {
   selectedDetails?: SelectedDetails;
   founderPap?: PAP;
 }) => {
+  const { t } = useTranslation();
+
   return (
     <Box pad={{ horizontal: 'large' }}>
       <Box style={{ width: '100%', flexShrink: 0 }}>
         {props.whoStatement ? (
           <>
             <Box style={{ margin: '24px 0 12px 0', fontSize: '10px', fontWeight: '300', flexShrink: 0 }}>
-              <AppHeading level="3">Can join anyone who:</AppHeading>
+              <AppHeading level="3">{t('canJoin')}:</AppHeading>
             </Box>
             <Box>
               <StatementEditable value={props.whoStatement}></StatementEditable>
@@ -26,7 +29,7 @@ export const ProjectSummary = (props: {
         ) : (
           <>
             <AppCard>
-              <Text>Please include who can join.</Text>
+              <Text>{t('notWhoGiven')}.</Text>
             </AppCard>
           </>
         )}
@@ -34,13 +37,13 @@ export const ProjectSummary = (props: {
 
       <Box style={{ marginTop: '36px', flexShrink: 0 }}>
         <AppHeading level="3" style={{ marginBottom: '12px' }}>
-          Participants will be asked to provide:
+          {t('toJoinMsg2')}:
         </AppHeading>
         <DetailsSelectedSummary selected={props.selectedDetails}></DetailsSelectedSummary>
       </Box>
 
       <Box style={{ marginTop: '36px', flexShrink: 0 }}>
-        <AppHeading level="3">Your Details:</AppHeading>
+        <AppHeading level="3">{t('yourDetails')}:</AppHeading>
         <AccountPerson cardStyle={{ margin: '16px 0px 32px 0px' }} pap={props.founderPap}></AccountPerson>
       </Box>
     </Box>

@@ -7,7 +7,7 @@ import { AppButton, AppCard } from '../../ui-components';
 import { ChallengeStatus } from '../challenges/ChallengeStatus';
 import { ChallengeVote } from '../challenges/ChallengeVote';
 import { useEffect, useState } from 'react';
-import { WaitingTransaction } from '../common/WaitingTransaction';
+import { WaitingTransaction } from '../common/Loading';
 import { BoxCentered } from '../../ui-components/BoxCentered';
 import { useMemberContext } from '../../contexts/MemberContext';
 import { useAccountContext } from '../../wallet/AccountContext';

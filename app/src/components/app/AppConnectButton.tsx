@@ -3,8 +3,10 @@ import { Box } from 'grommet';
 import { useState } from 'react';
 import { AppConnect } from './AppConnect';
 import { useAppSigner } from '../../wallet/SignerContext';
+import { useTranslation } from 'react-i18next';
 
 export const AppConnectButton = (props: IButton) => {
+  const { t } = useTranslation();
   const [showModal, setShowModal] = useState<boolean>();
 
   const { hasInjected, connectInjected } = useAppSigner();
@@ -20,11 +22,11 @@ export const AppConnectButton = (props: IButton) => {
   return (
     <Box>
       {showModal ? (
-        <AppModal heading="Connect" onClosed={() => setShowModal(false)}>
+        <AppModal heading={t('connect')} onClosed={() => setShowModal(false)}>
           <AppConnect></AppConnect>
         </AppModal>
       ) : (
-        <AppButton label="Connect" onClick={() => connect()} style={{ ...props.style }}></AppButton>
+        <AppButton label={t('connect')} onClick={() => connect()} style={{ ...props.style }}></AppButton>
       )}
     </Box>
   );

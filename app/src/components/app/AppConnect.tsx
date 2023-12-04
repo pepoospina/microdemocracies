@@ -3,20 +3,37 @@ import { StatusGood } from 'grommet-icons';
 import { AppButton } from '../../ui-components';
 import { useAccountContext } from '../../wallet/AccountContext';
 import { useAppSigner } from '../../wallet/SignerContext';
-import { Loading } from '../../pages/common/WaitingTransaction';
+import { Loading } from '../../pages/common/Loading';
 import { useSemaphoreContext } from '../../contexts/SemaphoreContext';
 import { useTranslation } from 'react-i18next';
+import { cap } from '../../utils/general';
 
 export const AppConnect = (props: {}) => {
   const { t } = useTranslation();
-  const { hasInjected, connectInjected, connectMagic, signer, isConnecting } = useAppSigner();
+  const { hasInjected, connectInjected, connectMagic, signer, isConnecting, isChecking } = useAppSigner();
   const { aaAddress } = useAccountContext();
   const { isCreatingPublicId } = useSemaphoreContext();
 
-  if (isConnecting || isCreatingPublicId) {
+  if (isChecking) {
     return (
       <Box>
-        <Loading label={isCreatingPublicId ? 'Creating Public Id - Waiting for Signatures' : 'Connecting'}></Loading>
+        <Loading label={cap(t('loading'))}></Loading>
+      </Box>
+    );
+  }
+
+  if (isConnecting) {
+    return (
+      <Box>
+        <Loading label={cap(t('connecting'))}></Loading>
+      </Box>
+    );
+  }
+
+  if (isCreatingPublicId) {
+    return (
+      <Box>
+        <Loading label={t('waitingSignatures')}></Loading>
       </Box>
     );
   }

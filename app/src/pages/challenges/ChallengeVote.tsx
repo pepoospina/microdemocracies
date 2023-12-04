@@ -4,12 +4,13 @@ import { useCurrentChallenge } from '../../contexts/CurrentChallengeContext';
 import { AppConnectButton } from '../../components/app/AppConnectButton';
 import { useConnectedMember } from '../../contexts/ConnectedAccountContext';
 import { useEffect, useState } from 'react';
-import { WaitingTransaction } from '../common/WaitingTransaction';
-import { COMMUNITY_MEMBER } from '../../config/community';
+import { WaitingTransaction } from '../common/Loading';
 import { BoxCentered } from '../../ui-components/BoxCentered';
 import { useAccountContext } from '../../wallet/AccountContext';
+import { useTranslation } from 'react-i18next';
 
 export const ChallengeVote = () => {
+  const { t } = useTranslation();
   const {
     sendVoteRemove,
     sendVoteKeep,
@@ -64,7 +65,7 @@ export const ChallengeVote = () => {
     return (
       <Box style={{ marginTop: '16px' }}>
         <Text>
-          {COMMUNITY_MEMBER} #{tokenId} can't vote
+          {t('member')} #{tokenId} can't vote
         </Text>
       </Box>
     );

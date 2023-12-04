@@ -1,39 +1,41 @@
-import { Anchor, Box, Spinner, Text } from 'grommet';
+import { Box, Spinner, Text } from 'grommet';
 import { useNavigate } from 'react-router-dom';
 
 import { AppButton, AppCard, AppHeading } from '../../ui-components';
 import { useProjectContext } from '../../contexts/ProjectContext';
 import { Add, FormPrevious } from 'grommet-icons';
 import { ViewportPage } from '../../components/app/Viewport';
-import { Loading } from '../common/WaitingTransaction';
+import { Loading } from '../common/Loading';
 import { ProjectCard } from './ProjectCard';
 import { useVoiceRead } from '../../contexts/VoiceReadContext';
-import { StatementEditable } from '../voice/StatementEditable';
 import { RouteNames } from '../../App';
 import { useResponsive } from '../../components/app';
 import { AppBottomButtons } from '../common/BottomButtons';
 import { BoxCentered } from '../../ui-components/BoxCentered';
 import { useConnectedMember } from '../../contexts/ConnectedAccountContext';
 import { StatementCard } from '../voice/StatementCard';
+import { useTranslation } from 'react-i18next';
+import { cap } from '../../utils/general';
 
 export interface IProjectHome {
   dum?: any;
 }
 
 export const ProjectHome = (props: IProjectHome) => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { project, nMembers } = useProjectContext();
   const { tokenId } = useConnectedMember();
   const { statements } = useVoiceRead();
   const { mobile } = useResponsive();
 
-  const newStr = mobile ? 'propose' : 'Propose new';
-  const membersStr = mobile ? 'Members' : 'See/Invite Members';
+  const newStr = mobile ? cap(t('propose')) : cap(t('proposeNew'));
+  const membersStr = mobile ? cap(t('members')) : t('seeInviteMembers');
 
   if (project === undefined) {
     return (
       <BoxCentered fill>
-        <Text>Loading micro(r)evolution details</Text>
+        <Text>{t('loadingProject')}</Text>
         <Spinner></Spinner>
       </BoxCentered>
     );
@@ -43,7 +45,7 @@ export const ProjectHome = (props: IProjectHome) => {
     return (
       <BoxCentered fill>
         <AppCard>
-          <Text>Project not found</Text>
+          <Text>{t('projectNotFound')}</Text>
         </AppCard>
       </BoxCentered>
     );
@@ -54,7 +56,7 @@ export const ProjectHome = (props: IProjectHome) => {
     if (statements !== undefined && statements.length === 0) {
       return (
         <AppCard>
-          <Text>Nothing has been said yet</Text>
+          <Text>{t('noStatements')}</Text>
         </AppCard>
       );
     }
@@ -73,7 +75,7 @@ export const ProjectHome = (props: IProjectHome) => {
       <Box style={{ overflowY: 'auto' }} margin={{ bottom: 'medium' }}>
         <Box style={{ flexShrink: 0 }} pad={{ right: 'medium' }}>
           <Box margin={{ vertical: 'large' }}>
-            <AppHeading level="3">Community's voice:</AppHeading>
+            <AppHeading level="3">{t('communityVoice')}:</AppHeading>
           </Box>
         </Box>
         <Box style={{ flexShrink: 0 }} pad={{ right: 'medium' }}>
@@ -88,7 +90,7 @@ export const ProjectHome = (props: IProjectHome) => {
       <Box>
         <Box pad="medium" align="center" justify="center">
           <Text size="22px" weight="bold">
-            micro(r)evolution for:
+            {t('projectHeader')}:
           </Text>
         </Box>
 
@@ -97,7 +99,9 @@ export const ProjectHome = (props: IProjectHome) => {
         </Box>
 
         <Box pad="medium" direction="row" align="center" justify="between">
-          <AppHeading level="3">Members: {nMembers}</AppHeading>
+          <AppHeading level="3">
+            {cap(t('members'))}: {nMembers}
+          </AppHeading>
           <AppButton onClick={() => navigate(RouteNames.Members)} label={membersStr}></AppButton>
         </Box>
 
@@ -115,7 +119,7 @@ export const ProjectHome = (props: IProjectHome) => {
       <AppBottomButtons
         left={{
           action: () => navigate('/home'),
-          label: 'back',
+          label: t('back'),
           icon: <FormPrevious />,
         }}
         right={{

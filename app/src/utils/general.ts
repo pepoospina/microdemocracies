@@ -27,3 +27,7 @@ export const parseCssUnits = (size: string): [value: number, units: string] => {
   const units = parts[2];
   return [value, units];
 };
+
+export const cap = (string: string) => {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+};
