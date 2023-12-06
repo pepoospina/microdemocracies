@@ -12,9 +12,9 @@ const LanguageValue = (key: Language, hideIfMobile: boolean = false) => {
   })();
 
   return (
-    <Box direction="row" align="center" gap={mobile ? 'small' : '0px'} justify="center">
-      {mobile && hideIfMobile ? '' : `(${key}) `}
-      {flag}
+    <Box direction="row" align="center" gap={!mobile ? 'small' : '0px'} justify="center">
+      <Box>{mobile && hideIfMobile ? '' : `(${key})`}</Box>
+      <Box>{flag}</Box>
     </Box>
   );
 };
