@@ -112,9 +112,6 @@ export const CreateProject = () => {
         <AppHeading style={headingStyle} level="3">
           {t('whoTitle')}:
         </AppHeading>
-        <Text style={{ margin: '12px 0px 0px 0px' }}>
-          <Trans i18nKey="examplesWho" components={{ Bold: <Bold></Bold> }}></Trans>
-        </Text>
       </Box>
       <Box>
         <StatementEditable
@@ -124,6 +121,9 @@ export const CreateProject = () => {
           editable
           placeholder={`${t('wantsTo')}...`}></StatementEditable>
       </Box>
+      <Text style={{ margin: '12px 0px 0px 0px' }}>
+        <Trans i18nKey="examplesWho" components={{ Bold: <Bold></Bold> }}></Trans>
+      </Text>
     </Box>,
 
     <Box style={boxStyle} pad="large">

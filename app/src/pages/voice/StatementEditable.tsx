@@ -82,7 +82,9 @@ export const StatementEditable = (props: IStatementEditable) => {
       </Box>
       {editable ? (
         <Box pad="small">
-          <Text style={{ textAlign: 'center', color: constants.colors.primaryLight }}>{t('helpEditable')}</Text>
+          <Text size="small" style={{ textAlign: 'center', color: constants.colors.primaryLight }}>
+            {t('helpEditable')}
+          </Text>
         </Box>
       ) : (
         <></>
