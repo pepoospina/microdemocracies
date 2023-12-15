@@ -3,12 +3,13 @@ import { Add, FormPrevious } from 'grommet-icons';
 import { useNavigate } from 'react-router-dom';
 
 import { VoucheCard } from './VouchCard';
-import { AppBottomButtons } from '../common/BottomButtons';
+import { AppBottomButton } from '../common/BottomButtons';
 import { useProjectContext } from '../../contexts/ProjectContext';
 import { ApplicationCard } from './ApplicationCard';
 import { ViewportHeadingLarge, ViewportPage } from '../../components/app/Viewport';
 import { cap } from '../../utils/general';
 import { useTranslation } from 'react-i18next';
+import { AppButton } from '../../ui-components';
 
 export const Members = (): JSX.Element => {
   const { t } = useTranslation();
@@ -19,6 +20,13 @@ export const Members = (): JSX.Element => {
     <ViewportPage>
       <ViewportHeadingLarge label={cap(t('members'))}></ViewportHeadingLarge>
       <Box pad="large">
+        <AppButton
+          margin={{ bottom: 'medium' }}
+          primary
+          icon={<Add />}
+          label={t('invite')}
+          onClick={() => navigate('../invite')}></AppButton>
+
         {applications?.map((application, ix) => {
           return (
             <Box key={ix} style={{ marginBottom: '16px' }}>
@@ -34,18 +42,7 @@ export const Members = (): JSX.Element => {
           );
         })}
       </Box>
-      <AppBottomButtons
-        left={{
-          icon: <FormPrevious />,
-          label: t('back'),
-          action: () => navigate('..'),
-        }}
-        right={{
-          primary: true,
-          icon: <Add />,
-          label: t('invite'),
-          action: () => navigate('../invite'),
-        }}></AppBottomButtons>
+      <AppBottomButton icon={<FormPrevious />} label={t('back')} onClick={() => navigate('..')}></AppBottomButton>
     </ViewportPage>
   );
 };

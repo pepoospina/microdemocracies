@@ -121,14 +121,14 @@ export const AccountContext = (props: PropsWithChildren) => {
   }, [alchemyProviderAA]);
 
   const addUserOp = alchemyProviderAA
-    ? (userOp: UserOperationCallData, send: boolean = false) => {
+    ? async (userOp: UserOperationCallData, send: boolean = false) => {
         if (!alchemyProviderAA) throw new Error(`alchemyProvider not defined`);
         if (isSending) throw new Error('Cannot add userOps while sending');
         if (isSuccess) throw new Error('Please reset before adding userOps');
 
         const allUserOps = userOps.concat(userOp);
         if (send) {
-          sendUserOps(allUserOps);
+          await sendUserOps(allUserOps);
         } else {
           setUserOps(allUserOps);
         }

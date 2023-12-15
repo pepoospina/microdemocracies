@@ -5,6 +5,7 @@ import { AccountPerson } from './AccountPerson';
 import { AppCard } from '../../ui-components';
 import { BoxCentered } from '../../ui-components/BoxCentered';
 import { useTranslation } from 'react-i18next';
+import { cap } from '../../utils/general';
 
 export const AccountOverview = () => {
   const { t } = useTranslation();
@@ -25,7 +26,7 @@ export const AccountOverview = () => {
         !isFounder ? (
           <Box margin={{ bottom: 'large' }}>
             <Text>
-              {t('invitedBy')}{' '}
+              {cap(t('invitedBy'))}{' '}
               <Anchor>
                 {t('member')} #{accountRead?.voucher}
               </Anchor>

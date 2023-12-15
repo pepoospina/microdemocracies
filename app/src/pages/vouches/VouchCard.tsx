@@ -43,7 +43,7 @@ export const VoucheCard = (props: IVouchCard): JSX.Element => {
                 <Anchor>
                   {t('member')} #{vouch.to.toString()}
                 </Anchor>{' '}
-                vouched by{' '}
+                {t('invitedBy')}{' '}
                 <Anchor>
                   {t('member')} #{vouch.from.toString()}
                 </Anchor>{' '}

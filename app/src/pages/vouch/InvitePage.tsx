@@ -101,13 +101,14 @@ export const InvitePage = (): JSX.Element => {
           onClick={() => setScan(!scan)}
           style={{ marginBottom: '16px' }}></AppButton>
         <Box>
+          <AppCard margin={{ vertical: 'medium' }}>
+            <Text>{t('resettingMsg')}</Text>
+          </AppCard>
           <AppButton
+            margin={{ bottom: 'large' }}
             onClick={() => resetLink()}
             label={resettingLink ? t('resetting') : t('reset')}
             disabled={resettingLink}></AppButton>
-          <AppCard margin={{ vertical: 'small' }}>
-            <Text>{t('resettingMsg')}</Text>
-          </AppCard>
         </Box>
       </Box>
     );

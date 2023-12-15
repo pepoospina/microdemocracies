@@ -1,10 +1,12 @@
-import { Anchor, Box, Spinner } from 'grommet';
+import { Box, Spinner } from 'grommet';
 import { AppQRCode } from '../../components/AppQRCode';
 
 import { useProjectContext } from '../../contexts/ProjectContext';
 import { useCopyToClipboard } from '../../utils/copy.clipboard';
 import { AppButton } from '../../ui-components';
 import { Send, StatusGood } from 'grommet-icons';
+import { useTranslation } from 'react-i18next';
+import { RouteNames } from '../../App';
 
 export interface IPAPShare {
   cid?: string;
@@ -12,16 +14,18 @@ export interface IPAPShare {
 
 export const PAPShare = (props: IPAPShare) => {
   const cid = props.cid;
+  const { t } = useTranslation();
+
   const { projectId } = useProjectContext();
 
   const { copy, copied } = useCopyToClipboard();
 
   const share = () => {
-    const link = `../${projectId}/vouch/${cid}`;
+    const link = `../${projectId}/${RouteNames.Invite}/${cid}`;
     if (navigator.share) {
       navigator.share({
         url: link,
-        text: `Join our micro(r)evolution!`,
+        text: t('askJoin'),
       });
     } else {
       copy(link);

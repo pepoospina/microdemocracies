@@ -32,6 +32,8 @@ export const CreateProject = () => {
     selectedDetails,
     isCreating,
     isSuccess,
+    isError,
+    error,
     projectId,
     setFounderDetails,
     setWhoStatement,
@@ -190,6 +192,7 @@ export const CreateProject = () => {
       </Box>
 
       <AppBottomButtons
+        popUp={isError ? error?.message : undefined}
         left={{
           action: () => prevPage(),
           icon: <FormPrevious></FormPrevious>,
