@@ -36,7 +36,7 @@ export const VouchMemberWidget = (props: { pap: Entity<PAP> }) => {
     setVouchParams(pap.object.account, pap.cid);
   }, []);
 
-  const deleteApplications = () => {
+  const deleteApplication = () => {
     /** delete applications and update */
     postDeleteApplication(pap.object.account).then(() => {
       refetchApplications();
@@ -49,7 +49,7 @@ export const VouchMemberWidget = (props: { pap: Entity<PAP> }) => {
     if (isSuccess) {
       setSending(false);
       setError(undefined);
-      deleteApplications();
+      deleteApplication();
       refetchVouchedAccount();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

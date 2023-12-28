@@ -12,7 +12,6 @@ import { WagmiConfig, configureChains, createConfig } from 'wagmi';
 import { ALCHEMY_KEY } from './config/appConfig';
 import { ViewportContainer } from './components/app/Viewport';
 import { VoiceReadContext } from './contexts/VoiceReadContext';
-import { VouchContext } from './contexts/VouchContext';
 import { AccountPage } from './pages/account/AccountPage';
 import { Challenges } from './pages/challenges/Challenges';
 import { CreateProject } from './pages/create/CreateProject';
@@ -37,6 +36,7 @@ import { TestProject } from './test/TestProject';
 
 import { i18n } from './i18n/i18n';
 import { AppLanguage } from './components/app/AppLanguage';
+import { useEffect } from 'react';
 
 const queryClient = new QueryClient();
 
@@ -94,11 +94,9 @@ function App() {
                                   <ProjectContext>
                                     <ConnectedMemberContext>
                                       <MemberContext>
-                                        <VouchContext>
-                                          <VoiceReadContext>
-                                            <ProjectBase />
-                                          </VoiceReadContext>
-                                        </VouchContext>
+                                        <VoiceReadContext>
+                                          <ProjectBase />
+                                        </VoiceReadContext>
                                       </MemberContext>
                                     </ConnectedMemberContext>
                                   </ProjectContext>

@@ -42,10 +42,6 @@ export const AccountContext = (props: PropsWithChildren) => {
   const [error, setError] = useState<Error>();
   const [events, setEvents] = useState<DecodeEventLogReturnType[]>();
 
-  const logout = () => {
-    setAaAddress(undefined);
-  };
-
   const isConnected = alchemyProviderAA !== undefined;
 
   const signMessageAA = alchemyProviderAA ? (message: string) => alchemyProviderAA.signMessage(message) : undefined;
@@ -108,6 +104,13 @@ export const AccountContext = (props: PropsWithChildren) => {
       setProvider(signer);
     }
   }, [signer]);
+
+  useEffect(() => {
+    if (isSuccess) {
+      /** auto-reset everytime (isSuccess is true briefly) */
+      setIsSuccess(false);
+    }
+  }, [isSuccess]);
 
   useEffect(() => {
     if (alchemyProviderAA) {

@@ -9,6 +9,7 @@ import { AppCarousel } from '../../ui-components/AppCarousel';
 import { LearnMoreItem } from './LearnMoreItem';
 import { Trans, useTranslation } from 'react-i18next';
 import { LanguageSelector } from '../account/LanguageSelector';
+import { useSemaphoreContext } from '../../contexts/SemaphoreContext';
 
 export const Bold = (props: React.PropsWithChildren) => {
   return <span style={{ fontWeight: '400' }}>{props.children}</span>;
