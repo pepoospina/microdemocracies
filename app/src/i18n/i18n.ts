@@ -41,7 +41,7 @@ i18n.use(initReactI18next).init({
         member: 'member',
         seeInviteMembers: 'See/Invite Members',
         propose: 'propose',
-        proposeNew: 'proposeNew',
+        proposeNew: 'propose new',
         proposeStatement: 'Propose Statement',
         proposeStatementBtn: 'Propose Statement',
         statementProposed: 'Statement Proposed',

@@ -49,11 +49,12 @@ export const TestCreateProject = () => {
 
   /** project created ? naviate to project test  */
   useEffect(() => {
-    if (isSuccess && projectId) {
+    console.log({ projectId });
+    if (projectId) {
       console.log('[TEST] project created', { projectId });
       navigate(`/p/${projectId}/test`);
     }
-  }, [isSuccess, projectId]);
+  }, [projectId]);
 
   return (
     <BoxCentered fill>

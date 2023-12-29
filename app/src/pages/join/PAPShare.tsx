@@ -21,7 +21,7 @@ export const PAPShare = (props: IPAPShare) => {
   const { copy, copied } = useCopyToClipboard();
 
   const share = () => {
-    const link = `../${projectId}/${RouteNames.Invite}/${cid}`;
+    const link = `${window.origin}/p/${projectId}/${RouteNames.Invite}/${cid}`;
     if (navigator.share) {
       navigator.share({
         url: link,

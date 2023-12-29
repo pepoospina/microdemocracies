@@ -31,7 +31,6 @@ export const CreateProject = () => {
     whoStatement,
     selectedDetails,
     isCreating,
-    isSuccess,
     isError,
     error,
     projectId,
@@ -42,10 +41,10 @@ export const CreateProject = () => {
   } = useCreateProject();
 
   useEffect(() => {
-    if (isSuccess && projectId) {
+    if (projectId) {
       navigate(RouteNames.ProjectHome(projectId.toString()));
     }
-  }, [isSuccess, navigate, projectId]);
+  }, [navigate, projectId]);
 
   const boxStyle: React.CSSProperties = {
     flexGrow: '1',

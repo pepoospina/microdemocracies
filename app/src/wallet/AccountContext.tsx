@@ -106,13 +106,6 @@ export const AccountContext = (props: PropsWithChildren) => {
   }, [signer]);
 
   useEffect(() => {
-    if (isSuccess) {
-      /** auto-reset everytime (isSuccess is true briefly) */
-      setIsSuccess(false);
-    }
-  }, [isSuccess]);
-
-  useEffect(() => {
     if (alchemyProviderAA) {
       alchemyProviderAA.getAddress().then((address) => {
         setAaAddress(getAddress(address));
@@ -179,6 +172,13 @@ export const AccountContext = (props: PropsWithChildren) => {
       setError(e);
     }
   };
+
+  useEffect(() => {
+    if (isSuccess) {
+      /** auto-reset everytime (isSuccess is true briefly) */
+      setIsSuccess(false);
+    }
+  }, [isSuccess]);
 
   return (
     <AccountContextValue.Provider

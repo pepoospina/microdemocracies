@@ -26,15 +26,7 @@ export interface CreateProjectStatus {
 }
 
 export const useCreateProject = (): CreateProjectStatus => {
-  const {
-    addUserOp,
-    aaAddress,
-    isSuccess: isSuccessUserOp,
-    events,
-    owner,
-    reset,
-    error: errorUserOp,
-  } = useAccountContext();
+  const { addUserOp, aaAddress, isSuccess: isSuccessUserOp, events, owner, reset, error: errorUserOp } = useAccountContext();
 
   const [founderDetails, setFounderDetails] = useState<DetailsAndPlatforms>();
   const [whoStatement, setWhoStatement] = useState<string>('');
@@ -144,6 +136,13 @@ export const useCreateProject = (): CreateProjectStatus => {
       }
     }
   }, [isSuccessUserOp, events, registerProject]);
+
+  // reset is success automatically
+  useEffect(() => {
+    if (isSuccess) {
+      setIsSuccess(false);
+    }
+  }, [isSuccess]);
 
   return {
     founderPap,

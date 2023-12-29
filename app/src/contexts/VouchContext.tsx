@@ -46,10 +46,10 @@ export const useVouch = (): VouchHookType => {
   };
 
   useEffect(() => {
-    if (isSuccess && events && projectId && vouchParamsInternal) {
+    if (events && projectId && vouchParamsInternal) {
       checkAndPostMember(events, projectId);
     }
-  }, [isSuccess, events, projectId, vouchParamsInternal]);
+  }, [events, projectId, vouchParamsInternal]);
 
   const sendVouch =
     address && addUserOp && vouchParamsInternal

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { postBacking } from '../../utils/statements';
 import { AppBackingCreate, StatmentReactions as StatementReactions } from '../../types';
@@ -7,7 +7,7 @@ import { getSupportNullifier } from '../../utils/identity.utils';
 import { hashMessage } from 'viem';
 
 export type VoiceSendContextType = {
-  backStatement?: (statementId: string, treeId: string) => Promise<boolean>;
+  backStatement?: (statementId: string, treeId: string) => Promise<any>;
   isSuccessBacking: boolean;
   isErrorBacking: boolean;
   errorBacking?: string;
@@ -54,6 +54,13 @@ export const useBackingSend = (): VoiceSendContextType => {
         return res;
       }
     : undefined;
+
+  // reset automatically
+  useEffect(() => {
+    if (isSuccessBacking) {
+      setIsSuccessBacking(false);
+    }
+  }, [isSuccessBacking]);
 
   return {
     backStatement,

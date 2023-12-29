@@ -21,8 +21,15 @@ export const LandingPage = () => {
   const navigate = useNavigate();
   const { mobile } = useResponsive();
   const { t } = useTranslation();
+  const { publicId } = useSemaphoreContext();
 
   const logoSize = mobile ? '32px' : '48px';
+
+  useEffect(() => {
+    if (publicId) {
+      navigate(RouteNames.Projects);
+    }
+  }, [publicId]);
 
   const [activeSlideIndex, setActiveSlideIndex] = useState(0);
 
