@@ -30,7 +30,7 @@ export const ProjectHome = (props: IProjectHome) => {
   const { mobile } = useResponsive();
 
   const newStr = mobile ? cap(t('propose')) : cap(t('proposeNew'));
-  const membersStr = mobile ? cap(t('members')) : t('seeInviteMembes');
+  const membersStr = mobile ? cap(t('members')) : t('seeInviteMembers');
 
   if (project === undefined) {
     return (
