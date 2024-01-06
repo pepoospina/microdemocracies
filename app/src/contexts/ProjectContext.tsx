@@ -49,12 +49,15 @@ export const ProjectContext = (props: IProjectContext) => {
   }, [routeProjectId]);
 
   /** from projectId to project */
-  const { data: project, refetch: refetchProject } = useQuery(['project', projectId], () => {
+  const { data: _project, refetch: refetchProject } = useQuery(['project', projectId], () => {
     if (projectId) {
       return getProject(projectId);
     }
     return null;
   });
+
+  /** query cannot return undefined, consider project undefined if projectId is undefined */
+  const project = _project && projectId ? _project : undefined;
 
   // all vouches
   const { data: vouchEvents, refetch: refetchVouches } = useQuery(['allVoucheEvents', project], async () => {

@@ -2,6 +2,7 @@ import { Box, Spinner, Text } from 'grommet';
 import { AppApplication } from '../../types';
 import { AppButton, AppCard } from '../../ui-components';
 import { useNavigate, useParams } from 'react-router-dom';
+import { RouteNames } from '../../App';
 
 export const ApplicationCard = (props: { application?: AppApplication }): JSX.Element => {
   const navigate = useNavigate();
@@ -10,7 +11,7 @@ export const ApplicationCard = (props: { application?: AppApplication }): JSX.El
 
   const clicked = () => {
     if (application) {
-      navigate(`/p/${projectId}/invite/${application?.papEntity.cid}`);
+      navigate(`/p/${projectId}/${RouteNames.Invite}/${application?.papEntity.cid}`);
     }
   };
 

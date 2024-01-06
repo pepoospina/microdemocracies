@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { postStatement } from '../../utils/statements';
 import { AppStatementCreate } from '../../types';
@@ -50,6 +50,12 @@ export const useStatementSend = (): VoiceSendContextType => {
           }
         }
       : undefined;
+
+  useEffect(() => {
+    if (isSuccessStatement) {
+      setIsSuccessStatement(false);
+    }
+  }, [isSuccessStatement]);
 
   return {
     proposeStatement,

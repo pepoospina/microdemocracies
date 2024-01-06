@@ -88,12 +88,6 @@ export const ProjectHome = (props: IProjectHome) => {
   return (
     <ViewportPage>
       <Box>
-        <Box pad="medium" align="center" justify="center">
-          <Text size="22px" weight="bold">
-            {t('projectHeader')}:
-          </Text>
-        </Box>
-
         <Box pad="medium">
           <ProjectCard project={project}></ProjectCard>
         </Box>

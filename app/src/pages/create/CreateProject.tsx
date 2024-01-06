@@ -31,7 +31,8 @@ export const CreateProject = () => {
     whoStatement,
     selectedDetails,
     isCreating,
-    isSuccess,
+    isError,
+    error,
     projectId,
     setFounderDetails,
     setWhoStatement,
@@ -40,10 +41,10 @@ export const CreateProject = () => {
   } = useCreateProject();
 
   useEffect(() => {
-    if (isSuccess && projectId) {
+    if (projectId) {
       navigate(RouteNames.ProjectHome(projectId.toString()));
     }
-  }, [isSuccess, navigate, projectId]);
+  }, [navigate, projectId]);
 
   const boxStyle: React.CSSProperties = {
     flexGrow: '1',
@@ -112,9 +113,6 @@ export const CreateProject = () => {
         <AppHeading style={headingStyle} level="3">
           {t('whoTitle')}:
         </AppHeading>
-        <Text style={{ margin: '12px 0px 0px 0px' }}>
-          <Trans i18nKey="examplesWho" components={{ Bold: <Bold></Bold> }}></Trans>
-        </Text>
       </Box>
       <Box>
         <StatementEditable
@@ -124,6 +122,9 @@ export const CreateProject = () => {
           editable
           placeholder={`${t('wantsTo')}...`}></StatementEditable>
       </Box>
+      <Text style={{ margin: '12px 0px 0px 0px' }}>
+        <Trans i18nKey="examplesWho" components={{ Bold: <Bold></Bold> }}></Trans>
+      </Text>
     </Box>,
 
     <Box style={boxStyle} pad="large">
@@ -168,7 +169,7 @@ export const CreateProject = () => {
       <ViewportHeadingLarge label={t('startProject')}></ViewportHeadingLarge>
 
       <Box style={{ flexGrow: '1' }} justify="center">
-        {/* {pageIx === 0 ? (
+        {pageIx === 0 ? (
           <Box pad={{ horizontal: 'large' }} style={{ flexShrink: 0 }}>
             <AppCard>
               <Text>
@@ -178,7 +179,7 @@ export const CreateProject = () => {
           </Box>
         ) : (
           <></>
-        )} */}
+        )}
 
         {pages.map((page, ix) => {
           return (
@@ -190,6 +191,7 @@ export const CreateProject = () => {
       </Box>
 
       <AppBottomButtons
+        popUp={isError ? error?.message : undefined}
         left={{
           action: () => prevPage(),
           icon: <FormPrevious></FormPrevious>,

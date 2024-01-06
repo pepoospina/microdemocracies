@@ -17,6 +17,7 @@ import { useState } from 'react';
 import { useSemaphoreContext } from '../../contexts/SemaphoreContext';
 import { LanguageSelector } from '../account/LanguageSelector';
 import { useResponsive, useThemeContext } from '../../components/app';
+import { cap } from '../../utils/general';
 
 export const AppHome = (props: {}) => {
   const { address } = useAppSigner();
@@ -69,7 +70,7 @@ export const AppHome = (props: {}) => {
         {showDetails ? (
           <Box pad={{ top: 'medium' }}>
             <Box direction="row" margin={{ bottom: 'small' }}>
-              <Text>{t('wallet')}</Text>: {<Address address={aaAddress} chainId={CHAIN_ID}></Address>}
+              <Text>{cap(t('account'))}</Text>: {<Address address={aaAddress} chainId={CHAIN_ID}></Address>}
             </Box>
             <Box direction="row">
               <Text>{t('owner')}</Text>: {<Address address={address} chainId={CHAIN_ID}></Address>}

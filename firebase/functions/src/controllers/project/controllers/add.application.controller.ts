@@ -18,7 +18,9 @@ export const addApplicationController: RequestHandler = async (
   /** verify application id is valid */
   const invitation = await getInvite(payload.projectId, payload.invitationId);
   if (invitation === undefined) {
-    throw new Error(`invitation not found`);
+    throw new Error(
+      `invitation ${payload.invitationId} not found on project ${payload.projectId}`
+    );
   }
 
   try {

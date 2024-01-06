@@ -20,11 +20,13 @@ export interface CreateProjectStatus {
   setDetails: React.Dispatch<React.SetStateAction<SelectedDetails | undefined>>;
   createProject: () => void;
   isSuccess: boolean;
+  isError: boolean;
+  error?: Error;
   projectId?: number;
 }
 
 export const useCreateProject = (): CreateProjectStatus => {
-  const { addUserOp, aaAddress, isSuccess: isSuccessUserOp, events, owner, reset } = useAccountContext();
+  const { addUserOp, aaAddress, isSuccess: isSuccessUserOp, events, owner, reset, error: errorUserOp } = useAccountContext();
 
   const [founderDetails, setFounderDetails] = useState<DetailsAndPlatforms>();
   const [whoStatement, setWhoStatement] = useState<string>('');
@@ -33,6 +35,9 @@ export const useCreateProject = (): CreateProjectStatus => {
   const [selectedDetails, setDetails] = useState<SelectedDetails>();
 
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
+  const [isError, setIsError] = useState<boolean>(false);
+  const [error, setError] = useState<Error>();
+
   const [projectId, setProjectId] = useState<number>();
 
   const founderPap: PAP | undefined = useMemo(() => {
@@ -48,32 +53,48 @@ export const useCreateProject = (): CreateProjectStatus => {
     if (!aaAddress || !founderPap || !addUserOp) return;
 
     setIsCreating(true);
+    setIsError(false);
+    setError(undefined);
 
-    const founder = await putObject(founderPap);
-    const statement = {
-      whoStatement,
-    };
-    const statementEntity = await putObject({ statement });
-    const salt = utils.keccak256(utils.toUtf8Bytes(Date.now().toString())) as HexStr;
+    try {
+      const founder = await putObject(founderPap);
+      const statement = {
+        whoStatement,
+      };
+      const statementEntity = await putObject({ statement });
+      const salt = utils.keccak256(utils.toUtf8Bytes(Date.now().toString())) as HexStr;
 
-    // TODO weird encodedFunctionData asking for zero parameters
-    const callData = encodeFunctionData({
-      abi: registryFactoryABI,
-      functionName: 'create',
-      args: ['MRS', 'micro(r)evolutions ', [founderPap.account as HexStr], [founder.cid], statementEntity.cid, salt],
-    });
+      // TODO weird encodedFunctionData asking for zero parameters
+      const callData = encodeFunctionData({
+        abi: registryFactoryABI,
+        functionName: 'create',
+        args: ['MRS', 'micro(r)evolutions ', [founderPap.account as HexStr], [founder.cid], statementEntity.cid, salt],
+      });
 
-    const registryFactoryAddress = await getFactoryAddress();
+      const registryFactoryAddress = await getFactoryAddress();
 
-    addUserOp(
-      {
-        target: registryFactoryAddress,
-        data: callData,
-        value: BigInt(0),
-      },
-      true
-    );
+      addUserOp(
+        {
+          target: registryFactoryAddress,
+          data: callData,
+          value: BigInt(0),
+        },
+        true
+      );
+    } catch (e: any) {
+      setIsCreating(false);
+      setIsError(true);
+      setError(e);
+    }
   }, [aaAddress, addUserOp, founderPap, whoStatement]);
+
+  useEffect(() => {
+    if (errorUserOp) {
+      setIsCreating(false);
+      setError(errorUserOp);
+      setIsError(true);
+    }
+  }, [errorUserOp]);
 
   const registerProject = useCallback(
     async (event: RegistryCreatedEvent) => {
@@ -116,6 +137,13 @@ export const useCreateProject = (): CreateProjectStatus => {
     }
   }, [isSuccessUserOp, events, registerProject]);
 
+  // reset is success automatically
+  useEffect(() => {
+    if (isSuccess) {
+      setIsSuccess(false);
+    }
+  }, [isSuccess]);
+
   return {
     founderPap,
     whoStatement,
@@ -126,6 +154,8 @@ export const useCreateProject = (): CreateProjectStatus => {
     setDetails,
     createProject,
     isSuccess,
+    isError,
+    error,
     projectId,
   };
 };

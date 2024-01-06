@@ -25,13 +25,17 @@ export const TestProject = () => {
   const connect = () => {
     connectTest(0);
   };
+
   const startTest = async () => {
-    if (proposeStatement) {
-      console.log('[TEST] proposing statement');
-      const _random = Date.now().toString();
-      setRandom(_random);
-      proposeStatement(`Test statement ${_random}`);
+    if (!proposeStatement) {
+      throw new Error('unexpected');
     }
+
+    console.log('[TEST] proposing statement');
+    const _random = Date.now().toString();
+
+    setRandom(_random);
+    proposeStatement(`Test statement ${_random}`);
   };
 
   /** project created ? post a statement */
@@ -51,11 +55,10 @@ export const TestProject = () => {
         console.log('backing posted', res);
 
         /** try again */
-        try {
-          const res = await backStatement(found.id, found.treeId);
-          console.error('did not failed', res);
-        } catch (e) {
-          console.log('failed as expected', e);
+
+        const res2 = await backStatement(found.id, found.treeId);
+        if (res2.success) {
+          console.error('request succeded');
         }
       }
     }
@@ -75,7 +78,7 @@ export const TestProject = () => {
         label="Start Test"
         primary></AppButton>
 
-      <Box style={{ overflowY: 'auto' }}>
+      <Box style={{ overflowY: 'auto' }} pad="medium">
         {statements ? (
           statements.map((statement, ix) => {
             return (

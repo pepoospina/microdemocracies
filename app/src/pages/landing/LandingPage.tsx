@@ -8,19 +8,28 @@ import { useState, useCallback, useEffect } from 'react';
 import { AppCarousel } from '../../ui-components/AppCarousel';
 import { LearnMoreItem } from './LearnMoreItem';
 import { Trans, useTranslation } from 'react-i18next';
+import { LanguageSelector } from '../account/LanguageSelector';
+import { useSemaphoreContext } from '../../contexts/SemaphoreContext';
 
 export const Bold = (props: React.PropsWithChildren) => {
   return <span style={{ fontWeight: '400' }}>{props.children}</span>;
 };
 
-const N_SLIDES = 4;
+const N_SLIDES = 3;
 
 export const LandingPage = () => {
   const navigate = useNavigate();
   const { mobile } = useResponsive();
   const { t } = useTranslation();
+  const { publicId } = useSemaphoreContext();
 
-  const logoSize = mobile ? '36px' : '48px';
+  const logoSize = mobile ? '32px' : '48px';
+
+  useEffect(() => {
+    if (publicId) {
+      navigate(RouteNames.Projects);
+    }
+  }, [publicId]);
 
   const [activeSlideIndex, setActiveSlideIndex] = useState(0);
 
@@ -38,6 +47,8 @@ export const LandingPage = () => {
     if (activeSlideIndex === N_SLIDES - 1) return true;
     return false;
   })();
+
+  const showLanguageSelector = true;
 
   const showOpenApp = activeSlideIndex === N_SLIDES - 1;
 
@@ -95,8 +106,15 @@ export const LandingPage = () => {
 
   return (
     <Box fill align="center">
-      <Box justify="center" align="center" style={{ flexShrink: '0', marginTop: '6vh' }}>
-        <Text size={logoSize} weight="bold">
+      <Box justify="center" align="center" style={{ flexShrink: '0', marginTop: '3vh', width: '100%' }}>
+        {showLanguageSelector ? (
+          <Box fill justify="end" direction="row" pad={{ horizontal: 'large' }}>
+            <LanguageSelector></LanguageSelector>
+          </Box>
+        ) : (
+          <></>
+        )}
+        <Text size={logoSize} weight="bold" style={{ marginTop: '3vh' }}>
           {t('appName')}
         </Text>
       </Box>

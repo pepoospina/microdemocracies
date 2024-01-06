@@ -42,10 +42,6 @@ export const AccountContext = (props: PropsWithChildren) => {
   const [error, setError] = useState<Error>();
   const [events, setEvents] = useState<DecodeEventLogReturnType[]>();
 
-  const logout = () => {
-    setAaAddress(undefined);
-  };
-
   const isConnected = alchemyProviderAA !== undefined;
 
   const signMessageAA = alchemyProviderAA ? (message: string) => alchemyProviderAA.signMessage(message) : undefined;
@@ -121,14 +117,14 @@ export const AccountContext = (props: PropsWithChildren) => {
   }, [alchemyProviderAA]);
 
   const addUserOp = alchemyProviderAA
-    ? (userOp: UserOperationCallData, send: boolean = false) => {
+    ? async (userOp: UserOperationCallData, send: boolean = false) => {
         if (!alchemyProviderAA) throw new Error(`alchemyProvider not defined`);
         if (isSending) throw new Error('Cannot add userOps while sending');
         if (isSuccess) throw new Error('Please reset before adding userOps');
 
         const allUserOps = userOps.concat(userOp);
         if (send) {
-          sendUserOps(allUserOps);
+          await sendUserOps(allUserOps);
         } else {
           setUserOps(allUserOps);
         }
@@ -176,6 +172,13 @@ export const AccountContext = (props: PropsWithChildren) => {
       setError(e);
     }
   };
+
+  useEffect(() => {
+    if (isSuccess) {
+      /** auto-reset everytime (isSuccess is true briefly) */
+      setIsSuccess(false);
+    }
+  }, [isSuccess]);
 
   return (
     <AccountContextValue.Provider

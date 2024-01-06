@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useCallback, useContext, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import { registryABI } from '../utils/contracts.json';
 import { HexStr } from '../types';
@@ -7,7 +7,7 @@ import { useAccountContext } from '../wallet/AccountContext';
 import { DecodeEventLogReturnType, encodeFunctionData, zeroAddress } from 'viem';
 import { postMember } from '../utils/project';
 
-export type VouchContextType = {
+export type VouchHookType = {
   setVouchParams: (account: HexStr, personCid: string) => void;
   sendVouch: (() => Promise<void>) | undefined;
   isSending: boolean;
@@ -16,13 +16,7 @@ export type VouchContextType = {
   isSuccess: boolean;
 };
 
-const VouchContextValue = createContext<VouchContextType | undefined>(undefined);
-
-export interface VouchContextProps {
-  children: ReactNode;
-}
-
-export const VouchContext = (props: VouchContextProps) => {
+export const useVouch = (): VouchHookType => {
   /** Vouch */
   const { address, projectId } = useProjectContext();
   const { reset, addUserOp, isSuccess, isSending, events } = useAccountContext();
@@ -52,10 +46,10 @@ export const VouchContext = (props: VouchContextProps) => {
   };
 
   useEffect(() => {
-    if (isSuccess && events && projectId && vouchParamsInternal) {
+    if (events && projectId && vouchParamsInternal) {
       checkAndPostMember(events, projectId);
     }
-  }, [isSuccess, events, projectId, vouchParamsInternal]);
+  }, [events, projectId, vouchParamsInternal]);
 
   const sendVouch =
     address && addUserOp && vouchParamsInternal
@@ -80,23 +74,12 @@ export const VouchContext = (props: VouchContextProps) => {
   const isErrorSending = false;
   const errorSending = new Error();
 
-  return (
-    <VouchContextValue.Provider
-      value={{
-        setVouchParams,
-        sendVouch,
-        isSending,
-        isErrorSending,
-        errorSending,
-        isSuccess,
-      }}>
-      {props.children}
-    </VouchContextValue.Provider>
-  );
-};
-
-export const useVouch = (): VouchContextType => {
-  const context = useContext(VouchContextValue);
-  if (!context) throw Error('context not found');
-  return context;
+  return {
+    setVouchParams,
+    sendVouch,
+    isSending,
+    isErrorSending,
+    errorSending,
+    isSuccess,
+  };
 };

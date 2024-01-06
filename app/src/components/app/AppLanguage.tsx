@@ -1,5 +1,4 @@
-import { changeLanguage } from 'i18next';
-import { PropsWithChildren, createContext, useContext, useEffect } from 'react';
+import { PropsWithChildren, createContext, useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 export enum Language {
@@ -12,6 +11,7 @@ export enum Language {
 export type AppLanguageType = {
   change: (key: Language) => void;
   selected: Language;
+  hasChosen: boolean;
 };
 
 const ThemeContextValue = createContext<AppLanguageType | undefined>(undefined);
@@ -21,24 +21,28 @@ export const AppLanguage = (props: PropsWithChildren): JSX.Element => {
   const { i18n } = useTranslation();
   const selected = i18n.language as Language;
 
+  const [hasChosen, setHasChosen] = useState<boolean>(false);
+
   useEffect(() => {
     const preferred = localStorage.getItem('language');
+
     if (preferred !== null) {
       console.log('Setting preferred language', preferred);
+      setHasChosen(true);
       i18n.changeLanguage(preferred);
     } else {
       const local = navigator.language;
       if (local.includes('en')) {
-        changeLanguage(Language.ENG);
+        i18n.changeLanguage(Language.ENG);
       }
       if (local.includes('es')) {
-        changeLanguage(Language.SPA);
+        i18n.changeLanguage(Language.SPA);
       }
       if (local.includes('cat')) {
-        changeLanguage(Language.CAT);
+        i18n.changeLanguage(Language.CAT);
       }
       if (local.includes('he')) {
-        changeLanguage(Language.HEB);
+        i18n.changeLanguage(Language.HEB);
       }
     }
   }, [i18n]);
@@ -48,7 +52,9 @@ export const AppLanguage = (props: PropsWithChildren): JSX.Element => {
     localStorage.setItem('language', key);
   };
 
-  return <ThemeContextValue.Provider value={{ change, selected }}>{props.children}</ThemeContextValue.Provider>;
+  return (
+    <ThemeContextValue.Provider value={{ change, selected, hasChosen }}>{props.children}</ThemeContextValue.Provider>
+  );
 };
 
 export const useAppLanguage = (): AppLanguageType => {
