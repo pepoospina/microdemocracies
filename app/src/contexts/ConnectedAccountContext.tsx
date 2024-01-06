@@ -24,7 +24,6 @@ export interface ConnectedMemberContextProps {
 export const ConnectedMemberContext = (props: ConnectedMemberContextProps) => {
   const { address: projectAddress } = useProjectContext();
   const publicClient = usePublicClient();
-
   const { aaAddress } = useAccountContext();
 
   const { data: tokenId, isSuccess } = useContractRead({
@@ -35,24 +34,11 @@ export const ConnectedMemberContext = (props: ConnectedMemberContextProps) => {
     enabled: aaAddress !== undefined && projectAddress !== undefined,
   });
 
-  const { data: _accountRead } = useContractRead({
-    address: projectAddress,
-    abi: registryABI,
-    functionName: 'getAccount',
-    args: tokenId ? [tokenId] : undefined,
-    enabled: tokenId !== undefined && projectAddress !== undefined,
-  });
-
-  const account = _accountRead && {
-    account: _accountRead.account,
-    valid: _accountRead.valid,
-    voucher: Number(_accountRead.voucher),
-  };
+  const { account } = useMember(tokenId);
 
   const { data: myVouchEvents } = useQuery(['myVoucheEvents', tokenId?.toString()], async () => {
     if (tokenId && projectAddress) {
-      // TODO viem types issue
-      const contract = (getContract as any)({
+      const contract = getContract({
         address: projectAddress,
         abi: registryABI,
         publicClient,
@@ -76,7 +62,7 @@ export const ConnectedMemberContext = (props: ConnectedMemberContextProps) => {
 
     Promise.all(
       myVouchEvents.map(async (e: any) => {
-        const block = await (publicClient as any).getBlock(e.blockNumber);
+        const block = await publicClient.getBlock(e.blockNumber);
         return {
           from: e.args.from.toString(),
           to: e.args.to.toString(),

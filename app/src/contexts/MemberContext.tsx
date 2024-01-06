@@ -20,8 +20,6 @@ export type AccountContextType = {
   address?: string;
 };
 
-const AccountContextValue = createContext<AccountContextType | undefined>(undefined);
-
 export interface AccountContextProps {
   tokenId?: number;
   address?: HexStr;
@@ -32,7 +30,7 @@ export interface AccountContextProps {
  * from a tokenId or an address, read the data about it from the
  * registry and IPFS. TokenId can be a property or set with setTokenId
  */
-export const MemberContext = (props: AccountContextProps) => {
+export const useMember = (props: AccountContextProps): AccountContextType => {
   const { address: projectAddress } = useProjectContext();
   const { aaAddress } = useAccountContext();
 
@@ -129,25 +127,14 @@ export const MemberContext = (props: AccountContextProps) => {
     voucher: Number(_accountRead.voucher),
   };
 
-  return (
-    <AccountContextValue.Provider
-      value={{
-        refetch,
-        accountRead,
-        accountPapRead,
-        isLoadingAccount: isLoadingAccount || isLoadingTokenId,
-        tokenId: Number(tokenId),
-        address,
-        voucherTokenId: _accountRead !== undefined ? Number(_accountRead.voucher) : undefined,
-        voucherPapRead,
-      }}>
-      {props.children}
-    </AccountContextValue.Provider>
-  );
-};
-
-export const useMemberContext = (): AccountContextType => {
-  const context = useContext(AccountContextValue);
-  if (!context) throw Error('context not found');
-  return context;
+  return {
+    refetch,
+    accountRead,
+    accountPapRead,
+    isLoadingAccount: isLoadingAccount || isLoadingTokenId,
+    tokenId: Number(tokenId),
+    address,
+    voucherTokenId: _accountRead !== undefined ? Number(_accountRead.voucher) : undefined,
+    voucherPapRead,
+  };
 };

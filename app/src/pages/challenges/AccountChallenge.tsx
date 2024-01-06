@@ -9,7 +9,7 @@ import { ChallengeVote } from '../challenges/ChallengeVote';
 import { useEffect, useState } from 'react';
 import { WaitingTransaction } from '../common/Loading';
 import { BoxCentered } from '../../ui-components/BoxCentered';
-import { useMemberContext } from '../../contexts/MemberContext';
+import { useMember } from '../../contexts/MemberContext';
 import { useAccountContext } from '../../wallet/AccountContext';
 
 interface IAccountChallenge extends BoxExtendedProps {
@@ -18,8 +18,7 @@ interface IAccountChallenge extends BoxExtendedProps {
 
 export const AccountChallenge = (props: IAccountChallenge) => {
   const { isConnected } = useAccountContext();
-
-  const { accountRead } = useMemberContext();
+  const { accountRead } = useMember();
   const { refetchChallenge, sendChallenge, challengeRead, isErrorSending, errorSending, isSuccess } =
     useCurrentChallenge();
 

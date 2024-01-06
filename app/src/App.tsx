@@ -93,11 +93,9 @@ function App() {
                                 element={
                                   <ProjectContext>
                                     <ConnectedMemberContext>
-                                      <MemberContext>
-                                        <VoiceReadContext>
-                                          <ProjectBase />
-                                        </VoiceReadContext>
-                                      </MemberContext>
+                                      <VoiceReadContext>
+                                        <ProjectBase />
+                                      </VoiceReadContext>
                                     </ConnectedMemberContext>
                                   </ProjectContext>
                                 }>

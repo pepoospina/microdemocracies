@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 import { RouteNames } from '../../App';
 import { AppConnectButton } from '../../components/app/AppConnectButton';
 import { useConnectedMember } from '../../contexts/ConnectedAccountContext';
-import { useMemberContext } from '../../contexts/MemberContext';
 import { useProjectContext } from '../../contexts/ProjectContext';
 import { useVouch } from '../../contexts/VouchContext';
 import { Entity, PAP } from '../../types';

@@ -40,19 +40,23 @@ export const AppConnect = (props: {}) => {
 
   return !signer || !aaAddress ? (
     <Box margin={{ horizontal: 'small' }}>
-      <Box margin={{ vertical: 'small' }}>
-        <Box margin={{ bottom: '6px' }}>
-          <Text>
-            {t('connectWallet')} {!hasInjected ? `(${t('notFound')})` : ''}
-          </Text>
+      {hasInjected ? (
+        <Box margin={{ vertical: 'small' }}>
+          <Box margin={{ bottom: '6px' }}>
+            <Text>
+              {t('connectWallet')} {!hasInjected ? `(${t('notFound')})` : ''}
+            </Text>
+          </Box>
+          <AppButton
+            onClick={() => connectInjected()}
+            label={t('connectWalletBtn')}
+            disabled={!hasInjected}></AppButton>
         </Box>
-        <AppButton onClick={() => connectInjected()} label={t('connectWalletBtn')} disabled={!hasInjected}></AppButton>
-      </Box>
+      ) : (
+        <></>
+      )}
 
       <Box margin={{ vertical: 'small' }}>
-        <Box margin={{ bottom: '6px' }}>
-          <Text>{t('connectWithEmail')}</Text>
-        </Box>
         <AppButton onClick={() => connectMagic()} label={t('connectWithEmailBtn')}></AppButton>
       </Box>
     </Box>
