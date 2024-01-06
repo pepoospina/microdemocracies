@@ -5,7 +5,7 @@ i18n.use(initReactI18next).init({
   resources: {
     ENG: {
       translation: {
-        appName: 'micro(r)evolutions',
+        appName: 'microdemocracies',
         startNow: 'start now',
         startNew: 'start new',
         back: 'back',

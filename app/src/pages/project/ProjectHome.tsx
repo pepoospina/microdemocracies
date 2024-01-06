@@ -87,11 +87,11 @@ export const ProjectHome = (props: IProjectHome) => {
 
   return (
     <ViewportPage>
-      <Box>
-        <Box pad="medium">
-          <ProjectCard project={project}></ProjectCard>
-        </Box>
+      <Box pad="medium">
+        <ProjectCard project={project}></ProjectCard>
+      </Box>
 
+      <Box pad={{ left: 'medium' }}>
         <Box pad="medium" direction="row" align="center" justify="between">
           <AppHeading level="3">
             {cap(t('members'))}: {nMembers}
@@ -106,9 +106,8 @@ export const ProjectHome = (props: IProjectHome) => {
         ) : (
           <></>
         )}
+        {content}
       </Box>
-
-      <Box pad={{ left: 'medium' }}>{content}</Box>
 
       <AppBottomButtons
         left={{

@@ -1,5 +1,13 @@
 import { initializeApp } from 'firebase/app';
-import { collection, collectionGroup, connectFirestoreEmulator, doc, getFirestore } from 'firebase/firestore';
+import {
+  collection,
+  collectionGroup,
+  connectFirestoreEmulator,
+  doc,
+  initializeFirestore,
+  persistentLocalCache,
+  persistentMultipleTabManager,
+} from 'firebase/firestore';
 import { CollectionNames } from './collectionNames';
 
 const firebaseConfig = {
@@ -12,7 +20,9 @@ const firebaseConfig = {
 };
 
 export const app = initializeApp(firebaseConfig);
-export const db = getFirestore(app);
+export const db = initializeFirestore(app, {
+  localCache: persistentLocalCache({ tabManager: persistentMultipleTabManager() }),
+});
 
 const isProd = process.env.NODE_ENV === 'production' || (process as any).env.NODE_ENV === 'test-prod';
 

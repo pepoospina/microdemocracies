@@ -54,7 +54,7 @@ export const SignerContext = (props: PropsWithChildren) => {
     }
   }, [signer]);
 
-  const { connectAsync } = useConnect({ connector: new InjectedConnector() });
+  const { connectAsync } = useConnect({ connector: new InjectedConnector() as any });
   const { disconnect: disconnectInjected } = useDisconnect();
 
   const connectTest = (ix: number) => {
