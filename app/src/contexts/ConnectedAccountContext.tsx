@@ -7,6 +7,7 @@ import { AppAccount, AppChallenge, AppVouch } from '../types';
 import { useProjectContext } from './ProjectContext';
 import { useAccountContext } from '../wallet/AccountContext';
 import { getContract } from 'viem';
+import { useMember } from './MemberContext';
 
 export type ConnectedMemberContextType = {
   tokenId?: number | null;
@@ -34,7 +35,7 @@ export const ConnectedMemberContext = (props: ConnectedMemberContextProps) => {
     enabled: aaAddress !== undefined && projectAddress !== undefined,
   });
 
-  const { account } = useMember(tokenId);
+  const { accountRead } = useMember({ tokenId: tokenId ? Number(tokenId) : undefined });
 
   const { data: myVouchEvents } = useQuery(['myVoucheEvents', tokenId?.toString()], async () => {
     if (tokenId && projectAddress) {
@@ -110,7 +111,7 @@ export const ConnectedMemberContext = (props: ConnectedMemberContextProps) => {
     <ConnectedMemberContextValue.Provider
       value={{
         tokenId: _tokenId,
-        account,
+        account: accountRead,
         myChallenge,
         myVouches,
       }}>

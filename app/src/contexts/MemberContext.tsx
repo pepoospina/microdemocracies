@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import { useContractRead } from 'wagmi';
 
 import { registryABI } from '../utils/contracts.json';
@@ -23,7 +23,6 @@ export type AccountContextType = {
 export interface AccountContextProps {
   tokenId?: number;
   address?: HexStr;
-  children: ReactNode;
 }
 
 /**

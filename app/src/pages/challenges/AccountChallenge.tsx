@@ -9,16 +9,18 @@ import { ChallengeVote } from '../challenges/ChallengeVote';
 import { useEffect, useState } from 'react';
 import { WaitingTransaction } from '../common/Loading';
 import { BoxCentered } from '../../ui-components/BoxCentered';
-import { useMember } from '../../contexts/MemberContext';
 import { useAccountContext } from '../../wallet/AccountContext';
+import { AppAccount } from '../../types';
 
 interface IAccountChallenge extends BoxExtendedProps {
   cardStyle?: React.CSSProperties;
+  account?: AppAccount;
 }
 
 export const AccountChallenge = (props: IAccountChallenge) => {
   const { isConnected } = useAccountContext();
-  const { accountRead } = useMember();
+  const accountRead = props.account;
+
   const { refetchChallenge, sendChallenge, challengeRead, isErrorSending, errorSending, isSuccess } =
     useCurrentChallenge();
 

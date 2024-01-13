@@ -13,6 +13,7 @@ import { WaitingTransaction } from '../common/Loading';
 import { useNavigate } from 'react-router-dom';
 import { postDeleteApplication } from '../../utils/project';
 import { useTranslation } from 'react-i18next';
+import { useMember } from '../../contexts/MemberContext';
 
 export const VouchMemberWidget = (props: { pap: Entity<PAP> }) => {
   const { t } = useTranslation();
@@ -29,7 +30,11 @@ export const VouchMemberWidget = (props: { pap: Entity<PAP> }) => {
 
   const { account } = useConnectedMember();
 
-  const { accountRead: vouchedAccount, tokenId: vouchedTokenId, refetch: refetchVouchedAccount } = useMemberContext();
+  const {
+    accountRead: vouchedAccount,
+    tokenId: vouchedTokenId,
+    refetch: refetchVouchedAccount,
+  } = useMember({ address: pap.object.account });
 
   useEffect(() => {
     setVouchParams(pap.object.account, pap.cid);
