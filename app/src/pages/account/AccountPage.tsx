@@ -15,7 +15,7 @@ export const AccountPage = () => {
   const { t } = useTranslation();
   const { tokenId } = useParams();
   const navigate = useNavigate();
-  const { accountRead, accountPapRead } = useMember({ tokenId: tokenId ? +tokenId : undefined });
+  const { account: accountRead, accountPap: accountPapRead } = useMember({ tokenId: tokenId ? +tokenId : undefined });
 
   if (!tokenId) {
     throw new Error('tokenId undefined');

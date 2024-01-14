@@ -31,7 +31,7 @@ export const VouchMemberWidget = (props: { pap: Entity<PAP> }) => {
   const { account } = useConnectedMember();
 
   const {
-    accountRead: vouchedAccount,
+    account: vouchedAccount,
     tokenId: vouchedTokenId,
     refetch: refetchVouchedAccount,
   } = useMember({ address: pap.object.account });

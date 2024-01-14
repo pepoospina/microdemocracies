@@ -35,7 +35,7 @@ export const ConnectedMemberContext = (props: ConnectedMemberContextProps) => {
     enabled: aaAddress !== undefined && projectAddress !== undefined,
   });
 
-  const { accountRead } = useMember({ tokenId: tokenId ? Number(tokenId) : undefined });
+  const { account: accountRead } = useMember({ tokenId: tokenId ? Number(tokenId) : undefined });
 
   const { data: myVouchEvents } = useQuery(['myVoucheEvents', tokenId?.toString()], async () => {
     if (tokenId && projectAddress) {

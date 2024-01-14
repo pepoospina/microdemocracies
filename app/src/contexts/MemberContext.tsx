@@ -10,8 +10,8 @@ import { useAccountContext } from '../wallet/AccountContext';
 
 export type AccountContextType = {
   refetch: (options?: { throwOnError: boolean; cancelRefetch: boolean }) => Promise<any>;
-  accountRead?: AppAccount;
-  accountPapRead?: Entity<PAP>;
+  account?: AppAccount;
+  accountPap?: Entity<PAP>;
   vouchRead?: AppVouch;
   voucherPapRead?: Entity<PAP>;
   isLoadingAccount: boolean;
@@ -124,12 +124,13 @@ export const useMember = (props: AccountContextProps): AccountContextType => {
     account: _accountRead.account,
     valid: _accountRead.valid,
     voucher: Number(_accountRead.voucher),
+    tokenId: Number(tokenId),
   };
 
   return {
     refetch,
-    accountRead,
-    accountPapRead,
+    account: accountRead,
+    accountPap: accountPapRead,
     isLoadingAccount: isLoadingAccount || isLoadingTokenId,
     tokenId: Number(tokenId),
     address,
