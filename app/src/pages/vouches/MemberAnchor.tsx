@@ -5,7 +5,7 @@ import { useMember } from '../../contexts/MemberContext';
 import { LoadingDiv } from '../../ui-components/LoadingDiv';
 import { getPapShortname } from '../../utils/pap';
 import { useNavigate, useParams } from 'react-router-dom';
-import { RouteNames } from '../../App';
+import { AbsoluteRoutes, RouteNames } from '../../App';
 
 export const MemberAnchor = (props: { tokenId: number }) => {
   const { projectId } = useParams();
@@ -26,7 +26,7 @@ export const MemberAnchor = (props: { tokenId: number }) => {
 
   const goToMemberPage = () => {
     if (projectId) {
-      navigate(`${RouteNames.ProjectHome(projectId)}/${RouteNames.Member(tokenId)}`);
+      navigate(AbsoluteRoutes.ProjectMember(projectId, tokenId.toString()));
     }
   };
 

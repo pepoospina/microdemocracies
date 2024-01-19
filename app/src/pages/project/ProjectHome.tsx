@@ -112,7 +112,7 @@ export const ProjectHome = (props: IProjectHome) => {
 
       <AppBottomButtons
         left={{
-          action: () => navigate('/home'),
+          action: () => navigate(RouteNames.AppHome),
           label: t('back'),
           icon: <FormPrevious />,
         }}

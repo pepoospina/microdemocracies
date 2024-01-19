@@ -16,7 +16,7 @@ import { ViewportHeadingLarge, ViewportPage } from '../../components/app/Viewpor
 import { Bold } from '../landing/LandingPage';
 import { AppBottomButtons } from '../common/BottomButtons';
 import { useCreateProject } from './useCreateProject';
-import { RouteNames } from '../../App';
+import { AbsoluteRoutes, RouteNames } from '../../App';
 import { Trans, useTranslation } from 'react-i18next';
 
 const NPAGES = 5;
@@ -42,7 +42,7 @@ export const CreateProject = () => {
 
   useEffect(() => {
     if (projectId) {
-      navigate(RouteNames.ProjectHome(projectId.toString()));
+      navigate(AbsoluteRoutes.ProjectHome(projectId.toString()));
     }
   }, [navigate, projectId]);
 

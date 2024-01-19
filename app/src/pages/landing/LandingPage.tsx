@@ -27,7 +27,7 @@ export const LandingPage = () => {
 
   useEffect(() => {
     if (publicId) {
-      navigate(RouteNames.Projects);
+      navigate(RouteNames.AppHome);
     }
   }, [publicId]);
 
@@ -86,7 +86,7 @@ export const LandingPage = () => {
   }, [handleKeyPress]);
 
   const goApp = () => {
-    navigate('/home');
+    navigate(`${RouteNames.App}/${RouteNames.AppHome}`);
   };
 
   const btnStyle: React.CSSProperties = {
