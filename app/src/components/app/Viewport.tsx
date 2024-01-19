@@ -16,7 +16,7 @@ import { AppHeading } from '../../ui-components';
 export const MAX_WIDTH_LANDING = 1600;
 
 export const ViewportContainer = (props: IElement) => {
-  const height = 'calc(100vh)';
+  const height = '100vh';
   return (
     <Box
       id="viewport-container"
@@ -64,11 +64,11 @@ export const ViewportPage = (props: { children: ReactNode[] }) => {
         margin: '0 auto',
         overflow: 'hidden',
       }}>
-      <Box id="header" style={{ flexShrink: 0, flexGrow: 0 }}>
-        {props.children[0]}
-      </Box>
-      <Box id="content" style={{ flexGrow: 1, overflowY: 'auto' }}>
-        {props.children[1]}
+      <Box id="header" style={{ flexGrow: 1, overflowY: 'auto' }}>
+        <Box style={{ flexShrink: 0 }}>
+          {props.children[0]}
+          {props.children[1]}
+        </Box>
       </Box>
       <Box id="nav" style={{ height: '90px', flexShrink: 0 }}>
         {props.children[2]}

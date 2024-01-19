@@ -6,6 +6,8 @@ import { DateManager } from '../../utils/date.manager';
 import { RouteNames } from '../../App';
 import { t } from 'i18next';
 import { useTranslation } from 'react-i18next';
+import { MemberAnchor } from './MemberAnchor';
+import { useConnectedMember } from '../../contexts/ConnectedAccountContext';
 
 interface IVouchCard {
   vouch?: AppVouch;
@@ -14,6 +16,7 @@ interface IVouchCard {
 export const VoucheCard = (props: IVouchCard): JSX.Element => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+
   const vouch = props.vouch;
 
   const goTo = () => {
@@ -33,20 +36,12 @@ export const VoucheCard = (props: IVouchCard): JSX.Element => {
           <Box fill>
             {isFounder ? (
               <Text>
-                <Anchor>
-                  {t('member')} #{vouch.to.toString()}
-                </Anchor>{' '}
-                {t('foundedCommunity')}
+                <MemberAnchor tokenId={+vouch.to}></MemberAnchor> {t('foundedCommunity')}
               </Text>
             ) : (
               <Text>
-                <Anchor>
-                  {t('member')} #{vouch.to.toString()}
-                </Anchor>{' '}
-                {t('invitedBy')}{' '}
-                <Anchor>
-                  {t('member')} #{vouch.from.toString()}
-                </Anchor>{' '}
+                <MemberAnchor tokenId={+vouch.to}></MemberAnchor> {t('invitedBy')}{' '}
+                <MemberAnchor tokenId={+vouch.from}></MemberAnchor>
               </Text>
             )}
           </Box>

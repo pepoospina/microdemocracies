@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useContractRead } from 'wagmi';
 
 import { registryABI } from '../utils/contracts.json';
@@ -10,8 +10,8 @@ import { useAccountContext } from '../wallet/AccountContext';
 
 export type AccountContextType = {
   refetch: (options?: { throwOnError: boolean; cancelRefetch: boolean }) => Promise<any>;
-  accountRead?: AppAccount;
-  accountPapRead?: Entity<PAP>;
+  account?: AppAccount;
+  accountPap?: Entity<PAP>;
   vouchRead?: AppVouch;
   voucherPapRead?: Entity<PAP>;
   isLoadingAccount: boolean;
@@ -20,19 +20,16 @@ export type AccountContextType = {
   address?: string;
 };
 
-const AccountContextValue = createContext<AccountContextType | undefined>(undefined);
-
 export interface AccountContextProps {
   tokenId?: number;
   address?: HexStr;
-  children: ReactNode;
 }
 
 /**
  * from a tokenId or an address, read the data about it from the
  * registry and IPFS. TokenId can be a property or set with setTokenId
  */
-export const MemberContext = (props: AccountContextProps) => {
+export const useMember = (props: AccountContextProps): AccountContextType => {
   const { address: projectAddress } = useProjectContext();
   const { aaAddress } = useAccountContext();
 
@@ -127,27 +124,17 @@ export const MemberContext = (props: AccountContextProps) => {
     account: _accountRead.account,
     valid: _accountRead.valid,
     voucher: Number(_accountRead.voucher),
+    tokenId: Number(tokenId),
   };
 
-  return (
-    <AccountContextValue.Provider
-      value={{
-        refetch,
-        accountRead,
-        accountPapRead,
-        isLoadingAccount: isLoadingAccount || isLoadingTokenId,
-        tokenId: Number(tokenId),
-        address,
-        voucherTokenId: _accountRead !== undefined ? Number(_accountRead.voucher) : undefined,
-        voucherPapRead,
-      }}>
-      {props.children}
-    </AccountContextValue.Provider>
-  );
-};
-
-export const useMemberContext = (): AccountContextType => {
-  const context = useContext(AccountContextValue);
-  if (!context) throw Error('context not found');
-  return context;
+  return {
+    refetch,
+    account: accountRead,
+    accountPap: accountPapRead,
+    isLoadingAccount: isLoadingAccount || isLoadingTokenId,
+    tokenId: Number(tokenId),
+    address,
+    voucherTokenId: _accountRead !== undefined ? Number(_accountRead.voucher) : undefined,
+    voucherPapRead,
+  };
 };

@@ -28,7 +28,6 @@ import { ProjectBase } from './pages/project/ProjectBase';
 import { SignerContext } from './wallet/SignerContext';
 import { ConnectedMemberContext } from './contexts/ConnectedAccountContext';
 import { AccountContext } from './wallet/AccountContext';
-import { MemberContext } from './contexts/MemberContext';
 import { SemaphoreContext } from './contexts/SemaphoreContext';
 import { AppHome } from './pages/myprojects/AppHome';
 import { TestCreateProject } from './test/TestCreateProject';
@@ -36,7 +35,6 @@ import { TestProject } from './test/TestProject';
 
 import { i18n } from './i18n/i18n';
 import { AppLanguage } from './components/app/AppLanguage';
-import { useEffect } from 'react';
 
 const queryClient = new QueryClient();
 
@@ -93,11 +91,9 @@ function App() {
                                 element={
                                   <ProjectContext>
                                     <ConnectedMemberContext>
-                                      <MemberContext>
-                                        <VoiceReadContext>
-                                          <ProjectBase />
-                                        </VoiceReadContext>
-                                      </MemberContext>
+                                      <VoiceReadContext>
+                                        <ProjectBase />
+                                      </VoiceReadContext>
                                     </ConnectedMemberContext>
                                   </ProjectContext>
                                 }>

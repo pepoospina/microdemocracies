@@ -5,7 +5,6 @@ import { FormPrevious } from 'grommet-icons';
 
 import { getEntity } from '../../utils/store';
 import { Entity, PAP } from '../../types';
-import { MemberContext } from '../../contexts/MemberContext';
 import { AccountPerson } from '../account/AccountPerson';
 import { AppBottomButton } from '../common/BottomButtons';
 import { ViewportPage } from '../../components/app/Viewport';
@@ -42,9 +41,7 @@ export const InviteAccount = () => {
         <Box pad="large" fill>
           <Box>
             <AccountPerson pap={pap.object} cardStyle={{ marginBottom: '32px' }}></AccountPerson>
-            <MemberContext address={pap.object.account}>
-              <VouchMemberWidget pap={pap}></VouchMemberWidget>
-            </MemberContext>
+            <VouchMemberWidget pap={pap}></VouchMemberWidget>
           </Box>
         </Box>
       </>

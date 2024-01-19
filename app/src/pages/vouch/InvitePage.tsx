@@ -87,6 +87,10 @@ export const InvitePage = (): JSX.Element => {
           label={copied ? t('linkCopied') : t('shareLink')}
           primary
           onClick={() => share()}></AppButton>
+
+        <AppHeading level="3" style={{ marginTop: '24px' }}>
+          {t('orUseQR')}
+        </AppHeading>
         <AppButton
           reverse
           icon={<Square color="black"></Square>}
@@ -100,6 +104,10 @@ export const InvitePage = (): JSX.Element => {
           label={!scan ? t('scanQr') : t('cancel')}
           onClick={() => setScan(!scan)}
           style={{ marginBottom: '16px' }}></AppButton>
+
+        <AppHeading level="3" style={{ marginTop: '24px' }}>
+          {t('resetLink')}
+        </AppHeading>
         <Box>
           <AppCard margin={{ vertical: 'medium' }}>
             <Text>{t('resettingMsg')}</Text>

@@ -5,17 +5,17 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { AccountOverview } from './AccountOverview';
 import { AccountChallenge } from '../challenges/AccountChallenge';
 
-import { MemberContext } from '../../contexts/MemberContext';
-import { ChallengeContext } from '../../contexts/CurrentChallengeContext';
 import { AppBottomButton } from '../common/BottomButtons';
 import { ViewportHeadingLarge, ViewportPage } from '../../components/app/Viewport';
 import { useTranslation } from 'react-i18next';
 import { cap } from '../../utils/general';
+import { useMember } from '../../contexts/MemberContext';
 
 export const AccountPage = () => {
   const { t } = useTranslation();
   const { tokenId } = useParams();
   const navigate = useNavigate();
+  const { account: accountRead, accountPap: accountPapRead } = useMember({ tokenId: tokenId ? +tokenId : undefined });
 
   if (!tokenId) {
     throw new Error('tokenId undefined');
@@ -26,15 +26,8 @@ export const AccountPage = () => {
       <ViewportHeadingLarge label={`${cap(t('member'))} #${tokenId}`} />
 
       <Box pad="large">
-        <MemberContext tokenId={+tokenId}>
-          <Box style={{ flexShrink: 0 }}>
-            <AccountOverview></AccountOverview>
-          </Box>
-
-          <ChallengeContext tokenId={+tokenId}>
-            <AccountChallenge cardStyle={{ marginTop: '36px', marginBottom: '36px' }} />
-          </ChallengeContext>
-        </MemberContext>
+        <AccountOverview account={accountRead} pap={accountPapRead}></AccountOverview>
+        <AccountChallenge account={accountRead} cardStyle={{ marginTop: '36px', marginBottom: '36px' }} />
       </Box>
 
       <AppBottomButton icon={<FormPrevious />} label="back" onClick={() => navigate(-1)}></AppBottomButton>
