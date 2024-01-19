@@ -1,15 +1,16 @@
 import { Anchor, Box, Spinner, Text } from 'grommet';
 
-import { useMemberContext } from '../../contexts/MemberContext';
 import { AccountPerson } from './AccountPerson';
 import { AppCard } from '../../ui-components';
 import { BoxCentered } from '../../ui-components/BoxCentered';
 import { useTranslation } from 'react-i18next';
 import { cap } from '../../utils/general';
+import { AppAccount, Entity, PAP } from '../../types';
+import { MemberAnchor } from '../vouches/MemberAnchor';
 
-export const AccountOverview = () => {
+export const AccountOverview = (props: { account?: AppAccount; pap?: Entity<PAP> }) => {
   const { t } = useTranslation();
-  const { accountPapRead, accountRead } = useMemberContext();
+  const { account: accountRead, pap: accountPapRead } = props;
   const isFounder = accountRead && accountRead.voucher > 10e70;
 
   if (!accountPapRead) {
@@ -26,10 +27,7 @@ export const AccountOverview = () => {
         !isFounder ? (
           <Box margin={{ bottom: 'large' }}>
             <Text>
-              {cap(t('invitedBy'))}{' '}
-              <Anchor>
-                {t('member')} #{accountRead?.voucher}
-              </Anchor>
+              {cap(t('invitedBy'))} <MemberAnchor tokenId={accountRead?.voucher}></MemberAnchor>
             </Text>
           </Box>
         ) : (

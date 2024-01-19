@@ -1,4 +1,3 @@
-import { createContext, ReactNode, useContext } from 'react';
 import { useContractRead, useContractWrite, usePrepareContractWrite, useWaitForTransaction } from 'wagmi';
 import { WriteContractResult } from '@wagmi/core';
 
@@ -26,18 +25,15 @@ export type ChallengeContextType = {
   isSuccessVote: boolean;
 };
 
-const ChallengeContextValue = createContext<ChallengeContextType | undefined>(undefined);
-
 export interface ChallengeContextProps {
   tokenId?: number;
-  children: ReactNode;
 }
 
-export const ChallengeContext = (props: ChallengeContextProps) => {
+export const useChallenge = (tokenId?: number) => {
   const { address: projectAddress } = useProjectContext();
 
   /** Vouch */
-  const tokenIdInternal = props.tokenId !== undefined ? BigInt(props.tokenId) : undefined;
+  const tokenIdInternal = tokenId !== undefined ? BigInt(tokenId) : undefined;
 
   /** challenge details */
   const {
@@ -196,33 +192,22 @@ export const ChallengeContext = (props: ChallengeContextProps) => {
     }
   })(_challengeRead);
 
-  return (
-    <ChallengeContextValue.Provider
-      value={{
-        tokenId: Number(tokenIdInternal),
-        sendChallenge,
-        refetchChallenge,
-        challengeRead,
-        totalVoters: Number(totalVoters),
-        isLoadingChallenge,
-        canVote,
-        myVote: myVote as VoteOption | undefined,
-        sendVoteRemove,
-        sendVoteKeep,
-        isSuccess,
-        isErrorSending,
-        errorSending,
-        isSuccessVote,
-        isErrorSendingVote,
-        errorSendingVote,
-      }}>
-      {props.children}
-    </ChallengeContextValue.Provider>
-  );
-};
-
-export const useCurrentChallenge = (): ChallengeContextType => {
-  const context = useContext(ChallengeContextValue);
-  if (!context) throw Error('context not found');
-  return context;
+  return {
+    tokenId: Number(tokenIdInternal),
+    sendChallenge,
+    refetchChallenge,
+    challengeRead,
+    totalVoters: Number(totalVoters),
+    isLoadingChallenge,
+    canVote,
+    myVote: myVote as VoteOption | undefined,
+    sendVoteRemove,
+    sendVoteKeep,
+    isSuccess,
+    isErrorSending,
+    errorSending,
+    isSuccessVote,
+    isErrorSendingVote,
+    errorSendingVote,
+  };
 };

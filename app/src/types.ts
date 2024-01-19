@@ -56,6 +56,7 @@ export interface AppAccount {
   account: HexStr;
   valid: boolean;
   voucher: number;
+  tokenId: number;
 }
 
 export interface AppProject {

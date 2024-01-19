@@ -92,7 +92,7 @@ export const ProjectHome = (props: IProjectHome) => {
       </Box>
 
       <Box pad={{ left: 'medium' }}>
-        <Box pad="medium" direction="row" align="center" justify="between">
+        <Box pad={{ vertical: '16px', horizontal: 'medium' }} direction="row" align="center" justify="between">
           <AppHeading level="3">
             {cap(t('members'))}: {nMembers}
           </AppHeading>
@@ -106,6 +106,7 @@ export const ProjectHome = (props: IProjectHome) => {
         ) : (
           <></>
         )}
+
         {content}
       </Box>
 
