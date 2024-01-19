@@ -43,6 +43,7 @@ export const LanguageSelector = (props: {}) => {
           {Object.keys(Language).map((key: string) => {
             return (
               <AppButton
+                key={key}
                 style={{ width: `${width - 40}px` }}
                 label={LanguageValue(key as Language, false)}
                 onClick={() => changeLanguage(key as Language)}></AppButton>

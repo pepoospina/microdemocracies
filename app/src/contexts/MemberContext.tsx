@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useContractRead } from 'wagmi';
 
 import { registryABI } from '../utils/contracts.json';

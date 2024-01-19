@@ -46,7 +46,7 @@ export const AccountPerson = (props: IAccountPerson) => {
   };
 
   return props.pap ? (
-    <Box style={{ width: '100%', ...props.cardStyle }}>
+    <Box style={{ width: '100%', flexShrink: 0, ...props.cardStyle }}>
       <Box>
         <DetailField
           boxStyle={fieldStyle}

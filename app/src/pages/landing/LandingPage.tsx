@@ -172,14 +172,6 @@ export const LandingPage = () => {
                     <Trans i18nKey="carousel03sub" components={{ Bold: <Bold /> }}></Trans>
                   }></LearnMoreItem>
               </Box>
-
-              <Box style={boxStyle}>
-                <LearnMoreItem
-                  mainText={<Trans i18nKey="carousel04" components={{ Bold: <Bold /> }}></Trans>}
-                  secondaryText={
-                    <Trans i18nKey="carousel04sub" components={{ Bold: <Bold /> }}></Trans>
-                  }></LearnMoreItem>
-              </Box>
             </AppCarousel>
           </Box>
         </Box>
