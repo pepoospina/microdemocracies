@@ -16,7 +16,6 @@ import { AccountPage } from './pages/account/AccountPage';
 import { Challenges } from './pages/challenges/Challenges';
 import { CreateProject } from './pages/create/CreateProject';
 import { Join } from './pages/join/Join';
-import { LandingPage } from './pages/landing/LandingPage';
 import { ProjectHome } from './pages/project/ProjectHome';
 import { VoiceBase } from './pages/voice/VoiceBase';
 import { VoicePropose } from './pages/voice/VoicePropose';
@@ -36,33 +35,9 @@ import { TestProject } from './test/TestProject';
 import { i18n } from './i18n/i18n';
 import { AppLanguage } from './components/app/AppLanguage';
 import { AppContainer } from './components/app/AppContainer';
+import { RouteNames } from './route.names';
 
 const queryClient = new QueryClient();
-
-export const RouteNames = {
-  Base: ``,
-  App: `app`,
-  Start: 'start',
-  AppHome: 'home',
-  ProjectHome: 'p',
-  Join: `join`,
-  Invite: `invite`,
-  InviteAccount: (hash: string) => `invite/${hash}`,
-  MyVouches: `invites`,
-  Members: `members`,
-  Challenges: `challenges`,
-  Member: `member`,
-  MemberChallange: (id: number) => `member/${id}/challenge`,
-  VoicePropose: `propose`,
-};
-
-export const AbsoluteRoutes = {
-  App: '/',
-  Projects: `/${RouteNames.App}/${RouteNames.AppHome}`,
-  ProjectHome: (projectId: string) => `/${RouteNames.App}/${RouteNames.ProjectHome}/${projectId}`,
-  ProjectMember: (projectId: string, tokenId: string) =>
-    `/${RouteNames.App}/${RouteNames.ProjectHome}/${projectId}/${RouteNames.Member}/member/${tokenId}`,
-};
 
 function App() {
   const { publicClient, webSocketPublicClient } = configureChains(
@@ -89,10 +64,9 @@ function App() {
                       <ResponsiveApp>
                         <BrowserRouter>
                           <ViewportContainer>
-                            <Routes>
-                              {/* Landing and project create */}
-                              <Route path={RouteNames.Base} element={<LandingPage />}></Route>
-                              <Route path={RouteNames.App} element={<AppContainer></AppContainer>}>
+                            <AppContainer>
+                              <Routes>
+                                {/* Landing and project create */}
                                 <Route path={RouteNames.AppHome} element={<AppHome></AppHome>}></Route>
                                 <Route path={RouteNames.Start} element={<CreateProject />}></Route>
 
@@ -123,10 +97,10 @@ function App() {
                                   <Route path={RouteNames.Base} element={<ProjectHome />}></Route>
                                   <Route path={'test'} element={<TestProject />}></Route>
                                 </Route>
-                              </Route>
 
-                              <Route path={'/test'} element={<TestCreateProject />}></Route>
-                            </Routes>
+                                <Route path={'/test'} element={<TestCreateProject />}></Route>
+                              </Routes>
+                            </AppContainer>
                           </ViewportContainer>
                         </BrowserRouter>
                       </ResponsiveApp>

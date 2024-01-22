@@ -1,15 +1,16 @@
-import { Box, Text } from 'grommet';
-import { AppButton } from '../../ui-components';
-import { useNavigate } from 'react-router-dom';
-import { RouteNames } from '../../App';
-import { useResponsive } from '../../components/app';
-import { FormNext, FormPrevious } from 'grommet-icons';
 import { useState, useCallback, useEffect } from 'react';
-import { AppCarousel } from '../../ui-components/AppCarousel';
-import { LearnMoreItem } from './LearnMoreItem';
+import { Box, Text } from 'grommet';
+import { FormNext, FormPrevious } from 'grommet-icons';
 import { Trans, useTranslation } from 'react-i18next';
-import { LanguageSelector } from '../account/LanguageSelector';
-import { useSemaphoreContext } from '../../contexts/SemaphoreContext';
+
+import { AppButton } from '../../@app/ui-components/AppButton';
+import { AppCarousel } from '../../@app/ui-components/AppCarousel';
+import { useResponsive } from '../../@app/components/app';
+import { LanguageSelector } from '../../@app/pages/account/LanguageSelector';
+import { RouteNames } from '../../@app/route.names';
+
+import { LearnMoreItem } from './LearnMoreItem';
+import { APP_ORIGIN } from '../../config';
 
 export const Bold = (props: React.PropsWithChildren) => {
   return <span style={{ fontWeight: '400' }}>{props.children}</span>;
@@ -18,18 +19,10 @@ export const Bold = (props: React.PropsWithChildren) => {
 const N_SLIDES = 3;
 
 export const LandingPage = () => {
-  const navigate = useNavigate();
   const { mobile } = useResponsive();
   const { t } = useTranslation();
-  const { publicId } = useSemaphoreContext();
 
   const logoSize = mobile ? '32px' : '48px';
-
-  useEffect(() => {
-    if (publicId) {
-      navigate(RouteNames.AppHome);
-    }
-  }, [publicId]);
 
   const [activeSlideIndex, setActiveSlideIndex] = useState(0);
 
@@ -39,7 +32,10 @@ export const LandingPage = () => {
   })();
 
   const btnClick = () => {
-    if (activeSlideIndex === N_SLIDES - 1) return navigate(RouteNames.Start);
+    if (activeSlideIndex === N_SLIDES - 1) {
+      /** create new project */
+      window.location.href = `${APP_ORIGIN}/${RouteNames.Start}`;
+    }
     nextSlide();
   };
 
@@ -86,7 +82,7 @@ export const LandingPage = () => {
   }, [handleKeyPress]);
 
   const goApp = () => {
-    navigate(`${RouteNames.App}/${RouteNames.AppHome}`);
+    window.location.href = `${APP_ORIGIN}/${RouteNames.AppHome}`;
   };
 
   const btnStyle: React.CSSProperties = {
@@ -106,7 +102,10 @@ export const LandingPage = () => {
 
   return (
     <Box fill align="center">
-      <Box justify="center" align="center" style={{ flexShrink: '0', marginTop: '3vh', width: '100%' }}>
+      <Box
+        justify="center"
+        align="center"
+        style={{ flexShrink: '0', marginTop: '3vh', width: '100%' }}>
         {showLanguageSelector ? (
           <Box fill justify="end" direction="row" pad={{ horizontal: 'large' }}>
             <LanguageSelector></LanguageSelector>
@@ -119,9 +118,15 @@ export const LandingPage = () => {
         </Text>
       </Box>
 
-      <Box style={{ flexGrow: '2', width: '100%', flexShrink: '0' }} justify="center" align="center">
+      <Box
+        style={{ flexGrow: '2', width: '100%', flexShrink: '0' }}
+        justify="center"
+        align="center">
         <Box fill align="center">
-          <Box style={{ flexGrow: '1', width: '100%', flexShrink: '0' }} justify="center" align="center">
+          <Box
+            style={{ flexGrow: '1', width: '100%', flexShrink: '0' }}
+            justify="center"
+            align="center">
             <AppCarousel
               swipeTreshold={0.15}
               disableSwipeByMouse
@@ -134,7 +139,10 @@ export const LandingPage = () => {
               forwardBtnProps={{
                 style: btnStyle,
                 children: (
-                  <Box align="center" justify="center" style={{ height: 36, width: 36 }}>
+                  <Box
+                    align="center"
+                    justify="center"
+                    style={{ height: 36, width: 36 }}>
                     <FormNext></FormNext>
                   </Box>
                 ),
@@ -142,7 +150,10 @@ export const LandingPage = () => {
               backwardBtnProps={{
                 style: btnStyle,
                 children: (
-                  <Box align="center" justify="center" style={{ height: 36, width: 36 }}>
+                  <Box
+                    align="center"
+                    justify="center"
+                    style={{ height: 36, width: 36 }}>
                     <FormPrevious></FormPrevious>
                   </Box>
                 ),
@@ -151,25 +162,43 @@ export const LandingPage = () => {
               easing="cubic-bezier(0.25, 0.1, 0.25, 1)">
               <Box style={boxStyle}>
                 <LearnMoreItem
-                  mainText={<Trans i18nKey="carousel01" components={{ Bold: <Bold /> }}></Trans>}
+                  mainText={
+                    <Trans
+                      i18nKey="carousel01"
+                      components={{ Bold: <Bold /> }}></Trans>
+                  }
                   secondaryText={
-                    <Trans i18nKey="carousel01sub" components={{ Bold: <Bold /> }}></Trans>
+                    <Trans
+                      i18nKey="carousel01sub"
+                      components={{ Bold: <Bold /> }}></Trans>
                   }></LearnMoreItem>
               </Box>
 
               <Box style={boxStyle}>
                 <LearnMoreItem
-                  mainText={<Trans i18nKey="carousel02" components={{ Bold: <Bold /> }}></Trans>}
+                  mainText={
+                    <Trans
+                      i18nKey="carousel02"
+                      components={{ Bold: <Bold /> }}></Trans>
+                  }
                   secondaryText={
-                    <Trans i18nKey="carousel02sub" components={{ Bold: <Bold /> }}></Trans>
+                    <Trans
+                      i18nKey="carousel02sub"
+                      components={{ Bold: <Bold /> }}></Trans>
                   }></LearnMoreItem>
               </Box>
 
               <Box style={boxStyle}>
                 <LearnMoreItem
-                  mainText={<Trans i18nKey="carousel03" components={{ Bold: <Bold /> }}></Trans>}
+                  mainText={
+                    <Trans
+                      i18nKey="carousel03"
+                      components={{ Bold: <Bold /> }}></Trans>
+                  }
                   secondaryText={
-                    <Trans i18nKey="carousel03sub" components={{ Bold: <Bold /> }}></Trans>
+                    <Trans
+                      i18nKey="carousel03sub"
+                      components={{ Bold: <Bold /> }}></Trans>
                   }></LearnMoreItem>
               </Box>
             </AppCarousel>
@@ -177,9 +206,16 @@ export const LandingPage = () => {
         </Box>
       </Box>
 
-      <Box justify="center" align="center" style={{ flexShrink: '0', marginBottom: '6vh' }}>
+      <Box
+        justify="center"
+        align="center"
+        style={{ flexShrink: '0', marginBottom: '6vh' }}>
         {showOpenApp ? (
-          <AppButton onClick={goApp} label={t('openApp')} style={{ margin: '12px 0px', width: '220px' }} />
+          <AppButton
+            onClick={goApp}
+            label={t('openApp')}
+            style={{ margin: '12px 0px', width: '220px' }}
+          />
         ) : (
           <></>
         )}

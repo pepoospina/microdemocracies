@@ -1,11 +1,10 @@
-import { Outlet } from 'react-router-dom';
 import { GlobalNav } from './GlobalNav';
 
-export const AppContainer = (props: {}) => {
+export const AppContainer = (props: React.PropsWithChildren) => {
   return (
     <>
       <GlobalNav />
-      <Outlet />
+      {props.children}
     </>
   );
 };
