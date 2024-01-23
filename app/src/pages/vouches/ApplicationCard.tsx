@@ -2,7 +2,7 @@ import { Box, Spinner, Text } from 'grommet';
 import { AppApplication } from '../../types';
 import { AppButton, AppCard } from '../../ui-components';
 import { useNavigate, useParams } from 'react-router-dom';
-import { RouteNames } from '../../App';
+import { RouteNames } from '../../route.names';
 
 export const ApplicationCard = (props: { application?: AppApplication }): JSX.Element => {
   const navigate = useNavigate();

@@ -1,8 +1,7 @@
 export const RouteNames = {
-  Base: ``,
+  AppHome: '',
   App: `app`,
   Start: 'start',
-  AppHome: 'home',
   ProjectHome: 'p',
   Join: `join`,
   Invite: `invite`,

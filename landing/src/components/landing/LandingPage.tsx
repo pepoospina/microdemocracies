@@ -5,6 +5,7 @@ import { Trans, useTranslation } from 'react-i18next';
 
 import { RouteNames } from '../../@app/route.names';
 
+import { Bold } from '../../@app/ui-components/Bold';
 import { AppButton } from '../../@app/ui-components/AppButton';
 import { AppCarousel } from '../../@app/ui-components/AppCarousel';
 import { useResponsive } from '../../@app/components/app/ResponsiveApp';
@@ -12,10 +13,6 @@ import { LanguageSelector } from '../../@app/pages/account/LanguageSelector';
 
 import { APP_ORIGIN } from '../../config';
 import { LearnMoreItem } from './LearnMoreItem';
-
-export const Bold = (props: React.PropsWithChildren) => {
-  return <span style={{ fontWeight: '400' }}>{props.children}</span>;
-};
 
 const N_SLIDES = 3;
 

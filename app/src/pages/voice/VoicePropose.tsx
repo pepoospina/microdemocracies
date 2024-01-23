@@ -45,46 +45,47 @@ export const VoicePropose = (): JSX.Element => {
   const readyToPropose = isConnected && input && proposeStatement !== undefined && publicId && !done;
 
   return (
-    <ViewportPage>
-      <ViewportHeadingLarge label={t('proposeStatement')}></ViewportHeadingLarge>
-
-      <Box pad="large">
-        {!done ? (
-          <>
-            <Box style={{ marginBottom: '36px' }}>
-              <StatementEditable
-                editable={!isProposing}
-                onChanged={(value?: string) => {
-                  if (value) setInput(value);
-                }}
-                placeholder={`${t('newStatement')}...`}></StatementEditable>
-            </Box>
-
-            <AppCard>
-              <Text>{t('proposeInfo')}!</Text>
-            </AppCard>
-
-            <Box justify="center" style={{ margin: '36px 0', width: '100%' }}>
-              {!isConnected ? <AppConnectButton label={t('connectToPropose')}></AppConnectButton> : <></>}
-              {isProposing ? (
-                <Box>
-                  <Loading label={t('sendingProposal')}></Loading>
-                </Box>
-              ) : (
-                <AppButton
-                  label={t('proposeStatementBtn')}
-                  onClick={() => {
-                    if (input) _proposeStatement(input);
+    <ViewportPage
+      content={
+        <Box pad="large">
+          {!done ? (
+            <>
+              <Box style={{ marginBottom: '36px' }}>
+                <StatementEditable
+                  editable={!isProposing}
+                  onChanged={(value?: string) => {
+                    if (value) setInput(value);
                   }}
-                  disabled={!readyToPropose || isProposing}></AppButton>
-              )}
-            </Box>
-          </>
-        ) : (
-          <AppCard>{t('statementProposed')}!</AppCard>
-        )}
-      </Box>
-      <AppBottomButton label={t('back')} icon={<FormPrevious />} onClick={() => navigate(-1)}></AppBottomButton>
-    </ViewportPage>
+                  placeholder={`${t('newStatement')}...`}></StatementEditable>
+              </Box>
+
+              <AppCard>
+                <Text>{t('proposeInfo')}!</Text>
+              </AppCard>
+
+              <Box justify="center" style={{ margin: '36px 0', width: '100%' }}>
+                {!isConnected ? <AppConnectButton label={t('connectToPropose')}></AppConnectButton> : <></>}
+                {isProposing ? (
+                  <Box>
+                    <Loading label={t('sendingProposal')}></Loading>
+                  </Box>
+                ) : (
+                  <AppButton
+                    label={t('proposeStatementBtn')}
+                    onClick={() => {
+                      if (input) _proposeStatement(input);
+                    }}
+                    disabled={!readyToPropose || isProposing}></AppButton>
+                )}
+              </Box>
+            </>
+          ) : (
+            <AppCard>{t('statementProposed')}!</AppCard>
+          )}
+        </Box>
+      }
+      nav={
+        <AppBottomButton label={t('back')} icon={<FormPrevious />} onClick={() => navigate(-1)}></AppBottomButton>
+      }></ViewportPage>
   );
 };

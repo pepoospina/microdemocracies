@@ -45,17 +45,17 @@ export const ViewportHeadingSmall = (props: { label: ReactNode }) => {
 
 export const ViewportHeadingLarge = (props: { label: ReactNode }) => {
   return (
-    <Box
-      justify="center"
-      align="center"
-      pad="medium"
-      style={{ textAlign: 'center' }}>
+    <Box justify="center" align="center" pad="medium" style={{ textAlign: 'center' }}>
       <AppHeading level="1">{props.label}</AppHeading>
     </Box>
   );
 };
 
-export const ViewportPage = (props: { children: ReactNode[] }) => {
+/**
+ * fill the vertical space with a scrollable content area, and leave the bottom
+ * fixed to the navigation buttons
+ */
+export const ViewportPage = (props: { content: ReactNode; nav: ReactNode }) => {
   const { mobile } = useResponsive();
   const pad = mobile ? 'none' : 'large';
   return (
@@ -70,13 +70,10 @@ export const ViewportPage = (props: { children: ReactNode[] }) => {
         overflow: 'hidden',
       }}>
       <Box id="header" style={{ flexGrow: 1, overflowY: 'auto' }}>
-        <Box style={{ flexShrink: 0 }}>
-          {props.children[0]}
-          {props.children[1]}
-        </Box>
+        <Box style={{ flexShrink: 0 }}>{props.content}</Box>
       </Box>
       <Box id="nav" style={{ height: '90px', flexShrink: 0 }}>
-        {props.children[2]}
+        {props.nav}
       </Box>
     </Box>
   );

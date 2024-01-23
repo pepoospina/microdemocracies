@@ -9,14 +9,20 @@ import { ProjectCard } from '../project/ProjectCard';
 import { useNavigate } from 'react-router-dom';
 import { AppBottomButton } from '../common/BottomButtons';
 import { useTranslation } from 'react-i18next';
-import { ConnectedUser } from '../../components/app/ConnectedUser';
+import { useAppContainer } from '../../components/app/AppContainer';
+import { useEffect } from 'react';
 
 export const AppHome = (props: {}) => {
   const { isConnected } = useAccountContext();
+  const { setTitle } = useAppContainer();
 
   const { projects } = useAccountDataContext();
   const navigate = useNavigate();
   const { t } = useTranslation();
+
+  useEffect(() => {
+    setTitle(t('yourProjects'));
+  }, []);
 
   const projectClicked = (projectId: number) => {
     navigate(`/p/${projectId}`);
@@ -33,9 +39,6 @@ export const AppHome = (props: {}) => {
       );
     return (
       <Box>
-        <AppHeading level="2" style={{ marginBottom: '16px' }}>
-          {t('yourProjects')}
-        </AppHeading>
         {projects.map((project, ix) => {
           return (
             <Box key={ix} style={{ position: 'relative', marginBottom: '16px', flexShrink: 0 }}>
@@ -56,12 +59,12 @@ export const AppHome = (props: {}) => {
   })();
 
   return (
-    <ViewportPage>
+    <>
       <Box fill pad={{ horizontal: 'large' }}>
         <Box style={{ flexShrink: 0 }}>{projectsContent}</Box>
       </Box>
 
       <AppBottomButton onClick={() => navigate('/start')} icon={<Add></Add>} label={t('startNew')}></AppBottomButton>
-    </ViewportPage>
+    </>
   );
 };

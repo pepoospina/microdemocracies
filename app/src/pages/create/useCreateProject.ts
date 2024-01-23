@@ -1,7 +1,7 @@
 import { utils } from 'ethers';
 import { useState, useCallback, useEffect, useMemo } from 'react';
 import { encodeFunctionData } from 'viem';
-import { RouteNames } from '../../App';
+
 import { registryFactoryABI } from '../../contracts/abis';
 import { DetailsAndPlatforms, SelectedDetails, PAP, HexStr } from '../../types';
 import { getFactoryAddress } from '../../utils/contracts.json';
@@ -26,7 +26,15 @@ export interface CreateProjectStatus {
 }
 
 export const useCreateProject = (): CreateProjectStatus => {
-  const { addUserOp, aaAddress, isSuccess: isSuccessUserOp, events, owner, reset, error: errorUserOp } = useAccountContext();
+  const {
+    addUserOp,
+    aaAddress,
+    isSuccess: isSuccessUserOp,
+    events,
+    owner,
+    reset,
+    error: errorUserOp,
+  } = useAccountContext();
 
   const [founderDetails, setFounderDetails] = useState<DetailsAndPlatforms>();
   const [whoStatement, setWhoStatement] = useState<string>('');

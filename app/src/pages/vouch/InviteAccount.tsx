@@ -49,16 +49,23 @@ export const InviteAccount = () => {
   })();
 
   return (
-    <ViewportPage>
-      <Box justify="center" align="center" style={{ flexShrink: '0', height: '50px' }}>
-        <Text size="22px" weight="bold">
-          {t('appName')}
-        </Text>
-      </Box>
+    <ViewportPage
+      content={
+        <>
+          <Box justify="center" align="center" style={{ flexShrink: '0', height: '50px' }}>
+            <Text size="22px" weight="bold">
+              {t('appName')}
+            </Text>
+          </Box>
 
-      {content}
-
-      <AppBottomButton onClick={() => navigate(-1)} icon={<FormPrevious></FormPrevious>} label="back"></AppBottomButton>
-    </ViewportPage>
+          {content}
+        </>
+      }
+      nav={
+        <AppBottomButton
+          onClick={() => navigate(-1)}
+          icon={<FormPrevious></FormPrevious>}
+          label="back"></AppBottomButton>
+      }></ViewportPage>
   );
 };

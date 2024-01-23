@@ -1,21 +1,21 @@
 import { Box, Text } from 'grommet';
+import { Camera, FormPrevious, Send, Square, StatusGood } from 'grommet-icons';
 import { QrScanner } from '@yudiel/react-qr-scanner';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
 import { AppButton, AppCard, AppHeading } from '../../ui-components';
-import { RouteNames } from '../../App';
-import { useNavigate } from 'react-router-dom';
+import { RouteNames } from '../../route.names';
 import { useProjectContext } from '../../contexts/ProjectContext';
 import { useAccountContext } from '../../wallet/AccountContext';
 import { AppQRCode } from '../../components/AppQRCode';
 import { AppConnect } from '../../components/app/AppConnect';
-import { Camera, FormPrevious, Send, Square, StatusGood } from 'grommet-icons';
 import { ViewportHeadingLarge, ViewportPage } from '../../components/app/Viewport';
 import { AppBottomButton } from '../common/BottomButtons';
 import { StatementEditable } from '../voice/StatementEditable';
 import { ApplicationCard } from '../vouches/ApplicationCard';
 import { useCopyToClipboard } from '../../utils/copy.clipboard';
-import { useTranslation } from 'react-i18next';
 
 export const InvitePage = (): JSX.Element => {
   const { t } = useTranslation();
@@ -123,32 +123,32 @@ export const InvitePage = (): JSX.Element => {
   })();
 
   return (
-    <ViewportPage>
-      <ViewportHeadingLarge label={t('inviteTitle')}></ViewportHeadingLarge>
+    <ViewportPage
+      content={
+        <Box fill pad={{ horizontal: 'large' }}>
+          <Box style={{ flexShrink: 0 }}>
+            <Box style={{ margin: '36px 0px' }}>
+              <Text style={{ marginBottom: '16px' }}>{t('rememberInviteMsg')}:</Text>
+              <StatementEditable value={project?.whoStatement}></StatementEditable>
+            </Box>
 
-      <Box fill pad={{ horizontal: 'large' }}>
-        <Box style={{ flexShrink: 0 }}>
-          <Box style={{ margin: '36px 0px' }}>
-            <Text style={{ marginBottom: '16px' }}>{t('rememberInviteMsg')}:</Text>
-            <StatementEditable value={project?.whoStatement}></StatementEditable>
+            {applications?.map((application) => {
+              return (
+                <Box style={{ marginBottom: '16px' }}>
+                  <ApplicationCard application={application}></ApplicationCard>
+                </Box>
+              );
+            })}
           </Box>
 
-          {applications?.map((application) => {
-            return (
-              <Box style={{ marginBottom: '16px' }}>
-                <ApplicationCard application={application}></ApplicationCard>
-              </Box>
-            );
-          })}
+          {content}
         </Box>
-
-        {content}
-      </Box>
-
-      <AppBottomButton
-        icon={<FormPrevious />}
-        label={t('back')}
-        onClick={() => navigate('../members')}></AppBottomButton>
-    </ViewportPage>
+      }
+      nav={
+        <AppBottomButton
+          icon={<FormPrevious />}
+          label={t('back')}
+          onClick={() => navigate('../members')}></AppBottomButton>
+      }></ViewportPage>
   );
 };

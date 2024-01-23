@@ -8,7 +8,7 @@ import { ViewportPage } from '../../components/app/Viewport';
 import { Loading } from '../common/Loading';
 import { ProjectCard } from './ProjectCard';
 import { useVoiceRead } from '../../contexts/VoiceReadContext';
-import { RouteNames } from '../../App';
+import { RouteNames } from '../../route.names';
 import { useResponsive } from '../../components/app';
 import { AppBottomButtons } from '../common/BottomButtons';
 import { BoxCentered } from '../../ui-components/BoxCentered';
@@ -86,42 +86,46 @@ export const ProjectHome = (props: IProjectHome) => {
   })();
 
   return (
-    <ViewportPage>
-      <Box pad="medium">
-        <ProjectCard project={project}></ProjectCard>
-      </Box>
-
-      <Box pad={{ left: 'medium' }}>
-        <Box pad={{ vertical: '16px', horizontal: 'medium' }} direction="row" align="center" justify="between">
-          <AppHeading level="3">
-            {cap(t('members'))}: {nMembers}
-          </AppHeading>
-          <AppButton onClick={() => navigate(RouteNames.Members)} label={membersStr}></AppButton>
-        </Box>
-
-        {tokenId === null ? (
-          <Box pad="small">
-            <AppButton onClick={() => navigate(RouteNames.Join)} label={'join'}></AppButton>
+    <ViewportPage
+      content={
+        <>
+          <Box pad="medium">
+            <ProjectCard project={project}></ProjectCard>
           </Box>
-        ) : (
-          <></>
-        )}
 
-        {content}
-      </Box>
+          <Box pad={{ left: 'medium' }}>
+            <Box pad={{ vertical: '16px', horizontal: 'medium' }} direction="row" align="center" justify="between">
+              <AppHeading level="3">
+                {cap(t('members'))}: {nMembers}
+              </AppHeading>
+              <AppButton onClick={() => navigate(RouteNames.Members)} label={membersStr}></AppButton>
+            </Box>
 
-      <AppBottomButtons
-        left={{
-          action: () => navigate(RouteNames.AppHome),
-          label: t('back'),
-          icon: <FormPrevious />,
-        }}
-        right={{
-          primary: true,
-          action: () => navigate('voice/propose'),
-          icon: <Add></Add>,
-          label: newStr,
-        }}></AppBottomButtons>
-    </ViewportPage>
+            {tokenId === null ? (
+              <Box pad="small">
+                <AppButton onClick={() => navigate(RouteNames.Join)} label={'join'}></AppButton>
+              </Box>
+            ) : (
+              <></>
+            )}
+
+            {content}
+          </Box>
+        </>
+      }
+      nav={
+        <AppBottomButtons
+          left={{
+            action: () => navigate(RouteNames.AppHome),
+            label: t('back'),
+            icon: <FormPrevious />,
+          }}
+          right={{
+            primary: true,
+            action: () => navigate('voice/propose'),
+            icon: <Add></Add>,
+            label: newStr,
+          }}></AppBottomButtons>
+      }></ViewportPage>
   );
 };

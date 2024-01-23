@@ -112,6 +112,11 @@ i18n.use(initReactI18next).init({
         you: 'you',
         orUseQR: 'Or use and scan a QR code',
         resetLink: 'Reset link',
+        join: 'join',
+        personal: 'personal',
+        done: 'done'
+        applicationReceived:
+          'Your application was received. Wait for it to be accepted by the person who invited you, or share the QR or the link below with an existing member and ask them to accept your application.',
       },
     },
     SPA: {
@@ -224,6 +229,8 @@ i18n.use(initReactI18next).init({
         you: 'tú',
         orUseQR: 'Utiliza un código QR',
         resetLink: 'Resetea enlace',
+        applicationReceived:
+          'Su solicitud fue recibida. Espere a que sea aceptado por la persona que lo invitó, o comparta el QR o el enlace a continuación con un miembro existente y pídale que acepte su solicitud.',
       },
     },
     CAT: {
@@ -335,6 +342,8 @@ i18n.use(initReactI18next).init({
         you: 'tu',
         orUseQR: 'Utilitza un codi QR',
         resetLink: 'Reinicia enllaç',
+        applicationReceived:
+          "S'ha rebut la teva sol·licitud. Espereu que sigui acceptat per la persona que us ha convidat, o compartiu el QR o l'enllaç següent amb un membre existent i demaneu-li que acceptin la vostra sol·licitud.",
       },
     },
     HEB: {
@@ -430,6 +439,8 @@ i18n.use(initReactI18next).init({
         you: 'אתה',
         orUseQR: 'השתמש בקוד QR',
         resetLink: 'אפס קישור',
+        applicationReceived:
+          'פנייתך התקבלה. המתן עד שהוא יתקבל על ידי האדם שהזמין אותך, או שתף את ה-QR או את הקישור למטה עם חבר קיים ובקש ממנו לאשר את בקשתך.',
       },
     },
   },

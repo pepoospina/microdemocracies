@@ -12,12 +12,13 @@ import { AppConnect } from '../../components/app/AppConnect';
 import { ProjectSummary } from './ProjectSummary';
 import { BoxCentered } from '../../ui-components/BoxCentered';
 
-import { ViewportHeadingLarge, ViewportPage } from '../../components/app/Viewport';
-import { Bold } from '../landing/LandingPage';
+import { ViewportPage } from '../../components/app/Viewport';
 import { AppBottomButtons } from '../common/BottomButtons';
 import { useCreateProject } from './useCreateProject';
-import { AbsoluteRoutes, RouteNames } from '../../App';
+import { AbsoluteRoutes } from '../../route.names';
 import { Trans, useTranslation } from 'react-i18next';
+import { Bold } from '../../ui-components/Bold';
+import { useAppContainer } from '../../components/app/AppContainer';
 
 const NPAGES = 5;
 
@@ -25,6 +26,7 @@ export const CreateProject = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [pageIx, setPageIx] = useState(0);
+  const { setTitle } = useAppContainer();
 
   const {
     founderPap,
@@ -45,6 +47,30 @@ export const CreateProject = () => {
       navigate(AbsoluteRoutes.ProjectHome(projectId.toString()));
     }
   }, [navigate, projectId]);
+
+  useEffect(() => {
+    switch (pageIx) {
+      case 0:
+        setTitle(t('whoTitle'));
+        break;
+
+      case 1:
+        setTitle(t('toJoinMsg'));
+        break;
+
+      case 2:
+        setTitle(t('yourDetails'));
+        break;
+
+      case 3:
+        setTitle(t('connectAccount'));
+        break;
+
+      case 4:
+        setTitle(t('projectSummary'));
+        break;
+    }
+  }, [pageIx]);
 
   const boxStyle: React.CSSProperties = {
     flexGrow: '1',
@@ -109,11 +135,6 @@ export const CreateProject = () => {
 
   const pages: ReactNode[] = [
     <Box style={boxStyle} pad="large">
-      <Box style={{ marginBottom: '12px', fontSize: '10px', fontWeight: '300', flexShrink: 0 }}>
-        <AppHeading style={headingStyle} level="3">
-          {t('whoTitle')}:
-        </AppHeading>
-      </Box>
       <Box>
         <StatementEditable
           onChanged={(value) => {
@@ -128,27 +149,17 @@ export const CreateProject = () => {
     </Box>,
 
     <Box style={boxStyle} pad="large">
-      <AppHeading style={headingStyle} level="3">
-        {t('toJoinMsg')}:
-      </AppHeading>
       <DetailsSelector onChanged={(details) => setDetails(details)}></DetailsSelector>
     </Box>,
 
     <Box style={boxStyle}>
       <Box style={{ width: '100%', flexShrink: 0 }} pad="large">
-        <AppHeading style={headingStyle} level="3">
-          {t('yourDetails')}:
-        </AppHeading>
-
         <DetailsForm selected={selectedDetails} onChange={(details) => setFounderDetails(details)}></DetailsForm>
       </Box>
     </Box>,
 
     <Box style={boxStyle}>
       <Box style={{ width: '100%', flexShrink: 0 }} pad="large">
-        <AppHeading style={headingStyle} level="3">
-          {t('connectAccount')}:
-        </AppHeading>
         <Box pad="large" style={{ flexShrink: 0 }}>
           <AppConnect></AppConnect>
         </Box>
@@ -165,45 +176,45 @@ export const CreateProject = () => {
   ];
 
   return (
-    <ViewportPage>
-      <ViewportHeadingLarge label={t('startProject')}></ViewportHeadingLarge>
+    <ViewportPage
+      content={
+        <Box style={{ flexGrow: '1' }} justify="center">
+          {pageIx === 0 ? (
+            <Box pad={{ horizontal: 'large' }} style={{ flexShrink: 0 }}>
+              <AppCard>
+                <Text>
+                  <Trans i18nKey={'tryoutMsg'} components={{ Bold: <Bold></Bold> }}></Trans>
+                </Text>
+              </AppCard>
+            </Box>
+          ) : (
+            <></>
+          )}
 
-      <Box style={{ flexGrow: '1' }} justify="center">
-        {pageIx === 0 ? (
-          <Box pad={{ horizontal: 'large' }} style={{ flexShrink: 0 }}>
-            <AppCard>
-              <Text>
-                <Trans i18nKey={'tryoutMsg'} components={{ Bold: <Bold></Bold> }}></Trans>
-              </Text>
-            </AppCard>
-          </Box>
-        ) : (
-          <></>
-        )}
-
-        {pages.map((page, ix) => {
-          return (
-            <div key={ix} style={{ width: '100%', display: pageIx === ix ? 'block' : 'none' }}>
-              {page}
-            </div>
-          );
-        })}
-      </Box>
-
-      <AppBottomButtons
-        popUp={isError ? error?.message : undefined}
-        left={{
-          action: () => prevPage(),
-          icon: <FormPrevious></FormPrevious>,
-          label: prevStr,
-        }}
-        right={{
-          action: () => nextPage(),
-          icon: <FormNext></FormNext>,
-          label: nextStr,
-          disabled: nextDisabled,
-          primary: nextPrimary,
-        }}></AppBottomButtons>
-    </ViewportPage>
+          {pages.map((page, ix) => {
+            return (
+              <div key={ix} style={{ width: '100%', display: pageIx === ix ? 'block' : 'none' }}>
+                {page}
+              </div>
+            );
+          })}
+        </Box>
+      }
+      nav={
+        <AppBottomButtons
+          popUp={isError ? error?.message : undefined}
+          left={{
+            action: () => prevPage(),
+            icon: <FormPrevious></FormPrevious>,
+            label: prevStr,
+          }}
+          right={{
+            action: () => nextPage(),
+            icon: <FormNext></FormNext>,
+            label: nextStr,
+            disabled: nextDisabled,
+            primary: nextPrimary,
+          }}></AppBottomButtons>
+      }></ViewportPage>
   );
 };

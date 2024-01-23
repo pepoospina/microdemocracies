@@ -1,8 +1,8 @@
 import { Box, Text } from 'grommet';
 import { AppProject } from '../../types';
 import { StatementEditable } from '../voice/StatementEditable';
-import { Bold } from '../landing/LandingPage';
 import { Trans } from 'react-i18next';
+import { Bold } from '../../ui-components/Bold';
 
 export const ProjectCard = (props: { project: AppProject; containerStyle?: React.CSSProperties }) => {
   return (

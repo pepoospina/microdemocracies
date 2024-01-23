@@ -1,7 +1,7 @@
 import { Box, Anchor, Text } from 'grommet';
 import { useEffect, useState } from 'react';
 
-import { AbsoluteRoutes, RouteNames } from '../../App';
+import { AbsoluteRoutes } from '../../route.names';
 import { AppConnectButton } from '../../components/app/AppConnectButton';
 import { useConnectedMember } from '../../contexts/ConnectedAccountContext';
 import { useProjectContext } from '../../contexts/ProjectContext';

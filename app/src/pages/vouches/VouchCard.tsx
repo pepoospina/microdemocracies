@@ -3,7 +3,7 @@ import { AppVouch } from '../../types';
 import { AppButton, AppCard } from '../../ui-components';
 import { useNavigate, useParams } from 'react-router-dom';
 import { DateManager } from '../../utils/date.manager';
-import { AbsoluteRoutes } from '../../App';
+import { AbsoluteRoutes } from '../../route.names';
 import { useTranslation } from 'react-i18next';
 import { MemberAnchor } from './MemberAnchor';
 

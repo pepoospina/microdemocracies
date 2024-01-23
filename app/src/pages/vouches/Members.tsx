@@ -17,32 +17,34 @@ export const Members = (): JSX.Element => {
   const navigate = useNavigate();
 
   return (
-    <ViewportPage>
-      <ViewportHeadingLarge label={cap(t('members'))}></ViewportHeadingLarge>
-      <Box pad="large">
-        <AppButton
-          margin={{ bottom: 'medium' }}
-          primary
-          icon={<Add />}
-          label={t('invite')}
-          onClick={() => navigate('../invite')}></AppButton>
+    <ViewportPage
+      content={
+        <Box pad="large">
+          <AppButton
+            margin={{ bottom: 'medium' }}
+            primary
+            icon={<Add />}
+            label={t('invite')}
+            onClick={() => navigate('../invite')}></AppButton>
 
-        {applications?.map((application, ix) => {
-          return (
-            <Box key={ix} style={{ marginBottom: '16px' }}>
-              <ApplicationCard application={application}></ApplicationCard>
-            </Box>
-          );
-        })}
-        {allVouches?.map((vouch, ix) => {
-          return (
-            <Box key={ix} style={{ marginBottom: '16px', flexShrink: 0 }}>
-              <VoucheCard vouch={vouch}></VoucheCard>
-            </Box>
-          );
-        })}
-      </Box>
-      <AppBottomButton icon={<FormPrevious />} label={t('back')} onClick={() => navigate('..')}></AppBottomButton>
-    </ViewportPage>
+          {applications?.map((application, ix) => {
+            return (
+              <Box key={ix} style={{ marginBottom: '16px' }}>
+                <ApplicationCard application={application}></ApplicationCard>
+              </Box>
+            );
+          })}
+          {allVouches?.map((vouch, ix) => {
+            return (
+              <Box key={ix} style={{ marginBottom: '16px', flexShrink: 0 }}>
+                <VoucheCard vouch={vouch}></VoucheCard>
+              </Box>
+            );
+          })}
+        </Box>
+      }
+      nav={
+        <AppBottomButton icon={<FormPrevious />} label={t('back')} onClick={() => navigate('..')}></AppBottomButton>
+      }></ViewportPage>
   );
 };
