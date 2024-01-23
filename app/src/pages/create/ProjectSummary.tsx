@@ -15,7 +15,7 @@ export const ProjectSummary = (props: {
   const { t } = useTranslation();
 
   return (
-    <Box pad={{ horizontal: 'large' }}>
+    <Box>
       <Box style={{ width: '100%', flexShrink: 0 }}>
         {props.whoStatement ? (
           <>

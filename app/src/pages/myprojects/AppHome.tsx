@@ -59,12 +59,10 @@ export const AppHome = (props: {}) => {
   })();
 
   return (
-    <>
-      <Box fill pad={{ horizontal: 'large' }}>
-        <Box style={{ flexShrink: 0 }}>{projectsContent}</Box>
-      </Box>
-
-      <AppBottomButton onClick={() => navigate('/start')} icon={<Add></Add>} label={t('startNew')}></AppBottomButton>
-    </>
+    <ViewportPage
+      content={projectsContent}
+      nav={
+        <AppBottomButton onClick={() => navigate('/start')} icon={<Add></Add>} label={t('startNew')}></AppBottomButton>
+      }></ViewportPage>
   );
 };

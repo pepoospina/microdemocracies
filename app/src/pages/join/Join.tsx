@@ -54,19 +54,19 @@ export const Join = () => {
   useEffect(() => {
     switch (pageIx) {
       case 0:
-        setTitle(cap(t('join')));
+        setTitle(t('joinProject'));
         break;
 
       case 1:
-        setTitle(cap(t('personal')));
+        setTitle(t('personalDetails'));
         break;
 
       case 2:
-        setTitle(cap(t('review')));
+        setTitle(t('reviewApplication'));
         break;
 
       case 3:
-        setTitle(cap(t('done')));
+        setTitle(t('applicationSent'));
         break;
     }
   }, [pageIx]);

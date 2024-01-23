@@ -49,36 +49,12 @@ export const CreateProject = () => {
   }, [navigate, projectId]);
 
   useEffect(() => {
-    switch (pageIx) {
-      case 0:
-        setTitle(t('whoTitle'));
-        break;
-
-      case 1:
-        setTitle(t('toJoinMsg'));
-        break;
-
-      case 2:
-        setTitle(t('yourDetails'));
-        break;
-
-      case 3:
-        setTitle(t('connectAccount'));
-        break;
-
-      case 4:
-        setTitle(t('projectSummary'));
-        break;
-    }
-  }, [pageIx]);
+    setTitle(t('startProject'));
+  }, [setTitle, t]);
 
   const boxStyle: React.CSSProperties = {
     flexGrow: '1',
     justifyContent: 'center',
-  };
-
-  const headingStyle: React.CSSProperties = {
-    marginBottom: '4vw',
   };
 
   const nextPage = () => {
@@ -135,6 +111,16 @@ export const CreateProject = () => {
 
   const pages: ReactNode[] = [
     <Box style={boxStyle} pad="large">
+      <Box pad={{ vertical: 'large' }} style={{ flexShrink: 0 }}>
+        <AppCard>
+          <Text>
+            <Trans i18nKey={'tryoutMsg'} components={{ Bold: <Bold></Bold> }}></Trans>
+          </Text>
+        </AppCard>
+      </Box>
+      <AppHeading level="3" style={{ marginBottom: '24px' }}>
+        {t('whoTitle')}
+      </AppHeading>
       <Box>
         <StatementEditable
           onChanged={(value) => {
@@ -149,24 +135,30 @@ export const CreateProject = () => {
     </Box>,
 
     <Box style={boxStyle} pad="large">
+      <AppHeading level="3" style={{ marginBottom: '18px' }}>
+        {t('toJoinMsg')}
+      </AppHeading>
       <DetailsSelector onChanged={(details) => setDetails(details)}></DetailsSelector>
     </Box>,
 
-    <Box style={boxStyle}>
-      <Box style={{ width: '100%', flexShrink: 0 }} pad="large">
-        <DetailsForm selected={selectedDetails} onChange={(details) => setFounderDetails(details)}></DetailsForm>
-      </Box>
+    <Box style={boxStyle} pad="large">
+      <AppHeading level="3" style={{ marginBottom: '18px' }}>
+        {t('yourDetails')}
+      </AppHeading>
+      <DetailsForm selected={selectedDetails} onChange={(details) => setFounderDetails(details)}></DetailsForm>
     </Box>,
 
-    <Box style={boxStyle}>
-      <Box style={{ width: '100%', flexShrink: 0 }} pad="large">
-        <Box pad="large" style={{ flexShrink: 0 }}>
-          <AppConnect></AppConnect>
-        </Box>
-      </Box>
+    <Box style={boxStyle} pad="large">
+      <AppHeading level="3" style={{ marginBottom: '18px' }}>
+        {t('connectAccount')}
+      </AppHeading>
+      <AppConnect></AppConnect>
     </Box>,
 
-    <Box style={boxStyle}>
+    <Box style={boxStyle} pad="large">
+      <AppHeading level="3" style={{ marginBottom: '18px' }}>
+        {t('projectSummary')}
+      </AppHeading>
       <ProjectSummary
         selectedDetails={selectedDetails}
         whatStatement={''}
@@ -179,18 +171,6 @@ export const CreateProject = () => {
     <ViewportPage
       content={
         <Box style={{ flexGrow: '1' }} justify="center">
-          {pageIx === 0 ? (
-            <Box pad={{ horizontal: 'large' }} style={{ flexShrink: 0 }}>
-              <AppCard>
-                <Text>
-                  <Trans i18nKey={'tryoutMsg'} components={{ Bold: <Bold></Bold> }}></Trans>
-                </Text>
-              </AppCard>
-            </Box>
-          ) : (
-            <></>
-          )}
-
           {pages.map((page, ix) => {
             return (
               <div key={ix} style={{ width: '100%', display: pageIx === ix ? 'block' : 'none' }}>
