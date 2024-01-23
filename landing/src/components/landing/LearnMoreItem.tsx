@@ -1,6 +1,6 @@
 import { Box, Text } from 'grommet';
 import { BoxCentered } from '../../@app/ui-components/BoxCentered';
-import { useResponsive } from '../../@app/components/app';
+import { useResponsive } from '../../@app/components/app/ResponsiveApp';
 
 export const LearnMoreItem = (props: {
   mainText: React.ReactNode;

@@ -1,5 +1,11 @@
-import { ButtonExtendedProps, Button, DropButton, DropButtonExtendedProps } from 'grommet';
-import { useResponsive, useThemeContext } from '../components/app';
+import {
+  ButtonExtendedProps,
+  Button,
+  DropButton,
+  DropButtonExtendedProps,
+} from 'grommet';
+import { useResponsive } from '../components/app/ResponsiveApp';
+import { useThemeContext } from '../components/app/ThemedApp';
 
 export interface IButton extends ButtonExtendedProps {}
 
@@ -15,7 +21,10 @@ const circleButtonStyle: React.CSSProperties = {
 export const AppButton = (props: IButton): JSX.Element => {
   return (
     <>
-      <Button {...props} style={{ textTransform: 'uppercase', ...props.style }} />
+      <Button
+        {...props}
+        style={{ textTransform: 'uppercase', ...props.style }}
+      />
     </>
   );
 };
@@ -24,22 +33,43 @@ export const AppCircleButton = (props: IButton) => {
   const { constants } = useThemeContext();
   circleButtonStyle.borderColor = constants.colors.primary;
 
-  return <AppButton {...props} plain label="" style={{ ...props.style, ...circleButtonStyle }}></AppButton>;
+  return (
+    <AppButton
+      {...props}
+      plain
+      label=""
+      style={{ ...props.style, ...circleButtonStyle }}></AppButton>
+  );
 };
 
 export const AppButtonResponsive = (props: IButton) => {
   const { mobile } = useResponsive();
-  return mobile ? <AppCircleButton {...props}></AppCircleButton> : <AppButton {...props}></AppButton>;
+  return mobile ? (
+    <AppCircleButton {...props}></AppCircleButton>
+  ) : (
+    <AppButton {...props}></AppButton>
+  );
 };
 
 export const AppCircleDropButton = (props: DropButtonExtendedProps) => {
   const { constants } = useThemeContext();
   circleButtonStyle.borderColor = constants.colors.primary;
 
-  return <DropButton {...props} plain style={{ ...props.style, ...circleButtonStyle }}></DropButton>;
+  return (
+    <DropButton
+      {...props}
+      plain
+      style={{ ...props.style, ...circleButtonStyle }}></DropButton>
+  );
 };
 
-export const AppCircleDropButtonResponsive = (props: DropButtonExtendedProps) => {
+export const AppCircleDropButtonResponsive = (
+  props: DropButtonExtendedProps
+) => {
   const { mobile } = useResponsive();
-  return !mobile ? <DropButton {...props}></DropButton> : <AppCircleDropButton {...props}></AppCircleDropButton>;
+  return !mobile ? (
+    <DropButton {...props}></DropButton>
+  ) : (
+    <AppCircleDropButton {...props}></AppCircleDropButton>
+  );
 };

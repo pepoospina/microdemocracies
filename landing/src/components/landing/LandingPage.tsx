@@ -3,14 +3,15 @@ import { Box, Text } from 'grommet';
 import { FormNext, FormPrevious } from 'grommet-icons';
 import { Trans, useTranslation } from 'react-i18next';
 
-import { AppButton } from '../../@app/ui-components/AppButton';
-import { AppCarousel } from '../../@app/ui-components/AppCarousel';
-import { useResponsive } from '../../@app/components/app';
-import { LanguageSelector } from '../../@app/pages/account/LanguageSelector';
 import { RouteNames } from '../../@app/route.names';
 
-import { LearnMoreItem } from './LearnMoreItem';
+import { AppButton } from '../../@app/ui-components/AppButton';
+import { AppCarousel } from '../../@app/ui-components/AppCarousel';
+import { useResponsive } from '../../@app/components/app/ResponsiveApp';
+import { LanguageSelector } from '../../@app/pages/account/LanguageSelector';
+
 import { APP_ORIGIN } from '../../config';
+import { LearnMoreItem } from './LearnMoreItem';
 
 export const Bold = (props: React.PropsWithChildren) => {
   return <span style={{ fontWeight: '400' }}>{props.children}</span>;

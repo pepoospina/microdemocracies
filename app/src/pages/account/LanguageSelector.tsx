@@ -1,7 +1,11 @@
 import { Box, Image } from 'grommet';
-import { AppButton, AppCircleDropButtonResponsive } from '../../ui-components';
-import { useResponsive } from '../../components/app';
 import { useState } from 'react';
+
+import {
+  AppButton,
+  AppCircleDropButtonResponsive,
+} from '../../ui-components/AppButton';
+import { useResponsive } from '../../components/app/ResponsiveApp';
 import { Language, useAppLanguage } from '../../components/app/AppLanguage';
 
 const LanguageValue = (key: Language, hideIfMobile: boolean = false) => {
@@ -12,7 +16,11 @@ const LanguageValue = (key: Language, hideIfMobile: boolean = false) => {
   })();
 
   return (
-    <Box direction="row" align="center" gap={!mobile ? 'small' : '0px'} justify="center">
+    <Box
+      direction="row"
+      align="center"
+      gap={!mobile ? 'small' : '0px'}
+      justify="center">
       <Box>{mobile && hideIfMobile ? '' : `(${key})`}</Box>
       <Box>{flag}</Box>
     </Box>
@@ -51,6 +59,8 @@ export const LanguageSelector = (props: {}) => {
           })}
         </Box>
       }
-      dropProps={{ style: { width: `${width + 40}px`, marginTop: '60px' } }}></AppCircleDropButtonResponsive>
+      dropProps={{
+        style: { width: `${width + 40}px`, marginTop: '60px' },
+      }}></AppCircleDropButtonResponsive>
   );
 };
