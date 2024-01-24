@@ -8,7 +8,7 @@ import { ViewportPage } from '../../components/app/Viewport';
 import { Loading } from '../common/Loading';
 import { ProjectCard } from './ProjectCard';
 import { useVoiceRead } from '../../contexts/VoiceReadContext';
-import { RouteNames } from '../../route.names';
+import { AbsoluteRoutes, RouteNames } from '../../route.names';
 import { useResponsive } from '../../components/app';
 import { AppBottomButtons } from '../common/BottomButtons';
 import { BoxCentered } from '../../ui-components/BoxCentered';
@@ -16,18 +16,25 @@ import { useConnectedMember } from '../../contexts/ConnectedAccountContext';
 import { StatementCard } from '../voice/StatementCard';
 import { useTranslation } from 'react-i18next';
 import { cap } from '../../utils/general';
+import { useEffect } from 'react';
+import { useAppContainer } from '../../components/app/AppContainer';
 
 export interface IProjectHome {
   dum?: any;
 }
 
-export const ProjectHome = (props: IProjectHome) => {
+export const ProjectHomePage = (props: IProjectHome) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { project, nMembers } = useProjectContext();
   const { tokenId } = useConnectedMember();
   const { statements } = useVoiceRead();
   const { mobile } = useResponsive();
+  const { setTitle } = useAppContainer();
+
+  useEffect(() => {
+    setTitle({ prefix: '', main: t('project') });
+  }, []);
 
   const newStr = mobile ? cap(t('propose')) : cap(t('proposeNew'));
   const membersStr = mobile ? cap(t('members')) : t('seeInviteMembers');
@@ -116,7 +123,7 @@ export const ProjectHome = (props: IProjectHome) => {
       nav={
         <AppBottomButtons
           left={{
-            action: () => navigate(RouteNames.AppHome),
+            action: () => navigate(AbsoluteRoutes.Projects),
             label: t('back'),
             icon: <FormPrevious />,
           }}

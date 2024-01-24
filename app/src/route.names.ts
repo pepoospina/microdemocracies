@@ -1,6 +1,5 @@
 export const RouteNames = {
   AppHome: '',
-  App: `app`,
   Start: 'start',
   ProjectHome: 'p',
   Join: `join`,
@@ -16,8 +15,8 @@ export const RouteNames = {
 
 export const AbsoluteRoutes = {
   App: '/',
-  Projects: `/${RouteNames.App}/${RouteNames.AppHome}`,
-  ProjectHome: (projectId: string) => `/${RouteNames.App}/${RouteNames.ProjectHome}/${projectId}`,
+  Projects: `/${RouteNames.AppHome}`,
+  ProjectHome: (projectId: string) => `/${RouteNames.ProjectHome}/${projectId}`,
   ProjectMember: (projectId: string, tokenId: string) =>
-    `/${RouteNames.App}/${RouteNames.ProjectHome}/${projectId}/${RouteNames.Member}/member/${tokenId}`,
+    `/${RouteNames.ProjectHome}/${projectId}/${RouteNames.Member}/member/${tokenId}`,
 };

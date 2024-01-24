@@ -17,12 +17,11 @@ import { IElement, useResponsive, useThemeContext } from '.';
 export const MAX_WIDTH_LANDING = 1600;
 
 export const ViewportContainer = (props: IElement) => {
-  const height = '100vh';
   return (
     <Box
       id="viewport-container"
       style={{
-        height,
+        height: '100vh',
         width: '100vw',
         overflow: 'hidden',
         maxWidth: `${MAX_WIDTH_LANDING}px`,

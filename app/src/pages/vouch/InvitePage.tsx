@@ -1,7 +1,7 @@
 import { Box, Text } from 'grommet';
 import { Camera, FormPrevious, Send, Square, StatusGood } from 'grommet-icons';
 import { QrScanner } from '@yudiel/react-qr-scanner';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
@@ -11,11 +11,12 @@ import { useProjectContext } from '../../contexts/ProjectContext';
 import { useAccountContext } from '../../wallet/AccountContext';
 import { AppQRCode } from '../../components/AppQRCode';
 import { AppConnect } from '../../components/app/AppConnect';
-import { ViewportHeadingLarge, ViewportPage } from '../../components/app/Viewport';
+import { ViewportPage } from '../../components/app/Viewport';
 import { AppBottomButton } from '../common/BottomButtons';
 import { StatementEditable } from '../voice/StatementEditable';
 import { ApplicationCard } from '../vouches/ApplicationCard';
 import { useCopyToClipboard } from '../../utils/copy.clipboard';
+import { useAppContainer } from '../../components/app/AppContainer';
 
 export const InvitePage = (): JSX.Element => {
   const { t } = useTranslation();
@@ -24,6 +25,12 @@ export const InvitePage = (): JSX.Element => {
   const { copy, copied } = useCopyToClipboard();
 
   const navigate = useNavigate();
+
+  const { setTitle } = useAppContainer();
+
+  useEffect(() => {
+    setTitle({ prefix: 'Invite new', main: 'members' });
+  }, []);
 
   const [showLink, setShowLink] = useState<boolean>(false);
   const [scan, setScan] = useState<boolean>(false);

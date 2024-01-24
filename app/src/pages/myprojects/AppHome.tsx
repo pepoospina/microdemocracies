@@ -21,7 +21,7 @@ export const AppHome = (props: {}) => {
   const { t } = useTranslation();
 
   useEffect(() => {
-    setTitle(t('yourProjects'));
+    setTitle({ prefix: t('your'), main: t('appName') });
   }, []);
 
   const projectClicked = (projectId: number) => {
@@ -38,10 +38,10 @@ export const AppHome = (props: {}) => {
         </AppCard>
       );
     return (
-      <Box>
+      <Box pad={{ horizontal: 'medium' }}>
         {projects.map((project, ix) => {
           return (
-            <Box key={ix} style={{ position: 'relative', marginBottom: '16px', flexShrink: 0 }}>
+            <Box key={ix} margin={{ top: 'medium' }} style={{ position: 'relative', flexShrink: 0 }}>
               <ProjectCard project={project}></ProjectCard>
               <Button
                 onClick={() => projectClicked(project.projectId)}

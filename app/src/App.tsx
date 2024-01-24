@@ -9,7 +9,6 @@ import { ResponsiveApp, ThemedApp } from './components/app';
 import { chain } from './wallet/config';
 import { WagmiConfig, configureChains, createConfig } from 'wagmi';
 import { ALCHEMY_KEY } from './config/appConfig';
-import { ViewportContainer } from './components/app/Viewport';
 import { SignerContext } from './wallet/SignerContext';
 import { AccountContext } from './wallet/AccountContext';
 import { SemaphoreContext } from './contexts/SemaphoreContext';
@@ -44,9 +43,7 @@ function App() {
                     <ThemedApp>
                       <ResponsiveApp>
                         <BrowserRouter>
-                          <ViewportContainer>
-                            <AppContainer></AppContainer>
-                          </ViewportContainer>
+                          <AppContainer></AppContainer>
                         </BrowserRouter>
                       </ResponsiveApp>
                     </ThemedApp>

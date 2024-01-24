@@ -23,13 +23,12 @@ import { Loading } from '../common/Loading';
 import { ViewportPage } from '../../components/app/Viewport';
 import { useAppContainer } from '../../components/app/AppContainer';
 import { useTranslation } from 'react-i18next';
-import { cap } from '../../utils/general';
 
 export interface IJoinProps {
   dum?: any;
 }
 
-export const Join = () => {
+export const JoinPage = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
 
@@ -54,19 +53,19 @@ export const Join = () => {
   useEffect(() => {
     switch (pageIx) {
       case 0:
-        setTitle(t('joinProject'));
+        setTitle({ prefix: t('joinA'), main: t('project') });
         break;
 
       case 1:
-        setTitle(t('personalDetails'));
+        setTitle({ prefix: t('personalDetailsPre'), main: t('personalDetailsMain') });
         break;
 
       case 2:
-        setTitle(t('reviewApplication'));
+        setTitle({ prefix: t('reviewApplicationPre'), main: t('reviewApplicationMain') });
         break;
 
       case 3:
-        setTitle(t('applicationSent'));
+        setTitle({ prefix: t('applicationSentPre'), main: t('applicationSentMain') });
         break;
     }
   }, [pageIx]);

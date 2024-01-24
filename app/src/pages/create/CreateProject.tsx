@@ -49,7 +49,7 @@ export const CreateProject = () => {
   }, [navigate, projectId]);
 
   useEffect(() => {
-    setTitle(t('startProject'));
+    setTitle({ prefix: t('startA'), main: t('project') });
   }, [setTitle, t]);
 
   const boxStyle: React.CSSProperties = {

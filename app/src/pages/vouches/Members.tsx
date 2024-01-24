@@ -6,15 +6,21 @@ import { VoucheCard } from './VouchCard';
 import { AppBottomButton } from '../common/BottomButtons';
 import { useProjectContext } from '../../contexts/ProjectContext';
 import { ApplicationCard } from './ApplicationCard';
-import { ViewportHeadingLarge, ViewportPage } from '../../components/app/Viewport';
-import { cap } from '../../utils/general';
+import { ViewportPage } from '../../components/app/Viewport';
 import { useTranslation } from 'react-i18next';
 import { AppButton } from '../../ui-components';
+import { useEffect } from 'react';
+import { useAppContainer } from '../../components/app/AppContainer';
 
-export const Members = (): JSX.Element => {
+export const MembersPage = (): JSX.Element => {
   const { t } = useTranslation();
   const { allVouches, applications } = useProjectContext();
   const navigate = useNavigate();
+  const { setTitle } = useAppContainer();
+
+  useEffect(() => {
+    setTitle({ prefix: 'List of', main: 'members' });
+  }, []);
 
   return (
     <ViewportPage

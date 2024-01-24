@@ -10,11 +10,17 @@ import { AppBottomButton } from '../common/BottomButtons';
 import { ViewportPage } from '../../components/app/Viewport';
 import { VouchMemberWidget } from './VouchMemberWidget';
 import { useTranslation } from 'react-i18next';
+import { useAppContainer } from '../../components/app/AppContainer';
 
-export const InviteAccount = () => {
+export const InviteAccountPage = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { hash } = useParams();
+  const { setTitle } = useAppContainer();
+
+  useEffect(() => {
+    setTitle({ prefix: 'Approve new', main: 'member' });
+  }, []);
 
   /** convert hash into pap and send to VouchWidget */
   const [pap, setPap] = useState<Entity<PAP>>();
