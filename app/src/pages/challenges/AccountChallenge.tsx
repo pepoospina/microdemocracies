@@ -198,7 +198,7 @@ export const AccountChallenge = (props: IAccountChallenge) => {
 
   /** already read the account and the account challenge data */
   return (
-    <AppCard style={{ ...props.cardStyle, flexShrink: 0 }}>
+    <Box style={{ ...props.cardStyle, flexShrink: 0 }}>
       {challenged ? (
         <>
           {status}
@@ -208,7 +208,7 @@ export const AccountChallenge = (props: IAccountChallenge) => {
         <Box>
           <Text>Account not currently challenged</Text>
           {error ? (
-            <AppCard style={{ marginBottom: '16px' }}>
+            <AppCard style={{ marginBottom: '16px', overflow: 'hidden' }}>
               <Text>{error}</Text>
             </AppCard>
           ) : (
@@ -224,11 +224,11 @@ export const AccountChallenge = (props: IAccountChallenge) => {
                 <AppButton label="challenge" onClick={() => challenge()}></AppButton>
               )
             ) : (
-              <Text>Cant challenge</Text>
+              <Text>Can't challenge</Text>
             )}
           </Box>
         </Box>
       )}
-    </AppCard>
+    </Box>
   );
 };

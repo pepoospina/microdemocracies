@@ -18,5 +18,5 @@ export const AbsoluteRoutes = {
   Projects: `/${RouteNames.AppHome}`,
   ProjectHome: (projectId: string) => `/${RouteNames.ProjectHome}/${projectId}`,
   ProjectMember: (projectId: string, tokenId: string) =>
-    `/${RouteNames.ProjectHome}/${projectId}/${RouteNames.Member}/member/${tokenId}`,
+    `/${RouteNames.ProjectHome}/${projectId}/${RouteNames.Member}/${tokenId}`,
 };

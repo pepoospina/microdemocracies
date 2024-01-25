@@ -21,7 +21,7 @@ export const AccountPage = () => {
   const { setTitle } = useAppContainer();
 
   useEffect(() => {
-    setTitle({ prefix: t('appNameSingle'), main: cap(t('member')) });
+    setTitle({ prefix: t('project'), main: cap(t('member')) });
   }, [i18n.language]);
 
   if (!tokenId) {
