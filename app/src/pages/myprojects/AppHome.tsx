@@ -11,9 +11,10 @@ import { AppBottomButton } from '../common/BottomButtons';
 import { useTranslation } from 'react-i18next';
 import { useAppContainer } from '../../components/app/AppContainer';
 import { useEffect } from 'react';
+import { AppConnectButton } from '../../components/app/AppConnectButton';
 
 export const AppHome = (props: {}) => {
-  const { isConnected } = useAccountContext();
+  const { isConnected, aaAddress } = useAccountContext();
   const { setTitle } = useAppContainer();
 
   const { projects } = useAccountDataContext();
@@ -29,7 +30,18 @@ export const AppHome = (props: {}) => {
   };
 
   const projectsContent = (() => {
-    if (!isConnected) return <></>;
+    if (!isConnected)
+      return (
+        <Box pad="large">
+          <AppCard margin={{ bottom: 'large' }}>
+            <Text>Please sign in to see your microdemocracies</Text>
+          </AppCard>
+          <AppConnectButton></AppConnectButton>
+        </Box>
+      );
+    if (!aaAddress) {
+      return <Loading></Loading>;
+    }
     if (projects === undefined) return <Loading label={t('loadingProjects')}></Loading>;
     if (projects.length === 0)
       return (
