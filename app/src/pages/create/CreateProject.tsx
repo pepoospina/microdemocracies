@@ -8,7 +8,7 @@ import { AppCard, AppHeading } from '../../ui-components';
 import { DetailsSelector } from './DetailsSelector';
 import { DetailsForm } from '../join/DetailsForm';
 
-import { AppConnectButton } from '../../components/app/AppConnectButton';
+import { AppConnectButton, AppConnectWidget } from '../../components/app/AppConnectButton';
 import { ProjectSummary } from './ProjectSummary';
 import { BoxCentered } from '../../ui-components/BoxCentered';
 
@@ -19,6 +19,8 @@ import { AbsoluteRoutes } from '../../route.names';
 import { Trans, useTranslation } from 'react-i18next';
 import { Bold } from '../../ui-components/Bold';
 import { useAppContainer } from '../../components/app/AppContainer';
+import { useAccountContext } from '../../wallet/AccountContext';
+import { Loading } from '../common/Loading';
 
 const NPAGES = 5;
 
@@ -27,6 +29,7 @@ export const CreateProject = () => {
   const navigate = useNavigate();
   const [pageIx, setPageIx] = useState(0);
   const { setTitle } = useAppContainer();
+  const { aaAddress } = useAccountContext();
 
   const {
     founderPap,
@@ -59,7 +62,11 @@ export const CreateProject = () => {
 
   const nextPage = () => {
     if (pageIx < NPAGES - 1) {
-      setPageIx(pageIx + 1);
+      if (pageIx === 2 && aaAddress) {
+        setPageIx(pageIx + 2);
+      } else {
+        setPageIx(pageIx + 1);
+      }
     }
 
     if (pageIx === NPAGES - 1) {
@@ -72,7 +79,11 @@ export const CreateProject = () => {
       navigate(-1);
     }
     if (pageIx > 0) {
-      setPageIx(pageIx - 1);
+      if (pageIx === 4 && aaAddress) {
+        setPageIx(pageIx - 2);
+      } else {
+        setPageIx(pageIx - 1);
+      }
     }
   };
 
@@ -83,7 +94,13 @@ export const CreateProject = () => {
 
   const nextStr = (() => {
     if (pageIx === 1) return t('next');
-    if (pageIx === 2) return t('next');
+    if (pageIx === 2) {
+      if (aaAddress) {
+        return t('review');
+      } else {
+        return t('next');
+      }
+    }
     if (pageIx === 3) return t('review');
     if (pageIx === 4) return t('create');
     return t('next');
@@ -95,6 +112,7 @@ export const CreateProject = () => {
   })();
 
   const nextDisabled = (() => {
+    if (pageIx === 2 && aaAddress && !founderPap) return true;
     if (pageIx === 3 && !founderPap) return true;
     if (pageIx === 4 && !whoStatement) return true;
     return false;
@@ -148,11 +166,8 @@ export const CreateProject = () => {
       <DetailsForm selected={selectedDetails} onChange={(details) => setFounderDetails(details)}></DetailsForm>
     </Box>,
 
-    <Box style={boxStyle} pad="large">
-      <AppHeading level="3" style={{ marginBottom: '18px' }}>
-        {t('connectAccount')}
-      </AppHeading>
-      <AppConnectButton></AppConnectButton>
+    <Box style={{ ...boxStyle, paddingTop: '80px' }} pad="large" align="center">
+      <AppConnectWidget></AppConnectWidget>
     </Box>,
 
     <Box style={boxStyle} pad="large">

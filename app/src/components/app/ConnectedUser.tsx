@@ -21,7 +21,7 @@ export const ConnectedUser = (props: {}) => {
   const { isCreatingPublicId, disconnect } = useSemaphoreContext();
   const { constants } = useThemeContext();
 
-  const [showDrop, setShowDrop] = useState<boolean>();
+  const [showDrop, setShowDrop] = useState<boolean>(false);
 
   const content = (() => {
     if (!isConnected) {

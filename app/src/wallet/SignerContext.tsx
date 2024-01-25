@@ -51,6 +51,8 @@ export const SignerContext = (props: PropsWithChildren) => {
   useEffect(() => {
     if (signer && signer) {
       signer.getAddress().then((adr) => setAddress(adr));
+    } else {
+      setAddress(undefined);
     }
   }, [signer]);
 
