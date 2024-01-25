@@ -5,7 +5,7 @@ import { isAddress } from 'ethers/lib/utils';
 import React from 'react';
 
 import { AppCard, AppHeading } from '../../ui-components';
-import { AppConnect } from '../../components/app/AppConnect';
+import { AppConnectButton } from '../../components/app/AppConnectButton';
 import { useAccountContext } from '../../wallet/AccountContext';
 import { useProjectContext } from '../../contexts/ProjectContext';
 import { StatementEditable } from '../voice/StatementEditable';
@@ -30,7 +30,7 @@ export interface IJoinProps {
 
 export const JoinPage = () => {
   const navigate = useNavigate();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const { project, projectId } = useProjectContext();
   const [pageIx, setPageIx] = useState<number>(0);
@@ -68,7 +68,7 @@ export const JoinPage = () => {
         setTitle({ prefix: t('applicationSentPre'), main: t('applicationSentMain') });
         break;
     }
-  }, [pageIx]);
+  }, [pageIx, i18n.language]);
 
   const review = async () => {
     if (account === undefined || !isAddress(account)) {
@@ -141,7 +141,7 @@ export const JoinPage = () => {
             <AppHeading level="3" style={{ marginBottom: '16px' }}>
               Select the account
             </AppHeading>
-            <AppConnect></AppConnect>
+            <AppConnectButton></AppConnectButton>
           </Box>
         </Box>
       }

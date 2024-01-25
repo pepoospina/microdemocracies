@@ -1,33 +1,19 @@
-import { AppButton, AppModal, IButton } from '../../ui-components';
-import { Box } from 'grommet';
-import { useState } from 'react';
-import { AppConnect } from './AppConnect';
+import { BoxExtendedProps } from 'grommet';
+import { AppButton } from '../../ui-components';
 import { useAppSigner } from '../../wallet/SignerContext';
 import { useTranslation } from 'react-i18next';
 
-export const AppConnectButton = (props: IButton) => {
+export const AppConnectButton = (props: { label?: string } & BoxExtendedProps) => {
   const { t } = useTranslation();
-  const [showModal, setShowModal] = useState<boolean>();
-
-  const { hasInjected, connectInjected } = useAppSigner();
+  const { hasInjected, connectInjected, connectMagic } = useAppSigner();
 
   const connect = () => {
     if (hasInjected) {
       connectInjected();
     } else {
-      setShowModal(true);
+      connectMagic();
     }
   };
 
-  return (
-    <Box>
-      {showModal ? (
-        <AppModal heading={t('connect')} onClosed={() => setShowModal(false)}>
-          <AppConnect></AppConnect>
-        </AppModal>
-      ) : (
-        <AppButton label={t('connect')} onClick={() => connect()} style={{ ...props.style }}></AppButton>
-      )}
-    </Box>
-  );
+  return <AppButton style={{ ...props.style }} onClick={() => connect()} label={t('connectWalletBtn')}></AppButton>;
 };

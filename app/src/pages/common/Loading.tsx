@@ -7,7 +7,7 @@ export const Loading = (props: { label?: string }) => {
   return (
     <Box align="center">
       <Box>
-        <Text>{props.label || cap(t('loading'))}</Text>
+        <Text>{props.label === undefined ? '' : cap(t('loading'))}</Text>
       </Box>
       <Box style={{ margin: '16px 0px' }} align="center" justify="center">
         <Spinner></Spinner>

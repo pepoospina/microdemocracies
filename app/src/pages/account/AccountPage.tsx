@@ -14,7 +14,7 @@ import { useEffect } from 'react';
 import { useAppContainer } from '../../components/app/AppContainer';
 
 export const AccountPage = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { tokenId } = useParams();
   const navigate = useNavigate();
   const { account: accountRead, accountPap: accountPapRead } = useMember({ tokenId: tokenId ? +tokenId : undefined });
@@ -22,7 +22,7 @@ export const AccountPage = () => {
 
   useEffect(() => {
     setTitle({ prefix: t('appNameSingle'), main: cap(t('member')) });
-  }, []);
+  }, [i18n.language]);
 
   if (!tokenId) {
     throw new Error('tokenId undefined');

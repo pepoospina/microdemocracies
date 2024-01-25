@@ -1,5 +1,5 @@
 import { Box, Button, Text } from 'grommet';
-import { AppCard, AppHeading } from '../../ui-components';
+import { AppCard } from '../../ui-components';
 import { ViewportPage } from '../../components/app/Viewport';
 import { Add } from 'grommet-icons';
 import { useAccountContext } from '../../wallet/AccountContext';
@@ -18,11 +18,11 @@ export const AppHome = (props: {}) => {
 
   const { projects } = useAccountDataContext();
   const navigate = useNavigate();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   useEffect(() => {
     setTitle({ prefix: t('your'), main: t('appName') });
-  }, []);
+  }, [i18n.language]);
 
   const projectClicked = (projectId: number) => {
     navigate(`/p/${projectId}`);

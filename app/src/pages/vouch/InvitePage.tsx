@@ -10,16 +10,17 @@ import { RouteNames } from '../../route.names';
 import { useProjectContext } from '../../contexts/ProjectContext';
 import { useAccountContext } from '../../wallet/AccountContext';
 import { AppQRCode } from '../../components/AppQRCode';
-import { AppConnect } from '../../components/app/AppConnect';
+import { AppConnectButton } from '../../components/app/AppConnectButton';
 import { ViewportPage } from '../../components/app/Viewport';
 import { AppBottomButton } from '../common/BottomButtons';
 import { StatementEditable } from '../voice/StatementEditable';
 import { ApplicationCard } from '../vouches/ApplicationCard';
 import { useCopyToClipboard } from '../../utils/copy.clipboard';
 import { useAppContainer } from '../../components/app/AppContainer';
+import { cap } from '../../utils/general';
 
 export const InvitePage = (): JSX.Element => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { project, projectId, inviteId, resetLink, applications, resettingLink } = useProjectContext();
   const { aaAddress } = useAccountContext();
   const { copy, copied } = useCopyToClipboard();
@@ -29,8 +30,8 @@ export const InvitePage = (): JSX.Element => {
   const { setTitle } = useAppContainer();
 
   useEffect(() => {
-    setTitle({ prefix: 'Invite new', main: 'members' });
-  }, []);
+    setTitle({ prefix: cap(t('inviteNew')), main: t('members') });
+  }, [i18n.language]);
 
   const [showLink, setShowLink] = useState<boolean>(false);
   const [scan, setScan] = useState<boolean>(false);
@@ -53,7 +54,7 @@ export const InvitePage = (): JSX.Element => {
   };
 
   const content = (() => {
-    if (aaAddress === undefined) return <AppConnect></AppConnect>;
+    if (aaAddress === undefined) return <AppConnectButton></AppConnectButton>;
 
     if (showLink) {
       return (

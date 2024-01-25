@@ -8,7 +8,7 @@ import { AppCard, AppHeading } from '../../ui-components';
 import { DetailsSelector } from './DetailsSelector';
 import { DetailsForm } from '../join/DetailsForm';
 
-import { AppConnect } from '../../components/app/AppConnect';
+import { AppConnectButton } from '../../components/app/AppConnectButton';
 import { ProjectSummary } from './ProjectSummary';
 import { BoxCentered } from '../../ui-components/BoxCentered';
 
@@ -23,7 +23,7 @@ import { useAppContainer } from '../../components/app/AppContainer';
 const NPAGES = 5;
 
 export const CreateProject = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const [pageIx, setPageIx] = useState(0);
   const { setTitle } = useAppContainer();
@@ -50,7 +50,7 @@ export const CreateProject = () => {
 
   useEffect(() => {
     setTitle({ prefix: t('startA'), main: t('project') });
-  }, [setTitle, t]);
+  }, [setTitle, i18n.language]);
 
   const boxStyle: React.CSSProperties = {
     flexGrow: '1',
@@ -152,7 +152,7 @@ export const CreateProject = () => {
       <AppHeading level="3" style={{ marginBottom: '18px' }}>
         {t('connectAccount')}
       </AppHeading>
-      <AppConnect></AppConnect>
+      <AppConnectButton></AppConnectButton>
     </Box>,
 
     <Box style={boxStyle} pad="large">

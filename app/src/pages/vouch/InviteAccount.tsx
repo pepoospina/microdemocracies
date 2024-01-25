@@ -13,14 +13,14 @@ import { useTranslation } from 'react-i18next';
 import { useAppContainer } from '../../components/app/AppContainer';
 
 export const InviteAccountPage = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const { hash } = useParams();
   const { setTitle } = useAppContainer();
 
   useEffect(() => {
-    setTitle({ prefix: 'Approve new', main: 'member' });
-  }, []);
+    setTitle({ prefix: t('approveNew'), main: t('member') });
+  }, [i18n.language]);
 
   /** convert hash into pap and send to VouchWidget */
   const [pap, setPap] = useState<Entity<PAP>>();

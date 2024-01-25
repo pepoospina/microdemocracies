@@ -24,7 +24,7 @@ export interface IProjectHome {
 }
 
 export const ProjectHomePage = (props: IProjectHome) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const { project, nMembers } = useProjectContext();
   const { tokenId } = useConnectedMember();
@@ -34,7 +34,7 @@ export const ProjectHomePage = (props: IProjectHome) => {
 
   useEffect(() => {
     setTitle({ prefix: '', main: t('project') });
-  }, []);
+  }, [i18n.language]);
 
   const newStr = mobile ? cap(t('propose')) : cap(t('proposeNew'));
   const membersStr = mobile ? cap(t('members')) : t('seeInviteMembers');

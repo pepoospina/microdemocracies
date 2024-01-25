@@ -13,14 +13,14 @@ import { useEffect } from 'react';
 import { useAppContainer } from '../../components/app/AppContainer';
 
 export const MembersPage = (): JSX.Element => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { allVouches, applications } = useProjectContext();
   const navigate = useNavigate();
   const { setTitle } = useAppContainer();
 
   useEffect(() => {
-    setTitle({ prefix: 'List of', main: 'members' });
-  }, []);
+    setTitle({ prefix: t('listOf'), main: t('members') });
+  }, [i18n.language]);
 
   return (
     <ViewportPage
