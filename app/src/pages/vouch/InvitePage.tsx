@@ -96,7 +96,7 @@ export const InvitePage = (): JSX.Element => {
           primary
           onClick={() => share()}></AppButton>
 
-        <AppHeading level="3" style={{ marginTop: '24px' }}>
+        <AppHeading level="3" style={{ marginTop: '64px' }}>
           {t('orUseQR')}
         </AppHeading>
         <AppButton

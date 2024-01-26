@@ -26,7 +26,7 @@ export const postStatement = async (statement: AppStatementCreate) => {
   });
 
   const body = await res.json();
-  return body.success;
+  return body.id;
 };
 
 export const postBacking = async (backing: AppBackingCreate) => {

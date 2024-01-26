@@ -5,7 +5,7 @@ import { isAddress } from 'ethers/lib/utils';
 import React from 'react';
 
 import { AppCard, AppHeading } from '../../ui-components';
-import { AppConnectButton } from '../../components/app/AppConnectButton';
+import { AppConnectButton, AppConnectWidget } from '../../components/app/AppConnectButton';
 import { useAccountContext } from '../../wallet/AccountContext';
 import { useProjectContext } from '../../contexts/ProjectContext';
 import { StatementEditable } from '../voice/StatementEditable';
@@ -137,11 +137,8 @@ export const JoinPage = () => {
             </Box>
             <StatementEditable value={project?.whoStatement}></StatementEditable>
           </Box>
-          <Box pad="large" style={{ flexShrink: 0 }}>
-            <AppHeading level="3" style={{ marginBottom: '16px' }}>
-              Select the account
-            </AppHeading>
-            <AppConnectButton></AppConnectButton>
+          <Box pad="large" style={{ flexShrink: 0 }} align="center">
+            <AppConnectWidget></AppConnectWidget>
           </Box>
         </Box>
       }
@@ -160,7 +157,7 @@ export const JoinPage = () => {
       }
       nav={
         <AppBottomButtons
-          popUp={!account ? 'You need to, at least, provide your blockchain account' : undefined}
+          popUp={!account ? 'You need to connect to join' : undefined}
           left={{ label: 'back', primary: false, action: prevPage }}
           right={{
             label: 'review',

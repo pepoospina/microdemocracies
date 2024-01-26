@@ -1,11 +1,11 @@
 import { Box, Text } from 'grommet';
 import { useEffect, useState } from 'react';
 
-import { AppButton, AppCard } from '../../ui-components';
+import { AppButton, AppCard, AppHeading } from '../../ui-components';
 import { AppConnectButton } from '../../components/app/AppConnectButton';
 import { useNavigate } from 'react-router-dom';
-import { AppBottomButton } from '../common/BottomButtons';
-import { FormPrevious } from 'grommet-icons';
+import { AppBottomButton, AppBottomButtons } from '../common/BottomButtons';
+import { Add, FormPrevious, Send } from 'grommet-icons';
 import { useAccountContext } from '../../wallet/AccountContext';
 import { StatementEditable } from './StatementEditable';
 import { useSemaphoreContext } from '../../contexts/SemaphoreContext';
@@ -16,11 +16,15 @@ import { useTranslation } from 'react-i18next';
 import { useAppContainer } from '../../components/app/AppContainer';
 import { i18n } from '../../i18n/i18n';
 import { cap } from '../../utils/general';
+import { RouteNames } from '../../route.names';
+import { useProjectContext } from '../../contexts/ProjectContext';
+import { BoxCentered } from '../../ui-components/BoxCentered';
 
 export const VoicePropose = (): JSX.Element => {
   const { t } = useTranslation();
   const { isConnected } = useAccountContext();
-  const { proposeStatement, isSuccessStatement } = useStatementSend();
+  const { proposeStatement, statementId } = useStatementSend();
+  const { nMembers } = useProjectContext();
 
   const { publicId } = useSemaphoreContext();
 
@@ -39,62 +43,95 @@ export const VoicePropose = (): JSX.Element => {
   const _proposeStatement = async (input: string) => {
     if (proposeStatement) {
       setIsProposing(true);
-      proposeStatement(input);
+      proposeStatement(input).then(() => {});
     }
   };
 
   useEffect(() => {
-    if (isSuccessStatement) {
+    if (statementId) {
       setIsProposing(false);
       setDone(true);
-      navigate('../..');
+      navigate(`../${RouteNames.VoiceStatement}/${statementId}`);
     }
-  }, [isSuccessStatement]);
+  }, [statementId]);
 
   const readyToPropose = isConnected && input && proposeStatement !== undefined && publicId && !done;
 
+  const content = (() => {
+    if (nMembers === undefined) {
+      return <Loading></Loading>;
+    }
+    if (nMembers < 3) {
+      return (
+        <BoxCentered>
+          <AppCard margin={{ vertical: 'medium' }}>
+            <Text>Debe haber al menos 3 miembros para proponer una declaración.</Text>
+          </AppCard>
+          <AppButton
+            margin={{ bottom: 'medium' }}
+            primary
+            icon={<Add />}
+            label={t('invite')}
+            onClick={() => navigate('../../invite')}></AppButton>
+        </BoxCentered>
+      );
+    }
+    return (
+      <Box pad="large">
+        {!done ? (
+          <>
+            <Box style={{ marginBottom: '36px' }}>
+              <StatementEditable
+                editable={!isProposing}
+                onChanged={(value?: string) => {
+                  if (value) setInput(value);
+                }}
+                placeholder={`${t('newStatement')}...`}></StatementEditable>
+            </Box>
+
+            <AppHeading level="3">Podran respaldar esta declaración {nMembers} personas </AppHeading>
+
+            <AppCard margin={{ vertical: 'medium' }}>
+              <Text>{t('proposeInfo')}!</Text>
+            </AppCard>
+
+            <Box justify="center" style={{ margin: '36px 0', width: '100%' }}>
+              {!isConnected ? <AppConnectButton label={t('connectToPropose')}></AppConnectButton> : <></>}
+              {isProposing ? (
+                <Box>
+                  <Loading label={t('sendingProposal')}></Loading>
+                </Box>
+              ) : (
+                <></>
+              )}
+            </Box>
+          </>
+        ) : (
+          <AppCard>{t('statementProposed')}!</AppCard>
+        )}
+      </Box>
+    );
+  })();
+
   return (
     <ViewportPage
-      content={
-        <Box pad="large">
-          {!done ? (
-            <>
-              <Box style={{ marginBottom: '36px' }}>
-                <StatementEditable
-                  editable={!isProposing}
-                  onChanged={(value?: string) => {
-                    if (value) setInput(value);
-                  }}
-                  placeholder={`${t('newStatement')}...`}></StatementEditable>
-              </Box>
-
-              <AppCard>
-                <Text>{t('proposeInfo')}!</Text>
-              </AppCard>
-
-              <Box justify="center" style={{ margin: '36px 0', width: '100%' }}>
-                {!isConnected ? <AppConnectButton label={t('connectToPropose')}></AppConnectButton> : <></>}
-                {isProposing ? (
-                  <Box>
-                    <Loading label={t('sendingProposal')}></Loading>
-                  </Box>
-                ) : (
-                  <AppButton
-                    label={t('proposeStatementBtn')}
-                    onClick={() => {
-                      if (input) _proposeStatement(input);
-                    }}
-                    disabled={!readyToPropose || isProposing}></AppButton>
-                )}
-              </Box>
-            </>
-          ) : (
-            <AppCard>{t('statementProposed')}!</AppCard>
-          )}
-        </Box>
-      }
+      content={content}
       nav={
-        <AppBottomButton label={t('back')} icon={<FormPrevious />} onClick={() => navigate(-1)}></AppBottomButton>
+        <AppBottomButtons
+          left={{
+            label: t('back'),
+            icon: <FormPrevious></FormPrevious>,
+            action: () => navigate(-1),
+          }}
+          right={{
+            label: t('propose'),
+            icon: <Add></Add>,
+            action: () => {
+              if (input) _proposeStatement(input);
+            },
+            disabled: !readyToPropose || isProposing,
+            primary: true,
+          }}></AppBottomButtons>
       }></ViewportPage>
   );
 };

@@ -40,8 +40,8 @@ export const createStatementController: RequestHandler = async (
   }
 
   try {
-    await setStatement(statement);
-    response.status(200).send({ success: true });
+    const id = await setStatement(statement);
+    response.status(200).send({ success: true, id });
   } catch (error: any) {
     logger.error('error', error);
     response.status(500).send({ success: false, error: error.message });

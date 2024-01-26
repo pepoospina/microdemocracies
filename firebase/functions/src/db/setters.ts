@@ -20,7 +20,6 @@ import {
 } from '../@app/utils/identity.utils';
 
 import { collections, db } from './db';
-import { logger } from '../instances/logger';
 
 export const setStatementBacker = async (
   backing: AppBackingCreate

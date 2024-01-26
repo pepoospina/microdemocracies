@@ -9,6 +9,7 @@ import { hashMessage } from 'viem';
 export type VoiceSendContextType = {
   proposeStatement?: (statement: string) => Promise<boolean>;
   isSuccessStatement: boolean;
+  statementId?: string;
 };
 
 export const useStatementSend = (): VoiceSendContextType => {
@@ -16,6 +17,7 @@ export const useStatementSend = (): VoiceSendContextType => {
   const { publicId, generateProof } = useSemaphoreContext();
 
   const [isSuccessStatement, setIsSuccessStatement] = useState<boolean>(false);
+  const [statementId, setStatementId] = useState<string>();
 
   const generateStatementProof =
     projectId && publicId && generateProof !== undefined
@@ -38,12 +40,13 @@ export const useStatementSend = (): VoiceSendContextType => {
               treeId: proofAndTree.treeId,
               statement: _statement,
             };
-            const res = await postStatement(statement);
-            if (res) {
+            const id = await postStatement(statement);
+            if (id !== undefined) {
               refetchStatements();
               setIsSuccessStatement(true);
+              setStatementId(id);
             }
-            return res;
+            return id;
           }
         }
       : undefined;
@@ -57,5 +60,6 @@ export const useStatementSend = (): VoiceSendContextType => {
   return {
     proposeStatement,
     isSuccessStatement,
+    statementId,
   };
 };
