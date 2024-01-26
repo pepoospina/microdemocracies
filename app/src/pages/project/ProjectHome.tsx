@@ -7,7 +7,6 @@ import { Add, FormPrevious, Group, UserAdd } from 'grommet-icons';
 import { ViewportPage } from '../../components/app/Viewport';
 import { Loading } from '../common/Loading';
 import { ProjectCard } from './ProjectCard';
-import { useVoiceRead } from '../../contexts/VoiceReadContext';
 import { AbsoluteRoutes, RouteNames } from '../../route.names';
 import { useResponsive, useThemeContext } from '../../components/app';
 import { AppBottomButtons } from '../common/BottomButtons';
@@ -27,9 +26,8 @@ export interface IProjectHome {
 export const ProjectHomePage = (props: IProjectHome) => {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
-  const { project, nMembers } = useProjectContext();
+  const { project, nMembers, statements } = useProjectContext();
   const { tokenId } = useConnectedMember();
-  const { statements } = useVoiceRead();
   const { mobile } = useResponsive();
   const { setTitle } = useAppContainer();
   const { constants } = useThemeContext();
@@ -60,6 +58,10 @@ export const ProjectHomePage = (props: IProjectHome) => {
     );
   }
 
+  const goToStatement = (id: string) => {
+    navigate(`${RouteNames.VoiceBase}/${RouteNames.VoiceStatement}/${id}`);
+  };
+
   const statementsContent = (() => {
     if (statements === undefined) return <Loading></Loading>;
     if (statements !== undefined && statements.length === 0) {
@@ -73,7 +75,10 @@ export const ProjectHomePage = (props: IProjectHome) => {
     return statements.map((statement) => {
       return (
         <Box key={statement.id} style={{ marginBottom: '32px' }}>
-          <StatementCard statement={statement} key={statement.id}></StatementCard>
+          <StatementCard
+            statement={statement}
+            key={statement.id}
+            statmentCardProps={{ onClick: () => goToStatement(statement.id) }}></StatementCard>
         </Box>
       );
     });
@@ -158,7 +163,7 @@ export const ProjectHomePage = (props: IProjectHome) => {
           }}
           right={{
             primary: true,
-            action: () => navigate('voice/propose'),
+            action: () => navigate(`${RouteNames.VoiceBase}/${RouteNames.VoicePropose}`),
             icon: <Add></Add>,
             label: newStr,
           }}></AppBottomButtons>

@@ -1,29 +1,52 @@
 import { Box, Spinner, Text } from 'grommet';
-import { AppStatementRead } from '../../types';
+import { StatementRead } from '../../types';
 
-import { StatementEditable } from './StatementEditable';
+import { IStatementEditable, StatementEditable } from './StatementEditable';
 import { useEffect, useState } from 'react';
 import { Favorite } from 'grommet-icons';
 import { useQuery } from 'react-query';
-import { countStatementBackings } from '../../firestore/getters';
+import { countStatementBackings, getStatement } from '../../firestore/getters';
 import { AppButton } from '../../ui-components/AppButton';
 import { useConnectedMember } from '../../contexts/ConnectedAccountContext';
 import { useBackingSend } from './useBackingSend';
 import { CircleIndicator } from '../../components/app/CircleIndicator';
 
-export const StatementCard = (props: { statement: AppStatementRead; containerStyle?: React.CSSProperties }) => {
-  const { statement } = props;
+export const StatementCard = (props: {
+  statement?: StatementRead;
+  statementId?: string;
+  containerStyle?: React.CSSProperties;
+  statmentCardProps?: IStatementEditable;
+}) => {
+  const { statement: propsStatement, statementId: propsStatementId } = props;
+
+  if (!propsStatement && !propsStatementId) {
+    throw new Error('Either statement or statementId must be provided.');
+  }
+
+  const statementId = propsStatement ? propsStatement.id : (propsStatementId as string);
 
   const { tokenId } = useConnectedMember();
   const [isBacking, setIsBacking] = useState<boolean>(false);
   const [alreadyLiked, setAlreadyLiked] = useState<boolean>();
 
+  const { data: statementRead } = useQuery([`${propsStatementId}`], async () => {
+    if (propsStatementId) {
+      return getStatement(statementId);
+    }
+  });
+
+  const statement = propsStatement ? propsStatement : statementRead;
+
+  console.log({ statement });
+
   const {
     data: nBacking,
     isLoading,
     refetch: refetchCount,
-  } = useQuery(['statementBackers', statement.id], () => {
-    return countStatementBackings(statement.id);
+  } = useQuery(['statementBackers', statement?.id], () => {
+    if (statement) {
+      return countStatementBackings(statement.id);
+    }
   });
 
   const { backStatement, isSuccessBacking, errorBacking } = useBackingSend();
@@ -31,7 +54,7 @@ export const StatementCard = (props: { statement: AppStatementRead; containerSty
   const canBack = tokenId !== undefined && tokenId !== null;
 
   const back = () => {
-    if (backStatement) {
+    if (backStatement && statement) {
       setIsBacking(true);
       backStatement(statement.id, statement.treeId);
     }
@@ -64,7 +87,8 @@ export const StatementCard = (props: { statement: AppStatementRead; containerSty
   return (
     <Box style={{ position: 'relative', flexShrink: 0, ...props.containerStyle }}>
       <StatementEditable
-        value={props.statement.statement}
+        {...props.statmentCardProps}
+        value={statement?.statement}
         containerStyle={{ paddingBottom: '22px' }}></StatementEditable>
       <Box
         direction="row"

@@ -47,9 +47,10 @@ export const collections = {
   members: collectionGroup(db, CollectionNames.ProjectMembers),
   identities: collection(db, CollectionNames.Projects),
   projects: collection(db, CollectionNames.Projects),
-  statements: collection(db, CollectionNames.Statments),
+  statements: collection(db, CollectionNames.Statements),
+  statement: (statementId: string) => doc(db, CollectionNames.Statements, statementId),
   statementsBackers: (statementId: string) => {
-    const statement = doc(db, CollectionNames.Statments, statementId);
+    const statement = doc(db, CollectionNames.Statements, statementId);
     return collection(statement, CollectionNames.StatementsBackers);
   },
 };

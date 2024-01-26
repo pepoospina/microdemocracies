@@ -4,9 +4,7 @@ import { GlobalNav } from './GlobalNav';
 import { Routes, Route } from 'react-router-dom';
 import { ConnectedMemberContext } from '../../contexts/ConnectedAccountContext';
 import { ProjectContext } from '../../contexts/ProjectContext';
-import { VoiceReadContext } from '../../contexts/VoiceReadContext';
 import { AccountPage } from '../../pages/account/AccountPage';
-import { Challenges } from '../../pages/challenges/Challenges';
 import { CreateProject } from '../../pages/create/CreateProject';
 import { JoinPage } from '../../pages/join/Join';
 import { AppHome } from '../../pages/myprojects/AppHome';
@@ -22,6 +20,7 @@ import { TestCreateProject } from '../../test/TestCreateProject';
 import { TestProject } from '../../test/TestProject';
 import { Box } from 'grommet';
 import { MAX_WIDTH_APP, ViewportContainer } from './Viewport';
+import { VoiceStatementPage } from '../../pages/voice/VoiceStatementPage';
 
 export interface SetPageTitleType {
   prefix: string;
@@ -55,9 +54,7 @@ export const AppContainer = (props: React.PropsWithChildren) => {
               element={
                 <ProjectContext>
                   <ConnectedMemberContext>
-                    <VoiceReadContext>
-                      <ProjectBase />
-                    </VoiceReadContext>
+                    <ProjectBase />
                   </ConnectedMemberContext>
                 </ProjectContext>
               }>
@@ -67,8 +64,9 @@ export const AppContainer = (props: React.PropsWithChildren) => {
               <Route path={RouteNames.Join} element={<JoinPage />}></Route>
               <Route path={RouteNames.Invite} element={<InvitePage />}></Route>
               <Route path={RouteNames.Members} element={<MembersPage />}></Route>
-              <Route path={'voice'} element={<VoiceBasePage />}>
+              <Route path={RouteNames.VoiceBase} element={<VoiceBasePage />}>
                 <Route path={RouteNames.VoicePropose} element={<VoicePropose />}></Route>
+                <Route path={`${RouteNames.VoiceStatement}/:statementId`} element={<VoiceStatementPage />}></Route>
               </Route>
 
               <Route path={'test'} element={<TestProject />}></Route>

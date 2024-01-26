@@ -10,9 +10,12 @@ import { useAccountContext } from '../../wallet/AccountContext';
 import { StatementEditable } from './StatementEditable';
 import { useSemaphoreContext } from '../../contexts/SemaphoreContext';
 import { Loading } from '../common/Loading';
-import { ViewportHeadingLarge, ViewportPage } from '../../components/app/Viewport';
+import { ViewportPage } from '../../components/app/Viewport';
 import { useStatementSend } from './useStatementSend';
 import { useTranslation } from 'react-i18next';
+import { useAppContainer } from '../../components/app/AppContainer';
+import { i18n } from '../../i18n/i18n';
+import { cap } from '../../utils/general';
 
 export const VoicePropose = (): JSX.Element => {
   const { t } = useTranslation();
@@ -24,6 +27,12 @@ export const VoicePropose = (): JSX.Element => {
   const [done, setDone] = useState<boolean>(false);
   const [isProposing, setIsProposing] = useState<boolean>(false);
   const navigate = useNavigate();
+
+  const { setTitle } = useAppContainer();
+
+  useEffect(() => {
+    setTitle({ prefix: cap(t('proposeNew')), main: t('statement') });
+  }, [i18n.language]);
 
   const [input, setInput] = useState<string>();
 

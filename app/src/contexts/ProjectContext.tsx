@@ -3,9 +3,9 @@ import { useContractRead, usePublicClient, useQuery } from 'wagmi';
 import { useParams } from 'react-router-dom';
 
 import { registryABI } from '../utils/contracts.json';
-import { AppApplication, AppProject, AppVouch, HexStr } from '../types';
+import { AppApplication, AppProject, AppVouch, HexStr, StatementRead } from '../types';
 import { getContract } from 'viem';
-import { getApplications, getInviteId, getProject } from '../firestore/getters';
+import { getApplications, getInviteId, getProject, getTopStatements } from '../firestore/getters';
 import { useAccountContext } from '../wallet/AccountContext';
 import { postInvite } from '../utils/project';
 import { collections } from '../firestore/database';
@@ -24,6 +24,8 @@ export type ProjectContextType = {
   resettingLink: boolean;
   applications?: AppApplication[] | null;
   refetchApplications: () => void;
+  statements?: StatementRead[];
+  refetchStatements: () => void;
 };
 
 interface IProjectContext {
@@ -119,6 +121,15 @@ export const ProjectContext = (props: IProjectContext) => {
     return null;
   });
 
+  const { data: statements, refetch: refetchStatements } = useQuery(
+    ['topStatements', projectId?.toString()],
+    async () => {
+      if (projectId) {
+        return getTopStatements(projectId);
+      }
+    }
+  );
+
   const resetLink = () => {
     if (projectId && aaAddress) {
       setResettingLink(true);
@@ -166,6 +177,8 @@ export const ProjectContext = (props: IProjectContext) => {
         resettingLink,
         applications,
         refetchApplications,
+        statements,
+        refetchStatements,
       }}>
       {props.children}
     </ProjectContextValue.Provider>

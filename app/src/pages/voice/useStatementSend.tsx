@@ -5,7 +5,6 @@ import { AppStatementCreate } from '../../types';
 import { useProjectContext } from '../../contexts/ProjectContext';
 import { useSemaphoreContext } from '../../contexts/SemaphoreContext';
 import { hashMessage } from 'viem';
-import { useVoiceRead } from '../../contexts/VoiceReadContext';
 
 export type VoiceSendContextType = {
   proposeStatement?: (statement: string) => Promise<boolean>;
@@ -13,10 +12,8 @@ export type VoiceSendContextType = {
 };
 
 export const useStatementSend = (): VoiceSendContextType => {
-  const { projectId } = useProjectContext();
+  const { projectId, refetchStatements } = useProjectContext();
   const { publicId, generateProof } = useSemaphoreContext();
-
-  const { refetchStatements } = useVoiceRead();
 
   const [isSuccessStatement, setIsSuccessStatement] = useState<boolean>(false);
 

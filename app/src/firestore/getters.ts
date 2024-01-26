@@ -43,6 +43,20 @@ export const getTopStatements = async (projectId: number) => {
   });
 };
 
+export const getStatement = async (statementId: string) => {
+  const ref = collections.statement(statementId);
+  const doc = await getDoc(ref);
+
+  if (!doc.exists) {
+    return undefined;
+  }
+
+  return {
+    ...doc.data(),
+    id: doc.id,
+  } as unknown as StatementRead;
+};
+
 export const countStatementBackings = async (statementId: string) => {
   const backers = collections.statementsBackers(statementId);
   const q = query(backers);

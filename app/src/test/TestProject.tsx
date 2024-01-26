@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import { AppButton, AppHeading } from '../ui-components';
 import { BoxCentered } from '../ui-components/BoxCentered';
 import { useProjectContext } from '../contexts/ProjectContext';
-import { useVoiceRead } from '../contexts/VoiceReadContext';
 import { useAppSigner } from '../wallet/SignerContext';
 import { useAccountContext } from '../wallet/AccountContext';
 import { StatementCard } from '../pages/voice/StatementCard';
@@ -14,10 +13,9 @@ import { useStatementSend } from '../pages/voice/useStatementSend';
 export const TestProject = () => {
   const { connectTest } = useAppSigner();
   const { isConnected } = useAccountContext();
-  const { projectId } = useProjectContext();
+  const { projectId, statements } = useProjectContext();
   const { proposeStatement, isSuccessStatement } = useStatementSend();
   const { backStatement } = useBackingSend();
-  const { statements } = useVoiceRead();
 
   const [random, setRandom] = useState<string>();
 

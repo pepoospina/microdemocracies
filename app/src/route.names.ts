@@ -10,7 +10,9 @@ export const RouteNames = {
   Challenges: `challenges`,
   Member: `member`,
   MemberChallange: (id: number) => `member/${id}/challenge`,
+  VoiceBase: 'v',
   VoicePropose: `propose`,
+  VoiceStatement: `s`,
 };
 
 export const AbsoluteRoutes = {
