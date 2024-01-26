@@ -4,7 +4,11 @@ import { StatementEditable } from '../voice/StatementEditable';
 import { Trans } from 'react-i18next';
 import { Bold } from '../../ui-components/Bold';
 
-export const ProjectCard = (props: { project: AppProject; containerStyle?: React.CSSProperties }) => {
+export const ProjectCard = (props: {
+  project: AppProject;
+  containerStyle?: React.CSSProperties;
+  statementStyle?: React.CSSProperties;
+}) => {
   return (
     <Box style={{ position: 'relative', ...props.containerStyle }}>
       <Box style={{ position: 'absolute', left: '12px', top: '4px' }}>
@@ -12,7 +16,9 @@ export const ProjectCard = (props: { project: AppProject; containerStyle?: React
           <Trans i18nKey={'anyoneWho'} components={{ Bold: <Bold></Bold> }}></Trans>:
         </Text>
       </Box>
-      <StatementEditable value={props.project.whoStatement} containerStyle={{ paddingTop: '22px' }}></StatementEditable>
+      <StatementEditable
+        value={props.project.whoStatement}
+        containerStyle={{ paddingTop: '22px', ...props.statementStyle }}></StatementEditable>
     </Box>
   );
 };

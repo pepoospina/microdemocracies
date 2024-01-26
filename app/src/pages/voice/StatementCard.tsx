@@ -2,30 +2,14 @@ import { Box, Spinner, Text } from 'grommet';
 import { AppStatementRead } from '../../types';
 
 import { StatementEditable } from './StatementEditable';
-import { ReactNode, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Favorite } from 'grommet-icons';
 import { useQuery } from 'react-query';
 import { countStatementBackings } from '../../firestore/getters';
-import { BoxCentered } from '../../ui-components/BoxCentered';
 import { AppButton } from '../../ui-components/AppButton';
 import { useConnectedMember } from '../../contexts/ConnectedAccountContext';
 import { useBackingSend } from './useBackingSend';
-
-const CircleElement = (props: { icon: ReactNode; size?: string; borderWidth?: string }) => {
-  return (
-    <BoxCentered
-      style={{
-        height: props.size || '36px',
-        width: props.size || '36px',
-        backgroundColor: 'black',
-        border: 'solid white',
-        borderWidth: props.borderWidth || '4px',
-        borderRadius: '50%',
-      }}>
-      {props.icon}
-    </BoxCentered>
-  );
-};
+import { CircleIndicator } from '../../components/app/CircleIndicator';
 
 export const StatementCard = (props: { statement: AppStatementRead; containerStyle?: React.CSSProperties }) => {
   const { statement } = props;
@@ -94,19 +78,19 @@ export const StatementCard = (props: { statement: AppStatementRead; containerSty
           left: '0px',
           width: '100%',
         }}>
-        <CircleElement
+        <CircleIndicator
           borderWidth="4px"
           icon={
             <Box>
               <Text color="white">{!isLoading ? <b>{nBacking}</b> : <Spinner color="white"></Spinner>}</Text>
             </Box>
-          }></CircleElement>
+          }></CircleIndicator>
         <AppButton plain onClick={() => back()} disabled={!canBack}>
-          <CircleElement
-            size="48px"
+          <CircleIndicator
+            size={48}
             icon={
               isBacking ? <Spinner color="white"></Spinner> : <Favorite color="white" style={{ height: '20px' }} />
-            }></CircleElement>
+            }></CircleIndicator>
         </AppButton>
 
         {alreadyLiked ? (

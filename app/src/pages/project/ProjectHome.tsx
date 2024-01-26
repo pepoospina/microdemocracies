@@ -3,13 +3,13 @@ import { useNavigate } from 'react-router-dom';
 
 import { AppButton, AppCard, AppHeading } from '../../ui-components';
 import { useProjectContext } from '../../contexts/ProjectContext';
-import { Add, FormPrevious } from 'grommet-icons';
+import { Add, FormPrevious, Group, UserAdd } from 'grommet-icons';
 import { ViewportPage } from '../../components/app/Viewport';
 import { Loading } from '../common/Loading';
 import { ProjectCard } from './ProjectCard';
 import { useVoiceRead } from '../../contexts/VoiceReadContext';
 import { AbsoluteRoutes, RouteNames } from '../../route.names';
-import { useResponsive } from '../../components/app';
+import { useResponsive, useThemeContext } from '../../components/app';
 import { AppBottomButtons } from '../common/BottomButtons';
 import { BoxCentered } from '../../ui-components/BoxCentered';
 import { useConnectedMember } from '../../contexts/ConnectedAccountContext';
@@ -18,6 +18,7 @@ import { useTranslation } from 'react-i18next';
 import { cap } from '../../utils/general';
 import { useEffect } from 'react';
 import { useAppContainer } from '../../components/app/AppContainer';
+import { CircleIndicator } from '../../components/app/CircleIndicator';
 
 export interface IProjectHome {
   dum?: any;
@@ -31,6 +32,7 @@ export const ProjectHomePage = (props: IProjectHome) => {
   const { statements } = useVoiceRead();
   const { mobile } = useResponsive();
   const { setTitle } = useAppContainer();
+  const { constants } = useThemeContext();
 
   useEffect(() => {
     setTitle({ prefix: '', main: t('project') });
@@ -95,19 +97,46 @@ export const ProjectHomePage = (props: IProjectHome) => {
   return (
     <ViewportPage
       content={
-        <>
-          <Box pad="medium">
-            <ProjectCard project={project}></ProjectCard>
+        <Box>
+          <Box pad={{ horizontal: 'medium' }}>
+            <Box style={{ position: 'relative', flexShrink: 0 }}>
+              <ProjectCard project={project} statementStyle={{ paddingBottom: '28px' }}></ProjectCard>
+              <Box
+                direction="row"
+                justify="end"
+                align="center"
+                gap="small"
+                pad={{ horizontal: 'medium' }}
+                style={{ position: 'absolute', bottom: '-12px', left: '0px', width: '100%' }}>
+                <AppButton plain onClick={() => navigate(RouteNames.Members)}>
+                  <CircleIndicator
+                    forceCircle={false}
+                    size={48}
+                    icon={
+                      <>
+                        <Group color={constants.colors.textOnPrimary}></Group>
+                        <Text
+                          color={constants.colors.textOnPrimary}
+                          style={{ fontWeight: 'bold' }}
+                          margin={{ left: 'small' }}>
+                          ({nMembers})
+                        </Text>
+                      </>
+                    }></CircleIndicator>
+                </AppButton>
+                <AppButton plain onClick={() => navigate(RouteNames.Invite)}>
+                  <CircleIndicator
+                    forceCircle={true}
+                    size={54}
+                    icon={
+                      <UserAdd color={constants.colors.textOnPrimary} style={{ marginLeft: '5px' }}></UserAdd>
+                    }></CircleIndicator>
+                </AppButton>
+              </Box>
+            </Box>
           </Box>
 
           <Box pad={{ left: 'medium' }}>
-            <Box pad={{ vertical: '16px', horizontal: 'medium' }} direction="row" align="center" justify="between">
-              <AppHeading level="3">
-                {cap(t('members'))}: {nMembers}
-              </AppHeading>
-              <AppButton onClick={() => navigate(RouteNames.Members)} label={membersStr}></AppButton>
-            </Box>
-
             {tokenId === null ? (
               <Box pad="small">
                 <AppButton onClick={() => navigate(RouteNames.Join)} label={'join'}></AppButton>
@@ -118,7 +147,7 @@ export const ProjectHomePage = (props: IProjectHome) => {
 
             {content}
           </Box>
-        </>
+        </Box>
       }
       nav={
         <AppBottomButtons

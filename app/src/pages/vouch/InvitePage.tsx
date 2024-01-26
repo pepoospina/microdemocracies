@@ -153,10 +153,7 @@ export const InvitePage = (): JSX.Element => {
         </Box>
       }
       nav={
-        <AppBottomButton
-          icon={<FormPrevious />}
-          label={t('back')}
-          onClick={() => navigate('../members')}></AppBottomButton>
+        <AppBottomButton icon={<FormPrevious />} label={t('back')} onClick={() => navigate(-1)}></AppBottomButton>
       }></ViewportPage>
   );
 };
