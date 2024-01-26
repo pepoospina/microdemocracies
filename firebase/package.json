@@ -8,6 +8,7 @@
     "emulate-test": "NODE_ENV=local FIRESTORE_EMULATOR_HOST=localhost:8080 firebase emulators:start --only firestore",
     "log": "npx firebase-logging --project=common-dev-dea4e --freq=1500 --n=10 --func ",
     "deploy": "firebase deploy --only functions",
+    "deploy-firestore": "firebase deploy --only firestore",
     "prepare:hooks": "husky install"
   },
   "author": "",

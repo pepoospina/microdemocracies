@@ -21,7 +21,7 @@ import { RouteNames } from '../../route.names';
 import { TestCreateProject } from '../../test/TestCreateProject';
 import { TestProject } from '../../test/TestProject';
 import { Box } from 'grommet';
-import { ViewportContainer } from './Viewport';
+import { MAX_WIDTH_APP, ViewportContainer } from './Viewport';
 
 export interface SetPageTitleType {
   prefix: string;
@@ -39,7 +39,7 @@ export const AppContainer = (props: React.PropsWithChildren) => {
 
   return (
     <AppContainerContextValue.Provider value={{ setTitle }}>
-      <ViewportContainer>
+      <ViewportContainer style={{ maxWidth: MAX_WIDTH_APP }}>
         <Box pad={{ horizontal: 'medium' }} style={{ height: '80px', flexShrink: 0 }} justify="center">
           <GlobalNav title={title} />
         </Box>

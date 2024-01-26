@@ -1,4 +1,4 @@
-import { getDocs, where, query, and, getDoc, doc as docRef, getCountFromServer } from 'firebase/firestore';
+import { getDocs, where, query, and, getDoc, doc as docRef, getCountFromServer, orderBy } from 'firebase/firestore';
 import { collections } from './database';
 import { AppApplication, AppProject, AppPublicIdentity, Entity, HexStr, StatementRead } from '../types';
 import { postInvite } from '../utils/project';
@@ -15,7 +15,7 @@ export const getProject = async (projectId: number) => {
 };
 
 export const getAccountProjects = async (aaAddress: HexStr) => {
-  const q = query(collections.members, where('aaAddress', '==', aaAddress));
+  const q = query(collections.members, where('aaAddress', '==', aaAddress), orderBy('projectId', 'desc'));
   const snap = await getDocs(q);
 
   const projectIds = snap.docs.map((doc) => {

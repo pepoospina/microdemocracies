@@ -15,6 +15,7 @@ import { AppHeading } from '../../ui-components/AppHeading';
 import { IElement, useResponsive, useThemeContext } from '.';
 
 export const MAX_WIDTH_LANDING = 1600;
+export const MAX_WIDTH_APP = 700;
 
 export const ViewportContainer = (props: IElement) => {
   return (
@@ -26,6 +27,7 @@ export const ViewportContainer = (props: IElement) => {
         overflow: 'hidden',
         maxWidth: `${MAX_WIDTH_LANDING}px`,
         margin: '0 auto',
+        ...props.style,
       }}>
       {props.children}
     </Box>
@@ -64,7 +66,7 @@ export const ViewportPage = (props: { content: ReactNode; nav: ReactNode }) => {
       style={{
         height: '100%',
         width: '100%',
-        maxWidth: '700px',
+        maxWidth: `${MAX_WIDTH_APP}px`,
         margin: '0 auto',
         overflow: 'hidden',
       }}>

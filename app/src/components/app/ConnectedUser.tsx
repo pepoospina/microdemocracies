@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Box, Text } from 'grommet';
 
 import { LanguageSelector, LanguageValue } from '../../pages/account/LanguageSelector';
-import { Address, AppButton, AppCircleDropButtonResponsive } from '../../ui-components';
+import { Address, AppButton, AppCircleDropButton, AppCircleDropButtonResponsive } from '../../ui-components';
 import { useAccountContext } from '../../wallet/AccountContext';
 import { useAppSigner } from '../../wallet/SignerContext';
 import { Loading } from '../../pages/common/Loading';
@@ -33,7 +33,7 @@ export const ConnectedUser = (props: {}) => {
     }
 
     return (
-      <AppCircleDropButtonResponsive
+      <AppCircleDropButton
         plain
         label={<UserExpert color={constants.colors.primary} style={{ margin: '2px 0px 0px 5px' }}></UserExpert>}
         open={showDrop}
@@ -55,7 +55,7 @@ export const ConnectedUser = (props: {}) => {
             </AppButton>
           </Box>
         }
-        dropProps={{ style: { marginTop: '60px' } }}></AppCircleDropButtonResponsive>
+        dropProps={{ style: { marginTop: '60px' } }}></AppCircleDropButton>
     );
   })();
 
