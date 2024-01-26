@@ -33,10 +33,10 @@ export const collections = {
       .collection(CollectionNames.TreeIdentities),
   entities: db.collection(CollectionNames.Entities),
   trees: db.collection(CollectionNames.Trees),
-  statements: db.collection(CollectionNames.Statments),
+  statements: db.collection(CollectionNames.Statements),
   statementsBackers: (statementId: string) =>
     db
-      .collection(CollectionNames.Statments)
+      .collection(CollectionNames.Statements)
       .doc(statementId)
       .collection(CollectionNames.StatementsBackers),
 };

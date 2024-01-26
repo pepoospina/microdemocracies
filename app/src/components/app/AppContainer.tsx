@@ -20,7 +20,7 @@ import { TestCreateProject } from '../../test/TestCreateProject';
 import { TestProject } from '../../test/TestProject';
 import { Box } from 'grommet';
 import { MAX_WIDTH_APP, ViewportContainer } from './Viewport';
-import { VoiceStatementPage } from '../../pages/voice/VoiceStatementPage';
+import { VoiceStatementPageBase } from '../../pages/voice/VoiceStatementPageBase';
 
 export interface SetPageTitleType {
   prefix: string;
@@ -66,7 +66,7 @@ export const AppContainer = (props: React.PropsWithChildren) => {
               <Route path={RouteNames.Members} element={<MembersPage />}></Route>
               <Route path={RouteNames.VoiceBase} element={<VoiceBasePage />}>
                 <Route path={RouteNames.VoicePropose} element={<VoicePropose />}></Route>
-                <Route path={`${RouteNames.VoiceStatement}/:statementId`} element={<VoiceStatementPage />}></Route>
+                <Route path={`${RouteNames.VoiceStatement}/:statementId`} element={<VoiceStatementPageBase />}></Route>
               </Route>
 
               <Route path={'test'} element={<TestProject />}></Route>

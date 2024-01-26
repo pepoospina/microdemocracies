@@ -1,88 +1,16 @@
 import { Box, Spinner, Text } from 'grommet';
-import { StatementRead } from '../../types';
 
 import { IStatementEditable, StatementEditable } from './StatementEditable';
-import { useEffect, useState } from 'react';
 import { Favorite } from 'grommet-icons';
-import { useQuery } from 'react-query';
-import { countStatementBackings, getStatement } from '../../firestore/getters';
 import { AppButton } from '../../ui-components/AppButton';
-import { useConnectedMember } from '../../contexts/ConnectedAccountContext';
-import { useBackingSend } from './useBackingSend';
 import { CircleIndicator } from '../../components/app/CircleIndicator';
+import { useStatementContext } from '../../contexts/StatementContext';
 
 export const StatementCard = (props: {
-  statement?: StatementRead;
-  statementId?: string;
   containerStyle?: React.CSSProperties;
   statmentCardProps?: IStatementEditable;
 }) => {
-  const { statement: propsStatement, statementId: propsStatementId } = props;
-
-  if (!propsStatement && !propsStatementId) {
-    throw new Error('Either statement or statementId must be provided.');
-  }
-
-  const statementId = propsStatement ? propsStatement.id : (propsStatementId as string);
-
-  const { tokenId } = useConnectedMember();
-  const [isBacking, setIsBacking] = useState<boolean>(false);
-  const [alreadyLiked, setAlreadyLiked] = useState<boolean>();
-
-  const { data: statementRead } = useQuery([`${propsStatementId}`], async () => {
-    if (propsStatementId) {
-      return getStatement(statementId);
-    }
-  });
-
-  const statement = propsStatement ? propsStatement : statementRead;
-
-  console.log({ statement });
-
-  const {
-    data: nBacking,
-    isLoading,
-    refetch: refetchCount,
-  } = useQuery(['statementBackers', statement?.id], () => {
-    if (statement) {
-      return countStatementBackings(statement.id);
-    }
-  });
-
-  const { backStatement, isSuccessBacking, errorBacking } = useBackingSend();
-
-  const canBack = tokenId !== undefined && tokenId !== null;
-
-  const back = () => {
-    if (backStatement && statement) {
-      setIsBacking(true);
-      backStatement(statement.id, statement.treeId);
-    }
-  };
-
-  useEffect(() => {
-    if (isSuccessBacking) {
-      setIsBacking(false);
-      refetchCount();
-    }
-  }, [isSuccessBacking]);
-
-  useEffect(() => {
-    if (errorBacking) {
-      setIsBacking(false);
-      if (errorBacking.toLocaleLowerCase().includes('already posted')) {
-        setAlreadyLiked(true);
-      }
-    }
-  }, [errorBacking]);
-
-  useEffect(() => {
-    if (alreadyLiked) {
-      setTimeout(() => {
-        setAlreadyLiked(false);
-      }, 3000);
-    }
-  }, [alreadyLiked]);
+  const { statement, nBacking, canBack, back, alreadyBacked } = useStatementContext();
 
   return (
     <Box style={{ position: 'relative', flexShrink: 0, ...props.containerStyle }}>
@@ -106,18 +34,24 @@ export const StatementCard = (props: {
           borderWidth="4px"
           icon={
             <Box>
-              <Text color="white">{!isLoading ? <b>{nBacking}</b> : <Spinner color="white"></Spinner>}</Text>
+              <Text color="white">
+                {nBacking !== undefined ? <b>{nBacking}</b> : <Spinner color="white"></Spinner>}
+              </Text>
             </Box>
           }></CircleIndicator>
         <AppButton plain onClick={() => back()} disabled={!canBack}>
           <CircleIndicator
             size={48}
             icon={
-              isBacking ? <Spinner color="white"></Spinner> : <Favorite color="white" style={{ height: '20px' }} />
+              nBacking === undefined ? (
+                <Spinner color="white"></Spinner>
+              ) : (
+                <Favorite color="white" style={{ height: '20px' }} />
+              )
             }></CircleIndicator>
         </AppButton>
 
-        {alreadyLiked ? (
+        {alreadyBacked ? (
           <Box style={{ position: 'absolute', bottom: '48px' }}>
             <Text color="white">already backed!</Text>
           </Box>

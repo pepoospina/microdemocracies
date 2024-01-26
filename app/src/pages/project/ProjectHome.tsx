@@ -18,6 +18,7 @@ import { cap } from '../../utils/general';
 import { useEffect } from 'react';
 import { useAppContainer } from '../../components/app/AppContainer';
 import { CircleIndicator } from '../../components/app/CircleIndicator';
+import { StatementContext } from '../../contexts/StatementContext';
 
 export interface IProjectHome {
   dum?: any;
@@ -75,10 +76,11 @@ export const ProjectHomePage = (props: IProjectHome) => {
     return statements.map((statement) => {
       return (
         <Box key={statement.id} style={{ marginBottom: '32px' }}>
-          <StatementCard
-            statement={statement}
-            key={statement.id}
-            statmentCardProps={{ onClick: () => goToStatement(statement.id) }}></StatementCard>
+          <StatementContext statement={statement}>
+            <StatementCard
+              key={statement.id}
+              statmentCardProps={{ onClick: () => goToStatement(statement.id) }}></StatementCard>
+          </StatementContext>
         </Box>
       );
     });

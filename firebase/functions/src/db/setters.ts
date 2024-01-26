@@ -7,6 +7,7 @@ import {
   AppProjectMember,
   AppPublicIdentity,
   AppStatementCreate,
+  AppStatementRead,
   AppTree,
   Entity,
   HexStr,
@@ -19,6 +20,7 @@ import {
 } from '../@app/utils/identity.utils';
 
 import { collections, db } from './db';
+import { logger } from '../instances/logger';
 
 export const setStatementBacker = async (
   backing: AppBackingCreate
@@ -27,6 +29,22 @@ export const setStatementBacker = async (
     .statementsBackers(backing.statementId)
     .doc(getBackingId(backing));
   await docRef.set(backing);
+
+  /** keep the sum of backers updated */
+  const statementRef = collections.statements.doc(backing.statementId);
+  const statementData = await statementRef.get();
+
+  if (!statementData.exists) {
+    throw new Error(`Statement not found ${backing.statementId}`);
+  }
+
+  const statement = statementData.data() as AppStatementRead;
+  const currentnBackers =
+    statement.nBackers !== undefined ? statement.nBackers : 0;
+  statement.nBackers = currentnBackers + 1;
+
+  statementRef.set(statement);
+
   return docRef.id;
 };
 

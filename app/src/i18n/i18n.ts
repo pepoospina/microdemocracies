@@ -128,6 +128,7 @@ i18n.use(initReactI18next).init({
         projectSummary: 'Summary of your microdemocracy',
         your: 'Your',
         approveNew: 'Approve new',
+        askSupport: 'Please support my statement',
       },
     },
     SPA: {
@@ -254,6 +255,7 @@ i18n.use(initReactI18next).init({
         projectSummary: 'Resumen de tu microdemocracia',
         your: 'Tus',
         approveNew: 'Aprueva un nuevo',
+        askSupport: 'Apoya mi declaración',
       },
     },
     CAT: {
@@ -379,6 +381,7 @@ i18n.use(initReactI18next).init({
         projectSummary: 'Resum de la teva microdemocracia',
         your: 'Les teves',
         approveNew: 'Aprova un nou',
+        askSupport: 'Dona suport a la meva declaració',
       },
     },
   },

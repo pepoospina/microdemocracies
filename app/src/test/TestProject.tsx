@@ -9,6 +9,7 @@ import { StatementCard } from '../pages/voice/StatementCard';
 import { Box } from 'grommet';
 import { useBackingSend } from '../pages/voice/useBackingSend';
 import { useStatementSend } from '../pages/voice/useStatementSend';
+import { StatementContext } from '../contexts/StatementContext';
 
 export const TestProject = () => {
   const { connectTest } = useAppSigner();
@@ -80,7 +81,9 @@ export const TestProject = () => {
         {statements ? (
           statements.map((statement, ix) => {
             return (
-              <StatementCard containerStyle={{ marginBottom: '22px' }} key={ix} statement={statement}></StatementCard>
+              <StatementContext statement={statement}>
+                <StatementCard containerStyle={{ marginBottom: '22px' }} key={ix}></StatementCard>
+              </StatementContext>
             );
           })
         ) : (

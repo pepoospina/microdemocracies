@@ -67,6 +67,7 @@ export const StatementEditable = (props: IStatementEditable) => {
           color: constants.colors.textOnPrimary,
           fontSize: '48px',
           borderRadius: '6px',
+          cursor: props.onClick ? 'pointer' : '',
           ...props.containerStyle,
         }}
         pad="small"
