@@ -25,7 +25,9 @@ export const Address = (props: IAddress): JSX.Element => {
   const exploreAddress = (address: `0x${string}` | undefined) => `${CHAIN_EXPLORER_BASE}/address/${address}`;
 
   const address = getAddress(props.address);
-  const text = address ? `${address.slice(0, digits)}...${address.slice(address.length - digits, address.length)}` : '';
+  const text = address
+    ? `0x${address.slice(2, 2 + digits)}...${address.slice(address.length - digits, address.length)}`
+    : '';
 
   const url = exploreAddress !== undefined ? exploreAddress(props.address) : undefined;
 

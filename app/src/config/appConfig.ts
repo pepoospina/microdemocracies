@@ -9,3 +9,5 @@ export const FUNCTIONS_BASE = process.env.FUNCTIONS_BASE;
 export const CHAIN_ID = 84531;
 export const CHAIN_NAME = 'basegoerli';
 export const CHAIN_EXPLORER_BASE = 'https://goerli.basescan.org';
+
+export const MIN_MEMBERS = 3;

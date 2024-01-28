@@ -113,7 +113,7 @@ export const VouchMemberWidget = (props: { pap: Entity<PAP> }) => {
     <Box>
       <AppCard>
         <Text>
-          Application already accepted as{' '}
+          {t('applicationAcceptedAs')}{' '}
           <Anchor
             onClick={() => {
               if (vouchedTokenId && projectId) {

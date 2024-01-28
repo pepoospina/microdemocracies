@@ -54,37 +54,42 @@ export const VoiceStatementPage = (): JSX.Element => {
       content={
         <Box pad="medium">
           <Box>
-            {!isShown ? <AppHeading level="3">{2 - nBackingDef} more likes needed to appear!</AppHeading> : <></>}
+            {!isShown ? (
+              <Box margin={{ top: 'large', bottom: '48px' }}>
+                <AppHeading level="3" style={{ textAlign: 'center' }}>
+                  {t('likesNeeded', { nLikes: 2 - nBackingDef })}
+                </AppHeading>
+
+                <Box>
+                  <AppCard margin={{ vertical: 'large' }}>
+                    <Text>
+                      This statement needs {2 - (nBacking ? nBacking : 0)} more likes to appear in the microdemocracy
+                      home page. Share it with others to get their support.
+                    </Text>
+                  </AppCard>
+                  <Box>
+                    <AppButton
+                      onClick={() => share()}
+                      icon={copied ? <StatusGood></StatusGood> : <Send></Send>}
+                      reverse
+                      primary
+                      style={{ width: '100%' }}
+                      label={copied ? 'link copied!' : 'share'}></AppButton>
+                  </Box>
+                </Box>
+              </Box>
+            ) : (
+              <></>
+            )}
           </Box>
           <Box>
             <Text margin={{ vertical: 'small' }}>The following statement was proposed</Text>
             <StatementCard></StatementCard>
           </Box>
-          <Box margin={{ vertical: 'medium' }}>
+          <Box margin={{ vertical: 'medium', bottom: '64px' }}>
             <Text margin={{ vertical: 'small' }}>For the microdemocracy:</Text>
             <ProjectCard project={project}></ProjectCard>
           </Box>
-          {!isShown ? (
-            <Box>
-              <AppCard margin={{ vertical: 'medium' }}>
-                <Text>
-                  This statement needs {2 - (nBacking ? nBacking : 0)} more likes to appear in the microdemocracy home
-                  page. Share it with others to get their support.
-                </Text>
-              </AppCard>
-              <Box>
-                <AppButton
-                  onClick={() => share()}
-                  icon={copied ? <StatusGood></StatusGood> : <Send></Send>}
-                  reverse
-                  primary
-                  style={{ width: '100%' }}
-                  label={copied ? 'link copied!' : 'share'}></AppButton>
-              </Box>
-            </Box>
-          ) : (
-            <></>
-          )}
         </Box>
       }
       nav={

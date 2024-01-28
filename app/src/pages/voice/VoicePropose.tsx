@@ -4,8 +4,8 @@ import { useEffect, useState } from 'react';
 import { AppButton, AppCard, AppHeading } from '../../ui-components';
 import { AppConnectButton } from '../../components/app/AppConnectButton';
 import { useNavigate } from 'react-router-dom';
-import { AppBottomButton, AppBottomButtons } from '../common/BottomButtons';
-import { Add, FormPrevious, Send } from 'grommet-icons';
+import { AppBottomButtons } from '../common/BottomButtons';
+import { Add, FormPrevious } from 'grommet-icons';
 import { useAccountContext } from '../../wallet/AccountContext';
 import { StatementEditable } from './StatementEditable';
 import { useSemaphoreContext } from '../../contexts/SemaphoreContext';
@@ -19,6 +19,7 @@ import { cap } from '../../utils/general';
 import { RouteNames } from '../../route.names';
 import { useProjectContext } from '../../contexts/ProjectContext';
 import { BoxCentered } from '../../ui-components/BoxCentered';
+import { MIN_MEMBERS } from '../../config/appConfig';
 
 export const VoicePropose = (): JSX.Element => {
   const { t } = useTranslation();
@@ -65,7 +66,7 @@ export const VoicePropose = (): JSX.Element => {
       return (
         <BoxCentered>
           <AppCard margin={{ vertical: 'medium' }}>
-            <Text>Debe haber al menos 3 miembros para proponer una declaración.</Text>
+            <Text>{t('atLeastNMembers', { nMembers: MIN_MEMBERS })}.</Text>
           </AppCard>
           <AppButton
             margin={{ bottom: 'medium' }}
@@ -89,11 +90,9 @@ export const VoicePropose = (): JSX.Element => {
                 placeholder={`${t('newStatement')}...`}></StatementEditable>
             </Box>
 
-            <AppHeading level="3">Podran respaldar esta declaración {nMembers} personas </AppHeading>
-
-            <AppCard margin={{ vertical: 'medium' }}>
-              <Text>{t('proposeInfo')}!</Text>
-            </AppCard>
+            <AppHeading level="3" style={{ textAlign: 'center' }}>
+              {t('canBackN', { nMembers })}
+            </AppHeading>
 
             <Box justify="center" style={{ margin: '36px 0', width: '100%' }}>
               {!isConnected ? <AppConnectButton label={t('connectToPropose')}></AppConnectButton> : <></>}

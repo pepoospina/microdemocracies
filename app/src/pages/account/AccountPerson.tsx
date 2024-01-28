@@ -8,6 +8,7 @@ import { CHAIN_ID } from '../../config/appConfig';
 import { platforms } from '../../utils/platforms';
 import { useTranslation } from 'react-i18next';
 import { cap } from '../../utils/general';
+import { AccountAddress } from './AccountAddress';
 
 interface IAccountPerson extends BoxExtendedProps {
   pap?: PAP;
@@ -81,7 +82,7 @@ export const AccountPerson = (props: IAccountPerson) => {
       </Box>
       <Box style={fieldStyle}>
         <Text style={{ fontWeight: 'bold' }}>{cap(t('account'))}:</Text>
-        <Address digits={8} address={props.pap.account as HexStr} chainId={CHAIN_ID}></Address>
+        <AccountAddress account={props.pap.account as HexStr}></AccountAddress>
       </Box>
     </Box>
   ) : (

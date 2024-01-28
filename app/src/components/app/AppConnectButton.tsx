@@ -31,8 +31,6 @@ export const AppConnectWidget = () => {
   const isFullyConnected = isConnected && publicId !== undefined && aaAddress !== undefined;
   const isLoading = isConnecting || (address && !isFullyConnected);
 
-  console.log({ isConnecting, address, isFullyConnected });
-
   if (!isFullyConnected) {
     return (
       <>

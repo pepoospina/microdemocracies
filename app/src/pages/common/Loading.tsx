@@ -6,7 +6,7 @@ export const Loading = (props: { label?: string }) => {
   const { t } = useTranslation();
   return (
     <Box align="center">
-      <Box>
+      <Box margin={{ bottom: 'small' }}>
         <Text>{props.label === undefined ? '' : cap(t('loading'))}</Text>
       </Box>
       <Box style={{ margin: '16px 0px' }} align="center" justify="center">

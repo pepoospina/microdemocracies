@@ -28,6 +28,8 @@ export const getAccountProjects = async (aaAddress: HexStr) => {
     })
   );
 
+  console.log({ projects });
+
   return projects;
 };
 

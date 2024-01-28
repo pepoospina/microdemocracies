@@ -86,7 +86,7 @@ export const InvitePage = (): JSX.Element => {
     return (
       <Box style={{ flexShrink: 0 }}>
         <AppCard margin={{ vertical: 'medium' }}>
-          <Text>{t('shareLinkMsg')}.</Text>
+          <Text>{t('shareLinkMsg')}</Text>
         </AppCard>
         <AppButton
           reverse

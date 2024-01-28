@@ -88,7 +88,7 @@ export const ProjectHomePage = (props: IProjectHome) => {
 
   const content = (() => {
     return (
-      <Box style={{ overflowY: 'auto' }} margin={{ bottom: 'medium' }}>
+      <Box style={{ overflowY: 'auto' }} margin={{ bottom: 'medium' }} pad={{ left: 'medium' }}>
         <Box style={{ flexShrink: 0 }} pad={{ right: 'medium' }}>
           <Box margin={{ vertical: 'large' }}>
             <AppHeading level="3">{t('communityVoice')}:</AppHeading>
@@ -131,7 +131,7 @@ export const ProjectHomePage = (props: IProjectHome) => {
                       </>
                     }></CircleIndicator>
                 </AppButton>
-                <AppButton plain onClick={() => navigate(RouteNames.Invite)}>
+                <AppButton plain disabled={tokenId === undefined} onClick={() => navigate(RouteNames.Invite)}>
                   <CircleIndicator
                     forceCircle={true}
                     size={54}
@@ -143,9 +143,9 @@ export const ProjectHomePage = (props: IProjectHome) => {
             </Box>
           </Box>
 
-          <Box pad={{ left: 'medium' }}>
+          <Box>
             {tokenId === null ? (
-              <Box pad="small">
+              <Box pad={{ horizontal: 'medium' }} margin={{ top: 'medium' }}>
                 <AppButton onClick={() => navigate(RouteNames.Join)} label={'join'}></AppButton>
               </Box>
             ) : (

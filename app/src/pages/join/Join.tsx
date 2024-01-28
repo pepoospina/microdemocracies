@@ -184,8 +184,8 @@ export const JoinPage = () => {
       }
       nav={
         <AppBottomButtons
-          left={{ label: 'back', primary: false, action: prevPage }}
-          right={{ label: 'send', primary: true, action: send }}></AppBottomButtons>
+          left={{ label: t('back'), primary: false, action: prevPage }}
+          right={{ label: t('send'), primary: true, action: send }}></AppBottomButtons>
       }></ViewportPage>,
     <ViewportPage
       key="5"
@@ -200,8 +200,8 @@ export const JoinPage = () => {
       }
       nav={
         <AppBottomButtons
-          left={{ label: 'back', primary: false, action: prevPage }}
-          right={{ label: 'done', primary: true, action: () => navigate('..') }}></AppBottomButtons>
+          left={{ label: t('back'), primary: false, action: prevPage }}
+          right={{ label: t('done'), primary: true, action: () => navigate('..') }}></AppBottomButtons>
       }></ViewportPage>,
   ];
 
