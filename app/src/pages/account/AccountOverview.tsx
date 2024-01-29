@@ -15,14 +15,14 @@ export const AccountOverview = (props: { account?: AppAccount; pap?: Entity<PAP>
 
   if (!accountPapRead) {
     return (
-      <BoxCentered fill>
+      <BoxCentered fill style={{ flexShrink: 0 }}>
         <Spinner></Spinner>
       </BoxCentered>
     );
   }
 
   return (
-    <Box align="center">
+    <Box align="center" style={{ flexShrink: 0 }}>
       {accountRead ? (
         !isFounder ? (
           <Box margin={{ bottom: 'large' }}>

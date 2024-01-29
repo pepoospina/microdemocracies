@@ -85,6 +85,7 @@ contract Registry is Context, IERC721, IERC721Metadata, Initializable {
     /** Errors */
     error ErrorAccountSolidified();
     error CantChallengeInvalidAccount();
+    error OnlyMemberCanChallenge();
     error ChallangeAlreadyActive();    
     error ErrorChallangeAlreadyExecuted();
     error ErrorChallangeNotActive();
@@ -157,6 +158,10 @@ contract Registry is Context, IERC721, IERC721Metadata, Initializable {
 
         if(!accounts[_tokenId].valid) {
             revert CantChallengeInvalidAccount();
+        }
+
+        if(_tokenIdOf(_msgSender()) == 0) {
+            revert OnlyMemberCanChallenge();
         }
 
         Challenge storage _challenge = getCurrentChallenge(_tokenId);

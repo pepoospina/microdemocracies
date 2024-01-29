@@ -31,7 +31,7 @@ export const AccountPage = () => {
   return (
     <ViewportPage
       content={
-        <Box pad="large">
+        <Box pad="large" style={{ flexShrink: 0 }}>
           <AccountOverview account={accountRead} pap={accountPapRead}></AccountOverview>
           <AccountChallenge account={accountRead} cardStyle={{ marginTop: '36px', marginBottom: '36px' }} />
         </Box>

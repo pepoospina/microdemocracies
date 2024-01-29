@@ -19,7 +19,7 @@ export type VouchHookType = {
 export const useVouch = (): VouchHookType => {
   /** Vouch */
   const { address, projectId } = useProjectContext();
-  const { reset, addUserOp, isSuccess, isSending, events } = useAccountContext();
+  const { addUserOp, isSuccess, isSending, events } = useAccountContext();
 
   const [vouchParamsInternal, setVouchParamsInternal] = useState<[HexStr, string]>();
 

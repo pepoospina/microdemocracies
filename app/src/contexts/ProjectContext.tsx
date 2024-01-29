@@ -127,6 +127,7 @@ export const ProjectContext = (props: IProjectContext) => {
       if (projectId) {
         return getTopStatements(projectId);
       }
+      return null;
     }
   );
 
@@ -177,7 +178,7 @@ export const ProjectContext = (props: IProjectContext) => {
         resettingLink,
         applications,
         refetchApplications,
-        statements,
+        statements: statements ? statements : undefined,
         refetchStatements,
       }}>
       {props.children}
