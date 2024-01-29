@@ -19,7 +19,8 @@ import { cap } from '../../utils/general';
 import { RouteNames } from '../../route.names';
 import { useProjectContext } from '../../contexts/ProjectContext';
 import { BoxCentered } from '../../ui-components/BoxCentered';
-import { MIN_MEMBERS } from '../../config/appConfig';
+import { MIN_LIKES_PUBLIC, MIN_MEMBERS } from '../../config/appConfig';
+import { BulletList } from '../../ui-components/BulletList';
 
 export const VoicePropose = (): JSX.Element => {
   const { t } = useTranslation();
@@ -64,7 +65,7 @@ export const VoicePropose = (): JSX.Element => {
     }
     if (nMembers < 3) {
       return (
-        <BoxCentered>
+        <BoxCentered pad={{ horizontal: 'medium' }}>
           <AppCard margin={{ vertical: 'medium' }}>
             <Text>{t('atLeastNMembers', { nMembers: MIN_MEMBERS })}.</Text>
           </AppCard>
@@ -91,8 +92,17 @@ export const VoicePropose = (): JSX.Element => {
             </Box>
 
             <AppHeading level="3" style={{ textAlign: 'center' }}>
-              {t('canBackN', { nMembers })}
+              {t('important')}
             </AppHeading>
+
+            <AppCard pad="small" margin={{ vertical: 'medium' }}>
+              <BulletList
+                elements={[
+                  <Text>{t('canBackN', { nMembers })}.</Text>,
+                  <Text>{t('aStatementNeeds', { nLikes: MIN_LIKES_PUBLIC })}.</Text>,
+                  <Text>{t('youNeedToLike')}.</Text>,
+                ]}></BulletList>
+            </AppCard>
 
             <Box justify="center" style={{ margin: '36px 0', width: '100%' }}>
               {!isConnected ? <AppConnectButton label={t('connectToPropose')}></AppConnectButton> : <></>}

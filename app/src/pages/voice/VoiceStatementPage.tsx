@@ -14,6 +14,7 @@ import { Loading } from '../common/Loading';
 import { AppButton, AppCard, AppHeading } from '../../ui-components';
 import { useStatementContext } from '../../contexts/StatementContext';
 import { useCopyToClipboard } from '../../utils/copy.clipboard';
+import { MIN_LIKES_PUBLIC } from '../../config/appConfig';
 
 export const VoiceStatementPage = (): JSX.Element => {
   const { t } = useTranslation();
@@ -57,15 +58,12 @@ export const VoiceStatementPage = (): JSX.Element => {
             {!isShown ? (
               <Box margin={{ top: 'large', bottom: '48px' }}>
                 <AppHeading level="3" style={{ textAlign: 'center' }}>
-                  {t('likesNeeded', { nLikes: 2 - nBackingDef })}
+                  {t('likesNeeded', { nLikes: MIN_LIKES_PUBLIC - nBackingDef })}
                 </AppHeading>
 
                 <Box>
                   <AppCard margin={{ vertical: 'large' }}>
-                    <Text>
-                      This statement needs {2 - (nBacking ? nBacking : 0)} more likes to appear in the microdemocracy
-                      home page. Share it with others to get their support.
-                    </Text>
+                    <Text>{t('likesNeededDetailed', { nLikes: MIN_LIKES_PUBLIC - (nBacking ? nBacking : 0) })}</Text>
                   </AppCard>
                   <Box>
                     <AppButton

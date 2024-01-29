@@ -11,3 +11,4 @@ export const CHAIN_NAME = 'basegoerli';
 export const CHAIN_EXPLORER_BASE = 'https://goerli.basescan.org';
 
 export const MIN_MEMBERS = 3;
+export const MIN_LIKES_PUBLIC = 2;
