@@ -90,6 +90,16 @@ export const setProjectMember = async (
   return docRef.id;
 };
 
+export const deleteProjectMember = async (
+  member: AppProjectMember
+): Promise<void> => {
+  const id = member.aaAddress;
+  const docRef = collections
+    .projectMembers(member.projectId.toString())
+    .doc(id);
+  await docRef.delete();
+};
+
 export const setTree = async (tree: AppTree): Promise<string> => {
   const treeRef = collections.trees.doc(getTreeId(tree.projectId, tree.root));
   await treeRef.set({ root: tree.root, projectId: tree.projectId });

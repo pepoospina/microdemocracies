@@ -1,4 +1,4 @@
-import { ButtonExtendedProps, Button, DropButton, DropButtonExtendedProps, BoxExtendedProps } from 'grommet';
+import { ButtonExtendedProps, Button, DropButton, DropButtonExtendedProps } from 'grommet';
 import { useResponsive } from '../components/app/ResponsiveApp';
 import { useThemeContext } from '../components/app/ThemedApp';
 import { AppModal, IAppModal } from './AppModal';
@@ -27,7 +27,7 @@ export const AppCircleButton = (props: IButton) => {
   const { constants } = useThemeContext();
   circleButtonStyle.borderColor = constants.colors.primary;
 
-  return <AppButton {...props} plain label="" style={{ ...props.style, ...circleButtonStyle }}></AppButton>;
+  return <AppButton {...props} plain label="" style={{ ...circleButtonStyle, ...props.style }}></AppButton>;
 };
 
 export const AppButtonResponsive = (props: IButton) => {
@@ -39,7 +39,7 @@ export const AppCircleDropButton = (props: DropButtonExtendedProps) => {
   const { constants } = useThemeContext();
   circleButtonStyle.borderColor = constants.colors.primary;
 
-  return <DropButton {...props} plain style={{ ...props.style, ...circleButtonStyle }}></DropButton>;
+  return <DropButton {...props} plain style={{ ...circleButtonStyle, ...props.style }}></DropButton>;
 };
 
 export const AppCircleDropButtonResponsive = (props: DropButtonExtendedProps) => {

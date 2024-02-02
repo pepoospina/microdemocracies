@@ -181,6 +181,11 @@ export interface AppProjectMember {
   aaAddress: HexStr;
 }
 
+export interface AppProjectMemberToken {
+  projectId: number;
+  tokenId: number;
+}
+
 export interface AppProjectIndex {
   deployAt: number;
   indexedAt: number;

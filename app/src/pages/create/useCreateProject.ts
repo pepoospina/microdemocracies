@@ -27,7 +27,7 @@ export interface CreateProjectStatus {
 
 export const useCreateProject = (): CreateProjectStatus => {
   const {
-    addUserOp,
+    sendUserOps,
     aaAddress,
     isSuccess: isSuccessUserOp,
     events,
@@ -58,7 +58,7 @@ export const useCreateProject = (): CreateProjectStatus => {
   }, [aaAddress, founderDetails]);
 
   const createProject = useCallback(async () => {
-    if (!aaAddress || !founderPap || !addUserOp) return;
+    if (!aaAddress || !founderPap || !sendUserOps) return;
 
     setIsCreating(true);
     setIsError(false);
@@ -81,20 +81,19 @@ export const useCreateProject = (): CreateProjectStatus => {
 
       const registryFactoryAddress = await getFactoryAddress();
 
-      addUserOp(
+      sendUserOps([
         {
           target: registryFactoryAddress,
           data: callData,
           value: BigInt(0),
         },
-        true
-      );
+      ]);
     } catch (e: any) {
       setIsCreating(false);
       setIsError(true);
       setError(e);
     }
-  }, [aaAddress, addUserOp, founderPap, whoStatement]);
+  }, [aaAddress, sendUserOps, founderPap, whoStatement]);
 
   useEffect(() => {
     if (errorUserOp) {

@@ -1,9 +1,9 @@
-import { Box, Spinner, Text } from 'grommet';
+import { Box, DropButton, Spinner, Text } from 'grommet';
 import { useNavigate } from 'react-router-dom';
+import { Add, FormPrevious, Group, UserAdd, Menu } from 'grommet-icons';
 
-import { AppButton, AppCard, AppHeading } from '../../ui-components';
+import { Address, AppButton, AppCard, AppCircleDropButton, AppHeading } from '../../ui-components';
 import { useProjectContext } from '../../contexts/ProjectContext';
-import { Add, FormPrevious, Group, UserAdd } from 'grommet-icons';
 import { ViewportPage } from '../../components/app/Viewport';
 import { Loading } from '../common/Loading';
 import { ProjectCard } from './ProjectCard';
@@ -19,6 +19,7 @@ import { useEffect } from 'react';
 import { useAppContainer } from '../../components/app/AppContainer';
 import { CircleIndicator } from '../../components/app/CircleIndicator';
 import { StatementContext } from '../../contexts/StatementContext';
+import { CHAIN_ID } from '../../config/appConfig';
 
 export interface IProjectHome {
   dum?: any;
@@ -33,12 +34,15 @@ export const ProjectHomePage = (props: IProjectHome) => {
   const { setTitle } = useAppContainer();
   const { constants } = useThemeContext();
 
+  const leave = () => {
+    console.log('soon');
+  };
+
   useEffect(() => {
     setTitle({ prefix: '', main: t('project') });
   }, [i18n.language]);
 
   const newStr = mobile ? cap(t('propose')) : cap(t('proposeNew'));
-  const membersStr = mobile ? cap(t('members')) : t('seeInviteMembers');
 
   if (project === undefined) {
     return (
@@ -139,6 +143,29 @@ export const ProjectHomePage = (props: IProjectHome) => {
                       <UserAdd color={constants.colors.textOnPrimary} style={{ marginLeft: '5px' }}></UserAdd>
                     }></CircleIndicator>
                 </AppButton>
+                <DropButton
+                  dropProps={{ style: { marginTop: '56px' } }}
+                  dropContent={
+                    <Box pad="20px" gap="small">
+                      <Box margin={{ bottom: 'small' }}>
+                        <Text>{cap(t('projectAddress'))}</Text>
+                        <Address address={project?.address} chainId={CHAIN_ID}></Address>
+                      </Box>
+
+                      <AppButton
+                        disabled
+                        plain
+                        onClick={() => leave()}
+                        style={{ textTransform: 'none', paddingTop: '6px' }}>
+                        <Text style={{ fontWeight: 'bold' }}>{cap(t('leave'))}</Text>
+                      </AppButton>
+                    </Box>
+                  }>
+                  <CircleIndicator
+                    forceCircle={true}
+                    size={54}
+                    icon={<Menu color={constants.colors.textOnPrimary} style={{}}></Menu>}></CircleIndicator>
+                </DropButton>
               </Box>
             </Box>
           </Box>

@@ -13,11 +13,13 @@ import { MessageSigner } from '../utils/identity';
 import { aaWalletAbi, getFactoryAddress, registryABI, registryFactoryABI } from '../utils/contracts.json';
 import { AccountDataContext } from './AccountDataContext';
 
+const DEBUG = true;
+
 export type AccountContextType = {
   isConnected: boolean;
   aaAddress?: HexStr;
   owner?: HexStr;
-  addUserOp?: (userOp: UserOperationCallData, send?: boolean) => void;
+  sendUserOps?: (userOps: UserOperationCallData[]) => void;
   reset: () => void;
   isSending: boolean;
   isSuccess: boolean;
@@ -36,7 +38,6 @@ export const AccountContext = (props: PropsWithChildren) => {
   /** ALCHEMY provider to send transactions using AA */
   const [alchemyProviderAA, setAlchemyProviderAA] = useState<AlchemyProvider>();
   const [aaAddress, setAaAddress] = useState<HexStr>();
-  const [userOps, setUserOps] = useState<UserOperationCallData[]>([]);
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
   const [isSending, setIsSending] = useState<boolean>(false);
   const [error, setError] = useState<Error>();
@@ -47,11 +48,11 @@ export const AccountContext = (props: PropsWithChildren) => {
   const signMessageAA = alchemyProviderAA ? (message: string) => alchemyProviderAA.signMessage(message) : undefined;
 
   const reset = () => {
+    if (DEBUG) console.log('resetting userOps');
     setIsSuccess(false);
     setIsSending(false);
     setError(undefined);
     setEvents(undefined);
-    setUserOps([]);
   };
 
   const {
@@ -116,30 +117,24 @@ export const AccountContext = (props: PropsWithChildren) => {
     }
   }, [alchemyProviderAA]);
 
-  const addUserOp = alchemyProviderAA
-    ? async (userOp: UserOperationCallData, send: boolean = false) => {
-        if (!alchemyProviderAA) throw new Error(`alchemyProvider not defined`);
-        if (isSending) throw new Error('Cannot add userOps while sending');
-        if (isSuccess) throw new Error('Please reset before adding userOps');
-
-        const allUserOps = userOps.concat(userOp);
-        if (send) {
-          await sendUserOps(allUserOps);
-        } else {
-          setUserOps(allUserOps);
-        }
-      }
-    : undefined;
-
   const sendUserOps = async (_userOps: UserOperationCallData[]) => {
     setIsSending(true);
     try {
       if (_userOps.length === 0) return;
       if (!alchemyProviderAA) throw new Error('undefined alchemyProviderAA');
 
+      if (DEBUG) console.log('sendUserOps', { userOps: _userOps });
       const res = await alchemyProviderAA.sendUserOperation(_userOps);
+      if (DEBUG) console.log('sendUserOps - res', { res });
+
+      if (DEBUG) console.log('waiting');
       const txHash = await alchemyProviderAA.waitForUserOperationTransaction(res.hash);
+      if (DEBUG) console.log('waitForUserOperationTransaction', { txHash });
+
+      if (DEBUG) console.log('getting tx');
       const tx = await (publicClient as any).waitForTransactionReceipt({ hash: txHash });
+      if (DEBUG) console.log('tx - res', { tx });
+
       const targets = _userOps.map((op) => op.target.toLowerCase());
 
       // extract all events from the target contracts (events from other callers would be here too... hmmm)
@@ -166,7 +161,6 @@ export const AccountContext = (props: PropsWithChildren) => {
       setIsSuccess(true);
       setIsSending(false);
       setEvents(events);
-      setUserOps([]);
     } catch (e: any) {
       console.error(e);
       setError(e);
@@ -186,7 +180,7 @@ export const AccountContext = (props: PropsWithChildren) => {
         isConnected,
         aaAddress,
         owner,
-        addUserOp,
+        sendUserOps,
         reset,
         isSuccess,
         isSending,

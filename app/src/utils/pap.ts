@@ -1,6 +1,7 @@
 import { PAP } from '../types';
 
-export const getPapShortname = (pap: PAP) => {
+export const getPapShortname = (pap?: PAP) => {
+  if (!pap) return '';
   if (pap.person && pap.person.personal) {
     return `${pap.person.personal.firstName ? pap.person.personal.firstName : ''}${
       pap.person.personal.lastName ? ` ${pap.person.personal.lastName}` : ''

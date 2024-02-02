@@ -14,6 +14,11 @@ export const addMemberValidationScheme = object({
   aaAddress: string().required(),
 }).noUnknown(true);
 
+export const invalidateMemberValidationScheme = object({
+  projectId: number().required(),
+  tokenId: number().required(),
+}).noUnknown(true);
+
 export const addInvitationValidationScheme = object({
   projectId: number().required(),
   memberAddress: string().required(),

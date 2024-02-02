@@ -19,7 +19,7 @@ export type VouchHookType = {
 export const useVouch = (): VouchHookType => {
   /** Vouch */
   const { address, projectId } = useProjectContext();
-  const { addUserOp, isSuccess, isSending, events } = useAccountContext();
+  const { sendUserOps, isSuccess, isSending, events } = useAccountContext();
 
   const [vouchParamsInternal, setVouchParamsInternal] = useState<[HexStr, string]>();
 
@@ -52,7 +52,7 @@ export const useVouch = (): VouchHookType => {
   }, [events, projectId, vouchParamsInternal]);
 
   const sendVouch =
-    address && addUserOp && vouchParamsInternal
+    address && sendUserOps && vouchParamsInternal
       ? async () => {
           const callData = encodeFunctionData({
             abi: registryABI,
@@ -60,14 +60,13 @@ export const useVouch = (): VouchHookType => {
             args: vouchParamsInternal,
           });
 
-          addUserOp(
+          sendUserOps([
             {
               target: address,
               data: callData,
               value: BigInt(0),
             },
-            true
-          );
+          ]);
         }
       : undefined;
 

@@ -71,7 +71,7 @@ export const InviteAccountPage = () => {
         <AppBottomButton
           onClick={() => navigate(-1)}
           icon={<FormPrevious></FormPrevious>}
-          label="back"></AppBottomButton>
+          label={t('back')}></AppBottomButton>
       }></ViewportPage>
   );
 };

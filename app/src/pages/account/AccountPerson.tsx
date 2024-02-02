@@ -2,9 +2,7 @@ import React, { CSSProperties } from 'react';
 import { Box, BoxExtendedProps, Spinner, Text } from 'grommet';
 
 import { HexStr, PAP } from '../../types';
-import { Address } from '../../ui-components';
 import { PlatformUrl } from './PlatformUrl';
-import { CHAIN_ID } from '../../config/appConfig';
 import { platforms } from '../../utils/platforms';
 import { useTranslation } from 'react-i18next';
 import { cap } from '../../utils/general';
@@ -13,6 +11,7 @@ import { AccountAddress } from './AccountAddress';
 interface IAccountPerson extends BoxExtendedProps {
   pap?: PAP;
   cardStyle?: React.CSSProperties;
+  showAccount?: boolean;
 }
 
 interface IDetailField {
@@ -82,7 +81,7 @@ export const AccountPerson = (props: IAccountPerson) => {
       </Box>
       <Box style={fieldStyle}>
         <Text style={{ fontWeight: 'bold' }}>{cap(t('account'))}:</Text>
-        <AccountAddress account={props.pap.account as HexStr}></AccountAddress>
+        <AccountAddress showAccount={props.showAccount} account={props.pap.account as HexStr}></AccountAddress>
       </Box>
     </Box>
   ) : (

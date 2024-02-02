@@ -378,6 +378,7 @@ contract Registry is Context, IERC721, IERC721Metadata, Initializable {
         Account storage account = accounts[tokenId];
 
         if (!account.valid) revert ErrorAccountNotValid();
+        address orgAccount = account.account;
         
         /** 
          * invalidate and remove the one-to-one relationship
@@ -387,13 +388,14 @@ contract Registry is Context, IERC721, IERC721Metadata, Initializable {
         
         owned[account.account] = 0;
         account.account = address(0);
+        account.voucher = 0;
 
         /** decrease the number of valid members of the circle */
         vouches[account.voucher].number -= 1;
         /** decrease the number of total entries in the registry */
         __totalSupply -= 1;
 
-        emit Transfer(account.account, address(0), tokenId);
+        emit Transfer(orgAccount, address(0), tokenId);
         emit InvalidatedAccountEvent(tokenId);
     }
 

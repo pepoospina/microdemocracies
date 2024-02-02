@@ -1,6 +1,6 @@
 import { Box, BoxExtendedProps, Spinner, Text } from 'grommet';
 
-import { AppConnectButton } from '../../components/app/AppConnectButton';
+import { AppConnectButton, AppConnectWidget } from '../../components/app/AppConnectButton';
 import { AppButton, AppCard, AppHeading, AppRemainingTime } from '../../ui-components';
 
 import { useEffect, useState } from 'react';
@@ -15,6 +15,7 @@ import { useConnectedMember } from '../../contexts/ConnectedAccountContext';
 import { LoadingDiv } from '../../ui-components/LoadingDiv';
 import { useChallengeRead } from '../../contexts/ChallengeContextRead';
 import { useChallengeWrite } from '../../contexts/ChallengeContextWrite';
+import { postAccountInvalidated } from '../../utils/project';
 
 interface IAccountChallenge extends BoxExtendedProps {
   cardStyle?: React.CSSProperties;
@@ -40,6 +41,7 @@ export const AccountChallenge = (props: IAccountChallenge) => {
     errorChallenging,
     isErrorVoting,
     errorVoting,
+    events,
   } = useChallengeWrite(accountRead?.tokenId);
 
   const [error, setError] = useState<boolean>();
@@ -66,6 +68,16 @@ export const AccountChallenge = (props: IAccountChallenge) => {
     }
   }, [isErrorVoting, errorVoting]);
 
+  /** trigger delete member if successful */
+  useEffect(() => {
+    if (isSuccess && events) {
+      const invalidated = events.find((e) => e.eventName === 'InvalidatedAccountEvent');
+      if (invalidated) {
+        postAccountInvalidated(Number((invalidated.args as any).tokenId));
+      }
+    }
+  }, [isSuccess, events]);
+
   const challenge = () => {
     if (sendChallenge) {
       sendChallenge();
@@ -73,7 +85,7 @@ export const AccountChallenge = (props: IAccountChallenge) => {
   };
 
   const challenged = challengeRead !== undefined && challengeRead !== null;
-  const canChallenge = sendChallenge !== undefined;
+  const canChallenge = sendChallenge !== undefined && accountRead?.valid;
 
   /** Status managing */
   const date = new DateManager();
@@ -101,8 +113,7 @@ export const AccountChallenge = (props: IAccountChallenge) => {
         </Box>
 
         <Box direction="row" align="center" justify="between">
-          <Text>Can vote: {totalVoters}</Text>
-          <Text>{nVoted !== undefined ? `Voted: ${nVoted}` : ''}</Text>
+          <Text>{nVoted !== undefined ? t('votedNofMEligible', { nVoted, totalVoters }) : ''}</Text>
         </Box>
 
         <Box>
@@ -175,7 +186,7 @@ export const AccountChallenge = (props: IAccountChallenge) => {
 
   const notChallengedContent = (
     <Box>
-      <Text>This account is valid and not currently challenged</Text>
+      <Text>{accountRead?.valid ? t('accountValidatedNotChallenged') : t('accountInvalidated')}.</Text>
       {error ? (
         <AppCard style={{ marginBottom: '16px', overflow: 'hidden' }}>
           <Text>{error}</Text>
@@ -185,15 +196,15 @@ export const AccountChallenge = (props: IAccountChallenge) => {
       )}
       <Box style={{ marginTop: '16px' }}>
         {!isConnected ? (
-          <AppConnectButton label="Connect to Challenge" />
+          <AppConnectWidget />
         ) : canChallenge ? (
           isSending ? (
             <WaitingTransaction></WaitingTransaction>
           ) : (
-            <AppButton label="challenge" onClick={() => challenge()}></AppButton>
+            <AppButton label={t('challenge')} onClick={() => challenge()}></AppButton>
           )
         ) : (
-          <Text>Can't challenge</Text>
+          <Text>{t('cantChallenge')}.</Text>
         )}
       </Box>
     </Box>

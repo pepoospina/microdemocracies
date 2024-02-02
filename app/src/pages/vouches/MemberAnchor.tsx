@@ -1,4 +1,4 @@
-import { Anchor } from 'grommet';
+import { Anchor, AnchorExtendedProps } from 'grommet';
 import { useTranslation } from 'react-i18next';
 
 import { useConnectedMember } from '../../contexts/ConnectedAccountContext';
@@ -8,7 +8,7 @@ import { getPapShortname } from '../../utils/pap';
 import { useNavigate, useParams } from 'react-router-dom';
 import { AbsoluteRoutes } from '../../route.names';
 
-export const MemberAnchor = (props: { tokenId: number }) => {
+export const MemberAnchor = (props: { tokenId: number } & AnchorExtendedProps) => {
   const { projectId } = useParams();
   const navigate = useNavigate();
   const { t } = useTranslation();
@@ -32,7 +32,7 @@ export const MemberAnchor = (props: { tokenId: number }) => {
   };
 
   return (
-    <Anchor style={{ marginRight: '5px' }} onClick={() => goToMemberPage()}>
+    <Anchor style={{ marginRight: '5px', ...props.style }} onClick={() => goToMemberPage()}>
       {tag}
       {isLoggedMember ? ` (${t('you')})` : ''}
     </Anchor>
