@@ -64,7 +64,7 @@ const config: HardhatUserConfig = {
       },
     },
     basesepolia: {
-      url: `https://base-goerli.g.alchemy.com/v2/${process.env.ALCHEMY_BASESEPOLIA_KEY}`,
+      url: `https://base-sepolia.g.alchemy.com/v2/${process.env.ALCHEMY_BASESEPOLIA_KEY}`,
       accounts: {
         mnemonic: getMnemonic(),
       },
