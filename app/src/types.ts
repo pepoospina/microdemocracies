@@ -110,16 +110,7 @@ export interface SemaphoreProofStrings {
   proof: PackedProofString;
 }
 
-export type PackedProofString = [
-  string,
-  string,
-  string,
-  string,
-  string,
-  string,
-  string,
-  string
-];
+export type PackedProofString = [string, string, string, string, string, string, string, string];
 
 export interface AppStatement {
   projectId: number;
@@ -176,9 +167,16 @@ export interface AppReturnMerklePass {
   treeId: string;
 }
 
+export interface AppProjectMemberId {
+  projectId: number;
+  aaAddress: HexStr;
+}
+
 export interface AppProjectMember {
   projectId: number;
   aaAddress: HexStr;
+  tokenId: number;
+  voucherTokenId: number;
 }
 
 export interface AppProjectMemberToken {

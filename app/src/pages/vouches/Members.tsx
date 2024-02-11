@@ -2,7 +2,6 @@ import { Box } from 'grommet';
 import { Add, FormPrevious } from 'grommet-icons';
 import { useNavigate } from 'react-router-dom';
 
-import { VoucheCard } from './VouchCard';
 import { AppBottomButton } from '../common/BottomButtons';
 import { useProjectContext } from '../../contexts/ProjectContext';
 import { ApplicationCard } from './ApplicationCard';
@@ -11,10 +10,11 @@ import { useTranslation } from 'react-i18next';
 import { AppButton } from '../../ui-components';
 import { useEffect } from 'react';
 import { useAppContainer } from '../../components/app/AppContainer';
+import { MemberCard } from './MemberCard';
 
 export const MembersPage = (): JSX.Element => {
   const { t, i18n } = useTranslation();
-  const { allVouches, applications } = useProjectContext();
+  const { members, applications } = useProjectContext();
   const navigate = useNavigate();
   const { setTitle } = useAppContainer();
 
@@ -40,10 +40,10 @@ export const MembersPage = (): JSX.Element => {
               </Box>
             );
           })}
-          {allVouches?.map((vouch, ix) => {
+          {members?.map((member, ix) => {
             return (
               <Box key={ix} style={{ marginBottom: '16px', flexShrink: 0 }}>
-                <VoucheCard vouch={vouch}></VoucheCard>
+                <MemberCard member={member}></MemberCard>
               </Box>
             );
           })}

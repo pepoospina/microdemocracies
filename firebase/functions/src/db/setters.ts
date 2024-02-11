@@ -5,6 +5,7 @@ import {
   AppInvite,
   AppProjectCreate,
   AppProjectMember,
+  AppProjectMemberId,
   AppPublicIdentity,
   AppStatementCreate,
   AppStatementRead,
@@ -91,13 +92,25 @@ export const setProjectMember = async (
 };
 
 export const deleteProjectMember = async (
-  member: AppProjectMember
+  member: AppProjectMemberId
 ): Promise<void> => {
   const id = member.aaAddress;
   const docRef = collections
     .projectMembers(member.projectId.toString())
     .doc(id);
   await docRef.delete();
+};
+
+export const getProjectMembers = async (
+  projectId: number
+): Promise<AppProjectMember[]> => {
+  const membersCollection = collections.projectMembers(projectId.toString());
+  const membersFull = await membersCollection.get();
+  const members = membersFull.docs.map((member) => {
+    return member.data() as AppProjectMember;
+  });
+
+  return members;
 };
 
 export const setTree = async (tree: AppTree): Promise<string> => {

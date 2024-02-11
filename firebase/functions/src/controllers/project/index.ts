@@ -8,6 +8,7 @@ import { invalidateMemberController } from './controllers/invalidate.member.cont
 import { addInvitationController } from './controllers/add.invitation.controller';
 import { addApplicationController } from './controllers/add.application.controller';
 import { deleteApplicationController } from './controllers/delete.application.controller';
+import { getProjectMembersController } from './controllers/get.members.controller';
 
 import { app } from '../../instances/app';
 
@@ -19,6 +20,7 @@ projectRouter.post('/newInvite', addInvitationController);
 projectRouter.post('/create', createProjectController);
 projectRouter.post('/member/invalidate', invalidateMemberController);
 projectRouter.post('/member', addMemberController);
+projectRouter.post('/getMembers', getProjectMembersController);
 
 export const projectApp = functions
   .region('europe-west1')

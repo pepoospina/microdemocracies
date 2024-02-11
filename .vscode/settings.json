@@ -49,12 +49,10 @@
   },
   "explorerExclude.backup": null,
   "eslint.workingDirectories": [
-    { "directory": "packages/contracts", "changeProcessCWD": true },
-    { "directory": "packages/core", "changeProcessCWD": true },
-    { "directory": "packages/frontend", "changeProcessCWD": true },
-    { "directory": "packages/oracle-node", "changeProcessCWD": true }
+    { "directory": "app", "changeProcessCWD": true },
+    { "directory": "contracts", "changeProcessCWD": true }
   ],
-  "solidity.packageDefaultDependenciesDirectory": "packages/contracts/node_modules",
+  "solidity.packageDefaultDependenciesDirectory": "contracts/node_modules",
   "editor.formatOnSave": true,
   "editor.formatOnSaveMode": "file",
   "solidity.formatter": "prettier", // This is the default so it might be missing.

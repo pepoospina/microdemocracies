@@ -71,10 +71,10 @@ export const AccountChallenge = (props: IAccountChallenge) => {
   /** trigger delete member if successful */
   useEffect(() => {
     if (isSuccess && events) {
-      const invalidated = events.find((e) => e.eventName === 'InvalidatedAccountEvent');
-      if (invalidated) {
+      const allInvalidated = events.filter((e) => e.eventName === 'InvalidatedAccountEvent');
+      allInvalidated.forEach((invalidated) => {
         postAccountInvalidated(Number((invalidated.args as any).tokenId));
-      }
+      });
     }
   }, [isSuccess, events]);
 

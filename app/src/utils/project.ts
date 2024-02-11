@@ -66,3 +66,14 @@ export const postAccountInvalidated = async (tokenId: number) => {
   const body = await res.json();
   return body.id;
 };
+
+export const getProjectMembers = async (projectId: number): Promise<AppProjectMember[]> => {
+  const res = await fetch(FUNCTIONS_BASE + '/project/getMembers', {
+    method: 'post',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ projectId }),
+  });
+
+  const body = await res.json();
+  return body.members;
+};

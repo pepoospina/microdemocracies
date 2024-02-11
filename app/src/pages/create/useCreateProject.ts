@@ -2,13 +2,14 @@ import { utils } from 'ethers';
 import { useState, useCallback, useEffect, useMemo } from 'react';
 import { encodeFunctionData } from 'viem';
 
-import { registryFactoryABI } from '../../contracts/abis';
+import { registryABI, registryFactoryABI } from '../../contracts/abis';
 import { DetailsAndPlatforms, SelectedDetails, PAP, HexStr } from '../../types';
 import { getFactoryAddress } from '../../utils/contracts.json';
 import { postProject, postMember } from '../../utils/project';
 import { putObject } from '../../utils/store';
 import { RegistryCreatedEvent } from '../../utils/viem.types';
 import { useAccountContext } from '../../wallet/AccountContext';
+import { usePublicClient } from 'wagmi';
 
 export interface CreateProjectStatus {
   founderPap?: PAP;
@@ -35,6 +36,7 @@ export const useCreateProject = (): CreateProjectStatus => {
     reset,
     error: errorUserOp,
   } = useAccountContext();
+  const publicClient = usePublicClient();
 
   const [founderDetails, setFounderDetails] = useState<DetailsAndPlatforms>();
   const [whoStatement, setWhoStatement] = useState<string>('');
@@ -122,15 +124,33 @@ export const useCreateProject = (): CreateProjectStatus => {
         selectedDetails,
       });
 
+      /** get founder details */
+      /** get the tokenId of the vouched address */
+      const founderTokenId = await publicClient.readContract({
+        address: address,
+        abi: registryABI,
+        args: [aaAddress],
+        functionName: 'tokenIdOf',
+      });
+
+      const founderAccount = await publicClient.readContract({
+        address,
+        abi: registryABI,
+        args: [founderTokenId],
+        functionName: 'getAccount',
+      });
+
       await postMember({
         projectId,
         aaAddress,
+        tokenId: Number(founderTokenId),
+        voucherTokenId: Number(founderAccount.voucher),
       });
 
       setProjectId((event.args as any).number);
       setIsCreating(false);
     },
-    [owner, aaAddress, selectedDetails, whoStatement]
+    [owner, aaAddress, selectedDetails, whoStatement, publicClient]
   );
 
   useEffect(() => {

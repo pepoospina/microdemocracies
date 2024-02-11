@@ -48,7 +48,7 @@
   },
   "explorerExclude.backup": null,
   "eslint.workingDirectories": [],
-  "solidity.packageDefaultDependenciesDirectory": "/node_modules",
+  "solidity.packageDefaultDependenciesDirectory": "node_modules",
   "editor.formatOnSave": true,
   "editor.formatOnSaveMode": "file",
   "solidity.formatter": "prettier", // This is the default so it might be missing.

@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
+import { decodeEventLog } from 'viem';
 import { CHAIN_ID } from '../config/appConfig';
 import { registryABI, registryFactoryABI } from '../contracts/abis';
 
@@ -23,3 +24,6 @@ const aaWalletAbi = [
 ] as const;
 
 export { registryABI, registryFactoryABI, aaWalletAbi, getFactoryAddress };
+
+export type TransferEventType = Awaited<ReturnType<typeof decodeEventLog<typeof registryABI, 'Transfer'>>>;
+export type VouchEventType = Awaited<ReturnType<typeof decodeEventLog<typeof registryABI, 'VouchEvent'>>>;

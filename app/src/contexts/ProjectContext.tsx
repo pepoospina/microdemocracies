@@ -1,13 +1,12 @@
 import { createContext, useContext, useEffect, useState } from 'react';
-import { useContractRead, usePublicClient, useQuery } from 'wagmi';
+import { useContractRead, useQuery } from 'wagmi';
 import { useParams } from 'react-router-dom';
 
 import { registryABI } from '../utils/contracts.json';
-import { AppApplication, AppProject, AppVouch, HexStr, StatementRead } from '../types';
-import { getContract } from 'viem';
+import { AppApplication, AppProject, AppProjectMember, HexStr, StatementRead } from '../types';
 import { getApplications, getInviteId, getProject, getTopStatements } from '../firestore/getters';
 import { useAccountContext } from '../wallet/AccountContext';
-import { postInvite } from '../utils/project';
+import { getProjectMembers, postInvite } from '../utils/project';
 import { collections } from '../firestore/database';
 import { onSnapshot } from 'firebase/firestore';
 
@@ -18,7 +17,7 @@ export type ProjectContextType = {
   nMembers?: number;
   refetch: () => void;
   isLoading: boolean;
-  allVouches?: AppVouch[];
+  members?: AppProjectMember[];
   inviteId?: string;
   resetLink: () => void;
   resettingLink: boolean;
@@ -35,7 +34,6 @@ interface IProjectContext {
 const ProjectContextValue = createContext<ProjectContextType | undefined>(undefined);
 
 export const ProjectContext = (props: IProjectContext) => {
-  const publicClient = usePublicClient();
   const { aaAddress } = useAccountContext();
 
   const { projectId: routeProjectId } = useParams();
@@ -62,39 +60,12 @@ export const ProjectContext = (props: IProjectContext) => {
   const project = _project && projectId ? _project : undefined;
 
   // all vouches
-  const { data: vouchEvents, refetch: refetchVouches } = useQuery(['allVoucheEvents', project], async () => {
+  const { data: members, refetch: refetchMembers } = useQuery(['allMembers', project], async () => {
     if (project) {
-      const contract = getContract({
-        address: project.address,
-        abi: registryABI,
-        publicClient,
-      });
-
-      /** all vouch events */
-      const logs = await contract.getEvents.VouchEvent({}, { fromBlock: 'earliest', toBlock: 'latest' });
-
-      return logs;
+      return getProjectMembers(project.projectId);
     }
     return null;
   });
-
-  const [allVouches, setAllVouches] = useState<AppVouch[]>();
-
-  useEffect(() => {
-    if (!publicClient || !vouchEvents) return;
-
-    Promise.all(
-      vouchEvents.map(async (e: any) => {
-        const block = await publicClient.getBlock(e.blockNumber);
-        return {
-          from: e.args.from.toString(),
-          to: e.args.to.toString(),
-          personCid: e.args.personCid,
-          vouchDate: +block.timestamp.toString(),
-        };
-      })
-    ).then((vouches) => setAllVouches(vouches));
-  }, [vouchEvents, publicClient]);
 
   const {
     refetch: refetchTotalSupply,
@@ -110,7 +81,7 @@ export const ProjectContext = (props: IProjectContext) => {
   const refetch = () => {
     refetchTotalSupply();
     refetchProject();
-    refetchVouches();
+    refetchMembers();
   };
 
   /** Member unique invite link */
@@ -172,7 +143,7 @@ export const ProjectContext = (props: IProjectContext) => {
         nMembers: nMembers !== undefined ? Number(nMembers) : undefined,
         refetch,
         isLoading,
-        allVouches,
+        members: members ? members : [],
         inviteId,
         resetLink,
         resettingLink,
