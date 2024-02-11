@@ -13,6 +13,7 @@ import {
   getChallengeParse,
   getContractEventsFromHash,
   getTimestamp,
+  leaveHelper,
   personCidHelper,
   registryFrom,
   shouldFail,
@@ -717,14 +718,30 @@ describe('Registry', () => {
 
       it('cant re-challenge invalid account', async () => {
         await shouldFail(async () => {
-          await challengeHelper(registry.address, c1, v32.tokenId);
+          await challengeHelper(registry.address, v33, v32.tokenId);
         }, 'CantChallengeInvalidAccount()');
+      });
+    });
+
+    describe('Leaving', async () => {
+      it("non-member can't leave", async () => {
+        await shouldFail(async () => {
+          await leaveHelper(registry.address, c1);
+        }, 'ErrorAccountNotValid()');
+      });
+
+      it('member can leave', async () => {
+        const event = await leaveHelper(registry.address, v33);
+        expect(event).to.exist;
+
+        expect(await registry.read.totalSupply()).eq(NCUM - 1n);
+        NCUM = NCUM - 1n;
       });
     });
 
     describe('Challenge founder', async () => {
       before(async () => {
-        const event = await challengeHelper(registry.address, v33, f3.tokenId);
+        const event = await challengeHelper(registry.address, v34, f3.tokenId);
         expect(event).to.exist;
 
         const { creationDate, nFor, nVoted } = getChallengeParse(await registry.read.getChallenge([f3.tokenId]));

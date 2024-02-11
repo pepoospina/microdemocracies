@@ -151,6 +151,15 @@ export const challengeHelper = async (registryAddress: HexStr, by: User, challen
   return events.find((e) => e.eventName === 'ChallengeEvent');
 };
 
+export const leaveHelper = async (registryAddress: HexStr, by: User) => {
+  const registry = await registryFrom(registryAddress, by.s);
+
+  const tx = await registry.write.leave();
+  const events = await getContractEventsFromHash('Registry', tx);
+
+  return events.find((e) => e.eventName === 'AccountLeftEvent');
+};
+
 export const getChallengeParse = (returned: Awaited<ReturnType<Registry['read']['getChallenge']>>) => {
   return {
     creationDate: returned[0],

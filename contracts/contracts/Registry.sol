@@ -76,6 +76,7 @@ contract Registry is Context, IERC721, IERC721Metadata, Initializable {
     event InvalidatedAccountEvent(uint256 indexed tokenId);
     event InvalidatedByChallenge(uint256 indexed tokenId);
     event InvalidatedByInvalidVoucher(uint256 indexed tokenId);
+    event AccountLeftEvent(address indexed account, uint256 indexed tokenId);
 
     event ChallengeEvent(uint256 indexed tokenId);
     event ChallengeExecuted(uint256 tokenId, int8 outcome);
@@ -194,6 +195,12 @@ contract Registry is Context, IERC721, IERC721Metadata, Initializable {
         emit VoteEvent(voterTokenId, _tokenId, _vote);
 
         _executeVote(_challenge, _tokenId);
+    }
+
+    function leave() external {
+        uint256 tokenId = _tokenIdOf(_msgSender());
+        _invalidateAccount(tokenId);
+        emit AccountLeftEvent(_msgSender(), tokenId);
     }
 
     function executeVote(uint256 _tokenId) external {
@@ -377,6 +384,7 @@ contract Registry is Context, IERC721, IERC721Metadata, Initializable {
         tokenVouches.number += 1;
         __totalSupply += 1;
 
+        /** mint event */
         emit Transfer(address(0), _account, _tokenId);
         emit VouchEvent(_voucherTokenId, _tokenId, _personCid);
     }
@@ -400,10 +408,11 @@ contract Registry is Context, IERC721, IERC721Metadata, Initializable {
 
         /** decrease the number of valid members of the circle */
         vouches[orgVoucher].number -= 1;
-        
+
         /** decrease the number of total entries in the registry */
         __totalSupply -= 1;
 
+        /** burn event */
         emit Transfer(orgAccount, address(0), tokenId);
         emit InvalidatedAccountEvent(tokenId);
     }
