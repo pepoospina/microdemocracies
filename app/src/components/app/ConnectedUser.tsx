@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { Box, Text } from 'grommet';
 
-import { LanguageSelector, LanguageValue } from '../../pages/account/LanguageSelector';
-import { Address, AppButton, AppCircleDropButton, AppCircleDropButtonResponsive } from '../../ui-components';
+import { LanguageSelector } from '../../pages/account/LanguageSelector';
+import { Address, AppButton, AppCircleDropButton } from '../../ui-components';
 import { useAccountContext } from '../../wallet/AccountContext';
 import { useAppSigner } from '../../wallet/SignerContext';
 import { Loading } from '../../pages/common/Loading';
@@ -25,7 +25,10 @@ export const ConnectedUser = (props: {}) => {
 
   const content = (() => {
     if (!isConnected) {
-      return <AppConnectButton style={{ fontSize: '16px', padding: '6px 8px' }}></AppConnectButton>;
+      return (
+        <AppConnectButton
+          style={{ fontSize: '16px', padding: '6px 8px' }}></AppConnectButton>
+      );
     }
 
     if (isConnecting || !address || !aaAddress || isCreatingPublicId) {
@@ -35,7 +38,11 @@ export const ConnectedUser = (props: {}) => {
     return (
       <AppCircleDropButton
         plain
-        label={<UserExpert color={constants.colors.primary} style={{ margin: '2px 0px 0px 5px' }}></UserExpert>}
+        label={
+          <UserExpert
+            color={constants.colors.primary}
+            style={{ margin: '2px 0px 0px 5px' }}></UserExpert>
+        }
         open={showDrop}
         onClose={() => setShowDrop(false)}
         onOpen={() => setShowDrop(true)}
@@ -50,7 +57,10 @@ export const ConnectedUser = (props: {}) => {
               <LanguageSelector></LanguageSelector>
             </Box>
 
-            <AppButton plain onClick={() => disconnect()} style={{ textTransform: 'none', paddingTop: '6px' }}>
+            <AppButton
+              plain
+              onClick={() => disconnect()}
+              style={{ textTransform: 'none', paddingTop: '6px' }}>
               <Text style={{ fontWeight: 'bold' }}>{cap(t('logout'))}</Text>
             </AppButton>
           </Box>
@@ -60,7 +70,10 @@ export const ConnectedUser = (props: {}) => {
   })();
 
   return (
-    <Box style={{ width: '84px', height: '60px' }} align="center" justify="center">
+    <Box
+      style={{ width: '84px', height: '60px' }}
+      align="center"
+      justify="center">
       {content}
     </Box>
   );

@@ -1,10 +1,18 @@
 import { useCallback, useEffect, useState } from 'react';
 
-import { TransferEventType, VouchEventType, registryABI } from '../utils/contracts.json';
+import {
+  TransferEventType,
+  VouchEventType,
+  registryABI,
+} from '../utils/contracts.json';
 import { HexStr } from '../types';
 import { useProjectContext } from './ProjectContext';
 import { useAccountContext } from '../wallet/AccountContext';
-import { DecodeEventLogReturnType, encodeFunctionData, zeroAddress } from 'viem';
+import {
+  DecodeEventLogReturnType,
+  encodeFunctionData,
+  zeroAddress,
+} from 'viem';
 import { postMember } from '../utils/project';
 import { usePublicClient } from 'wagmi';
 
@@ -24,35 +32,44 @@ export const useVouch = (): VouchHookType => {
   const { address, projectId } = useProjectContext();
   const { sendUserOps, isSuccess, isSending, events } = useAccountContext();
 
-  const [vouchParamsInternal, setVouchParamsInternal] = useState<[HexStr, string]>();
+  const [vouchParamsInternal, setVouchParamsInternal] =
+    useState<[HexStr, string]>();
 
   const setVouchParams = useCallback((account: HexStr, personCid: string) => {
     setVouchParamsInternal([account, personCid]);
   }, []);
 
-  const checkAndPostMember = async (_events: DecodeEventLogReturnType[], _projectId: number) => {
-    if (!vouchParamsInternal) throw Error('Unexpected vouchParamsInternal undefined');
+  const checkAndPostMember = async (
+    _events: DecodeEventLogReturnType[],
+    _projectId: number
+  ) => {
+    if (!vouchParamsInternal)
+      throw Error('Unexpected vouchParamsInternal undefined');
     if (!address) throw Error('Unexpected address undefined');
 
     const vouchedAddress = vouchParamsInternal[0];
 
-    const transfer = _events?.find((e) => {
+    const transfer = _events?.find((e: any) => {
       if (e.eventName === 'Transfer') {
         const event = e as TransferEventType;
-        return event.args.from === zeroAddress && event.args.to === vouchedAddress;
+        return (
+          event.args.from === zeroAddress && event.args.to === vouchedAddress
+        );
       }
     }) as TransferEventType | undefined;
 
     /** get the tokenId of the vouched address */
-    const vouchedTokenId = await publicClient.readContract({
-      address: address,
-      abi: registryABI,
-      args: [vouchedAddress],
-      functionName: 'tokenIdOf',
-    });
+    const vouchedTokenId = publicClient
+      ? await publicClient.readContract({
+          address: address,
+          abi: registryABI,
+          args: [vouchedAddress],
+          functionName: 'tokenIdOf',
+        })
+      : undefined;
 
     /** find the exact vouch event */
-    const vouch = _events?.find((e) => {
+    const vouch = _events?.find((e: any) => {
       if (e.eventName === 'Transfer') {
         const event = e as VouchEventType;
         return event.args.to === vouchedTokenId;

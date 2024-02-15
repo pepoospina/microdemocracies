@@ -1,13 +1,17 @@
-import { PropsWithChildren, createContext, useContext, useEffect, useState } from 'react';
+import {
+  PropsWithChildren,
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
+import { useDisconnect, useWalletClient } from 'wagmi';
+import { useWeb3Modal } from '@web3modal/wagmi/react';
+import { WalletClientSigner } from '@alchemy/aa-core';
 
 import { createMagicSigner, magic } from './magic.signer';
-import { WalletClientSigner } from '@alchemy/aa-core';
-import { createInjectedSigner } from './injected.signer';
-import { InjectedConnector } from '@wagmi/core';
-import { useConnect, useDisconnect } from 'wagmi';
 import { HexStr } from '../types';
 import { MessageSigner } from '../utils/identity';
-import { createTestSigner } from '../test/test.signer';
 
 export type SignerContextType = {
   connectMagic: () => void;
@@ -23,12 +27,17 @@ export type SignerContextType = {
   disconnect: () => void;
 };
 
-const ProviderContextValue = createContext<SignerContextType | undefined>(undefined);
+const ProviderContextValue = createContext<SignerContextType | undefined>(
+  undefined
+);
 
 export const SignerContext = (props: PropsWithChildren) => {
+  const { open: openConnectModal } = useWeb3Modal();
+
   const [address, setAddress] = useState<HexStr>();
   const [magicSigner, setMagicSigner] = useState<WalletClientSigner>();
-  const [injectedSigner, setInjectedSigner] = useState<WalletClientSigner>();
+
+  const { data: injectedSigner } = useWalletClient();
 
   const [isConnecting, setIsConnecting] = useState<boolean>(false);
   const [isChecking, setIsChecking] = useState<boolean>(true);
@@ -49,21 +58,21 @@ export const SignerContext = (props: PropsWithChildren) => {
   }, []);
 
   useEffect(() => {
-    if (signer && signer) {
-      signer.getAddress().then((adr) => setAddress(adr));
+    if (signer) {
+      if (injectedSigner) {
+        setAddress(injectedSigner.account.address);
+      } else {
+        if (!magicSigner) throw new Error('unexpected');
+        magicSigner.getAddress().then((address) => {
+          setAddress(address);
+        });
+      }
     } else {
       setAddress(undefined);
     }
   }, [signer]);
 
-  const { connectAsync } = useConnect({ connector: new InjectedConnector() as any });
   const { disconnect: disconnectInjected } = useDisconnect();
-
-  const connectTest = (ix: number) => {
-    console.log('connecting test signer', { ix });
-    const signer = createTestSigner(ix);
-    setInjectedSigner(signer);
-  };
 
   const connectMagic = () => {
     console.log('connecting magic signer', { signer });
@@ -77,20 +86,7 @@ export const SignerContext = (props: PropsWithChildren) => {
   };
 
   const connectInjected = () => {
-    console.log('connecting injected signer', { signer });
-    setIsConnecting(true);
-    connectAsync()
-      .then((res) => {
-        const signer = createInjectedSigner();
-        console.log('connected injected signer', { signer });
-        setInjectedSigner(signer);
-        setIsConnecting(false);
-      })
-      .catch((e) => {
-        console.error('error connecting injected signer', { e });
-        setErrorConnecting(e);
-        setIsConnecting(false);
-      });
+    openConnectModal();
   };
 
   const hasInjected = (window as any).ethereum !== undefined;
@@ -98,14 +94,14 @@ export const SignerContext = (props: PropsWithChildren) => {
   const signMessage = (() => {
     if (!signer) return undefined;
     const client = (signer as any).client;
-    if (client && client.account) return (message: string) => client.account.signMessage({ message });
+    if (client && client.account)
+      return (message: string) => client.account.signMessage({ message });
 
-    return signer.signMessage;
+    return (message: string) => signer.signMessage(message as any);
   })();
 
   const disconnect = () => {
     disconnectInjected();
-    setInjectedSigner(undefined);
 
     magic.user.logout();
     setMagicSigner(undefined);
@@ -116,13 +112,13 @@ export const SignerContext = (props: PropsWithChildren) => {
       value={{
         connectMagic,
         connectInjected,
-        connectTest,
+        connectTest: () => {},
         isConnecting,
         isChecking,
         errorConnecting,
         signMessage,
         hasInjected,
-        signer,
+        signer: signer as any,
         address,
         disconnect,
       }}>

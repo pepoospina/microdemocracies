@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from 'react';
-import { useQuery } from 'wagmi';
+import { useQuery } from '@tanstack/react-query';
 
 import { StatementRead } from '../types';
 import { useConnectedMember } from './ConnectedAccountContext';
@@ -21,7 +21,9 @@ interface IStatementContext {
   children: React.ReactNode;
 }
 
-const StatementContextValue = createContext<StatementContextType | undefined>(undefined);
+const StatementContextValue = createContext<StatementContextType | undefined>(
+  undefined
+);
 
 export const StatementContext = (props: IStatementContext) => {
   const { statement: propsStatement, statementId: propsStatementId } = props;
@@ -30,16 +32,21 @@ export const StatementContext = (props: IStatementContext) => {
     throw new Error('Either statement or statementId must be provided.');
   }
 
-  const statementId = propsStatement ? propsStatement.id : (propsStatementId as string);
+  const statementId = propsStatement
+    ? propsStatement.id
+    : (propsStatementId as string);
 
   const { tokenId } = useConnectedMember();
   const [isBacking, setIsBacking] = useState<boolean>(false);
   const [alreadyBacked, setAlreadyBacked] = useState<boolean>();
 
-  const { data: statementRead } = useQuery([`${propsStatementId}`], async () => {
-    if (propsStatementId) {
-      return getStatement(statementId);
-    }
+  const { data: statementRead } = useQuery({
+    queryKey: [`${propsStatementId}`],
+    queryFn: async () => {
+      if (propsStatementId) {
+        return getStatement(statementId);
+      }
+    },
   });
 
   const statement = propsStatement ? propsStatement : statementRead;
@@ -48,10 +55,13 @@ export const StatementContext = (props: IStatementContext) => {
     data: nBacking,
     isLoading,
     refetch: refetchCount,
-  } = useQuery(['statementBackers', statement?.id], () => {
-    if (statement) {
-      return countStatementBackings(statement.id);
-    }
+  } = useQuery({
+    queryKey: ['statementBackers', statement?.id],
+    queryFn: () => {
+      if (statement) {
+        return countStatementBackings(statement.id);
+      }
+    },
   });
 
   const { backStatement, isSuccessBacking, errorBacking } = useBackingSend();

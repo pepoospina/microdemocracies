@@ -1,4 +1,4 @@
-import { useContractRead } from 'wagmi';
+import { useReadContract } from 'wagmi';
 
 import { registryABI } from '../utils/contracts.json';
 import { AppChallenge, VoteOption } from '../types';
@@ -6,7 +6,10 @@ import { useProjectContext } from './ProjectContext';
 
 export type ChallengeContextReadType = {
   tokenId?: number;
-  refetchChallenge: (options?: { throwOnError: boolean; cancelRefetch: boolean }) => Promise<any>;
+  refetchChallenge: (options?: {
+    throwOnError: boolean;
+    cancelRefetch: boolean;
+  }) => Promise<any>;
   challengeRead: AppChallenge | undefined | null;
   totalVoters?: number;
   isLoadingChallenge: boolean;
@@ -16,7 +19,9 @@ export interface ChallengeContextProps {
   tokenId?: number;
 }
 
-export const useChallengeRead = (tokenId?: number): ChallengeContextReadType => {
+export const useChallengeRead = (
+  tokenId?: number
+): ChallengeContextReadType => {
   const { address: projectAddress } = useProjectContext();
 
   /** Vouch */
@@ -29,25 +34,33 @@ export const useChallengeRead = (tokenId?: number): ChallengeContextReadType => 
     isLoading: isLoadingChallenge,
     isError: isErrorChallengeRead,
     error: errorChallengeRead,
-  } = useContractRead({
+  } = useReadContract({
     address: projectAddress,
     abi: registryABI,
     functionName: 'getChallenge',
     args: tokenIdInternal ? [tokenIdInternal] : undefined,
-    enabled: tokenIdInternal !== undefined && projectAddress !== undefined,
+    query: {
+      enabled: tokenIdInternal !== undefined && projectAddress !== undefined,
+    },
   });
 
-  const { data: totalVoters } = useContractRead({
+  const { data: totalVoters } = useReadContract({
     address: projectAddress,
     abi: registryABI,
     functionName: 'getTotalVoters',
     args: tokenIdInternal ? [tokenIdInternal] : undefined,
-    enabled: tokenIdInternal !== undefined && projectAddress !== undefined,
+    query: {
+      enabled: tokenIdInternal !== undefined && projectAddress !== undefined,
+    },
   });
 
   /** undefined means currently reading, null means read and not found */
   const challengeRead: AppChallenge | undefined | null = ((_challengeRead) => {
-    if (isErrorChallengeRead && errorChallengeRead && errorChallengeRead.message.includes('')) {
+    if (
+      isErrorChallengeRead &&
+      errorChallengeRead &&
+      errorChallengeRead.message.includes('')
+    ) {
       return null;
     }
     if (_challengeRead === undefined) {

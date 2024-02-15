@@ -10,13 +10,20 @@ import { putObject } from '../../utils/store';
 import { RegistryCreatedEvent } from '../../utils/viem.types';
 import { useAccountContext } from '../../wallet/AccountContext';
 import { usePublicClient } from 'wagmi';
+import {
+  PENDING_PERIOD,
+  VOTING_PERIOD,
+  QUIET_ENDING_PERIOD,
+} from '../../config/appConfig';
 
 export interface CreateProjectStatus {
   founderPap?: PAP;
   whoStatement: string;
   selectedDetails?: SelectedDetails;
   isCreating: boolean;
-  setFounderDetails: React.Dispatch<React.SetStateAction<DetailsAndPlatforms | undefined>>;
+  setFounderDetails: React.Dispatch<
+    React.SetStateAction<DetailsAndPlatforms | undefined>
+  >;
   setWhoStatement: React.Dispatch<React.SetStateAction<string>>;
   setDetails: React.Dispatch<React.SetStateAction<SelectedDetails | undefined>>;
   createProject: () => void;
@@ -72,13 +79,25 @@ export const useCreateProject = (): CreateProjectStatus => {
         whoStatement,
       };
       const statementEntity = await putObject({ statement });
-      const salt = utils.keccak256(utils.toUtf8Bytes(Date.now().toString())) as HexStr;
+      const salt = utils.keccak256(
+        utils.toUtf8Bytes(Date.now().toString())
+      ) as HexStr;
 
       // TODO weird encodedFunctionData asking for zero parameters
       const callData = encodeFunctionData({
         abi: registryFactoryABI,
         functionName: 'create',
-        args: ['MRS', 'micro(r)evolutions ', [founderPap.account as HexStr], [founder.cid], statementEntity.cid, salt],
+        args: [
+          'DEM',
+          'microdemocracy ',
+          [founderPap.account as HexStr],
+          [founder.cid],
+          statementEntity.cid,
+          BigInt(PENDING_PERIOD),
+          BigInt(VOTING_PERIOD),
+          BigInt(QUIET_ENDING_PERIOD),
+          salt,
+        ],
       });
 
       const registryFactoryAddress = await getFactoryAddress();
@@ -126,19 +145,28 @@ export const useCreateProject = (): CreateProjectStatus => {
 
       /** get founder details */
       /** get the tokenId of the vouched address */
-      const founderTokenId = await publicClient.readContract({
-        address: address,
-        abi: registryABI,
-        args: [aaAddress],
-        functionName: 'tokenIdOf',
-      });
+      const founderTokenId = publicClient
+        ? await publicClient.readContract({
+            address: address,
+            abi: registryABI,
+            args: [aaAddress],
+            functionName: 'tokenIdOf',
+          })
+        : undefined;
 
-      const founderAccount = await publicClient.readContract({
-        address,
-        abi: registryABI,
-        args: [founderTokenId],
-        functionName: 'getAccount',
-      });
+      const founderAccount =
+        publicClient && founderTokenId
+          ? await publicClient.readContract({
+              address,
+              abi: registryABI,
+              args: [founderTokenId],
+              functionName: 'getAccount',
+            })
+          : undefined;
+
+      if (!founderAccount) {
+        throw new Error(`founder not found`);
+      }
 
       await postMember({
         projectId,
@@ -155,7 +183,9 @@ export const useCreateProject = (): CreateProjectStatus => {
 
   useEffect(() => {
     if (isSuccessUserOp && events) {
-      const event = events.find((e) => e.eventName === 'RegistryCreated') as RegistryCreatedEvent | undefined;
+      const event = events.find((e) => e.eventName === 'RegistryCreated') as
+        | RegistryCreatedEvent
+        | undefined;
       if (event) {
         reset();
         registerProject(event);

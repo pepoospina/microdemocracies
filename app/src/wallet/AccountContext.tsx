@@ -1,17 +1,31 @@
-import { PropsWithChildren, createContext, useContext, useEffect, useState } from 'react';
+import {
+  PropsWithChildren,
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 
 import { AlchemyProvider } from '@alchemy/aa-alchemy';
-import { LightSmartContractAccount, getDefaultLightAccountFactoryAddress } from '@alchemy/aa-accounts';
+import {
+  LightSmartContractAccount,
+  getDefaultLightAccountFactoryAddress,
+} from '@alchemy/aa-accounts';
 import { UserOperationCallData, WalletClientSigner } from '@alchemy/aa-core';
 import { HexStr } from '../types';
-import { chain } from './config';
-import { useContractRead, usePublicClient } from 'wagmi';
+import { useReadContract, usePublicClient } from 'wagmi';
 import { ALCHEMY_GAS_POLICY_ID, ALCHEMY_KEY } from '../config/appConfig';
 import { DecodeEventLogReturnType, decodeEventLog, getAddress } from 'viem';
 import { useAppSigner } from './SignerContext';
 import { MessageSigner } from '../utils/identity';
-import { aaWalletAbi, getFactoryAddress, registryABI, registryFactoryABI } from '../utils/contracts.json';
+import {
+  aaWalletAbi,
+  getFactoryAddress,
+  registryABI,
+  registryFactoryABI,
+} from '../utils/contracts.json';
 import { AccountDataContext } from './AccountDataContext';
+import { chain } from './ConnectedWalletContext';
 
 const DEBUG = true;
 
@@ -28,7 +42,9 @@ export type AccountContextType = {
   signMessageAA?: MessageSigner;
 };
 
-const AccountContextValue = createContext<AccountContextType | undefined>(undefined);
+const AccountContextValue = createContext<AccountContextType | undefined>(
+  undefined
+);
 
 /** Manages the AA user ops and their execution */
 export const AccountContext = (props: PropsWithChildren) => {
@@ -45,7 +61,9 @@ export const AccountContext = (props: PropsWithChildren) => {
 
   const isConnected = alchemyProviderAA !== undefined;
 
-  const signMessageAA = alchemyProviderAA ? (message: string) => alchemyProviderAA.signMessage(message) : undefined;
+  const signMessageAA = alchemyProviderAA
+    ? (message: string) => alchemyProviderAA.signMessage(message)
+    : undefined;
 
   const reset = () => {
     if (DEBUG) console.log('resetting userOps');
@@ -59,11 +77,11 @@ export const AccountContext = (props: PropsWithChildren) => {
     data: _owner,
     error: ownerError,
     status: statusOwner,
-  } = useContractRead({
+  } = useReadContract({
     abi: aaWalletAbi,
     address: aaAddress,
     functionName: 'owner',
-    enabled: aaAddress !== undefined,
+    query: { enabled: aaAddress !== undefined },
   });
 
   const owner = (() => {
@@ -71,7 +89,8 @@ export const AccountContext = (props: PropsWithChildren) => {
     if (!signerAddress) return undefined;
     if (
       ownerError &&
-      (ownerError as any).shortMessage === 'The contract function "owner" returned no data ("0x").' &&
+      (ownerError as any).shortMessage ===
+        'The contract function "owner" returned no data ("0x").' &&
       signerAddress
     )
       return signerAddress;
@@ -81,7 +100,7 @@ export const AccountContext = (props: PropsWithChildren) => {
   const setProvider = (signer: WalletClientSigner) => {
     const provider = new AlchemyProvider({
       apiKey: ALCHEMY_KEY,
-      chain: chain as any,
+      chain: chain,
     }).connect((rpcClient) => {
       return new LightSmartContractAccount({
         chain: rpcClient.chain,
@@ -128,27 +147,41 @@ export const AccountContext = (props: PropsWithChildren) => {
       if (DEBUG) console.log('sendUserOps - res', { res });
 
       if (DEBUG) console.log('waiting');
-      const txHash = await alchemyProviderAA.waitForUserOperationTransaction(res.hash);
+      const txHash = await alchemyProviderAA.waitForUserOperationTransaction(
+        res.hash
+      );
       if (DEBUG) console.log('waitForUserOperationTransaction', { txHash });
 
       if (DEBUG) console.log('getting tx');
-      const tx = await (publicClient as any).waitForTransactionReceipt({ hash: txHash });
+      const tx = await (publicClient as any).waitForTransactionReceipt({
+        hash: txHash,
+      });
       if (DEBUG) console.log('tx - res', { tx });
 
       const targets = _userOps.map((op) => op.target.toLowerCase());
 
       // extract all events from the target contracts (events from other callers would be here too... hmmm)
-      const logs = tx.logs.filter((log: any) => targets.includes(log.address.toLowerCase()));
+      const logs = tx.logs.filter((log: any) =>
+        targets.includes(log.address.toLowerCase())
+      );
       const factoryAddress = await getFactoryAddress();
 
       console.log({ logs });
       const events = logs
         .map((log: any) => {
           if (log.address.toLowerCase() === factoryAddress.toLowerCase()) {
-            return decodeEventLog({ abi: registryFactoryABI, data: log.data, topics: log.topics });
+            return decodeEventLog({
+              abi: registryFactoryABI,
+              data: log.data,
+              topics: log.topics,
+            });
           } else {
             try {
-              return decodeEventLog({ abi: registryABI, data: log.data, topics: log.topics });
+              return decodeEventLog({
+                abi: registryABI,
+                data: log.data,
+                topics: log.topics,
+              });
             } catch (e) {
               return undefined;
             }

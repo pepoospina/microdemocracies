@@ -545,6 +545,15 @@ export const registryABI = [
     type: 'event',
     anonymous: false,
     inputs: [
+      { name: 'account', internalType: 'address', type: 'address', indexed: true },
+      { name: 'tokenId', internalType: 'uint256', type: 'uint256', indexed: true },
+    ],
+    name: 'AccountLeftEvent',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
       { name: 'owner', internalType: 'address', type: 'address', indexed: true },
       { name: 'approved', internalType: 'address', type: 'address', indexed: true },
       { name: 'tokenId', internalType: 'uint256', type: 'uint256', indexed: true },
@@ -831,6 +840,7 @@ export const registryABI = [
     name: 'isSolidified',
     outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
   },
+  { stateMutability: 'nonpayable', type: 'function', inputs: [], name: 'leave', outputs: [] },
   { stateMutability: 'view', type: 'function', inputs: [], name: 'name', outputs: [{ name: '', internalType: 'string', type: 'string' }] },
   {
     stateMutability: 'view',

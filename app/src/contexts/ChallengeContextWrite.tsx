@@ -1,4 +1,4 @@
-import { useContractRead } from 'wagmi';
+import { useReadContract } from 'wagmi';
 
 import { registryABI } from '../utils/contracts.json';
 import { VoteOption } from '../types';
@@ -23,7 +23,9 @@ export type ChallengeContextWriteType = {
   events?: DecodeEventLogReturnType[];
 };
 
-export const useChallengeWrite = (tokenId?: number): ChallengeContextWriteType => {
+export const useChallengeWrite = (
+  tokenId?: number
+): ChallengeContextWriteType => {
   const { address: projectAddress } = useProjectContext();
   const { sendUserOps, isSuccess, isSending, events } = useAccountContext();
 
@@ -40,28 +42,46 @@ export const useChallengeWrite = (tokenId?: number): ChallengeContextWriteType =
   /** can vote */
   const { aaAddress: connectedAddress } = useAccountContext();
 
-  const { data: tokenIdOfAddress } = useContractRead({
+  const { data: tokenIdOfAddress } = useReadContract({
     address: projectAddress,
     abi: registryABI,
     functionName: 'tokenIdOf',
     args: connectedAddress ? [connectedAddress] : undefined,
-    enabled: connectedAddress !== undefined && projectAddress !== undefined,
+    query: {
+      enabled: connectedAddress !== undefined && projectAddress !== undefined,
+    },
   });
 
-  const { data: canVote } = useContractRead({
+  const { data: canVote } = useReadContract({
     address: projectAddress,
     abi: registryABI,
     functionName: 'canVote',
-    args: tokenIdOfAddress && tokenIdInternal ? [tokenIdOfAddress, tokenIdInternal] : undefined,
-    enabled: tokenIdOfAddress !== undefined && tokenIdInternal !== undefined && projectAddress !== undefined,
+    args:
+      tokenIdOfAddress && tokenIdInternal
+        ? [tokenIdOfAddress, tokenIdInternal]
+        : undefined,
+    query: {
+      enabled:
+        tokenIdOfAddress !== undefined &&
+        tokenIdInternal !== undefined &&
+        projectAddress !== undefined,
+    },
   });
 
-  const { data: _myVote, refetch: refetchMyVote } = useContractRead({
+  const { data: _myVote, refetch: refetchMyVote } = useReadContract({
     address: projectAddress,
     abi: registryABI,
     functionName: 'getChallengeVote',
-    args: tokenIdOfAddress && tokenIdInternal ? [tokenIdInternal, tokenIdOfAddress] : undefined,
-    enabled: tokenIdOfAddress !== undefined && tokenIdInternal !== undefined && projectAddress !== undefined,
+    args:
+      tokenIdOfAddress && tokenIdInternal
+        ? [tokenIdInternal, tokenIdOfAddress]
+        : undefined,
+    query: {
+      enabled:
+        tokenIdOfAddress !== undefined &&
+        tokenIdInternal !== undefined &&
+        projectAddress !== undefined,
+    },
   });
 
   const myVote = _myVote !== undefined && _myVote !== 0 ? _myVote : undefined;

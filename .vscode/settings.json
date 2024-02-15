@@ -55,7 +55,10 @@
   "solidity.packageDefaultDependenciesDirectory": "contracts/node_modules",
   "editor.formatOnSave": true,
   "editor.formatOnSaveMode": "file",
-  "solidity.formatter": "prettier", // This is the default so it might be missing.
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
   "[solidity]": {
     "editor.defaultFormatter": "JuanBlanco.solidity"
   },

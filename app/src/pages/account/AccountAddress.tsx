@@ -1,5 +1,5 @@
 import { Box, Text } from 'grommet';
-import { useContractRead } from 'wagmi';
+import { useReadContract } from 'wagmi';
 import { CHAIN_ID } from '../../config/appConfig';
 import { HexStr } from '../../types';
 import { Address } from '../../ui-components';
@@ -16,16 +16,20 @@ const abi = [
   },
 ] as const;
 
-export const AccountAddress = (props: { account?: HexStr; showAccount?: boolean }) => {
+export const AccountAddress = (props: {
+  account?: HexStr;
+  showAccount?: boolean;
+}) => {
   const { t } = useTranslation();
 
-  const showAccount = props.showAccount !== undefined ? props.showAccount : false;
+  const showAccount =
+    props.showAccount !== undefined ? props.showAccount : false;
 
-  const { data: owner, isLoading } = useContractRead({
+  const { data: owner, isLoading } = useReadContract({
     address: props.account,
     abi,
     functionName: 'owner',
-    enabled: props.account !== undefined,
+    query: { enabled: props.account !== undefined },
   });
 
   if (!props.account) {
@@ -36,7 +40,10 @@ export const AccountAddress = (props: { account?: HexStr; showAccount?: boolean 
     <div>
       {showAccount ? (
         <Box style={{ float: 'left' }} direction="row">
-          <Address digits={4} address={props.account} chainId={CHAIN_ID}></Address>
+          <Address
+            digits={4}
+            address={props.account}
+            chainId={CHAIN_ID}></Address>
           <Text margin={{ horizontal: 'small' }}>-</Text>
         </Box>
       ) : (

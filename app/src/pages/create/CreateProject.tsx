@@ -8,7 +8,7 @@ import { AppCard, AppHeading } from '../../ui-components';
 import { DetailsSelector } from './DetailsSelector';
 import { DetailsForm } from '../join/DetailsForm';
 
-import { AppConnectButton, AppConnectWidget } from '../../components/app/AppConnectButton';
+import { AppConnectWidget } from '../../components/app/AppConnectButton';
 import { ProjectSummary } from './ProjectSummary';
 import { BoxCentered } from '../../ui-components/BoxCentered';
 
@@ -20,7 +20,6 @@ import { Trans, useTranslation } from 'react-i18next';
 import { Bold } from '../../ui-components/Bold';
 import { useAppContainer } from '../../components/app/AppContainer';
 import { useAccountContext } from '../../wallet/AccountContext';
-import { Loading } from '../common/Loading';
 
 const NPAGES = 5;
 
