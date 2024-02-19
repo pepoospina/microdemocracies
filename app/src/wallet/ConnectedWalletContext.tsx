@@ -1,8 +1,7 @@
-import { WagmiProvider } from 'wagmi';
+import { WagmiConfig } from 'wagmi';
+import { createWeb3Modal, defaultWagmiConfig } from '@web3modal/wagmi/react';
+
 import { baseSepolia } from 'wagmi/chains';
-import { createWeb3Modal } from '@web3modal/wagmi/react';
-import { defaultWagmiConfig } from '@web3modal/wagmi/react/config';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import { WALLETCONNECT_PROJECT_ID } from '../config/appConfig';
 
@@ -28,12 +27,6 @@ createWeb3Modal({
   enableAnalytics: false,
 });
 
-const queryClient = new QueryClient();
-
 export const ConnectedWallet = ({ children }: React.PropsWithChildren) => {
-  return (
-    <WagmiProvider config={config}>
-      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
-    </WagmiProvider>
-  );
+  return <WagmiConfig config={config}>{children}</WagmiConfig>;
 };

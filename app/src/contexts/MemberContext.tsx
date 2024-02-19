@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
-import { useReadContract } from 'wagmi';
+import { useContractRead, useQuery } from 'wagmi';
 
 import { registryABI } from '../utils/contracts.json';
 import { AppAccount, AppVouch, Entity, HexStr, PAP } from '../types';
-import { useQuery } from 'react-query';
+
 import { getEntity } from '../utils/store';
 import { useProjectContext } from './ProjectContext';
 import { useAccountContext } from '../wallet/AccountContext';
@@ -71,12 +71,12 @@ export const useMember = (props: AccountContextProps): AccountContextType => {
     data: tokenIdOfAddress,
     isLoading: isLoadingTokenId,
     refetch: refetchTokenIdOfAddress,
-  } = useReadContract({
+  } = useContractRead({
     address: projectAddress,
     abi: registryABI,
     functionName: 'tokenIdOf',
     args: address ? [address] : undefined,
-    query: { enabled: address !== undefined && projectAddress !== undefined },
+    enabled: address !== undefined && projectAddress !== undefined,
   });
 
   /** if tokenIdOfAddress changes, update the account */
@@ -90,7 +90,7 @@ export const useMember = (props: AccountContextProps): AccountContextType => {
     refetch: refetchAccount,
     data: _accountRead,
     isLoading: isLoadingAccount,
-  } = useReadContract({
+  } = useContractRead({
     address: projectAddress,
     abi: registryABI,
     functionName: 'getAccount',
@@ -99,31 +99,29 @@ export const useMember = (props: AccountContextProps): AccountContextType => {
       : tokenIdOfAddress
       ? [tokenIdOfAddress]
       : undefined,
-    query: {
-      enabled:
-        (tokenId !== undefined || tokenIdOfAddress !== undefined) &&
-        projectAddress !== undefined,
-    },
+
+    enabled:
+      (tokenId !== undefined || tokenIdOfAddress !== undefined) &&
+      projectAddress !== undefined,
   });
 
   const refetch = tokenId ? refetchAccount : refetchTokenIdOfAddress;
 
-  const { data: accountVouch } = useReadContract({
+  const { data: accountVouch } = useContractRead({
     address: projectAddress,
     abi: registryABI,
     functionName: 'getTokenVouch',
     args: tokenId ? [tokenId] : undefined,
-    query: { enabled: tokenId !== undefined && projectAddress !== undefined },
+    enabled: tokenId !== undefined && projectAddress !== undefined,
   });
 
-  const { data: voucherVouch } = useReadContract({
+  const { data: voucherVouch } = useContractRead({
     address: projectAddress,
     abi: registryABI,
     functionName: 'getTokenVouch',
     args: _accountRead !== undefined ? [_accountRead.voucher] : undefined,
-    query: {
-      enabled: _accountRead !== undefined && projectAddress !== undefined,
-    },
+
+    enabled: _accountRead !== undefined && projectAddress !== undefined,
   });
 
   const { data: accountPapRead } = useQuery(

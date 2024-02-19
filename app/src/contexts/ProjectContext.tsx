@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
+
 import { useParams } from 'react-router-dom';
 
 import { registryABI } from '../utils/contracts.json';
@@ -20,7 +20,7 @@ import { useAccountContext } from '../wallet/AccountContext';
 import { getProjectMembers, postInvite } from '../utils/project';
 import { collections } from '../firestore/database';
 import { onSnapshot } from 'firebase/firestore';
-import { useReadContract } from 'wagmi';
+import { useContractRead, useQuery } from 'wagmi';
 
 export type ProjectContextType = {
   project?: AppProject | null;
@@ -64,39 +64,39 @@ export const ProjectContext = (props: IProjectContext) => {
 
   /** from projectId to project */
 
-  const { data: _project, refetch: refetchProject } = useQuery({
-    queryKey: ['project', projectId],
-    queryFn: () => {
+  const { data: _project, refetch: refetchProject } = useQuery(
+    ['project', projectId],
+    () => {
       if (projectId) {
         return getProject(projectId);
       }
       return null;
-    },
-  });
+    }
+  );
 
   /** query cannot return undefined, consider project undefined if projectId is undefined */
   const project = _project && projectId ? _project : undefined;
 
   // all vouches
-  const { data: members, refetch: refetchMembers } = useQuery({
-    queryKey: ['allMembers', project],
-    queryFn: async () => {
+  const { data: members, refetch: refetchMembers } = useQuery(
+    ['allMembers', project],
+    async () => {
       if (project) {
         return getProjectMembers(project.projectId);
       }
       return null;
-    },
-  });
+    }
+  );
 
   const {
     refetch: refetchTotalSupply,
     data: nMembers,
     isLoading,
-  } = useReadContract({
+  } = useContractRead({
     address: project?.address,
     abi: registryABI,
     functionName: 'totalSupply',
-    query: { enabled: project !== undefined },
+    enabled: project !== undefined,
   });
 
   const refetch = () => {
@@ -106,25 +106,25 @@ export const ProjectContext = (props: IProjectContext) => {
   };
 
   /** Member unique invite link */
-  const { data: inviteId, refetch: refetchInvite } = useQuery({
-    queryKey: ['getInviteLink', aaAddress, projectId],
-    queryFn: () => {
+  const { data: inviteId, refetch: refetchInvite } = useQuery(
+    ['getInviteLink', aaAddress, projectId],
+    () => {
       if (projectId && aaAddress) {
         return getInviteId(projectId, aaAddress);
       }
       return null;
-    },
-  });
+    }
+  );
 
-  const { data: statements, refetch: refetchStatements } = useQuery({
-    queryKey: ['topStatements', projectId?.toString()],
-    queryFn: async () => {
+  const { data: statements, refetch: refetchStatements } = useQuery(
+    ['topStatements', projectId?.toString()],
+    async () => {
       if (projectId) {
         return getTopStatements(projectId);
       }
       return null;
-    },
-  });
+    }
+  );
 
   const resetLink = () => {
     if (projectId && aaAddress) {
@@ -141,15 +141,15 @@ export const ProjectContext = (props: IProjectContext) => {
   };
 
   /** get applications created for this member */
-  const { data: applications, refetch: refetchApplications } = useQuery({
-    queryKey: ['getApplications', aaAddress],
-    queryFn: () => {
+  const { data: applications, refetch: refetchApplications } = useQuery(
+    ['getApplications', aaAddress],
+    () => {
       if (aaAddress) {
         return getApplications(aaAddress);
       }
       return null;
-    },
-  });
+    }
+  );
 
   /** autorefetch on applications changes */
   useEffect(() => {

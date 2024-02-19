@@ -1,10 +1,10 @@
 import { createContext, useContext, useEffect, useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
 
 import { StatementRead } from '../types';
 import { useConnectedMember } from './ConnectedAccountContext';
 import { countStatementBackings, getStatement } from '../firestore/getters';
 import { useBackingSend } from '../pages/voice/useBackingSend';
+import { useQuery } from 'wagmi';
 
 export type StatementContextType = {
   statement?: StatementRead;
@@ -40,14 +40,14 @@ export const StatementContext = (props: IStatementContext) => {
   const [isBacking, setIsBacking] = useState<boolean>(false);
   const [alreadyBacked, setAlreadyBacked] = useState<boolean>();
 
-  const { data: statementRead } = useQuery({
-    queryKey: [`${propsStatementId}`],
-    queryFn: async () => {
+  const { data: statementRead } = useQuery(
+    [`${propsStatementId}`],
+    async () => {
       if (propsStatementId) {
         return getStatement(statementId);
       }
-    },
-  });
+    }
+  );
 
   const statement = propsStatement ? propsStatement : statementRead;
 
@@ -55,13 +55,10 @@ export const StatementContext = (props: IStatementContext) => {
     data: nBacking,
     isLoading,
     refetch: refetchCount,
-  } = useQuery({
-    queryKey: ['statementBackers', statement?.id],
-    queryFn: () => {
-      if (statement) {
-        return countStatementBackings(statement.id);
-      }
-    },
+  } = useQuery(['statementBackers', statement?.id], () => {
+    if (statement) {
+      return countStatementBackings(statement.id);
+    }
   });
 
   const { backStatement, isSuccessBacking, errorBacking } = useBackingSend();

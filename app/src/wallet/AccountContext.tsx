@@ -11,9 +11,12 @@ import {
   LightSmartContractAccount,
   getDefaultLightAccountFactoryAddress,
 } from '@alchemy/aa-accounts';
-import { UserOperationCallData, WalletClientSigner } from '@alchemy/aa-core';
+import {
+  BatchUserOperationCallData,
+  WalletClientSigner,
+} from '@alchemy/aa-core';
 import { HexStr } from '../types';
-import { useReadContract, usePublicClient } from 'wagmi';
+import { useContractRead, usePublicClient } from 'wagmi';
 import { ALCHEMY_GAS_POLICY_ID, ALCHEMY_KEY } from '../config/appConfig';
 import { DecodeEventLogReturnType, decodeEventLog, getAddress } from 'viem';
 import { useAppSigner } from './SignerContext';
@@ -33,7 +36,7 @@ export type AccountContextType = {
   isConnected: boolean;
   aaAddress?: HexStr;
   owner?: HexStr;
-  sendUserOps?: (userOps: UserOperationCallData[]) => void;
+  sendUserOps?: (userOps: BatchUserOperationCallData) => void;
   reset: () => void;
   isSending: boolean;
   isSuccess: boolean;
@@ -77,11 +80,11 @@ export const AccountContext = (props: PropsWithChildren) => {
     data: _owner,
     error: ownerError,
     status: statusOwner,
-  } = useReadContract({
+  } = useContractRead({
     abi: aaWalletAbi,
     address: aaAddress,
     functionName: 'owner',
-    query: { enabled: aaAddress !== undefined },
+    enabled: aaAddress !== undefined,
   });
 
   const owner = (() => {
@@ -136,7 +139,7 @@ export const AccountContext = (props: PropsWithChildren) => {
     }
   }, [alchemyProviderAA]);
 
-  const sendUserOps = async (_userOps: UserOperationCallData[]) => {
+  const sendUserOps = async (_userOps: BatchUserOperationCallData) => {
     setIsSending(true);
     try {
       if (_userOps.length === 0) return;

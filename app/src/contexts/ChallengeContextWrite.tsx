@@ -1,4 +1,4 @@
-import { useReadContract } from 'wagmi';
+import { useContractRead } from 'wagmi';
 
 import { registryABI } from '../utils/contracts.json';
 import { VoteOption } from '../types';
@@ -42,17 +42,15 @@ export const useChallengeWrite = (
   /** can vote */
   const { aaAddress: connectedAddress } = useAccountContext();
 
-  const { data: tokenIdOfAddress } = useReadContract({
+  const { data: tokenIdOfAddress } = useContractRead({
     address: projectAddress,
     abi: registryABI,
     functionName: 'tokenIdOf',
     args: connectedAddress ? [connectedAddress] : undefined,
-    query: {
-      enabled: connectedAddress !== undefined && projectAddress !== undefined,
-    },
+    enabled: connectedAddress !== undefined && projectAddress !== undefined,
   });
 
-  const { data: canVote } = useReadContract({
+  const { data: canVote } = useContractRead({
     address: projectAddress,
     abi: registryABI,
     functionName: 'canVote',
@@ -60,15 +58,13 @@ export const useChallengeWrite = (
       tokenIdOfAddress && tokenIdInternal
         ? [tokenIdOfAddress, tokenIdInternal]
         : undefined,
-    query: {
-      enabled:
-        tokenIdOfAddress !== undefined &&
-        tokenIdInternal !== undefined &&
-        projectAddress !== undefined,
-    },
+    enabled:
+      tokenIdOfAddress !== undefined &&
+      tokenIdInternal !== undefined &&
+      projectAddress !== undefined,
   });
 
-  const { data: _myVote, refetch: refetchMyVote } = useReadContract({
+  const { data: _myVote, refetch: refetchMyVote } = useContractRead({
     address: projectAddress,
     abi: registryABI,
     functionName: 'getChallengeVote',
@@ -76,12 +72,10 @@ export const useChallengeWrite = (
       tokenIdOfAddress && tokenIdInternal
         ? [tokenIdInternal, tokenIdOfAddress]
         : undefined,
-    query: {
-      enabled:
-        tokenIdOfAddress !== undefined &&
-        tokenIdInternal !== undefined &&
-        projectAddress !== undefined,
-    },
+    enabled:
+      tokenIdOfAddress !== undefined &&
+      tokenIdInternal !== undefined &&
+      projectAddress !== undefined,
   });
 
   const myVote = _myVote !== undefined && _myVote !== 0 ? _myVote : undefined;

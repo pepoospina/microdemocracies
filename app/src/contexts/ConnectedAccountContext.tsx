@@ -1,5 +1,5 @@
 import { createContext, ReactNode, useContext } from 'react';
-import { useReadContract, usePublicClient } from 'wagmi';
+import { useContractRead, usePublicClient } from 'wagmi';
 
 import { registryABI } from '../utils/contracts.json';
 import { AppAccount, AppChallenge } from '../types';
@@ -26,12 +26,12 @@ export const ConnectedMemberContext = (props: ConnectedMemberContextProps) => {
   const publicClient = usePublicClient();
   const { aaAddress } = useAccountContext();
 
-  const { data: tokenId, isSuccess } = useReadContract({
+  const { data: tokenId, isSuccess } = useContractRead({
     address: projectAddress,
     abi: registryABI,
     functionName: 'tokenIdOf',
     args: aaAddress ? [aaAddress] : undefined,
-    query: { enabled: aaAddress !== undefined && projectAddress !== undefined },
+    enabled: aaAddress !== undefined && projectAddress !== undefined,
   });
 
   const { account: accountRead } = useMember({
@@ -42,12 +42,12 @@ export const ConnectedMemberContext = (props: ConnectedMemberContextProps) => {
     data: _challengeRead,
     isError: isErrorChallengeRead,
     error: errorChallengeRead,
-  } = useReadContract({
+  } = useContractRead({
     address: projectAddress,
     abi: registryABI,
     functionName: 'getChallenge',
     args: tokenId ? [tokenId] : undefined,
-    query: { enabled: tokenId !== undefined && projectAddress !== undefined },
+    enabled: tokenId !== undefined && projectAddress !== undefined,
   });
 
   const myChallenge: AppChallenge | undefined | null = ((_challengeRead) => {

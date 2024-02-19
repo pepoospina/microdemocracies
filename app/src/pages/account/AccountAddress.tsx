@@ -1,5 +1,5 @@
 import { Box, Text } from 'grommet';
-import { useReadContract } from 'wagmi';
+import { useContractRead } from 'wagmi';
 import { CHAIN_ID } from '../../config/appConfig';
 import { HexStr } from '../../types';
 import { Address } from '../../ui-components';
@@ -25,11 +25,11 @@ export const AccountAddress = (props: {
   const showAccount =
     props.showAccount !== undefined ? props.showAccount : false;
 
-  const { data: owner, isLoading } = useReadContract({
+  const { data: owner, isLoading } = useContractRead({
     address: props.account,
     abi,
     functionName: 'owner',
-    query: { enabled: props.account !== undefined },
+    enabled: props.account !== undefined,
   });
 
   if (!props.account) {
