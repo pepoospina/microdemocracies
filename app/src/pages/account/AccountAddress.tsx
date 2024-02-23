@@ -1,12 +1,13 @@
 import { useQuery } from '@tanstack/react-query';
 import { Box, Text } from 'grommet';
 import { useTranslation } from 'react-i18next';
+import { useReadContract } from 'wagmi';
 
 import { CHAIN_ID } from '../../config/appConfig';
 import { HexStr } from '../../types';
 import { Address } from '../../ui-components';
 import { LoadingDiv } from '../../ui-components/LoadingDiv';
-import { useAccountContext } from '../../wallet/AccountContext';
+import { aaWalletAbi } from '../../utils/contracts.json';
 import { useAppSigner } from '../../wallet/SignerContext';
 
 export const AccountAddress = (props: {
@@ -14,21 +15,19 @@ export const AccountAddress = (props: {
   showAccount?: boolean;
 }) => {
   const { address } = useAppSigner();
-  const { alchemyClient } = useAccountContext();
   const { t } = useTranslation();
 
   const showAccount =
     props.showAccount !== undefined ? props.showAccount : false;
 
-  const { data: owners, isLoading } = useQuery({
-    queryKey: [`ownersOf`, props.account],
-    queryFn: async (): Promise<string[] | null> => {
-      if (!alchemyClient) return null;
-      return (alchemyClient as any).readOwners();
-    },
+  const { data: _owner, isLoading } = useReadContract({
+    abi: aaWalletAbi,
+    address: props.account,
+    functionName: 'owner',
+    query: { enabled: props.account !== undefined },
   });
 
-  const owner = owners && owners.length ? (owners as any)[0] : address;
+  const owner = _owner ? _owner : address;
 
   if (!props.account) {
     return <LoadingDiv></LoadingDiv>;

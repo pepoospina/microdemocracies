@@ -1,7 +1,6 @@
-import { multiOwnerPluginActions } from '@alchemy/aa-accounts';
 import {
   AlchemySmartAccountClient,
-  createModularAccountAlchemyClient,
+  createLightAccountAlchemyClient,
 } from '@alchemy/aa-alchemy';
 import {
   BatchUserOperationCallData,
@@ -16,11 +15,12 @@ import {
   useState,
 } from 'react';
 import { DecodeEventLogReturnType, decodeEventLog, getAddress } from 'viem';
-import { usePublicClient } from 'wagmi';
+import { usePublicClient, useReadContract } from 'wagmi';
 
 import { ALCHEMY_GAS_POLICY_ID, ALCHEMY_RPC_URL } from '../config/appConfig';
 import { HexStr } from '../types';
 import {
+  aaWalletAbi,
   getFactoryAddress,
   registryABI,
   registryFactoryABI,
@@ -65,7 +65,7 @@ export const AccountContext = (props: PropsWithChildren) => {
 
   useEffect(() => {
     if (signer) {
-      createModularAccountAlchemyClient({
+      createLightAccountAlchemyClient({
         rpcUrl: ALCHEMY_RPC_URL,
         chain: chain,
         signer: new WalletClientSigner(signer, 'json-rpc'),
@@ -73,8 +73,7 @@ export const AccountContext = (props: PropsWithChildren) => {
           policyId: ALCHEMY_GAS_POLICY_ID,
         },
       }).then((client) => {
-        const ownedClient = client.extend(multiOwnerPluginActions);
-        setAlchemyClientAA(ownedClient);
+        setAlchemyClientAA(client);
       });
     }
     return undefined;
@@ -90,19 +89,28 @@ export const AccountContext = (props: PropsWithChildren) => {
     setEvents(undefined);
   };
 
-  const { data: owners, isLoading } = useQuery({
-    queryKey: [`ownersOf`, aaAddress],
-    queryFn: async (): Promise<string[] | null> => {
-      if (!alchemyClientAA) return null;
-      return (alchemyClientAA as any).readOwners();
-    },
+  const {
+    data: _owner,
+    error: ownerError,
+    status: statusOwner,
+  } = useReadContract({
+    abi: aaWalletAbi,
+    address: aaAddress,
+    functionName: 'owner',
+    query: { enabled: aaAddress !== undefined },
   });
 
   const owner = (() => {
     if (!aaAddress) return undefined;
     if (!address) return undefined;
-    if (owners) return owners[0] as HexStr;
-    return address;
+    if (
+      ownerError &&
+      (ownerError as any).shortMessage ===
+        'The contract function "owner" returned no data ("0x").' &&
+      address
+    )
+      return address;
+    return _owner;
   })();
 
   useEffect(() => {
