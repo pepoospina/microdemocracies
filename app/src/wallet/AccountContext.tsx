@@ -1,3 +1,4 @@
+import { multiOwnerPluginActions } from '@alchemy/aa-accounts';
 import {
   AlchemySmartAccountClient,
   createModularAccountAlchemyClient,
@@ -6,6 +7,7 @@ import {
   BatchUserOperationCallData,
   WalletClientSigner,
 } from '@alchemy/aa-core';
+import { useQuery } from '@tanstack/react-query';
 import {
   PropsWithChildren,
   createContext,
@@ -14,16 +16,11 @@ import {
   useState,
 } from 'react';
 import { DecodeEventLogReturnType, decodeEventLog, getAddress } from 'viem';
-import { usePublicClient, useReadContract, useWalletClient } from 'wagmi';
+import { usePublicClient } from 'wagmi';
 
-import {
-  ALCHEMY_GAS_POLICY_ID,
-  ALCHEMY_KEY,
-  ALCHEMY_RPC_URL,
-} from '../config/appConfig';
+import { ALCHEMY_GAS_POLICY_ID, ALCHEMY_RPC_URL } from '../config/appConfig';
 import { HexStr } from '../types';
 import {
-  aaWalletAbi,
   getFactoryAddress,
   registryABI,
   registryFactoryABI,
@@ -45,6 +42,7 @@ export type AccountContextType = {
   isSuccess: boolean;
   error?: Error;
   events?: DecodeEventLogReturnType[];
+  alchemyClient?: AlchemySmartAccountClient;
 };
 
 const AccountContextValue = createContext<AccountContextType | undefined>(
@@ -75,7 +73,8 @@ export const AccountContext = (props: PropsWithChildren) => {
           policyId: ALCHEMY_GAS_POLICY_ID,
         },
       }).then((client) => {
-        setAlchemyClientAA(client);
+        const ownedClient = client.extend(multiOwnerPluginActions);
+        setAlchemyClientAA(ownedClient);
       });
     }
     return undefined;
@@ -91,28 +90,19 @@ export const AccountContext = (props: PropsWithChildren) => {
     setEvents(undefined);
   };
 
-  const {
-    data: _owner,
-    error: ownerError,
-    status: statusOwner,
-  } = useReadContract({
-    abi: aaWalletAbi,
-    address: aaAddress,
-    functionName: 'owner',
-    query: { enabled: aaAddress !== undefined },
+  const { data: owners, isLoading } = useQuery({
+    queryKey: [`ownersOf`, aaAddress],
+    queryFn: async (): Promise<string[] | null> => {
+      if (!alchemyClientAA) return null;
+      return (alchemyClientAA as any).readOwners();
+    },
   });
 
   const owner = (() => {
     if (!aaAddress) return undefined;
     if (!address) return undefined;
-    if (
-      ownerError &&
-      (ownerError as any).shortMessage ===
-        'The contract function "owner" returned no data ("0x").' &&
-      address
-    )
-      return address;
-    return _owner;
+    if (owners) return owners[0] as HexStr;
+    return address;
   })();
 
   useEffect(() => {
@@ -210,6 +200,7 @@ export const AccountContext = (props: PropsWithChildren) => {
         isSending,
         events,
         error,
+        alchemyClient: alchemyClientAA,
       }}>
       <AccountDataContext>{props.children}</AccountDataContext>
     </AccountContextValue.Provider>
