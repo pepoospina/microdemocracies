@@ -1,17 +1,15 @@
 import { I18nextProvider } from 'react-i18next';
 import { BrowserRouter } from 'react-router-dom';
 
-import { GlobalStyles } from './components/styles/GlobalStyles';
 import { ResponsiveApp, ThemedApp } from './components/app';
-
-import { SignerContext } from './wallet/SignerContext';
-import { AccountContext } from './wallet/AccountContext';
-import { SemaphoreContext } from './contexts/SemaphoreContext';
-
-import { i18n } from './i18n/i18n';
-import { AppLanguage } from './components/app/AppLanguage';
 import { AppContainer } from './components/app/AppContainer';
+import { AppLanguage } from './components/app/AppLanguage';
+import { GlobalStyles } from './components/styles/GlobalStyles';
+import { SemaphoreContext } from './contexts/SemaphoreContext';
+import { i18n } from './i18n/i18n';
+import { AccountContext } from './wallet/AccountContext';
 import { ConnectedWallet } from './wallet/ConnectedWalletContext';
+import { SignerContext } from './wallet/SignerContext';
 
 function App() {
   return (

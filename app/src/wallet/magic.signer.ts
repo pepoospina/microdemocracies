@@ -1,6 +1,6 @@
-import { WalletClientSigner } from '@alchemy/aa-core';
 import { Magic } from 'magic-sdk';
 import { createWalletClient, custom } from 'viem';
+
 import { MAGIC_API_KEY } from '../config/appConfig';
 import { chain } from './ConnectedWalletContext';
 
@@ -18,5 +18,5 @@ export const createMagicSigner = async () => {
     chain: chain,
   });
 
-  return new WalletClientSigner(magicClient as any, 'magic');
+  return magicClient;
 };

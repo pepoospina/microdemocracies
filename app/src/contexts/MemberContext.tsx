@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
-import { useContractRead, useQuery } from 'wagmi';
+import { useReadContract } from 'wagmi';
 
-import { registryABI } from '../utils/contracts.json';
 import { AppAccount, AppVouch, Entity, HexStr, PAP } from '../types';
-
+import { registryABI } from '../utils/contracts.json';
 import { getEntity } from '../utils/store';
-import { useProjectContext } from './ProjectContext';
 import { useAccountContext } from '../wallet/AccountContext';
+import { useProjectContext } from './ProjectContext';
+import { useQuery } from '@tanstack/react-query';
 
 export type AccountContextType = {
   refetch: (options?: {
@@ -71,12 +71,12 @@ export const useMember = (props: AccountContextProps): AccountContextType => {
     data: tokenIdOfAddress,
     isLoading: isLoadingTokenId,
     refetch: refetchTokenIdOfAddress,
-  } = useContractRead({
+  } = useReadContract({
     address: projectAddress,
     abi: registryABI,
     functionName: 'tokenIdOf',
     args: address ? [address] : undefined,
-    enabled: address !== undefined && projectAddress !== undefined,
+    query: { enabled: address !== undefined && projectAddress !== undefined },
   });
 
   /** if tokenIdOfAddress changes, update the account */
@@ -90,7 +90,7 @@ export const useMember = (props: AccountContextProps): AccountContextType => {
     refetch: refetchAccount,
     data: _accountRead,
     isLoading: isLoadingAccount,
-  } = useContractRead({
+  } = useReadContract({
     address: projectAddress,
     abi: registryABI,
     functionName: 'getAccount',
@@ -100,48 +100,48 @@ export const useMember = (props: AccountContextProps): AccountContextType => {
       ? [tokenIdOfAddress]
       : undefined,
 
-    enabled:
+    query: { enabled:
       (tokenId !== undefined || tokenIdOfAddress !== undefined) &&
-      projectAddress !== undefined,
+      projectAddress !== undefined,}
   });
 
   const refetch = tokenId ? refetchAccount : refetchTokenIdOfAddress;
 
-  const { data: accountVouch } = useContractRead({
+  const { data: accountVouch } = useReadContract({
     address: projectAddress,
     abi: registryABI,
     functionName: 'getTokenVouch',
     args: tokenId ? [tokenId] : undefined,
-    enabled: tokenId !== undefined && projectAddress !== undefined,
+    query: { enabled: tokenId !== undefined && projectAddress !== undefined },
   });
 
-  const { data: voucherVouch } = useContractRead({
+  const { data: voucherVouch } = useReadContract({
     address: projectAddress,
     abi: registryABI,
     functionName: 'getTokenVouch',
     args: _accountRead !== undefined ? [_accountRead.voucher] : undefined,
 
-    enabled: _accountRead !== undefined && projectAddress !== undefined,
+    query: {
+      enabled: _accountRead !== undefined && projectAddress !== undefined,
+    },
   });
 
-  const { data: accountPapRead } = useQuery(
-    ['accountPap', accountVouch?.personCid],
-    () => {
-      if (accountVouch?.personCid) {
-        return getEntity<PAP>(accountVouch?.personCid);
-      }
+  const { data: accountPapRead } = useQuery({queryKey:  ['accountPap', accountVouch?.personCid], queryFn: () => {
+    if (accountVouch?.personCid) {
+      return getEntity<PAP>(accountVouch?.personCid);
     }
-  );
+  } });
+   
+   
+  
 
-  const { data: voucherPapRead } = useQuery(
-    ['voucherPap', voucherVouch?.personCid],
-    () => {
-      if (voucherVouch?.personCid) {
-        return getEntity<PAP>(voucherVouch?.personCid);
-      }
+  const { data: voucherPapRead } = useQuery({queryKey:  ['voucherPap', voucherVouch?.personCid], queryFn: () => {
+    if (voucherVouch?.personCid) {
+      return getEntity<PAP>(voucherVouch?.personCid);
     }
-  );
-
+  }});
+   
+    
   const accountRead = _accountRead && {
     account: _accountRead.account,
     valid: _accountRead.valid,

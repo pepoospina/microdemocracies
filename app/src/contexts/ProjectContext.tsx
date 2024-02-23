@@ -1,8 +1,15 @@
+import { onSnapshot } from 'firebase/firestore';
 import { createContext, useContext, useEffect, useState } from 'react';
-
 import { useParams } from 'react-router-dom';
+import { useReadContract } from 'wagmi';
 
-import { registryABI } from '../utils/contracts.json';
+import { collections } from '../firestore/database';
+import {
+  getApplications,
+  getInviteId,
+  getProject,
+  getTopStatements,
+} from '../firestore/getters';
 import {
   AppApplication,
   AppProject,
@@ -10,17 +17,10 @@ import {
   HexStr,
   StatementRead,
 } from '../types';
-import {
-  getApplications,
-  getInviteId,
-  getProject,
-  getTopStatements,
-} from '../firestore/getters';
-import { useAccountContext } from '../wallet/AccountContext';
+import { registryABI } from '../utils/contracts.json';
 import { getProjectMembers, postInvite } from '../utils/project';
-import { collections } from '../firestore/database';
-import { onSnapshot } from 'firebase/firestore';
-import { useContractRead, useQuery } from 'wagmi';
+import { useAccountContext } from '../wallet/AccountContext';
+import { useQuery } from '@tanstack/react-query';
 
 export type ProjectContextType = {
   project?: AppProject | null;
@@ -64,39 +64,36 @@ export const ProjectContext = (props: IProjectContext) => {
 
   /** from projectId to project */
 
-  const { data: _project, refetch: refetchProject } = useQuery(
-    ['project', projectId],
-    () => {
-      if (projectId) {
-        return getProject(projectId);
-      }
-      return null;
+  const { data: _project, refetch: refetchProject } = useQuery({queryKey:  ['project', projectId],queryFn: () => {
+    if (projectId) {
+      return getProject(projectId);
     }
-  );
+    return null;
+  }});
+    
+    
 
   /** query cannot return undefined, consider project undefined if projectId is undefined */
   const project = _project && projectId ? _project : undefined;
 
   // all vouches
-  const { data: members, refetch: refetchMembers } = useQuery(
-    ['allMembers', project],
-    async () => {
-      if (project) {
-        return getProjectMembers(project.projectId);
-      }
-      return null;
+  const { data: members, refetch: refetchMembers } = useQuery({queryKey: ['allMembers', project], queryFn: async () => {
+    if (project) {
+      return getProjectMembers(project.projectId);
     }
-  );
-
+    return null;
+  }});
+    
+  
   const {
     refetch: refetchTotalSupply,
     data: nMembers,
     isLoading,
-  } = useContractRead({
+  } = useReadContract({
     address: project?.address,
     abi: registryABI,
     functionName: 'totalSupply',
-    enabled: project !== undefined,
+    query: { enabled: project !== undefined },
   });
 
   const refetch = () => {
@@ -106,26 +103,22 @@ export const ProjectContext = (props: IProjectContext) => {
   };
 
   /** Member unique invite link */
-  const { data: inviteId, refetch: refetchInvite } = useQuery(
-    ['getInviteLink', aaAddress, projectId],
-    () => {
-      if (projectId && aaAddress) {
-        return getInviteId(projectId, aaAddress);
-      }
-      return null;
+  const { data: inviteId, refetch: refetchInvite } = useQuery({queryKey: ['getInviteLink', aaAddress, projectId], queryFn: () => {
+    if (projectId && aaAddress) {
+      return getInviteId(projectId, aaAddress);
     }
-  );
+    return null;
+  }});
+  
 
-  const { data: statements, refetch: refetchStatements } = useQuery(
-    ['topStatements', projectId?.toString()],
-    async () => {
-      if (projectId) {
-        return getTopStatements(projectId);
-      }
-      return null;
+  const { data: statements, refetch: refetchStatements } = useQuery({queryKey: ['topStatements', projectId?.toString()], queryFn:  async () => {
+    if (projectId) {
+      return getTopStatements(projectId);
     }
-  );
-
+    return null;
+  }});
+    
+   
   const resetLink = () => {
     if (projectId && aaAddress) {
       setResettingLink(true);
@@ -141,15 +134,13 @@ export const ProjectContext = (props: IProjectContext) => {
   };
 
   /** get applications created for this member */
-  const { data: applications, refetch: refetchApplications } = useQuery(
-    ['getApplications', aaAddress],
-    () => {
-      if (aaAddress) {
-        return getApplications(aaAddress);
-      }
-      return null;
+  const { data: applications, refetch: refetchApplications } = useQuery({queryKey: ['getApplications', aaAddress], queryFn: () => {
+    if (aaAddress) {
+      return getApplications(aaAddress);
     }
-  );
+    return null;
+  }});
+    
 
   /** autorefetch on applications changes */
   useEffect(() => {

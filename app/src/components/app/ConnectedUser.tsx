@@ -1,23 +1,21 @@
-import { useState } from 'react';
 import { Box, Text } from 'grommet';
-
-import { LanguageSelector } from '../../pages/account/LanguageSelector';
-import { Address, AppButton, AppCircleDropButton } from '../../ui-components';
-import { useAccountContext } from '../../wallet/AccountContext';
-import { useAppSigner } from '../../wallet/SignerContext';
-import { Loading } from '../../pages/common/Loading';
-import { CHAIN_ID } from '../../config/appConfig';
-import { cap } from '../../utils/general';
-import { useSemaphoreContext } from '../../contexts/SemaphoreContext';
-import { useTranslation } from 'react-i18next';
-import { useThemeContext } from './ThemedApp';
 import { UserExpert } from 'grommet-icons';
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+
+import { CHAIN_ID } from '../../config/appConfig';
+import { useSemaphoreContext } from '../../contexts/SemaphoreContext';
+import { LanguageSelector } from '../../pages/account/LanguageSelector';
+import { Loading } from '../../pages/common/Loading';
+import { Address, AppButton, AppCircleDropButton } from '../../ui-components';
+import { cap } from '../../utils/general';
+import { useAccountContext } from '../../wallet/AccountContext';
 import { AppConnectButton } from './AppConnectButton';
+import { useThemeContext } from './ThemedApp';
 
 export const ConnectedUser = (props: {}) => {
   const { t } = useTranslation();
-  const { isConnecting, address } = useAppSigner();
-  const { aaAddress, isConnected } = useAccountContext();
+  const { aaAddress, isConnected, owner } = useAccountContext();
   const { isCreatingPublicId, disconnect } = useSemaphoreContext();
   const { constants } = useThemeContext();
 
@@ -31,7 +29,7 @@ export const ConnectedUser = (props: {}) => {
       );
     }
 
-    if (isConnecting || !address || !aaAddress || isCreatingPublicId) {
+    if (!aaAddress || isCreatingPublicId) {
       return <Loading></Loading>;
     }
 
@@ -50,7 +48,7 @@ export const ConnectedUser = (props: {}) => {
           <Box pad="20px" gap="small">
             <Box margin={{ bottom: 'small' }}>
               <Text>{cap(t('connectedAs'))}</Text>
-              <Address address={address} chainId={CHAIN_ID}></Address>
+              <Address address={owner} chainId={CHAIN_ID}></Address>
             </Box>
             <Box margin={{ bottom: 'small' }}>
               <Text margin={{ bottom: '3px' }}>{cap(t('language'))}</Text>

@@ -1,7 +1,7 @@
-import { useContractRead } from 'wagmi';
+import { useReadContract } from 'wagmi';
 
-import { registryABI } from '../utils/contracts.json';
 import { AppChallenge, VoteOption } from '../types';
+import { registryABI } from '../utils/contracts.json';
 import { useProjectContext } from './ProjectContext';
 
 export type ChallengeContextReadType = {
@@ -34,22 +34,26 @@ export const useChallengeRead = (
     isLoading: isLoadingChallenge,
     isError: isErrorChallengeRead,
     error: errorChallengeRead,
-  } = useContractRead({
+  } = useReadContract({
     address: projectAddress,
     abi: registryABI,
     functionName: 'getChallenge',
     args: tokenIdInternal ? [tokenIdInternal] : undefined,
 
-    enabled: tokenIdInternal !== undefined && projectAddress !== undefined,
+    query: {
+      enabled: tokenIdInternal !== undefined && projectAddress !== undefined,
+    },
   });
 
-  const { data: totalVoters } = useContractRead({
+  const { data: totalVoters } = useReadContract({
     address: projectAddress,
     abi: registryABI,
     functionName: 'getTotalVoters',
     args: tokenIdInternal ? [tokenIdInternal] : undefined,
 
-    enabled: tokenIdInternal !== undefined && projectAddress !== undefined,
+    query: {
+      enabled: tokenIdInternal !== undefined && projectAddress !== undefined,
+    },
   });
 
   /** undefined means currently reading, null means read and not found */
