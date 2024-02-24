@@ -1,17 +1,18 @@
 import { Box, Button, Text } from 'grommet';
-import { AppCard } from '../../ui-components';
-import { ViewportPage } from '../../components/app/Viewport';
 import { Add } from 'grommet-icons';
+import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
+
+import { AppConnectButton } from '../../components/app/AppConnectButton';
+import { useAppContainer } from '../../components/app/AppContainer';
+import { ViewportPage } from '../../components/app/Viewport';
+import { AppCard } from '../../ui-components';
 import { useAccountContext } from '../../wallet/AccountContext';
 import { useAccountDataContext } from '../../wallet/AccountDataContext';
+import { AppBottomButton } from '../common/BottomButtons';
 import { Loading } from '../common/Loading';
 import { ProjectCard } from '../project/ProjectCard';
-import { useNavigate } from 'react-router-dom';
-import { AppBottomButton } from '../common/BottomButtons';
-import { useTranslation } from 'react-i18next';
-import { useAppContainer } from '../../components/app/AppContainer';
-import { useEffect } from 'react';
-import { AppConnectButton } from '../../components/app/AppConnectButton';
 
 export const AppHome = (props: {}) => {
   const { isConnected, aaAddress } = useAccountContext();
@@ -42,18 +43,24 @@ export const AppHome = (props: {}) => {
     if (!aaAddress) {
       return <Loading></Loading>;
     }
-    if (projects === undefined) return <Loading label={t('loadingProjects')}></Loading>;
+    if (projects === undefined)
+      return <Loading label={t('loadingProjects')}></Loading>;
     if (projects.length === 0)
       return (
-        <AppCard>
-          <Text>{t('noProjects')}</Text>
-        </AppCard>
+        <Box pad="medium">
+          <AppCard>
+            <Text>{t('noProjects')}</Text>
+          </AppCard>
+        </Box>
       );
     return (
       <Box pad={{ horizontal: 'medium' }}>
         {projects.map((project, ix) => {
           return (
-            <Box key={ix} margin={{ top: 'medium' }} style={{ position: 'relative', flexShrink: 0 }}>
+            <Box
+              key={ix}
+              margin={{ top: 'medium' }}
+              style={{ position: 'relative', flexShrink: 0 }}>
               <ProjectCard project={project}></ProjectCard>
               <Button
                 onClick={() => projectClicked(project.projectId)}
@@ -74,7 +81,10 @@ export const AppHome = (props: {}) => {
     <ViewportPage
       content={projectsContent}
       nav={
-        <AppBottomButton onClick={() => navigate('/start')} icon={<Add></Add>} label={t('startNew')}></AppBottomButton>
+        <AppBottomButton
+          onClick={() => navigate('/start')}
+          icon={<Add></Add>}
+          label={t('startNew')}></AppBottomButton>
       }></ViewportPage>
   );
 };

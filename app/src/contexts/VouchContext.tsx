@@ -29,7 +29,7 @@ export const useVouch = (): VouchHookType => {
   /** Vouch */
   const publicClient = usePublicClient();
 
-  const { address, projectId } = useProjectContext();
+  const { address, projectId, refetch: refetchProject } = useProjectContext();
   const { sendUserOps, isSuccess, isSending, events } = useAccountContext();
 
   const [vouchParamsInternal, setVouchParamsInternal] =
@@ -87,6 +87,8 @@ export const useVouch = (): VouchHookType => {
         tokenId: Number(vouch.args.to),
         voucherTokenId: Number(vouch.args.from),
       });
+
+      refetchProject();
     }
   };
 
