@@ -71,6 +71,9 @@ export const AccountContext = (props: PropsWithChildren) => {
         rpcUrl: ALCHEMY_RPC_URL,
         chain: chain,
         signer: new WalletClientSigner(signer, 'json-rpc'),
+        gasManagerConfig: {
+          policyId: ALCHEMY_GAS_POLICY_ID,
+        },
       }).then((client) => {
         setAlchemyClientAA(client);
       });
