@@ -1,1 +1,1 @@
-export const APP_ORIGIN = 'https://app.microdemocracies.com';
+export const APP_ORIGIN = 'https://app.microdemocracias.com';
