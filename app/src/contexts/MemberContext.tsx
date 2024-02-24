@@ -1,3 +1,4 @@
+import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { useReadContract } from 'wagmi';
 
@@ -6,7 +7,6 @@ import { registryABI } from '../utils/contracts.json';
 import { getEntity } from '../utils/store';
 import { useAccountContext } from '../wallet/AccountContext';
 import { useProjectContext } from './ProjectContext';
-import { useQuery } from '@tanstack/react-query';
 
 export type AccountContextType = {
   refetch: (options?: {
@@ -100,9 +100,11 @@ export const useMember = (props: AccountContextProps): AccountContextType => {
       ? [tokenIdOfAddress]
       : undefined,
 
-    query: { enabled:
-      (tokenId !== undefined || tokenIdOfAddress !== undefined) &&
-      projectAddress !== undefined,}
+    query: {
+      enabled:
+        (tokenId !== undefined || tokenIdOfAddress !== undefined) &&
+        projectAddress !== undefined,
+    },
   });
 
   const refetch = tokenId ? refetchAccount : refetchTokenIdOfAddress;
@@ -126,22 +128,24 @@ export const useMember = (props: AccountContextProps): AccountContextType => {
     },
   });
 
-  const { data: accountPapRead } = useQuery({queryKey:  ['accountPap', accountVouch?.personCid], queryFn: () => {
-    if (accountVouch?.personCid) {
-      return getEntity<PAP>(accountVouch?.personCid);
-    }
-  } });
-   
-   
-  
+  const { data: accountPapRead } = useQuery({
+    queryKey: ['accountPap', accountVouch?.personCid],
+    queryFn: () => {
+      if (accountVouch?.personCid) {
+        return getEntity<PAP>(accountVouch?.personCid);
+      }
+    },
+  });
 
-  const { data: voucherPapRead } = useQuery({queryKey:  ['voucherPap', voucherVouch?.personCid], queryFn: () => {
-    if (voucherVouch?.personCid) {
-      return getEntity<PAP>(voucherVouch?.personCid);
-    }
-  }});
-   
-    
+  const { data: voucherPapRead } = useQuery({
+    queryKey: ['voucherPap', voucherVouch?.personCid],
+    queryFn: () => {
+      if (voucherVouch?.personCid) {
+        return getEntity<PAP>(voucherVouch?.personCid);
+      }
+    },
+  });
+
   const accountRead = _accountRead && {
     account: _accountRead.account,
     valid: _accountRead.valid,

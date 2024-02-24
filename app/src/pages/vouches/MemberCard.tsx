@@ -1,23 +1,33 @@
-import { Box, Spinner, Text } from 'grommet';
-import { AppProjectMember } from '../../types';
-import { AppButton, AppCard } from '../../ui-components';
+import { Box, Text } from 'grommet';
+import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 
+import { useThemeContext } from '../../components/app';
+import { useMember } from '../../contexts/MemberContext';
 import { AbsoluteRoutes } from '../../route.names';
-import { useTranslation } from 'react-i18next';
-import { MemberAnchor } from './MemberAnchor';
+import { AppProjectMember } from '../../types';
+import { AppButton } from '../../ui-components';
 import { LoadingDiv } from '../../ui-components/LoadingDiv';
+import { getPapShortname } from '../../utils/pap';
 
-export const MemberCard = (props: { member?: AppProjectMember }): JSX.Element => {
-  const { projectId } = useParams();
+export const MemberCard = (props: {
+  member?: AppProjectMember;
+}): JSX.Element => {
+  const { constants } = useThemeContext();
   const { t } = useTranslation();
+  const { projectId } = useParams();
   const navigate = useNavigate();
+  const { accountPap } = useMember({
+    tokenId: props.member?.tokenId,
+  });
 
   const member = props.member;
 
   const goTo = () => {
     if (member && projectId) {
-      navigate(AbsoluteRoutes.ProjectMember(projectId, '0'));
+      navigate(
+        AbsoluteRoutes.ProjectMember(projectId, member.tokenId.toString())
+      );
     }
   };
 
@@ -27,7 +37,23 @@ export const MemberCard = (props: { member?: AppProjectMember }): JSX.Element =>
 
   return (
     <AppButton onClick={() => goTo()} style={{ textTransform: 'none' }}>
-      <AppCard>{member.aaAddress}</AppCard>
+      <Box
+        pad={{ vertical: 'medium', horizontal: 'medium' }}
+        style={{
+          backgroundColor: constants.colors.primary,
+          color: constants.colors.textOnPrimary,
+        }}>
+        <Text>
+          <b>
+            {t('member')} #{props.member?.tokenId}
+          </b>
+        </Text>
+        {!accountPap ? (
+          <LoadingDiv></LoadingDiv>
+        ) : (
+          getPapShortname(accountPap.object)
+        )}
+      </Box>
     </AppButton>
   );
 };
