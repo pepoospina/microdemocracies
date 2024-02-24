@@ -6,7 +6,6 @@ import {
   BatchUserOperationCallData,
   WalletClientSigner,
 } from '@alchemy/aa-core';
-import { useQuery } from '@tanstack/react-query';
 import {
   PropsWithChildren,
   createContext,
@@ -42,7 +41,6 @@ export type AccountContextType = {
   isSuccess: boolean;
   error?: Error;
   events?: DecodeEventLogReturnType[];
-  alchemyClient?: AlchemySmartAccountClient;
 };
 
 const AccountContextValue = createContext<AccountContextType | undefined>(
@@ -63,15 +61,16 @@ export const AccountContext = (props: PropsWithChildren) => {
   const [error, setError] = useState<Error>();
   const [events, setEvents] = useState<DecodeEventLogReturnType[]>();
 
+  // gasManagerConfig: {
+  //   policyId: ALCHEMY_GAS_POLICY_ID,
+  // },
+
   useEffect(() => {
     if (signer) {
       createLightAccountAlchemyClient({
         rpcUrl: ALCHEMY_RPC_URL,
         chain: chain,
         signer: new WalletClientSigner(signer, 'json-rpc'),
-        gasManagerConfig: {
-          policyId: ALCHEMY_GAS_POLICY_ID,
-        },
       }).then((client) => {
         setAlchemyClientAA(client);
       });
@@ -117,6 +116,7 @@ export const AccountContext = (props: PropsWithChildren) => {
     if (alchemyClientAA) {
       // TODO: what?
       const address = (alchemyClientAA as any).getAddress();
+      if (DEBUG) console.log({ aaAddress: address });
       setAaAddress(getAddress(address));
     } else {
       setAaAddress(undefined);
@@ -129,6 +129,12 @@ export const AccountContext = (props: PropsWithChildren) => {
       if (_userOps.length === 0) return;
       if (!alchemyClientAA) throw new Error('undefined alchemyClientAA');
 
+      const uoSimResult = await (alchemyClientAA as any).simulateUserOperation({
+        uo: _userOps,
+      });
+
+      if (DEBUG) console.log('uoSimResult', { uoSimResult });
+
       if (DEBUG) console.log('sendUserOps', { userOps: _userOps });
       const res = await (alchemyClientAA as any).sendUserOperation({
         uo: _userOps,
@@ -136,13 +142,16 @@ export const AccountContext = (props: PropsWithChildren) => {
       if (DEBUG) console.log('sendUserOps - res', { res });
 
       if (DEBUG) console.log('waiting');
-      const txHash = await alchemyClientAA.waitForUserOperationTransaction(
-        res.hash
-      );
+      const txHash = await alchemyClientAA.waitForUserOperationTransaction({
+        hash: res.hash,
+      });
+
       if (DEBUG) console.log('waitForUserOperationTransaction', { txHash });
 
       if (DEBUG) console.log('getting tx');
-      const tx = await (publicClient as any).waitForTransactionReceipt({
+
+      if (!publicClient) throw new Error(`publicClient undefined`);
+      const tx = await publicClient.waitForTransactionReceipt({
         hash: txHash,
       });
       if (DEBUG) console.log('tx - res', { tx });
@@ -182,7 +191,7 @@ export const AccountContext = (props: PropsWithChildren) => {
 
       setIsSuccess(true);
       setIsSending(false);
-      setEvents(events);
+      setEvents(events as any);
     } catch (e: any) {
       console.error(e);
       setError(e);
@@ -208,7 +217,6 @@ export const AccountContext = (props: PropsWithChildren) => {
         isSending,
         events,
         error,
-        alchemyClient: alchemyClientAA,
       }}>
       <AccountDataContext>{props.children}</AccountDataContext>
     </AccountContextValue.Provider>

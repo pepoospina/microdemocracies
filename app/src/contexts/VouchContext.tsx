@@ -1,20 +1,20 @@
 import { useCallback, useEffect, useState } from 'react';
-
-import {
-  TransferEventType,
-  VouchEventType,
-  registryABI,
-} from '../utils/contracts.json';
-import { HexStr } from '../types';
-import { useProjectContext } from './ProjectContext';
-import { useAccountContext } from '../wallet/AccountContext';
 import {
   DecodeEventLogReturnType,
   encodeFunctionData,
   zeroAddress,
 } from 'viem';
-import { postMember } from '../utils/project';
 import { usePublicClient } from 'wagmi';
+
+import { HexStr } from '../types';
+import {
+  TransferEventType,
+  VouchEventType,
+  registryABI,
+} from '../utils/contracts.json';
+import { postMember } from '../utils/project';
+import { useAccountContext } from '../wallet/AccountContext';
+import { useProjectContext } from './ProjectContext';
 
 export type VouchHookType = {
   setVouchParams: (account: HexStr, personCid: string) => void;
@@ -70,7 +70,7 @@ export const useVouch = (): VouchHookType => {
 
     /** find the exact vouch event */
     const vouch = _events?.find((e: any) => {
-      if (e.eventName === 'Transfer') {
+      if (e.eventName === 'VouchEvent') {
         const event = e as VouchEventType;
         return event.args.to === vouchedTokenId;
       }
