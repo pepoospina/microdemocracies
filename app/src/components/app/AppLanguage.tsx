@@ -1,4 +1,10 @@
-import { PropsWithChildren, createContext, useContext, useEffect, useState } from 'react';
+import {
+  PropsWithChildren,
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 import { useTranslation } from 'react-i18next';
 
 export enum Language {
@@ -25,21 +31,26 @@ export const AppLanguage = (props: PropsWithChildren): JSX.Element => {
   useEffect(() => {
     const preferred = localStorage.getItem('language');
 
-    if (preferred !== null) {
+    if (preferred && preferred !== null) {
       console.log('Setting preferred language', preferred);
       setHasChosen(true);
       i18n.changeLanguage(preferred);
     } else {
-      const local = navigator.language;
-      console.log('reading nav language', local);
-      if (local.includes('en')) {
-        i18n.changeLanguage(Language.ENG);
-      }
-      if (local.includes('es')) {
+      const local = navigator.language.toLocaleLowerCase();
+      if (window.location.origin.includes('microdemocracias.com')) {
         i18n.changeLanguage(Language.SPA);
-      }
-      if (local.includes('cat')) {
-        i18n.changeLanguage(Language.CAT);
+        return;
+      } else {
+        console.log('reading nav language', local);
+        if (local.includes('en')) {
+          i18n.changeLanguage(Language.ENG);
+        }
+        if (local.includes('es')) {
+          i18n.changeLanguage(Language.SPA);
+        }
+        if (local.includes('cat')) {
+          i18n.changeLanguage(Language.CAT);
+        }
       }
     }
   }, [i18n]);
@@ -50,12 +61,17 @@ export const AppLanguage = (props: PropsWithChildren): JSX.Element => {
   };
 
   return (
-    <ThemeContextValue.Provider value={{ change, selected, hasChosen }}>{props.children}</ThemeContextValue.Provider>
+    <ThemeContextValue.Provider value={{ change, selected, hasChosen }}>
+      {props.children}
+    </ThemeContextValue.Provider>
   );
 };
 
 export const useAppLanguage = (): AppLanguageType => {
   const context = useContext(ThemeContextValue);
-  if (!context) throw Error('useThemeContext can only be used within the CampaignContext component');
+  if (!context)
+    throw Error(
+      'useThemeContext can only be used within the CampaignContext component'
+    );
   return context;
 };
