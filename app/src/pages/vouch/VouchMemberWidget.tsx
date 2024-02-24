@@ -1,7 +1,7 @@
 import { Box, Anchor, Text } from 'grommet';
 import { useEffect, useState } from 'react';
 
-import { RouteNames } from '../../App';
+import { AbsoluteRoutes } from '../../route.names';
 import { AppConnectButton } from '../../components/app/AppConnectButton';
 import { useConnectedMember } from '../../contexts/ConnectedAccountContext';
 import { useProjectContext } from '../../contexts/ProjectContext';
@@ -10,12 +10,13 @@ import { Entity, PAP } from '../../types';
 import { AppCard, AppButton } from '../../ui-components';
 import { useAccountContext } from '../../wallet/AccountContext';
 import { WaitingTransaction } from '../common/Loading';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { postDeleteApplication } from '../../utils/project';
 import { useTranslation } from 'react-i18next';
 import { useMember } from '../../contexts/MemberContext';
 
 export const VouchMemberWidget = (props: { pap: Entity<PAP> }) => {
+  const { projectId } = useParams();
   const { t } = useTranslation();
   const { pap } = props;
 
@@ -112,11 +113,11 @@ export const VouchMemberWidget = (props: { pap: Entity<PAP> }) => {
     <Box>
       <AppCard>
         <Text>
-          Application already accepted as{' '}
+          {t('applicationAcceptedAs')}{' '}
           <Anchor
             onClick={() => {
-              if (vouchedTokenId) {
-                navigate(`../${RouteNames.Member(vouchedTokenId)}`);
+              if (vouchedTokenId && projectId) {
+                navigate(AbsoluteRoutes.ProjectMember(projectId, vouchedTokenId.toString()));
               }
             }}>
             {t('member')} #{vouchedTokenId}

@@ -8,7 +8,7 @@ export enum CollectionNames {
   TreeIdentities = 'tree-identities',
   Identities = 'identities',
   Projects = 'projects',
-  Statments = 'statements',
+  Statements = 'statements',
   StatementsBackers = 'statements_backers',
   Entities = 'entities',
 }

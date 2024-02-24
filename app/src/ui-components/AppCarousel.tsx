@@ -1,5 +1,4 @@
 import React, {
-  memo,
   useState,
   useRef,
   useEffect,
@@ -92,7 +91,10 @@ export type ReactSimplyCarouselProps = ReactSimplyCarouselStaticProps & {
   responsiveProps?: ReactSimplyCarouselResponsiveProps;
 };
 
-export function AppCarousel({ responsiveProps = [], ...props }: ReactSimplyCarouselProps) {
+export function AppCarousel({
+  responsiveProps = [],
+  ...props
+}: ReactSimplyCarouselProps) {
   const [windowWidth, setWindowWidth] = useState(0);
   const [positionIndex, setPositionIndex] = useState(props.activeSlideIndex);
 
@@ -112,18 +114,23 @@ export function AppCarousel({ responsiveProps = [], ...props }: ReactSimplyCarou
   const renderedSlidesCountRef = useRef(0);
   const firstRenderSlideIndexRef = useRef(positionIndex);
 
-  const propsByWindowWidth = responsiveProps.reduce((result, { minWidth = 0, maxWidth = null, ...item } = {}) => {
-    if (windowWidth > minWidth && (!maxWidth || windowWidth <= maxWidth)) {
-      return {
-        ...result,
-        ...item,
-      };
-    }
+  const propsByWindowWidth = responsiveProps.reduce(
+    (result, { minWidth = 0, maxWidth = null, ...item } = {}) => {
+      if (windowWidth > minWidth && (!maxWidth || windowWidth <= maxWidth)) {
+        return {
+          ...result,
+          ...item,
+        };
+      }
 
-    return result;
-  }, props);
+      return result;
+    },
+    props
+  );
 
-  const slidesItems = Children.toArray(propsByWindowWidth.children) as ReactElement<any>[];
+  const slidesItems = Children.toArray(
+    propsByWindowWidth.children
+  ) as ReactElement<any>[];
 
   const {
     containerProps: { style: containerStyle = {}, ...containerProps } = {},
@@ -134,9 +141,21 @@ export function AppCarousel({ responsiveProps = [], ...props }: ReactSimplyCarou
       onTransitionEnd: onItemsListTransitionEnd = undefined,
       ...itemsListProps
     } = {},
-    backwardBtnProps: { children: backwardBtnChildren = null, show: showBackwardBtn = true, ...backwardBtnProps } = {},
-    forwardBtnProps: { children: forwardBtnChildren = null, show: showForwardBtn = true, ...forwardBtnProps } = {},
-    activeSlideProps: { className: activeSlideClassName = '', style: activeSlideStyle = {}, ...activeSlideProps } = {},
+    backwardBtnProps: {
+      children: backwardBtnChildren = null,
+      show: showBackwardBtn = true,
+      ...backwardBtnProps
+    } = {},
+    forwardBtnProps: {
+      children: forwardBtnChildren = null,
+      show: showForwardBtn = true,
+      ...forwardBtnProps
+    } = {},
+    activeSlideProps: {
+      className: activeSlideClassName = '',
+      style: activeSlideStyle = {},
+      ...activeSlideProps
+    } = {},
     visibleSlideProps: {
       className: visibleSlideClassName = '',
       style: visibleSlideStyle = {},
@@ -176,9 +195,18 @@ export function AppCarousel({ responsiveProps = [], ...props }: ReactSimplyCarou
   } = windowWidth
     ? {
         ...propsByWindowWidth,
-        activeSlideIndex: Math.max(0, Math.min(propsByWindowWidth.activeSlideIndex, slidesItems.length - 1)),
-        itemsToShow: Math.min(slidesItems.length, propsByWindowWidth.itemsToShow || 0),
-        itemsToScroll: Math.min(slidesItems.length, propsByWindowWidth.itemsToScroll || 1),
+        activeSlideIndex: Math.max(
+          0,
+          Math.min(propsByWindowWidth.activeSlideIndex, slidesItems.length - 1)
+        ),
+        itemsToShow: Math.min(
+          slidesItems.length,
+          propsByWindowWidth.itemsToShow || 0
+        ),
+        itemsToScroll: Math.min(
+          slidesItems.length,
+          propsByWindowWidth.itemsToScroll || 1
+        ),
       }
     : props;
 
@@ -190,11 +218,16 @@ export function AppCarousel({ responsiveProps = [], ...props }: ReactSimplyCarou
   } = (dotsNav as DotsNav) || {};
 
   const lastSlideIndex = Children.count(children) - 1;
-  const isAllSlidesVisible = !!windowWidth && innerRef.current?.offsetWidth! >= itemsListRef.current?.offsetWidth!;
+  const isAllSlidesVisible =
+    !!windowWidth &&
+    innerRef.current?.offsetWidth! >= itemsListRef.current?.offsetWidth!;
   const hideNav = hideNavIfAllVisible && isAllSlidesVisible;
-  const _disableNav = disableNav || (disableNavIfAllVisible && isAllSlidesVisible);
+  const _disableNav =
+    disableNav || (disableNavIfAllVisible && isAllSlidesVisible);
   const itemsListTransition =
-    activeSlideIndex - positionIndex === 0 || !(speed || delay) ? 'none' : `transform ${speed}ms ${easing} ${delay}ms`;
+    activeSlideIndex - positionIndex === 0 || !(speed || delay)
+      ? 'none'
+      : `transform ${speed}ms ${easing} ${delay}ms`;
 
   const getRenderParams = useCallback(
     ({
@@ -213,17 +246,25 @@ export function AppCarousel({ responsiveProps = [], ...props }: ReactSimplyCarou
       const slidesHTMLElements = infinite
         ? ([...itemsListChildren].slice(
             itemsListChildrenCount / 3 - prevCorrectionSlideIndex,
-            itemsListChildrenCount / 3 - prevCorrectionSlideIndex + itemsListChildrenCount / 3
+            itemsListChildrenCount / 3 -
+              prevCorrectionSlideIndex +
+              itemsListChildrenCount / 3
           ) as HTMLElement[])
         : ([...itemsListChildren] as HTMLElement[]);
 
-      const activeSlideWidth = slidesHTMLElements[curActiveSlideIndex]?.offsetWidth;
+      const activeSlideWidth =
+        slidesHTMLElements[curActiveSlideIndex]?.offsetWidth;
 
       const innerMaxWidth = itemsToShow
         ? slidesHTMLElements.reduce((result, item, index) => {
             const isItemVisible =
-              (index >= curActiveSlideIndex && index < curActiveSlideIndex + itemsToShow) ||
-              (index < curActiveSlideIndex && index < curActiveSlideIndex + itemsToShow - slidesHTMLElements.length);
+              (index >= curActiveSlideIndex &&
+                index < curActiveSlideIndex + itemsToShow) ||
+              (index < curActiveSlideIndex &&
+                index <
+                  curActiveSlideIndex +
+                    itemsToShow -
+                    slidesHTMLElements.length);
 
             if (!isItemVisible) {
               return result;
@@ -237,7 +278,8 @@ export function AppCarousel({ responsiveProps = [], ...props }: ReactSimplyCarou
 
       const itemsListMaxTranslateX = itemsListWidth - innerWidth;
 
-      const offsetCorrectionForCenterMode = centerMode && infinite ? -(innerWidth - activeSlideWidth) / 2 : 0;
+      const offsetCorrectionForCenterMode =
+        centerMode && infinite ? -(innerWidth - activeSlideWidth) / 2 : 0;
 
       const offsetCorrectionForInfiniteMode = infinite ? itemsListWidth / 3 : 0;
 
@@ -246,22 +288,27 @@ export function AppCarousel({ responsiveProps = [], ...props }: ReactSimplyCarou
         correctionSlideIndex - curActiveSlideIndex === 0
           ? 0
           : // eslint-disable-next-line no-nested-ternary
-          directionRef.current === 'forward' && curActiveSlideIndex < correctionSlideIndex
+          directionRef.current === 'forward' &&
+            curActiveSlideIndex < correctionSlideIndex
           ? offsetCorrectionForInfiniteMode
-          : directionRef.current === 'backward' && curActiveSlideIndex > correctionSlideIndex
+          : directionRef.current === 'backward' &&
+            curActiveSlideIndex > correctionSlideIndex
           ? -offsetCorrectionForInfiniteMode
           : 0;
 
       const isNewSlideIndex = curActiveSlideIndex - correctionSlideIndex !== 0;
 
       const getItemsListOffsetBySlideIndex = (slideIndex: number) => {
-        const offsetByIndex = slidesHTMLElements.reduce((total, item, index) => {
-          if (index >= slideIndex) {
-            return total;
-          }
+        const offsetByIndex = slidesHTMLElements.reduce(
+          (total, item, index) => {
+            if (index >= slideIndex) {
+              return total;
+            }
 
-          return total + (item.offsetWidth || 0);
-        }, 0);
+            return total + (item.offsetWidth || 0);
+          },
+          0
+        );
 
         if (infinite) {
           return offsetByIndex;
@@ -271,9 +318,13 @@ export function AppCarousel({ responsiveProps = [], ...props }: ReactSimplyCarou
       };
 
       const positionIndexOffset =
-        isNewSlideIndex && infinite ? getItemsListOffsetBySlideIndex(correctionSlideIndex) : 0;
+        isNewSlideIndex && infinite
+          ? getItemsListOffsetBySlideIndex(correctionSlideIndex)
+          : 0;
       const activeSlideIndexOffset =
-        isNewSlideIndex || !infinite ? getItemsListOffsetBySlideIndex(curActiveSlideIndex) : 0;
+        isNewSlideIndex || !infinite
+          ? getItemsListOffsetBySlideIndex(curActiveSlideIndex)
+          : 0;
 
       const itemsListTranslateX = _disableNav
         ? 0
@@ -298,23 +349,29 @@ export function AppCarousel({ responsiveProps = [], ...props }: ReactSimplyCarou
           );
       const end = start + innerWidth;
 
-      const slidesHTMLElementsDefault = slidesHTMLElements.map((htmlElement, index) => ({
-        slideIndex: index,
-        htmlElement,
-      }));
+      const slidesHTMLElementsDefault = slidesHTMLElements.map(
+        (htmlElement, index) => ({
+          slideIndex: index,
+          htmlElement,
+        })
+      );
 
       const slidesHTMLElementsInRender = infinite
         ? [
-            ...slidesHTMLElements.slice(curActiveSlideIndex).map((htmlElement, index) => ({
-              slideIndex: index + curActiveSlideIndex,
-              htmlElement,
-            })),
+            ...slidesHTMLElements
+              .slice(curActiveSlideIndex)
+              .map((htmlElement, index) => ({
+                slideIndex: index + curActiveSlideIndex,
+                htmlElement,
+              })),
             ...slidesHTMLElementsDefault,
             ...slidesHTMLElementsDefault,
-            ...slidesHTMLElements.slice(0, curActiveSlideIndex).map((htmlElement, index) => ({
-              slideIndex: index,
-              htmlElement,
-            })),
+            ...slidesHTMLElements
+              .slice(0, curActiveSlideIndex)
+              .map((htmlElement, index) => ({
+                slideIndex: index,
+                htmlElement,
+              })),
           ]
         : slidesHTMLElementsDefault;
 
@@ -324,11 +381,13 @@ export function AppCarousel({ responsiveProps = [], ...props }: ReactSimplyCarou
 
           if (
             (result.summ >= start && result.summ < end) ||
-            (result.summ + htmlElementWidth > start && result.summ + htmlElementWidth <= end)
+            (result.summ + htmlElementWidth > start &&
+              result.summ + htmlElementWidth <= end)
           ) {
             result.items.push({
               slideIndex,
-              isFullyVisible: result.summ + htmlElementWidth <= end && result.summ >= start,
+              isFullyVisible:
+                result.summ + htmlElementWidth <= end && result.summ >= start,
             });
           }
 
@@ -343,7 +402,9 @@ export function AppCarousel({ responsiveProps = [], ...props }: ReactSimplyCarou
         }
       );
 
-      const isFirstSlideVisible = !!visibilityItemsState.items.find((item) => item.slideIndex === 0);
+      const isFirstSlideVisible = !!visibilityItemsState.items.find(
+        (item) => item.slideIndex === 0
+      );
 
       const isLastSlideVisible = !!visibilityItemsState.items.find(
         (item) => item.slideIndex === slidesHTMLElements.length - 1
@@ -402,7 +463,11 @@ export function AppCarousel({ responsiveProps = [], ...props }: ReactSimplyCarou
         const nextSlideIndex = activeSlideIndex - itemsToScroll;
         const isOnStart = nextSlideIndex < 0;
         // eslint-disable-next-line no-nested-ternary
-        const newSlideIndex = isOnStart ? (infinite ? lastSlideIndex + 1 + nextSlideIndex : 0) : nextSlideIndex;
+        const newSlideIndex = isOnStart
+          ? infinite
+            ? lastSlideIndex + 1 + nextSlideIndex
+            : 0
+          : nextSlideIndex;
 
         return newSlideIndex;
       }
@@ -415,9 +480,13 @@ export function AppCarousel({ responsiveProps = [], ...props }: ReactSimplyCarou
   const updateActiveSlideIndex = useCallback(
     (newActiveSlideIndex: number, direction: NavDirection) => {
       directionRef.current = direction;
-      itemsListRef.current!.style.transition = speed || delay ? `transform ${speed}ms ${easing} ${delay}ms` : 'none';
+      itemsListRef.current!.style.transition =
+        speed || delay ? `transform ${speed}ms ${easing} ${delay}ms` : 'none';
 
-      if (newActiveSlideIndex !== activeSlideIndex || persistentChangeCallbacks) {
+      if (
+        newActiveSlideIndex !== activeSlideIndex ||
+        persistentChangeCallbacks
+      ) {
         clearTimeout(autoplayTimerRef.current);
 
         const {
@@ -447,7 +516,9 @@ export function AppCarousel({ responsiveProps = [], ...props }: ReactSimplyCarou
         });
       } else {
         itemsListRef.current!.style.transform = `translateX(-${
-          offsetCorrectionForCenterMode + offsetCorrectionForInfiniteMode + (infinite ? 0 : itemsListTranslateX)
+          offsetCorrectionForCenterMode +
+          offsetCorrectionForInfiniteMode +
+          (infinite ? 0 : itemsListTranslateX)
         }px)`;
       }
     },
@@ -472,10 +543,20 @@ export function AppCarousel({ responsiveProps = [], ...props }: ReactSimplyCarou
       clearTimeout(autoplayTimerRef.current);
 
       autoplayTimerRef.current = setTimeout(() => {
-        updateActiveSlideIndex(getNextSlideIndex(autoplayDirection), autoplayDirection);
+        updateActiveSlideIndex(
+          getNextSlideIndex(autoplayDirection),
+          autoplayDirection
+        );
       }, autoplayDelay || delay);
     }
-  }, [autoplay, autoplayDirection, autoplayDelay, updateActiveSlideIndex, getNextSlideIndex, delay]);
+  }, [
+    autoplay,
+    autoplayDirection,
+    autoplayDelay,
+    updateActiveSlideIndex,
+    getNextSlideIndex,
+    delay,
+  ]);
 
   const handleBackwardBtnClick = useCallback(() => {
     updateActiveSlideIndex(getNextSlideIndex('backward'), 'backward');
@@ -509,7 +590,10 @@ export function AppCarousel({ responsiveProps = [], ...props }: ReactSimplyCarou
       const forwardDirectionValue = activeSlideIndex < index ? 'forward' : '';
       const backwardDirectionValue = activeSlideIndex > index ? 'backward' : '';
 
-      updateActiveSlideIndex(index, direction || forwardDirectionValue || backwardDirectionValue);
+      updateActiveSlideIndex(
+        index,
+        direction || forwardDirectionValue || backwardDirectionValue
+      );
 
       if (onClick) {
         onClick(event);
@@ -519,7 +603,11 @@ export function AppCarousel({ responsiveProps = [], ...props }: ReactSimplyCarou
     return slideItemOnClick;
   };
 
-  const renderSlidesItems = (items: ReactElement<any>[], startIndex: number, isDisableNav?: boolean) =>
+  const renderSlidesItems = (
+    items: ReactElement<any>[],
+    startIndex: number,
+    isDisableNav?: boolean
+  ) =>
     items.map((item, index) => {
       const {
         props: {
@@ -541,11 +629,14 @@ export function AppCarousel({ responsiveProps = [], ...props }: ReactSimplyCarou
         : 'backward';
 
       const isActive: boolean = index + startIndex === activeSlideIndex;
-      const isVisible = visibleSlides.find((slide) => slide.slideIndex === index + startIndex);
+      const isVisible = visibleSlides.find(
+        (slide) => slide.slideIndex === index + startIndex
+      );
 
       const className =
-        `${itemClassName} ${isActive ? activeSlideClassName : ''} ${isVisible ? visibleSlideClassName : ''}`.trim() ||
-        undefined;
+        `${itemClassName} ${isActive ? activeSlideClassName : ''} ${
+          isVisible ? visibleSlideClassName : ''
+        }`.trim() || undefined;
       const style = {
         ...itemStyle,
         ...(isVisible ? visibleSlideStyle : {}),
@@ -592,10 +683,13 @@ export function AppCarousel({ responsiveProps = [], ...props }: ReactSimplyCarou
 
       const isTouch = !!(event as TouchEvent).touches?.[0];
 
-      const dragPos = isTouch ? (event as TouchEvent).touches?.[0].clientX : (event as MouseEvent).clientX;
+      const dragPos = isTouch
+        ? (event as TouchEvent).touches?.[0].clientX
+        : (event as MouseEvent).clientX;
 
       const dragPosDiff =
-        (itemsListDragStartPosRef.current - dragPos) * ((isTouch ? touchSwipeRatio : mouseSwipeRatio) || swipeRatio) +
+        (itemsListDragStartPosRef.current - dragPos) *
+          ((isTouch ? touchSwipeRatio : mouseSwipeRatio) || swipeRatio) +
         offsetCorrectionForCenterMode +
         offsetCorrectionForInfiniteMode +
         (infinite ? 0 : itemsListTranslateX);
@@ -617,11 +711,14 @@ export function AppCarousel({ responsiveProps = [], ...props }: ReactSimplyCarou
         const isTouch = !!(event as TouchEvent).changedTouches?.[0];
 
         const dragPos = isTouch
-          ? (event as TouchEvent).changedTouches[(event as TouchEvent).changedTouches.length - 1].clientX
+          ? (event as TouchEvent).changedTouches[
+              (event as TouchEvent).changedTouches.length - 1
+            ].clientX
           : (event as MouseEvent).clientX;
 
         const mousePosDiff =
-          (itemsListDragStartPosRef.current - dragPos) * ((isTouch ? touchSwipeRatio : mouseSwipeRatio) || swipeRatio);
+          (itemsListDragStartPosRef.current - dragPos) *
+          ((isTouch ? touchSwipeRatio : mouseSwipeRatio) || swipeRatio);
 
         const treshold = (() => {
           if (isTouch && touchSwipeTreshold) return touchSwipeTreshold;
@@ -646,7 +743,10 @@ export function AppCarousel({ responsiveProps = [], ...props }: ReactSimplyCarou
                 direction: 'forward',
               };
 
-        updateActiveSlideIndex(nextActiveSlide.index, nextActiveSlide.direction as NavDirection);
+        updateActiveSlideIndex(
+          nextActiveSlide.index,
+          nextActiveSlide.direction as NavDirection
+        );
       } else {
         event.target?.removeEventListener('click', preventClick as () => {});
       }
@@ -674,13 +774,20 @@ export function AppCarousel({ responsiveProps = [], ...props }: ReactSimplyCarou
 
     if (!disableNav) {
       if (!disableSwipeByMouse) {
-        listRef?.addEventListener('mousedown', handleListSwipeStart as () => {});
+        listRef?.addEventListener(
+          'mousedown',
+          handleListSwipeStart as () => {}
+        );
       }
 
       if (!disableSwipeByTouch) {
-        listRef?.addEventListener('touchstart', handleListSwipeStart as () => {}, {
-          passive: true,
-        });
+        listRef?.addEventListener(
+          'touchstart',
+          handleListSwipeStart as () => {},
+          {
+            passive: true,
+          }
+        );
       }
 
       if (!disableSwipeByMouse || !disableSwipeByTouch) {
@@ -692,8 +799,14 @@ export function AppCarousel({ responsiveProps = [], ...props }: ReactSimplyCarou
       isListDraggingRef.current = false;
       itemsListDragStartPosRef.current = 0;
 
-      listRef?.removeEventListener('mousedown', handleListSwipeStart as () => {});
-      listRef?.removeEventListener('touchstart', handleListSwipeStart as () => {});
+      listRef?.removeEventListener(
+        'mousedown',
+        handleListSwipeStart as () => {}
+      );
+      listRef?.removeEventListener(
+        'touchstart',
+        handleListSwipeStart as () => {}
+      );
       listRef?.removeEventListener('dragstart', handleListSwipeEnd as () => {});
 
       document.removeEventListener('mousemove', handleListSwipe as () => {});
@@ -735,7 +848,8 @@ export function AppCarousel({ responsiveProps = [], ...props }: ReactSimplyCarou
 
       if (
         infinite ||
-        (autoplayDirection === 'forward' && activeSlideIndex !== lastSlideIndex) ||
+        (autoplayDirection === 'forward' &&
+          activeSlideIndex !== lastSlideIndex) ||
         (autoplayDirection === 'backward' && activeSlideIndex !== 0)
       ) {
         startAutoplay();
@@ -858,14 +972,28 @@ export function AppCarousel({ responsiveProps = [], ...props }: ReactSimplyCarou
             transform: itemsListTransform,
             touchAction: preventScrollOnSwipe ? 'none' : 'auto',
           }}
-          onTransitionEnd={speed || delay ? handleItemsListTransitionEnd : onItemsListTransitionEnd}
+          onTransitionEnd={
+            speed || delay
+              ? handleItemsListTransitionEnd
+              : onItemsListTransitionEnd
+          }
           tabIndex={-1}
           role="presentation"
           ref={itemsListRef}>
-          {infinite && renderSlidesItems(slidesItems.slice(positionIndex), positionIndex, disableNav)}
+          {infinite &&
+            renderSlidesItems(
+              slidesItems.slice(positionIndex),
+              positionIndex,
+              disableNav
+            )}
           {renderSlidesItems(slidesItems, 0, disableNav)}
           {infinite && renderSlidesItems(slidesItems, 0, disableNav)}
-          {infinite && renderSlidesItems(slidesItems.slice(0, positionIndex), 0, disableNav)}
+          {infinite &&
+            renderSlidesItems(
+              slidesItems.slice(0, positionIndex),
+              0,
+              disableNav
+            )}
         </div>
       </div>
 
@@ -874,8 +1002,10 @@ export function AppCarousel({ responsiveProps = [], ...props }: ReactSimplyCarou
           {...forwardBtnProps}
           type="button"
           onClick={
-            ((itemsListTranslateX === itemsListMaxTranslateX && disableNavIfEdgeVisible) ||
-              (activeSlideIndex === lastSlideIndex && disableNavIfEdgeActive)) &&
+            ((itemsListTranslateX === itemsListMaxTranslateX &&
+              disableNavIfEdgeVisible) ||
+              (activeSlideIndex === lastSlideIndex &&
+                disableNavIfEdgeActive)) &&
             !infinite
               ? undefined
               : handleForwardBtnClick
@@ -884,8 +1014,10 @@ export function AppCarousel({ responsiveProps = [], ...props }: ReactSimplyCarou
             typeof forwardBtnProps.disabled === 'boolean'
               ? forwardBtnProps.disabled
               : !!(
-                  ((itemsListTranslateX === itemsListMaxTranslateX && disableNavIfEdgeVisible) ||
-                    (activeSlideIndex === lastSlideIndex && disableNavIfEdgeActive)) &&
+                  ((itemsListTranslateX === itemsListMaxTranslateX &&
+                    disableNavIfEdgeVisible) ||
+                    (activeSlideIndex === lastSlideIndex &&
+                      disableNavIfEdgeActive)) &&
                   !infinite
                 )
           }>
@@ -894,7 +1026,9 @@ export function AppCarousel({ responsiveProps = [], ...props }: ReactSimplyCarou
       )}
 
       {!!showDotsNav && (
-        <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }} {...dotsNavContainerProps}>
+        <div
+          style={{ width: '100%', display: 'flex', justifyContent: 'center' }}
+          {...dotsNavContainerProps}>
           {Array.from({
             length: Math.ceil(slidesItems.length / itemsToScroll),
           }).map((_item, index) => (
@@ -905,13 +1039,17 @@ export function AppCarousel({ responsiveProps = [], ...props }: ReactSimplyCarou
               title={`${index}`}
               {...dotsNavBtnProps}
               {...(activeSlideIndex >= index * itemsToScroll &&
-              activeSlideIndex < Math.min(itemsToScroll * (index + 1), lastSlideIndex + 1)
+              activeSlideIndex <
+                Math.min(itemsToScroll * (index + 1), lastSlideIndex + 1)
                 ? dotsNavActiveBtnProps
                 : {})}
               onClick={() => {
                 updateActiveSlideIndex(
                   Math.min(index * itemsToScroll, slidesItems.length - 1),
-                  Math.min(index * itemsToScroll, slidesItems.length - 1) > activeSlideIndex ? 'forward' : 'backward'
+                  Math.min(index * itemsToScroll, slidesItems.length - 1) >
+                    activeSlideIndex
+                    ? 'forward'
+                    : 'backward'
                 );
               }}
             />

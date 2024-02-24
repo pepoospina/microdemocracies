@@ -1,5 +1,5 @@
 import { createPublicClient, getContract, http } from 'viem';
-import { baseGoerli } from 'viem/chains';
+import { baseSepolia } from 'viem/chains';
 
 import { env } from '../config/env';
 import { registryABI, registryFactoryABI } from '../contracts/abis';
@@ -8,7 +8,7 @@ import { HexStr } from '../@app/types';
 // const getFactoryAddress = () => _factoryAddress(env.CHAIN_ID);
 
 const publicClient = createPublicClient({
-  chain: baseGoerli,
+  chain: baseSepolia,
   transport: http(
     `https://${env.ALCHEMY_SUBDOMAIN}.g.alchemy.com/v2/${env.ALCHEMY_KEY}`
   ),

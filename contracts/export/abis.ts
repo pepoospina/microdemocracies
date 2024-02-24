@@ -529,6 +529,7 @@ export const registryABI = [
   { type: 'error', inputs: [], name: 'ErrorVotingPeriodEnded' },
   { type: 'error', inputs: [], name: 'ErrorVoucherIsValid' },
   { type: 'error', inputs: [], name: 'ErrorVoucherNotValid' },
+  { type: 'error', inputs: [], name: 'OnlyMemberCanChallenge' },
   { type: 'error', inputs: [{ name: 'prod1', internalType: 'uint256', type: 'uint256' }], name: 'PRBMath__MulDivFixedPointOverflow' },
   {
     type: 'error',
@@ -540,6 +541,15 @@ export const registryABI = [
   },
   { type: 'error', inputs: [], name: 'UnexpectedExecutedCondition' },
   { type: 'error', inputs: [], name: 'VoucherNoLongerInvalid' },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      { name: 'account', internalType: 'address', type: 'address', indexed: true },
+      { name: 'tokenId', internalType: 'uint256', type: 'uint256', indexed: true },
+    ],
+    name: 'AccountLeftEvent',
+  },
   {
     type: 'event',
     anonymous: false,
@@ -789,6 +799,9 @@ export const registryABI = [
       { name: 'addresses', internalType: 'address[]', type: 'address[]' },
       { name: 'foundersCids', internalType: 'string[]', type: 'string[]' },
       { name: '_statementCid', internalType: 'string', type: 'string' },
+      { name: '_PENDING_PERIOD', internalType: 'uint256', type: 'uint256' },
+      { name: '_VOTING_PERIOD', internalType: 'uint256', type: 'uint256' },
+      { name: '_QUIET_ENDING_PERIOD', internalType: 'uint256', type: 'uint256' },
     ],
     name: 'initRegistry',
     outputs: [],
@@ -827,6 +840,7 @@ export const registryABI = [
     name: 'isSolidified',
     outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
   },
+  { stateMutability: 'nonpayable', type: 'function', inputs: [], name: 'leave', outputs: [] },
   { stateMutability: 'view', type: 'function', inputs: [], name: 'name', outputs: [{ name: '', internalType: 'string', type: 'string' }] },
   {
     stateMutability: 'view',
@@ -957,6 +971,9 @@ export const registryFactoryABI = [
       { name: 'addresses', internalType: 'address[]', type: 'address[]' },
       { name: 'foundersCids', internalType: 'string[]', type: 'string[]' },
       { name: '_statementCid', internalType: 'string', type: 'string' },
+      { name: '_PENDING_PERIOD', internalType: 'uint256', type: 'uint256' },
+      { name: '_VOTING_PERIOD', internalType: 'uint256', type: 'uint256' },
+      { name: '_QUIET_ENDING_PERIOD', internalType: 'uint256', type: 'uint256' },
       { name: 'salt', internalType: 'bytes32', type: 'bytes32' },
     ],
     name: 'create',

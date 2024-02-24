@@ -8,34 +8,21 @@ import { cap } from '../../utils/general';
 import { AppAccount, Entity, PAP } from '../../types';
 import { MemberAnchor } from '../vouches/MemberAnchor';
 
-export const AccountOverview = (props: { account?: AppAccount; pap?: Entity<PAP> }) => {
+export const AccountOverview = (props: { account?: AppAccount; pap?: Entity<PAP>; showAccount?: boolean }) => {
   const { t } = useTranslation();
   const { account: accountRead, pap: accountPapRead } = props;
   const isFounder = accountRead && accountRead.voucher > 10e70;
 
   if (!accountPapRead) {
     return (
-      <BoxCentered fill>
+      <BoxCentered fill style={{ flexShrink: 0 }}>
         <Spinner></Spinner>
       </BoxCentered>
     );
   }
 
   return (
-    <Box align="center">
-      {accountRead ? (
-        !isFounder ? (
-          <Box margin={{ bottom: 'large' }}>
-            <Text>
-              {cap(t('invitedBy'))} <MemberAnchor tokenId={accountRead?.voucher}></MemberAnchor>
-            </Text>
-          </Box>
-        ) : (
-          <Box>{t('founder')}</Box>
-        )
-      ) : (
-        <></>
-      )}
+    <Box style={{ flexShrink: 0 }}>
       {accountRead && !accountRead.valid ? (
         <AppCard style={{ marginBottom: '36px' }}>
           <Text>
@@ -45,7 +32,19 @@ export const AccountOverview = (props: { account?: AppAccount; pap?: Entity<PAP>
       ) : (
         <></>
       )}
-      <AccountPerson pap={accountPapRead.object}></AccountPerson>
+      <AccountPerson showAccount={props.showAccount} pap={accountPapRead.object}></AccountPerson>
+      {accountRead ? (
+        <Box style={{ marginTop: '8px' }}>
+          <Text style={{ fontWeight: 'bold' }}>{isFounder ? cap(t('founder')) : cap(t('invitedBy'))}</Text>
+          {isFounder ? (
+            <></>
+          ) : (
+            <MemberAnchor style={{ fontSize: '18px' }} tokenId={accountRead?.voucher}></MemberAnchor>
+          )}
+        </Box>
+      ) : (
+        <></>
+      )}
     </Box>
   );
 };

@@ -1,15 +1,26 @@
-import { createContext, useContext, useEffect, useState } from 'react';
-import { useContractRead, usePublicClient, useQuery } from 'wagmi';
-import { useParams } from 'react-router-dom';
-
-import { registryABI } from '../utils/contracts.json';
-import { AppApplication, AppProject, AppVouch, HexStr } from '../types';
-import { getContract } from 'viem';
-import { getApplications, getInviteId, getProject } from '../firestore/getters';
-import { useAccountContext } from '../wallet/AccountContext';
-import { postInvite } from '../utils/project';
-import { collections } from '../firestore/database';
 import { onSnapshot } from 'firebase/firestore';
+import { createContext, useContext, useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { useReadContract } from 'wagmi';
+
+import { collections } from '../firestore/database';
+import {
+  getApplications,
+  getInviteId,
+  getProject,
+  getTopStatements,
+} from '../firestore/getters';
+import {
+  AppApplication,
+  AppProject,
+  AppProjectMember,
+  HexStr,
+  StatementRead,
+} from '../types';
+import { registryABI } from '../utils/contracts.json';
+import { getProjectMembers, postInvite } from '../utils/project';
+import { useAccountContext } from '../wallet/AccountContext';
+import { useQuery } from '@tanstack/react-query';
 
 export type ProjectContextType = {
   project?: AppProject | null;
@@ -18,22 +29,25 @@ export type ProjectContextType = {
   nMembers?: number;
   refetch: () => void;
   isLoading: boolean;
-  allVouches?: AppVouch[];
+  members?: AppProjectMember[];
   inviteId?: string;
   resetLink: () => void;
   resettingLink: boolean;
   applications?: AppApplication[] | null;
   refetchApplications: () => void;
+  statements?: StatementRead[];
+  refetchStatements: () => void;
 };
 
 interface IProjectContext {
   children: React.ReactNode;
 }
 
-const ProjectContextValue = createContext<ProjectContextType | undefined>(undefined);
+const ProjectContextValue = createContext<ProjectContextType | undefined>(
+  undefined
+);
 
 export const ProjectContext = (props: IProjectContext) => {
-  const publicClient = usePublicClient();
   const { aaAddress } = useAccountContext();
 
   const { projectId: routeProjectId } = useParams();
@@ -49,76 +63,62 @@ export const ProjectContext = (props: IProjectContext) => {
   }, [routeProjectId]);
 
   /** from projectId to project */
-  const { data: _project, refetch: refetchProject } = useQuery(['project', projectId], () => {
+
+  const { data: _project, refetch: refetchProject } = useQuery({queryKey:  ['project', projectId],queryFn: () => {
     if (projectId) {
       return getProject(projectId);
     }
     return null;
-  });
+  }});
+    
+    
 
   /** query cannot return undefined, consider project undefined if projectId is undefined */
   const project = _project && projectId ? _project : undefined;
 
   // all vouches
-  const { data: vouchEvents, refetch: refetchVouches } = useQuery(['allVoucheEvents', project], async () => {
+  const { data: members, refetch: refetchMembers } = useQuery({queryKey: ['allMembers', project], queryFn: async () => {
     if (project) {
-      const contract = getContract({
-        address: project.address,
-        abi: registryABI,
-        publicClient,
-      });
-
-      /** all vouch events */
-      const logs = await contract.getEvents.VouchEvent({}, { fromBlock: 'earliest', toBlock: 'latest' });
-
-      return logs;
+      return getProjectMembers(project.projectId);
     }
     return null;
-  });
-
-  const [allVouches, setAllVouches] = useState<AppVouch[]>();
-
-  useEffect(() => {
-    if (!publicClient || !vouchEvents) return;
-
-    Promise.all(
-      vouchEvents.map(async (e: any) => {
-        const block = await publicClient.getBlock(e.blockNumber);
-        return {
-          from: e.args.from.toString(),
-          to: e.args.to.toString(),
-          personCid: e.args.personCid,
-          vouchDate: +block.timestamp.toString(),
-        };
-      })
-    ).then((vouches) => setAllVouches(vouches));
-  }, [vouchEvents, publicClient]);
-
+  }});
+    
+  
   const {
     refetch: refetchTotalSupply,
     data: nMembers,
     isLoading,
-  } = useContractRead({
+  } = useReadContract({
     address: project?.address,
     abi: registryABI,
     functionName: 'totalSupply',
-    enabled: project !== undefined,
+    query: { enabled: project !== undefined },
   });
 
   const refetch = () => {
     refetchTotalSupply();
     refetchProject();
-    refetchVouches();
+    refetchMembers();
   };
 
   /** Member unique invite link */
-  const { data: inviteId, refetch: refetchInvite } = useQuery(['getInviteLink', aaAddress, projectId], () => {
+  const { data: inviteId, refetch: refetchInvite } = useQuery({queryKey: ['getInviteLink', aaAddress, projectId], queryFn: () => {
     if (projectId && aaAddress) {
       return getInviteId(projectId, aaAddress);
     }
     return null;
-  });
+  }});
+  
 
+  const { data: statements, refetch: refetchStatements } = useQuery({queryKey: ['topStatements', projectId?.toString()], queryFn:  async () => {
+    if (projectId) {
+      return getTopStatements(projectId);
+    }
+    return null;
+  }});
+    
+   
   const resetLink = () => {
     if (projectId && aaAddress) {
       setResettingLink(true);
@@ -134,19 +134,23 @@ export const ProjectContext = (props: IProjectContext) => {
   };
 
   /** get applications created for this member */
-  const { data: applications, refetch: refetchApplications } = useQuery(['getApplications', aaAddress], () => {
+  const { data: applications, refetch: refetchApplications } = useQuery({queryKey: ['getApplications', aaAddress], queryFn: () => {
     if (aaAddress) {
       return getApplications(aaAddress);
     }
     return null;
-  });
+  }});
+    
 
   /** autorefetch on applications changes */
   useEffect(() => {
     if (aaAddress) {
-      const unsub = onSnapshot(collections.userApplications(aaAddress), (doc) => {
-        refetchApplications();
-      });
+      const unsub = onSnapshot(
+        collections.userApplications(aaAddress),
+        (doc) => {
+          refetchApplications();
+        }
+      );
       return unsub;
     }
   }, [aaAddress, refetchApplications]);
@@ -160,12 +164,14 @@ export const ProjectContext = (props: IProjectContext) => {
         nMembers: nMembers !== undefined ? Number(nMembers) : undefined,
         refetch,
         isLoading,
-        allVouches,
+        members: members ? members : [],
         inviteId,
         resetLink,
         resettingLink,
         applications,
         refetchApplications,
+        statements: statements ? statements : undefined,
+        refetchStatements,
       }}>
       {props.children}
     </ProjectContextValue.Provider>

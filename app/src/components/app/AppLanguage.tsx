@@ -5,7 +5,6 @@ export enum Language {
   ENG = 'ENG',
   SPA = 'SPA',
   CAT = 'CAT',
-  HEB = 'HEB',
 }
 
 export type AppLanguageType = {
@@ -32,6 +31,7 @@ export const AppLanguage = (props: PropsWithChildren): JSX.Element => {
       i18n.changeLanguage(preferred);
     } else {
       const local = navigator.language;
+      console.log('reading nav language', local);
       if (local.includes('en')) {
         i18n.changeLanguage(Language.ENG);
       }
@@ -40,9 +40,6 @@ export const AppLanguage = (props: PropsWithChildren): JSX.Element => {
       }
       if (local.includes('cat')) {
         i18n.changeLanguage(Language.CAT);
-      }
-      if (local.includes('he')) {
-        i18n.changeLanguage(Language.HEB);
       }
     }
   }, [i18n]);

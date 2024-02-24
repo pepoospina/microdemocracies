@@ -1,29 +1,37 @@
 import { Box, Text } from 'grommet';
+import { Camera, FormPrevious, Send, Square, StatusGood } from 'grommet-icons';
 import { QrScanner } from '@yudiel/react-qr-scanner';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
 import { AppButton, AppCard, AppHeading } from '../../ui-components';
-import { RouteNames } from '../../App';
-import { useNavigate } from 'react-router-dom';
+import { RouteNames } from '../../route.names';
 import { useProjectContext } from '../../contexts/ProjectContext';
 import { useAccountContext } from '../../wallet/AccountContext';
 import { AppQRCode } from '../../components/AppQRCode';
-import { AppConnect } from '../../components/app/AppConnect';
-import { Camera, FormPrevious, Send, Square, StatusGood } from 'grommet-icons';
-import { ViewportHeadingLarge, ViewportPage } from '../../components/app/Viewport';
+import { AppConnectButton } from '../../components/app/AppConnectButton';
+import { ViewportPage } from '../../components/app/Viewport';
 import { AppBottomButton } from '../common/BottomButtons';
 import { StatementEditable } from '../voice/StatementEditable';
 import { ApplicationCard } from '../vouches/ApplicationCard';
 import { useCopyToClipboard } from '../../utils/copy.clipboard';
-import { useTranslation } from 'react-i18next';
+import { useAppContainer } from '../../components/app/AppContainer';
+import { cap } from '../../utils/general';
 
 export const InvitePage = (): JSX.Element => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { project, projectId, inviteId, resetLink, applications, resettingLink } = useProjectContext();
   const { aaAddress } = useAccountContext();
   const { copy, copied } = useCopyToClipboard();
 
   const navigate = useNavigate();
+
+  const { setTitle } = useAppContainer();
+
+  useEffect(() => {
+    setTitle({ prefix: cap(t('inviteNew')), main: t('members') });
+  }, [i18n.language]);
 
   const [showLink, setShowLink] = useState<boolean>(false);
   const [scan, setScan] = useState<boolean>(false);
@@ -46,7 +54,7 @@ export const InvitePage = (): JSX.Element => {
   };
 
   const content = (() => {
-    if (aaAddress === undefined) return <AppConnect></AppConnect>;
+    if (aaAddress === undefined) return <AppConnectButton></AppConnectButton>;
 
     if (showLink) {
       return (
@@ -78,7 +86,7 @@ export const InvitePage = (): JSX.Element => {
     return (
       <Box style={{ flexShrink: 0 }}>
         <AppCard margin={{ vertical: 'medium' }}>
-          <Text>{t('shareLinkMsg')}.</Text>
+          <Text>{t('shareLinkMsg')}</Text>
         </AppCard>
         <AppButton
           reverse
@@ -88,7 +96,7 @@ export const InvitePage = (): JSX.Element => {
           primary
           onClick={() => share()}></AppButton>
 
-        <AppHeading level="3" style={{ marginTop: '24px' }}>
+        <AppHeading level="3" style={{ marginTop: '64px' }}>
           {t('orUseQR')}
         </AppHeading>
         <AppButton
@@ -123,32 +131,29 @@ export const InvitePage = (): JSX.Element => {
   })();
 
   return (
-    <ViewportPage>
-      <ViewportHeadingLarge label={t('inviteTitle')}></ViewportHeadingLarge>
+    <ViewportPage
+      content={
+        <Box fill pad={{ horizontal: 'large' }}>
+          <Box style={{ flexShrink: 0 }}>
+            <Box style={{ margin: '36px 0px' }}>
+              <Text style={{ marginBottom: '16px' }}>{t('rememberInviteMsg')}:</Text>
+              <StatementEditable value={project?.whoStatement}></StatementEditable>
+            </Box>
 
-      <Box fill pad={{ horizontal: 'large' }}>
-        <Box style={{ flexShrink: 0 }}>
-          <Box style={{ margin: '36px 0px' }}>
-            <Text style={{ marginBottom: '16px' }}>{t('rememberInviteMsg')}:</Text>
-            <StatementEditable value={project?.whoStatement}></StatementEditable>
+            {applications?.map((application) => {
+              return (
+                <Box style={{ marginBottom: '16px' }}>
+                  <ApplicationCard application={application}></ApplicationCard>
+                </Box>
+              );
+            })}
           </Box>
 
-          {applications?.map((application) => {
-            return (
-              <Box style={{ marginBottom: '16px' }}>
-                <ApplicationCard application={application}></ApplicationCard>
-              </Box>
-            );
-          })}
+          {content}
         </Box>
-
-        {content}
-      </Box>
-
-      <AppBottomButton
-        icon={<FormPrevious />}
-        label={t('back')}
-        onClick={() => navigate('../members')}></AppBottomButton>
-    </ViewportPage>
+      }
+      nav={
+        <AppBottomButton icon={<FormPrevious />} label={t('back')} onClick={() => navigate(-1)}></AppBottomButton>
+      }></ViewportPage>
   );
 };

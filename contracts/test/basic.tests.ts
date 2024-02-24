@@ -13,6 +13,7 @@ import {
   getChallengeParse,
   getContractEventsFromHash,
   getTimestamp,
+  leaveHelper,
   personCidHelper,
   registryFrom,
   shouldFail,
@@ -68,6 +69,10 @@ describe('Registry', () => {
 
   let NCUM: bigint;
 
+  const PENDING_PERIOD = 180 * SECONDS_IN_DAY;
+  const VOTING_PERIOD = 15 * SECONDS_IN_DAY;
+  const QUIET_ENDING_PERIOD = 2 * SECONDS_IN_DAY;
+
   before(async () => {
     client = await viem.getPublicClient();
     let signers = await viem.getWalletClients();
@@ -96,7 +101,17 @@ describe('Registry', () => {
     const statement = keccak256(stringToBytes(counter.toString()));
     const salt = keccak256(stringToBytes(counter.toString()));
 
-    const hash = await factory.write.create(['ABC', 'Test Community', addresses, personCids, statement, salt]);
+    const hash = await factory.write.create([
+      'ABC',
+      'Test Community',
+      addresses,
+      personCids,
+      statement,
+      BigInt(PENDING_PERIOD),
+      BigInt(VOTING_PERIOD),
+      BigInt(QUIET_ENDING_PERIOD),
+      salt,
+    ]);
     const factoryEvents = await getContractEventsFromHash('RegistryFactory', hash);
 
     const createdEvent = factoryEvents?.find((e) => e.eventName === 'RegistryCreated') as RegistryCreatedEvent;
@@ -361,12 +376,19 @@ describe('Registry', () => {
         it('cant challenge invalid account', async () => {
           /** just in case check challenging an invalid account */
           await shouldFail(async () => {
-            await challengeHelper(registry.address, c1, v32.tokenId);
+            await challengeHelper(registry.address, v111, v32.tokenId);
           }, 'CantChallengeInvalidAccount()');
         });
 
+        it('cant challenge if not member', async () => {
+          /** just in case check challenging an invalid account */
+          await shouldFail(async () => {
+            await challengeHelper(registry.address, c1, v11.tokenId);
+          }, 'OnlyMemberCanChallenge()');
+        });
+
         it('can challenge valid account', async () => {
-          const event = await challengeHelper(registry.address, c1, v11.tokenId);
+          const event = await challengeHelper(registry.address, v111, v11.tokenId);
           const { creationDate, nVoted, nFor } = getChallengeParse(await registry.read.getChallenge([v11.tokenId]));
 
           expect(event).to.exist;
@@ -504,7 +526,7 @@ describe('Registry', () => {
 
     describe('Challenge outside of voting period', () => {
       before(async () => {
-        const event = await challengeHelper(registry.address, c1, v31.tokenId);
+        const event = await challengeHelper(registry.address, v32, v31.tokenId);
 
         expect(event).to.exist;
       });
@@ -531,7 +553,7 @@ describe('Registry', () => {
 
       it('can re-challenge unsucessful challenge', async () => {
         expect(await registry.read.totalSupply()).eq(NCUM);
-        const event = await challengeHelper(registry.address, c1, v31.tokenId);
+        const event = await challengeHelper(registry.address, v32, v31.tokenId);
 
         expect(event).to.exist;
         expect(await registry.read.getTotalVoters([v31.tokenId])).to.eq(N4);
@@ -554,10 +576,10 @@ describe('Registry', () => {
 
       it('challenge passes with relative majority', async () => {
         expect(await registry.read.totalSupply()).eq(NCUM);
-        const event = await challengeHelper(registry.address, c1, v32.tokenId);
+        const event = await challengeHelper(registry.address, v33, v32.tokenId);
 
         expect(event).to.exist;
-        expect(await registry.read.getTotalVoters([v31.tokenId])).to.eq(N4);
+        expect(await registry.read.getTotalVoters([v32.tokenId])).to.eq(N4);
 
         const { voteEvent, invalidatedAccountEvent, challengeExecuted } = await voteHelper(registry.address, v33, v32.tokenId, 1);
         expect(voteEvent).to.exist;
@@ -606,7 +628,7 @@ describe('Registry', () => {
         expect(await registry.read.totalSupply()).eq(NCUM + 1n);
         NCUM = NCUM + 1n;
 
-        const event = await challengeHelper(registry.address, c1, v32.tokenId);
+        const event = await challengeHelper(registry.address, v33, v32.tokenId);
         const details0 = getChallengeParse(await registry.read.getChallenge([v32.tokenId]));
         expect(details0.nFor).to.eq(0n);
         expect(details0.nVoted).to.eq(0n);
@@ -614,7 +636,7 @@ describe('Registry', () => {
         expect(details0.lastOutcome).to.eq(-1);
 
         expect(event).to.exist;
-        expect(await registry.read.getTotalVoters([v31.tokenId])).to.eq(N4);
+        expect(await registry.read.getTotalVoters([v32.tokenId])).to.eq(N4);
 
         const voteRes1 = await voteHelper(registry.address, f3, v32.tokenId, -1);
         expect(voteRes1.voteEvent).to.exist;
@@ -696,14 +718,30 @@ describe('Registry', () => {
 
       it('cant re-challenge invalid account', async () => {
         await shouldFail(async () => {
-          await challengeHelper(registry.address, c1, v32.tokenId);
+          await challengeHelper(registry.address, v33, v32.tokenId);
         }, 'CantChallengeInvalidAccount()');
+      });
+    });
+
+    describe('Leaving', async () => {
+      it("non-member can't leave", async () => {
+        await shouldFail(async () => {
+          await leaveHelper(registry.address, c1);
+        }, 'ErrorAccountNotValid()');
+      });
+
+      it('member can leave', async () => {
+        const event = await leaveHelper(registry.address, v33);
+        expect(event).to.exist;
+
+        expect(await registry.read.totalSupply()).eq(NCUM - 1n);
+        NCUM = NCUM - 1n;
       });
     });
 
     describe('Challenge founder', async () => {
       before(async () => {
-        const event = await challengeHelper(registry.address, c1, f3.tokenId);
+        const event = await challengeHelper(registry.address, v34, f3.tokenId);
         expect(event).to.exist;
 
         const { creationDate, nFor, nVoted } = getChallengeParse(await registry.read.getChallenge([f3.tokenId]));

@@ -1,36 +1,54 @@
-import { Box, Spinner, Text } from 'grommet';
+import { Box, DropButton, Spinner, Text } from 'grommet';
+import { Add, FormPrevious, Group, Menu, UserAdd } from 'grommet-icons';
+import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import { AppButton, AppCard, AppHeading } from '../../ui-components';
-import { useProjectContext } from '../../contexts/ProjectContext';
-import { Add, FormPrevious } from 'grommet-icons';
+import { useResponsive, useThemeContext } from '../../components/app';
+import { useAppContainer } from '../../components/app/AppContainer';
+import { CircleIndicator } from '../../components/app/CircleIndicator';
 import { ViewportPage } from '../../components/app/Viewport';
-import { Loading } from '../common/Loading';
-import { ProjectCard } from './ProjectCard';
-import { useVoiceRead } from '../../contexts/VoiceReadContext';
-import { RouteNames } from '../../App';
-import { useResponsive } from '../../components/app';
-import { AppBottomButtons } from '../common/BottomButtons';
-import { BoxCentered } from '../../ui-components/BoxCentered';
+import { CHAIN_ID } from '../../config/appConfig';
 import { useConnectedMember } from '../../contexts/ConnectedAccountContext';
-import { StatementCard } from '../voice/StatementCard';
-import { useTranslation } from 'react-i18next';
+import { useProjectContext } from '../../contexts/ProjectContext';
+import { StatementContext } from '../../contexts/StatementContext';
+import { AbsoluteRoutes, RouteNames } from '../../route.names';
+import {
+  Address,
+  AppButton,
+  AppCard,
+  AppCircleDropButton,
+  AppHeading,
+} from '../../ui-components';
+import { BoxCentered } from '../../ui-components/BoxCentered';
 import { cap } from '../../utils/general';
+import { AppBottomButtons } from '../common/BottomButtons';
+import { Loading } from '../common/Loading';
+import { StatementCard } from '../voice/StatementCard';
+import { ProjectCard } from './ProjectCard';
 
 export interface IProjectHome {
   dum?: any;
 }
 
-export const ProjectHome = (props: IProjectHome) => {
-  const { t } = useTranslation();
+export const ProjectHomePage = (props: IProjectHome) => {
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
-  const { project, nMembers } = useProjectContext();
+  const { project, nMembers, statements } = useProjectContext();
   const { tokenId } = useConnectedMember();
-  const { statements } = useVoiceRead();
   const { mobile } = useResponsive();
+  const { setTitle } = useAppContainer();
+  const { constants } = useThemeContext();
+
+  const leave = () => {
+    console.log('soon');
+  };
+
+  useEffect(() => {
+    setTitle({ prefix: '', main: t('project') });
+  }, [i18n.language]);
 
   const newStr = mobile ? cap(t('propose')) : cap(t('proposeNew'));
-  const membersStr = mobile ? cap(t('members')) : t('seeInviteMembers');
 
   if (project === undefined) {
     return (
@@ -51,6 +69,10 @@ export const ProjectHome = (props: IProjectHome) => {
     );
   }
 
+  const goToStatement = (id: string) => {
+    navigate(`${RouteNames.VoiceBase}/${RouteNames.VoiceStatement}/${id}`);
+  };
+
   const statementsContent = (() => {
     if (statements === undefined) return <Loading></Loading>;
     if (statements !== undefined && statements.length === 0) {
@@ -64,7 +86,13 @@ export const ProjectHome = (props: IProjectHome) => {
     return statements.map((statement) => {
       return (
         <Box key={statement.id} style={{ marginBottom: '32px' }}>
-          <StatementCard statement={statement} key={statement.id}></StatementCard>
+          <StatementContext statement={statement}>
+            <StatementCard
+              key={statement.id}
+              statmentCardProps={{
+                onClick: () => goToStatement(statement.id),
+              }}></StatementCard>
+          </StatementContext>
         </Box>
       );
     });
@@ -72,7 +100,10 @@ export const ProjectHome = (props: IProjectHome) => {
 
   const content = (() => {
     return (
-      <Box style={{ overflowY: 'auto' }} margin={{ bottom: 'medium' }}>
+      <Box
+        style={{ overflowY: 'auto' }}
+        margin={{ bottom: 'medium' }}
+        pad={{ left: 'medium' }}>
         <Box style={{ flexShrink: 0 }} pad={{ right: 'medium' }}>
           <Box margin={{ vertical: 'large' }}>
             <AppHeading level="3">{t('communityVoice')}:</AppHeading>
@@ -86,42 +117,120 @@ export const ProjectHome = (props: IProjectHome) => {
   })();
 
   return (
-    <ViewportPage>
-      <Box pad="medium">
-        <ProjectCard project={project}></ProjectCard>
-      </Box>
+    <ViewportPage
+      content={
+        <Box>
+          <Box pad={{ horizontal: 'medium' }}>
+            <Box style={{ position: 'relative', flexShrink: 0 }}>
+              <ProjectCard
+                project={project}
+                statementStyle={{ paddingBottom: '28px' }}></ProjectCard>
+              <Box
+                direction="row"
+                justify="end"
+                align="center"
+                gap="small"
+                pad={{ horizontal: 'medium' }}
+                style={{
+                  position: 'absolute',
+                  bottom: '-12px',
+                  left: '0px',
+                  width: '100%',
+                }}>
+                <AppButton plain onClick={() => navigate(RouteNames.Members)}>
+                  <CircleIndicator
+                    forceCircle={false}
+                    size={48}
+                    icon={
+                      <>
+                        <Group color={constants.colors.textOnPrimary}></Group>
+                        <Text
+                          color={constants.colors.textOnPrimary}
+                          style={{ fontWeight: 'bold' }}
+                          margin={{ left: 'small' }}>
+                          ({nMembers})
+                        </Text>
+                      </>
+                    }></CircleIndicator>
+                </AppButton>
+                <AppButton
+                  plain
+                  disabled={tokenId === undefined}
+                  onClick={() => navigate(RouteNames.Invite)}>
+                  <CircleIndicator
+                    forceCircle={true}
+                    size={54}
+                    icon={
+                      <UserAdd
+                        color={constants.colors.textOnPrimary}
+                        style={{ marginLeft: '5px' }}></UserAdd>
+                    }></CircleIndicator>
+                </AppButton>
+                <DropButton
+                  dropProps={{ style: { marginTop: '56px' } }}
+                  dropContent={
+                    <Box pad="20px" gap="small">
+                      <Box margin={{ bottom: 'small' }}>
+                        <Text>{cap(t('projectAddress'))}</Text>
+                        <Address
+                          addressType="token"
+                          address={project?.address}
+                          chainId={CHAIN_ID}></Address>
+                      </Box>
 
-      <Box pad={{ left: 'medium' }}>
-        <Box pad={{ vertical: '16px', horizontal: 'medium' }} direction="row" align="center" justify="between">
-          <AppHeading level="3">
-            {cap(t('members'))}: {nMembers}
-          </AppHeading>
-          <AppButton onClick={() => navigate(RouteNames.Members)} label={membersStr}></AppButton>
-        </Box>
-
-        {tokenId === null ? (
-          <Box pad="small">
-            <AppButton onClick={() => navigate(RouteNames.Join)} label={'join'}></AppButton>
+                      <AppButton
+                        disabled
+                        plain
+                        onClick={() => leave()}
+                        style={{ textTransform: 'none', paddingTop: '6px' }}>
+                        <Text style={{ fontWeight: 'bold' }}>
+                          {cap(t('leave'))}
+                        </Text>
+                      </AppButton>
+                    </Box>
+                  }>
+                  <CircleIndicator
+                    forceCircle={true}
+                    size={54}
+                    icon={
+                      <Menu
+                        color={constants.colors.textOnPrimary}
+                        style={{}}></Menu>
+                    }></CircleIndicator>
+                </DropButton>
+              </Box>
+            </Box>
           </Box>
-        ) : (
-          <></>
-        )}
 
-        {content}
-      </Box>
+          <Box>
+            {tokenId === null ? (
+              <Box pad={{ horizontal: 'medium' }} margin={{ top: 'medium' }}>
+                <AppButton
+                  onClick={() => navigate(RouteNames.Join)}
+                  label={'join'}></AppButton>
+              </Box>
+            ) : (
+              <></>
+            )}
 
-      <AppBottomButtons
-        left={{
-          action: () => navigate('/home'),
-          label: t('back'),
-          icon: <FormPrevious />,
-        }}
-        right={{
-          primary: true,
-          action: () => navigate('voice/propose'),
-          icon: <Add></Add>,
-          label: newStr,
-        }}></AppBottomButtons>
-    </ViewportPage>
+            {content}
+          </Box>
+        </Box>
+      }
+      nav={
+        <AppBottomButtons
+          left={{
+            action: () => navigate(AbsoluteRoutes.Projects),
+            label: t('back'),
+            icon: <FormPrevious />,
+          }}
+          right={{
+            primary: true,
+            action: () =>
+              navigate(`${RouteNames.VoiceBase}/${RouteNames.VoicePropose}`),
+            icon: <Add></Add>,
+            label: newStr,
+          }}></AppBottomButtons>
+      }></ViewportPage>
   );
 };

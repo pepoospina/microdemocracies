@@ -12,15 +12,16 @@ export const GlobalStyles = createGlobalStyle`
     margin: 0;
   }
 
-  *::-webkit-scrollbar {
+  ::-webkit-scrollbar {
     width: 5px; /* Mostly for vertical scrollbars */
     height: 5px; /* Mostly for horizontal scrollbars */
   }
-  *::-webkit-scrollbar-thumb { /* Foreground */
+  ::-webkit-scrollbar-thumb { /* Foreground */
     border-radius: 10px;  
     background: #3333337d;
+    
   }
-  *::-webkit-scrollbar-track { /* Background */
+  ::-webkit-scrollbar-track { /* Background */
     background: #ffffff00;
   }
 

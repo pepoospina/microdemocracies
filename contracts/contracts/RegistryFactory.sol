@@ -7,7 +7,7 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 
 import "./Registry.sol";
-    
+
 contract RegistryFactory {
     using Strings for uint256;
     Registry private master;
@@ -25,19 +25,22 @@ contract RegistryFactory {
     }
 
     function create(
-        string memory __symbol, 
-        string memory __name, 
-        address[] memory addresses, 
+        string memory __symbol,
+        string memory __name,
+        address[] memory addresses,
         string[] memory foundersCids,
-        string memory _statementCid, 
+        string memory _statementCid,
+        uint256 _PENDING_PERIOD,
+        uint256 _VOTING_PERIOD,
+        uint256 _QUIET_ENDING_PERIOD,
         bytes32 salt
     ) external returns (address payable proxy) {
         proxy = payable(Clones.cloneDeterministic(address(master), salt));
-        
+
         mrCounter++;
         string memory name = string(abi.encodePacked(__name, Strings.toString(mrCounter)));
 
-        Registry(proxy).initRegistry(__symbol, name, addresses, foundersCids, _statementCid);
+        Registry(proxy).initRegistry(__symbol, name, addresses, foundersCids, _statementCid, _PENDING_PERIOD, _VOTING_PERIOD, _QUIET_ENDING_PERIOD);
 
         emit RegistryCreated(msg.sender, proxy, mrCounter);
 

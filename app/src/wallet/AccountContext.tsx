@@ -1,159 +1,188 @@
-import { PropsWithChildren, createContext, useContext, useEffect, useState } from 'react';
-
-import { AlchemyProvider } from '@alchemy/aa-alchemy';
-import { LightSmartContractAccount, getDefaultLightAccountFactoryAddress } from '@alchemy/aa-accounts';
-import { UserOperationCallData, WalletClientSigner } from '@alchemy/aa-core';
-import { HexStr } from '../types';
-import { chain } from './config';
-import { useContractRead, usePublicClient } from 'wagmi';
-import { ALCHEMY_GAS_POLICY_ID, ALCHEMY_KEY } from '../config/appConfig';
+import {
+  AlchemySmartAccountClient,
+  createLightAccountAlchemyClient,
+} from '@alchemy/aa-alchemy';
+import {
+  BatchUserOperationCallData,
+  WalletClientSigner,
+} from '@alchemy/aa-core';
+import {
+  PropsWithChildren,
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 import { DecodeEventLogReturnType, decodeEventLog, getAddress } from 'viem';
-import { useAppSigner } from './SignerContext';
-import { MessageSigner } from '../utils/identity';
-import { aaWalletAbi, getFactoryAddress, registryABI, registryFactoryABI } from '../utils/contracts.json';
-import { AccountDataContext } from './AccountDataContext';
+import { usePublicClient, useReadContract } from 'wagmi';
 
+import { ALCHEMY_GAS_POLICY_ID, ALCHEMY_RPC_URL } from '../config/appConfig';
+import { HexStr } from '../types';
+import {
+  aaWalletAbi,
+  getFactoryAddress,
+  registryABI,
+  registryFactoryABI,
+} from '../utils/contracts.json';
+import { AccountDataContext } from './AccountDataContext';
+import { chain } from './ConnectedWalletContext';
+import { useAppSigner } from './SignerContext';
+
+const DEBUG = true;
+
+/** Account Abstraction Manager */
 export type AccountContextType = {
   isConnected: boolean;
   aaAddress?: HexStr;
   owner?: HexStr;
-  addUserOp?: (userOp: UserOperationCallData, send?: boolean) => void;
+  sendUserOps?: (userOps: BatchUserOperationCallData) => void;
   reset: () => void;
   isSending: boolean;
   isSuccess: boolean;
   error?: Error;
   events?: DecodeEventLogReturnType[];
-  signMessageAA?: MessageSigner;
 };
 
-const AccountContextValue = createContext<AccountContextType | undefined>(undefined);
+const AccountContextValue = createContext<AccountContextType | undefined>(
+  undefined
+);
 
 /** Manages the AA user ops and their execution */
 export const AccountContext = (props: PropsWithChildren) => {
-  const { signer, address: signerAddress } = useAppSigner();
+  const { signer, address } = useAppSigner();
   const publicClient = usePublicClient();
 
   /** ALCHEMY provider to send transactions using AA */
-  const [alchemyProviderAA, setAlchemyProviderAA] = useState<AlchemyProvider>();
+  const [alchemyClientAA, setAlchemyClientAA] =
+    useState<AlchemySmartAccountClient>();
   const [aaAddress, setAaAddress] = useState<HexStr>();
-  const [userOps, setUserOps] = useState<UserOperationCallData[]>([]);
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
   const [isSending, setIsSending] = useState<boolean>(false);
   const [error, setError] = useState<Error>();
   const [events, setEvents] = useState<DecodeEventLogReturnType[]>();
 
-  const isConnected = alchemyProviderAA !== undefined;
+  // gasManagerConfig: {
+  //   policyId: ALCHEMY_GAS_POLICY_ID,
+  // },
 
-  const signMessageAA = alchemyProviderAA ? (message: string) => alchemyProviderAA.signMessage(message) : undefined;
+  useEffect(() => {
+    if (signer) {
+      createLightAccountAlchemyClient({
+        rpcUrl: ALCHEMY_RPC_URL,
+        chain: chain,
+        signer: new WalletClientSigner(signer, 'json-rpc'),
+        gasManagerConfig: {
+          policyId: ALCHEMY_GAS_POLICY_ID,
+        },
+      }).then((client) => {
+        setAlchemyClientAA(client);
+      });
+    }
+    return undefined;
+  }, [signer]);
+
+  const isConnected = alchemyClientAA !== undefined;
 
   const reset = () => {
+    if (DEBUG) console.log('resetting userOps');
     setIsSuccess(false);
     setIsSending(false);
     setError(undefined);
     setEvents(undefined);
-    setUserOps([]);
   };
 
   const {
     data: _owner,
     error: ownerError,
     status: statusOwner,
-  } = useContractRead({
+  } = useReadContract({
     abi: aaWalletAbi,
     address: aaAddress,
     functionName: 'owner',
-    enabled: aaAddress !== undefined,
+    query: { enabled: aaAddress !== undefined },
   });
 
   const owner = (() => {
     if (!aaAddress) return undefined;
-    if (!signerAddress) return undefined;
+    if (!address) return undefined;
     if (
       ownerError &&
-      (ownerError as any).shortMessage === 'The contract function "owner" returned no data ("0x").' &&
-      signerAddress
+      (ownerError as any).shortMessage ===
+        'The contract function "owner" returned no data ("0x").' &&
+      address
     )
-      return signerAddress;
+      return address;
     return _owner;
   })();
 
-  const setProvider = (signer: WalletClientSigner) => {
-    const provider = new AlchemyProvider({
-      apiKey: ALCHEMY_KEY,
-      chain: chain as any,
-    }).connect((rpcClient) => {
-      return new LightSmartContractAccount({
-        chain: rpcClient.chain,
-        owner: signer,
-        factoryAddress: getDefaultLightAccountFactoryAddress(chain as any),
-        rpcClient,
-      });
-    });
-
-    provider.withAlchemyGasManager({ policyId: ALCHEMY_GAS_POLICY_ID });
-
-    setAlchemyProviderAA(provider);
-    console.log('created aa provider', { provider });
-  };
-
-  /** keep the alchemy provider in sync with selected signer */
   useEffect(() => {
-    if (!signer) {
-      setAlchemyProviderAA(undefined);
-    } else {
-      setProvider(signer);
-    }
-  }, [signer]);
-
-  useEffect(() => {
-    if (alchemyProviderAA) {
-      alchemyProviderAA.getAddress().then((address) => {
-        setAaAddress(getAddress(address));
-        console.log('computed aa address', { aaAddress: address });
-      });
+    if (alchemyClientAA) {
+      // TODO: what?
+      const address = (alchemyClientAA as any).getAddress();
+      if (DEBUG) console.log({ aaAddress: address });
+      setAaAddress(getAddress(address));
     } else {
       setAaAddress(undefined);
     }
-  }, [alchemyProviderAA]);
+  }, [alchemyClientAA]);
 
-  const addUserOp = alchemyProviderAA
-    ? async (userOp: UserOperationCallData, send: boolean = false) => {
-        if (!alchemyProviderAA) throw new Error(`alchemyProvider not defined`);
-        if (isSending) throw new Error('Cannot add userOps while sending');
-        if (isSuccess) throw new Error('Please reset before adding userOps');
-
-        const allUserOps = userOps.concat(userOp);
-        if (send) {
-          await sendUserOps(allUserOps);
-        } else {
-          setUserOps(allUserOps);
-        }
-      }
-    : undefined;
-
-  const sendUserOps = async (_userOps: UserOperationCallData[]) => {
+  const sendUserOps = async (_userOps: BatchUserOperationCallData) => {
     setIsSending(true);
     try {
       if (_userOps.length === 0) return;
-      if (!alchemyProviderAA) throw new Error('undefined alchemyProviderAA');
+      if (!alchemyClientAA) throw new Error('undefined alchemyClientAA');
 
-      const res = await alchemyProviderAA.sendUserOperation(_userOps);
-      const txHash = await alchemyProviderAA.waitForUserOperationTransaction(res.hash);
-      const tx = await (publicClient as any).waitForTransactionReceipt({ hash: txHash });
+      const uoSimResult = await (alchemyClientAA as any).simulateUserOperation({
+        uo: _userOps,
+      });
+
+      if (DEBUG) console.log('uoSimResult', { uoSimResult });
+
+      if (DEBUG) console.log('sendUserOps', { userOps: _userOps });
+      const res = await (alchemyClientAA as any).sendUserOperation({
+        uo: _userOps,
+      });
+      if (DEBUG) console.log('sendUserOps - res', { res });
+
+      if (DEBUG) console.log('waiting');
+      const txHash = await alchemyClientAA.waitForUserOperationTransaction({
+        hash: res.hash,
+      });
+
+      if (DEBUG) console.log('waitForUserOperationTransaction', { txHash });
+
+      if (DEBUG) console.log('getting tx');
+
+      if (!publicClient) throw new Error(`publicClient undefined`);
+      const tx = await publicClient.waitForTransactionReceipt({
+        hash: txHash,
+      });
+      if (DEBUG) console.log('tx - res', { tx });
+
       const targets = _userOps.map((op) => op.target.toLowerCase());
 
       // extract all events from the target contracts (events from other callers would be here too... hmmm)
-      const logs = tx.logs.filter((log: any) => targets.includes(log.address.toLowerCase()));
+      const logs = tx.logs.filter((log: any) =>
+        targets.includes(log.address.toLowerCase())
+      );
       const factoryAddress = await getFactoryAddress();
 
       console.log({ logs });
       const events = logs
         .map((log: any) => {
           if (log.address.toLowerCase() === factoryAddress.toLowerCase()) {
-            return decodeEventLog({ abi: registryFactoryABI, data: log.data, topics: log.topics });
+            return decodeEventLog({
+              abi: registryFactoryABI,
+              data: log.data,
+              topics: log.topics,
+            });
           } else {
             try {
-              return decodeEventLog({ abi: registryABI, data: log.data, topics: log.topics });
+              return decodeEventLog({
+                abi: registryABI,
+                data: log.data,
+                topics: log.topics,
+              });
             } catch (e) {
               return undefined;
             }
@@ -165,8 +194,7 @@ export const AccountContext = (props: PropsWithChildren) => {
 
       setIsSuccess(true);
       setIsSending(false);
-      setEvents(events);
-      setUserOps([]);
+      setEvents(events as any);
     } catch (e: any) {
       console.error(e);
       setError(e);
@@ -186,13 +214,12 @@ export const AccountContext = (props: PropsWithChildren) => {
         isConnected,
         aaAddress,
         owner,
-        addUserOp,
+        sendUserOps,
         reset,
         isSuccess,
         isSending,
         events,
         error,
-        signMessageAA,
       }}>
       <AccountDataContext>{props.children}</AccountDataContext>
     </AccountContextValue.Provider>

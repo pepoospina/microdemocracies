@@ -1,12 +1,13 @@
 import { Box, Spinner } from 'grommet';
+import { Send, StatusGood } from 'grommet-icons';
+import { useTranslation } from 'react-i18next';
+
 import { AppQRCode } from '../../components/AppQRCode';
 
 import { useProjectContext } from '../../contexts/ProjectContext';
 import { useCopyToClipboard } from '../../utils/copy.clipboard';
 import { AppButton } from '../../ui-components';
-import { Send, StatusGood } from 'grommet-icons';
-import { useTranslation } from 'react-i18next';
-import { RouteNames } from '../../App';
+import { RouteNames } from '../../route.names';
 
 export interface IPAPShare {
   cid?: string;
