@@ -13,13 +13,7 @@ import { useConnectedMember } from '../../contexts/ConnectedAccountContext';
 import { useProjectContext } from '../../contexts/ProjectContext';
 import { StatementContext } from '../../contexts/StatementContext';
 import { AbsoluteRoutes, RouteNames } from '../../route.names';
-import {
-  Address,
-  AppButton,
-  AppCard,
-  AppCircleDropButton,
-  AppHeading,
-} from '../../ui-components';
+import { Address, AppButton, AppCard, AppHeading } from '../../ui-components';
 import { BoxCentered } from '../../ui-components/BoxCentered';
 import { cap } from '../../utils/general';
 import { AppBottomButtons } from '../common/BottomButtons';
