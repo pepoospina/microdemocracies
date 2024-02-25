@@ -40,6 +40,13 @@ export const AppLanguage = (props: PropsWithChildren): JSX.Element => {
       if (window.location.origin.includes('microdemocracias.com')) {
         i18n.changeLanguage(Language.SPA);
         return;
+      } else if (window.location.origin.includes('microdemocracies.com')) {
+        if (local.includes('cat')) {
+          i18n.changeLanguage(Language.CAT);
+        } else {
+          i18n.changeLanguage(Language.ENG);
+        }
+        return;
       } else {
         console.log('reading nav language', local);
         if (local.includes('en')) {

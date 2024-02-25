@@ -1,10 +1,10 @@
 import { Box, Image, Text } from 'grommet';
-
-import { AppButton, AppModalButtonResponsive } from '../../ui-components/AppButton';
-import { useResponsive } from '../../components/app/ResponsiveApp';
-import { Language, useAppLanguage } from '../../components/app/AppLanguage';
-import { AppModal } from '../../ui-components/AppModal';
 import { useState } from 'react';
+
+import { Language, useAppLanguage } from '../../components/app/AppLanguage';
+import { useResponsive } from '../../components/app/ResponsiveApp';
+import { AppButton } from '../../ui-components/AppButton';
+import { AppModal } from '../../ui-components/AppModal';
 import { BoxCentered } from '../../ui-components/BoxCentered';
 
 export const LanguageValue = (key: Language, hideIfMobile: boolean = false) => {

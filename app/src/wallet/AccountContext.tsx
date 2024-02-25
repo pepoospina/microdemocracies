@@ -77,8 +77,10 @@ export const AccountContext = (props: PropsWithChildren) => {
       }).then((client) => {
         setAlchemyClientAA(client);
       });
+    } else {
+      setAlchemyClientAA(undefined);
+      setAaAddress(undefined);
     }
-    return undefined;
   }, [signer]);
 
   const isConnected = alchemyClientAA !== undefined;

@@ -1,4 +1,4 @@
-# Micro(r)evolutions
+# Microdemocracies
 
 A platform to build unstoppable online communities with super-powers:
 

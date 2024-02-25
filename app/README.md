@@ -1,3 +1,3 @@
-# Micro(r)evolutions App
+# Microdemocracies App
 
 (more soon)
