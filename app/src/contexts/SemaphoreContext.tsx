@@ -6,7 +6,6 @@ import {
   useEffect,
   useState,
 } from 'react';
-import { useDisconnect, useSignMessage } from 'wagmi';
 
 import { getPublicIdentity } from '../firestore/getters';
 import { AppGetProof, AppPublicIdentity } from '../types';
@@ -17,6 +16,7 @@ import {
 import { getControlMessage } from '../utils/identity.utils';
 import { postIdentity } from '../utils/statements';
 import { useAccountContext } from '../wallet/AccountContext';
+import { useAppSigner } from '../wallet/SignerContext';
 
 export type SemaphoreContextType = {
   publicId?: string;
@@ -31,9 +31,8 @@ const SemaphoreContextValue = createContext<SemaphoreContextType | undefined>(
 );
 
 export const SemaphoreContext = (props: PropsWithChildren) => {
+  const { signMessage, disconnect: disconnectSigner } = useAppSigner();
   const { owner, aaAddress } = useAccountContext();
-  const { disconnect: disconnectSigner } = useDisconnect();
-  const { signMessageAsync: signMessage } = useSignMessage();
 
   // console.log({ walletClient, isError, isLoading });
   const [isCreatingPublicId, setIsCreatingPublicId] = useState<boolean>(false);
@@ -53,7 +52,7 @@ export const SemaphoreContext = (props: PropsWithChildren) => {
   // keep identity inline with aaAddress
   useEffect(() => {
     checkStoredIdentity();
-  }, [aaAddress, owner, signMessage]);
+  }, [aaAddress, owner]);
 
   const checkStoredIdentity = async () => {
     try {
@@ -86,9 +85,7 @@ export const SemaphoreContext = (props: PropsWithChildren) => {
 
         setIsCreatingPublicId(true);
 
-        const secret = await signMessage({
-          message: 'Prepare anonymous identity',
-        });
+        const secret = await signMessage('Prepare anonymous identity');
         const _identity = new Identity(secret);
         const _publicId = _identity.getCommitment().toString();
 
@@ -97,9 +94,7 @@ export const SemaphoreContext = (props: PropsWithChildren) => {
 
         // if not found, store the identity
         if (identity === undefined) {
-          const signature = await signMessage({
-            message: getControlMessage(_publicId),
-          });
+          const signature = await signMessage(getControlMessage(_publicId));
           const details: AppPublicIdentity = {
             owner,
             publicId: _publicId,
