@@ -144,9 +144,7 @@ export const JoinPage = () => {
         <Box>
           <Box pad="large">
             <Box margin={{ bottom: 'small' }}>
-              <Text>
-                This micro(r)evolution is for <b>anyone who</b>:
-              </Text>
+              <Text>{t('whoTitle')}:</Text>
             </Box>
             <StatementEditable
               value={project?.whoStatement}></StatementEditable>
