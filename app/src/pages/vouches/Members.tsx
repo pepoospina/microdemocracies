@@ -1,20 +1,21 @@
 import { Box } from 'grommet';
 import { Add, FormPrevious } from 'grommet-icons';
+import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import { AppBottomButton } from '../common/BottomButtons';
-import { useProjectContext } from '../../contexts/ProjectContext';
-import { ApplicationCard } from './ApplicationCard';
-import { ViewportPage } from '../../components/app/Viewport';
-import { useTranslation } from 'react-i18next';
-import { AppButton } from '../../ui-components';
-import { useEffect } from 'react';
 import { useAppContainer } from '../../components/app/AppContainer';
+import { ViewportPage } from '../../components/app/Viewport';
+import { useProjectContext } from '../../contexts/ProjectContext';
+import { AbsoluteRoutes } from '../../route.names';
+import { AppButton } from '../../ui-components';
+import { AppBottomButton } from '../common/BottomButtons';
+import { ApplicationCard } from './ApplicationCard';
 import { MemberCard } from './MemberCard';
 
 export const MembersPage = (): JSX.Element => {
   const { t, i18n } = useTranslation();
-  const { members, applications } = useProjectContext();
+  const { members, applications, projectId } = useProjectContext();
   const navigate = useNavigate();
   const { setTitle } = useAppContainer();
 
@@ -40,6 +41,7 @@ export const MembersPage = (): JSX.Element => {
               </Box>
             );
           })}
+
           {members?.map((member, ix) => {
             return (
               <Box key={ix} style={{ marginBottom: '16px', flexShrink: 0 }}>
@@ -50,7 +52,14 @@ export const MembersPage = (): JSX.Element => {
         </Box>
       }
       nav={
-        <AppBottomButton icon={<FormPrevious />} label={t('back')} onClick={() => navigate('..')}></AppBottomButton>
+        <AppBottomButton
+          icon={<FormPrevious />}
+          label={t('back')}
+          onClick={() =>
+            navigate(
+              AbsoluteRoutes.ProjectHome(projectId?.toString() as string)
+            )
+          }></AppBottomButton>
       }></ViewportPage>
   );
 };

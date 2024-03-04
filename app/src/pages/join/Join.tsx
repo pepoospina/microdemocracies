@@ -1,28 +1,28 @@
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { isAddress } from 'ethers/lib/utils';
 import { Box, Text } from 'grommet';
 import { useEffect, useState } from 'react';
-import { isAddress } from 'ethers/lib/utils';
 import React from 'react';
-
-import { AppCard, AppHeading } from '../../ui-components';
-import { AppConnectButton, AppConnectWidget } from '../../components/app/AppConnectButton';
-import { useAccountContext } from '../../wallet/AccountContext';
-import { useProjectContext } from '../../contexts/ProjectContext';
-import { StatementEditable } from '../voice/StatementEditable';
-import { SelectedDetailsHelper } from '../../utils/select.details';
-
-import { PAPShare } from './PAPShare';
-import { DetailsAndPlatforms, PAP } from '../../types';
-import { PAPEntry } from './PAPEntry';
-import { DetailsForm } from './DetailsForm';
-import { AppBottomButtons } from '../common/BottomButtons';
-import { putObject } from '../../utils/store';
-import { postApply } from '../../utils/project';
-import { BoxCentered } from '../../ui-components/BoxCentered';
-import { Loading } from '../common/Loading';
-import { ViewportPage } from '../../components/app/Viewport';
-import { useAppContainer } from '../../components/app/AppContainer';
 import { useTranslation } from 'react-i18next';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+
+import { AppConnectWidget } from '../../components/app/AppConnectButton';
+import { useAppContainer } from '../../components/app/AppContainer';
+import { ViewportPage } from '../../components/app/Viewport';
+import { useProjectContext } from '../../contexts/ProjectContext';
+import { AbsoluteRoutes } from '../../route.names';
+import { DetailsAndPlatforms, PAP } from '../../types';
+import { AppCard } from '../../ui-components';
+import { BoxCentered } from '../../ui-components/BoxCentered';
+import { postApply } from '../../utils/project';
+import { SelectedDetailsHelper } from '../../utils/select.details';
+import { putObject } from '../../utils/store';
+import { useAccountContext } from '../../wallet/AccountContext';
+import { AppBottomButtons } from '../common/BottomButtons';
+import { Loading } from '../common/Loading';
+import { StatementEditable } from '../voice/StatementEditable';
+import { DetailsForm } from './DetailsForm';
+import { PAPEntry } from './PAPEntry';
+import { PAPShare } from './PAPShare';
 
 export interface IJoinProps {
   dum?: any;
@@ -45,8 +45,12 @@ export const JoinPage = () => {
   const [pap, setPap] = useState<PAP>();
   const [cid, setCid] = useState<string>();
 
-  const askPlatform = SelectedDetailsHelper.hasPlatforms(project?.selectedDetails);
-  const askPersonal = SelectedDetailsHelper.hasPersonal(project?.selectedDetails);
+  const askPlatform = SelectedDetailsHelper.hasPlatforms(
+    project?.selectedDetails
+  );
+  const askPersonal = SelectedDetailsHelper.hasPersonal(
+    project?.selectedDetails
+  );
 
   const { setTitle } = useAppContainer();
 
@@ -57,15 +61,24 @@ export const JoinPage = () => {
         break;
 
       case 1:
-        setTitle({ prefix: t('personalDetailsPre'), main: t('personalDetailsMain') });
+        setTitle({
+          prefix: t('personalDetailsPre'),
+          main: t('personalDetailsMain'),
+        });
         break;
 
       case 2:
-        setTitle({ prefix: t('reviewApplicationPre'), main: t('reviewApplicationMain') });
+        setTitle({
+          prefix: t('reviewApplicationPre'),
+          main: t('reviewApplicationMain'),
+        });
         break;
 
       case 3:
-        setTitle({ prefix: t('applicationSentPre'), main: t('applicationSentMain') });
+        setTitle({
+          prefix: t('applicationSentPre'),
+          main: t('applicationSentMain'),
+        });
         break;
     }
   }, [pageIx, i18n.language]);
@@ -135,7 +148,8 @@ export const JoinPage = () => {
                 This micro(r)evolution is for <b>anyone who</b>:
               </Text>
             </Box>
-            <StatementEditable value={project?.whoStatement}></StatementEditable>
+            <StatementEditable
+              value={project?.whoStatement}></StatementEditable>
           </Box>
           <Box pad="large" style={{ flexShrink: 0 }} align="center">
             <AppConnectWidget></AppConnectWidget>
@@ -144,15 +158,28 @@ export const JoinPage = () => {
       }
       nav={
         <AppBottomButtons
-          left={{ label: 'home', primary: false, action: () => navigate('..') }}
-          right={{ label: 'next', primary: true, action: nextPage }}></AppBottomButtons>
+          left={{
+            label: 'home',
+            primary: false,
+            action: () =>
+              navigate(
+                AbsoluteRoutes.ProjectHome(projectId?.toString() as string)
+              ),
+          }}
+          right={{
+            label: 'next',
+            primary: true,
+            action: nextPage,
+          }}></AppBottomButtons>
       }></ViewportPage>,
 
     <ViewportPage
       key="3"
       content={
         <Box pad="large">
-          <DetailsForm selected={project?.selectedDetails} onChange={(d) => setPersonal(d)}></DetailsForm>
+          <DetailsForm
+            selected={project?.selectedDetails}
+            onChange={(d) => setPersonal(d)}></DetailsForm>
         </Box>
       }
       nav={
@@ -185,7 +212,11 @@ export const JoinPage = () => {
       nav={
         <AppBottomButtons
           left={{ label: t('back'), primary: false, action: prevPage }}
-          right={{ label: t('send'), primary: true, action: send }}></AppBottomButtons>
+          right={{
+            label: t('send'),
+            primary: true,
+            action: send,
+          }}></AppBottomButtons>
       }></ViewportPage>,
     <ViewportPage
       key="5"
@@ -201,15 +232,31 @@ export const JoinPage = () => {
       nav={
         <AppBottomButtons
           left={{ label: t('back'), primary: false, action: prevPage }}
-          right={{ label: t('done'), primary: true, action: () => navigate('..') }}></AppBottomButtons>
+          right={{
+            label: t('done'),
+            primary: true,
+            action: () =>
+              navigate(
+                AbsoluteRoutes.ProjectHome(projectId?.toString() as string)
+              ),
+          }}></AppBottomButtons>
       }></ViewportPage>,
   ];
 
   return (
-    <Box justify="start" align="center" style={{ height: '100vh', width: '100%' }}>
+    <Box
+      justify="start"
+      align="center"
+      style={{ height: '100vh', width: '100%' }}>
       {pages.map((page, ix) => {
         return (
-          <div key={ix} style={{ height: '100%', width: '100%', display: pageIx === ix ? 'block' : 'none' }}>
+          <div
+            key={ix}
+            style={{
+              height: '100%',
+              width: '100%',
+              display: pageIx === ix ? 'block' : 'none',
+            }}>
             {page}
           </div>
         );
