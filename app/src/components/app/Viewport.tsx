@@ -8,11 +8,14 @@ import {
   GridSizeType,
   ResponsiveContext,
   Text,
+  Layer
 } from 'grommet';
 import { ReactNode } from 'react';
-import { AppHeading } from '../../ui-components/AppHeading';
 
 import { IElement, useResponsive, useThemeContext } from '.';
+import { useLoadingContext } from '../../contexts/LoadingContext';
+import { AppButton } from '../../ui-components/AppButton';
+import { AppHeading } from '../../ui-components/AppHeading';
 
 export const MAX_WIDTH_LANDING = 1600;
 export const MAX_WIDTH_APP = 700;
@@ -46,7 +49,11 @@ export const ViewportHeadingSmall = (props: { label: ReactNode }) => {
 
 export const ViewportHeadingLarge = (props: { label: ReactNode }) => {
   return (
-    <Box justify="center" align="center" pad="medium" style={{ textAlign: 'center' }}>
+    <Box
+      justify="center"
+      align="center"
+      pad="medium"
+      style={{ textAlign: 'center' }}>
       <AppHeading level="1">{props.label}</AppHeading>
     </Box>
   );
@@ -59,6 +66,8 @@ export const ViewportHeadingLarge = (props: { label: ReactNode }) => {
 export const ViewportPage = (props: { content: ReactNode; nav: ReactNode }) => {
   const { mobile } = useResponsive();
   const pad = mobile ? 'none' : 'large';
+  const { loading, setLoading, setLoadingTimeout } = useLoadingContext();
+
   return (
     <Box
       id="viewport-page"
@@ -76,6 +85,11 @@ export const ViewportPage = (props: { content: ReactNode; nav: ReactNode }) => {
       <Box id="nav" style={{ height: '90px', flexShrink: 0 }}>
         {props.nav}
       </Box>
+      <AppButton plain onClick={() => setLoading(true)}>
+        Testing Loading
+      </AppButton>
+      {/* {loading && <Text>Loading?</Text>} */}
+      {/* <Layer></Layer> */}
     </Box>
   );
 };
