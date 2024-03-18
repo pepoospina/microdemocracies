@@ -17,6 +17,7 @@ import { DecodeEventLogReturnType, decodeEventLog, getAddress } from 'viem';
 import { usePublicClient, useReadContract } from 'wagmi';
 
 import { ALCHEMY_GAS_POLICY_ID, ALCHEMY_RPC_URL } from '../config/appConfig';
+import { useLoadingContext } from '../contexts/LoadingContext';
 import { HexStr } from '../types';
 import {
   aaWalletAbi,
@@ -51,6 +52,7 @@ const AccountContextValue = createContext<AccountContextType | undefined>(
 export const AccountContext = (props: PropsWithChildren) => {
   const { signer, address } = useAppSigner();
   const publicClient = usePublicClient();
+  const { setLoading, setLoadingTimeout } = useLoadingContext();
 
   /** ALCHEMY provider to send transactions using AA */
   const [alchemyClientAA, setAlchemyClientAA] =
@@ -91,6 +93,8 @@ export const AccountContext = (props: PropsWithChildren) => {
     setIsSending(false);
     setError(undefined);
     setEvents(undefined);
+    setLoading(false);
+    setLoadingTimeout(false);
   };
 
   const {
@@ -144,6 +148,9 @@ export const AccountContext = (props: PropsWithChildren) => {
       const res = await (alchemyClientAA as any).sendUserOperation({
         uo: _userOps,
       });
+
+      setLoadingTimeout(true);
+
       if (DEBUG) console.log('sendUserOps - res', { res });
 
       if (DEBUG) console.log('waiting');
@@ -200,6 +207,8 @@ export const AccountContext = (props: PropsWithChildren) => {
     } catch (e: any) {
       console.error(e);
       setError(e);
+      setLoading(false);
+      setLoadingTimeout(false);
     }
   };
 

@@ -1,20 +1,20 @@
 import { utils } from 'ethers';
-import { useState, useCallback, useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { encodeFunctionData } from 'viem';
+import { usePublicClient } from 'wagmi';
 
+import {
+  PENDING_PERIOD,
+  QUIET_ENDING_PERIOD,
+  VOTING_PERIOD,
+} from '../../config/appConfig';
 import { registryABI, registryFactoryABI } from '../../contracts/abis';
-import { DetailsAndPlatforms, SelectedDetails, PAP, HexStr } from '../../types';
+import { DetailsAndPlatforms, HexStr, PAP, SelectedDetails } from '../../types';
 import { getFactoryAddress } from '../../utils/contracts.json';
-import { postProject, postMember } from '../../utils/project';
+import { postMember, postProject } from '../../utils/project';
 import { putObject } from '../../utils/store';
 import { RegistryCreatedEvent } from '../../utils/viem.types';
 import { useAccountContext } from '../../wallet/AccountContext';
-import { usePublicClient } from 'wagmi';
-import {
-  PENDING_PERIOD,
-  VOTING_PERIOD,
-  QUIET_ENDING_PERIOD,
-} from '../../config/appConfig';
 
 export interface CreateProjectStatus {
   founderPap?: PAP;

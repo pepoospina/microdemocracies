@@ -1,19 +1,20 @@
-import { Box, Anchor, Text } from 'grommet';
+import { Anchor, Box, Text } from 'grommet';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useNavigate, useParams } from 'react-router-dom';
 
-import { AbsoluteRoutes } from '../../route.names';
 import { AppConnectButton } from '../../components/app/AppConnectButton';
 import { useConnectedMember } from '../../contexts/ConnectedAccountContext';
+import { useLoadingContext } from '../../contexts/LoadingContext';
+import { useMember } from '../../contexts/MemberContext';
 import { useProjectContext } from '../../contexts/ProjectContext';
 import { useVouch } from '../../contexts/VouchContext';
+import { AbsoluteRoutes } from '../../route.names';
 import { Entity, PAP } from '../../types';
-import { AppCard, AppButton } from '../../ui-components';
+import { AppButton, AppCard } from '../../ui-components';
+import { postDeleteApplication } from '../../utils/project';
 import { useAccountContext } from '../../wallet/AccountContext';
 import { WaitingTransaction } from '../common/Loading';
-import { useNavigate, useParams } from 'react-router-dom';
-import { postDeleteApplication } from '../../utils/project';
-import { useTranslation } from 'react-i18next';
-import { useMember } from '../../contexts/MemberContext';
 
 export const VouchMemberWidget = (props: { pap: Entity<PAP> }) => {
   const { projectId } = useParams();
@@ -27,9 +28,16 @@ export const VouchMemberWidget = (props: { pap: Entity<PAP> }) => {
   const [sending, setSending] = useState<boolean>(false);
   const [error, setError] = useState<boolean>();
 
-  const { setVouchParams, sendVouch, isErrorSending, errorSending, isSuccess } = useVouch();
+  const { setVouchParams, sendVouch, isErrorSending, errorSending, isSuccess } =
+    useVouch();
 
   const { account } = useConnectedMember();
+  const {
+    setLoading,
+    setLoadingTimeout,
+    setTitle: setTitleToLoading,
+    setSubtitle,
+  } = useLoadingContext();
 
   const {
     account: vouchedAccount,
@@ -50,8 +58,9 @@ export const VouchMemberWidget = (props: { pap: Entity<PAP> }) => {
   };
 
   useEffect(() => {
-    // console.log('useEffect isSuccess', { isSuccess });
     if (isSuccess) {
+      setLoading(false);
+      setLoadingTimeout(false);
       setSending(false);
       setError(undefined);
       deleteApplication();
@@ -61,7 +70,6 @@ export const VouchMemberWidget = (props: { pap: Entity<PAP> }) => {
   }, [isSuccess]);
 
   useEffect(() => {
-    // console.log('useEffect isErrorSending', { isErrorSending, errorSending });
     if (isErrorSending) {
       setSending(false);
       setError((errorSending as any).shortMessage);
@@ -72,6 +80,9 @@ export const VouchMemberWidget = (props: { pap: Entity<PAP> }) => {
     if (sendVouch) {
       setError(undefined);
       setSending(true);
+      setLoading(true);
+      setTitleToLoading(t('approvingNewMember'));
+      setSubtitle(t('preparingData'));
       sendVouch();
     }
   };
@@ -98,7 +109,11 @@ export const VouchMemberWidget = (props: { pap: Entity<PAP> }) => {
     }
     if (isConnected) {
       return (
-        <AppButton label="accept" onClick={() => vouch()} disabled={!sendVouch && isConnected} primary></AppButton>
+        <AppButton
+          label="accept"
+          onClick={() => vouch()}
+          disabled={!sendVouch && isConnected}
+          primary></AppButton>
       );
     }
 
@@ -117,7 +132,12 @@ export const VouchMemberWidget = (props: { pap: Entity<PAP> }) => {
           <Anchor
             onClick={() => {
               if (vouchedTokenId && projectId) {
-                navigate(AbsoluteRoutes.ProjectMember(projectId, vouchedTokenId.toString()));
+                navigate(
+                  AbsoluteRoutes.ProjectMember(
+                    projectId,
+                    vouchedTokenId.toString()
+                  )
+                );
               }
             }}>
             {t('member')} #{vouchedTokenId}

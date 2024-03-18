@@ -8,13 +8,10 @@ import {
   GridSizeType,
   ResponsiveContext,
   Text,
-  Layer
 } from 'grommet';
 import { ReactNode } from 'react';
 
 import { IElement, useResponsive, useThemeContext } from '.';
-import { useLoadingContext } from '../../contexts/LoadingContext';
-import { AppButton } from '../../ui-components/AppButton';
 import { AppHeading } from '../../ui-components/AppHeading';
 
 export const MAX_WIDTH_LANDING = 1600;
@@ -66,7 +63,6 @@ export const ViewportHeadingLarge = (props: { label: ReactNode }) => {
 export const ViewportPage = (props: { content: ReactNode; nav: ReactNode }) => {
   const { mobile } = useResponsive();
   const pad = mobile ? 'none' : 'large';
-  const { loading, setLoading, setLoadingTimeout } = useLoadingContext();
 
   return (
     <Box
@@ -85,11 +81,6 @@ export const ViewportPage = (props: { content: ReactNode; nav: ReactNode }) => {
       <Box id="nav" style={{ height: '90px', flexShrink: 0 }}>
         {props.nav}
       </Box>
-      <AppButton plain onClick={() => setLoading(true)}>
-        Testing Loading
-      </AppButton>
-      {/* {loading && <Text>Loading?</Text>} */}
-      {/* <Layer></Layer> */}
     </Box>
   );
 };

@@ -75,7 +75,7 @@ export const CreateProject = () => {
 
     if (pageIx === NPAGES - 1) {
       setLoading(true);
-      setTitleToLoading(t('creatingMicrodemocracy'));
+      setTitleToLoading(t('creatingProject'));
       setSubtitle(t('preparingData'));
       createProject();
     }

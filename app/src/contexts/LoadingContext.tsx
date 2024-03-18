@@ -1,10 +1,16 @@
-import { Box, Layer, Text } from 'grommet';
-import { ReactNode, createContext, useContext, useState } from 'react';
+import { Box, Heading, Layer, Meter, Paragraph, Spinner } from 'grommet';
+import {
+  ReactNode,
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 
 export type LoadingContextType = {
   loading: boolean;
   setLoading: (loading: boolean) => void;
-  setLoadingTimeout: (loadingTimeout: number) => void;
+  setLoadingTimeout: (loadingTimeout: boolean) => void;
   setTitle: (title: string) => void;
   setSubtitle: (subtitle: string) => void;
   //   setIcon: (icon: any) => void;
@@ -20,28 +26,49 @@ const LoadingContextValue = createContext<LoadingContextType | undefined>(
 
 export const LoadingContext = ({ children }: LoadingContextProps) => {
   const [loading, setLoading] = useState<boolean>(false);
-  const [loadingTimeout, setLoadingTimeout] = useState<number | null>(null);
+  const [loadingTimeout, setLoadingTimeout] = useState<boolean>(false);
   const [title, setTitle] = useState<string>('');
   const [subtitle, setSubtitle] = useState<string>('');
   //   const [icon, setIcon] = useState();
 
-  console.log({ loading });
+  const [meterValue, setMeterValue] = useState<number>(0);
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setMeterValue((oldValue) => {
+        if (oldValue === 100) return 0;
+        return Math.min(oldValue + Math.random() * 10, 100);
+      });
+    }, 500);
+
+    return () => clearInterval(intervalId);
+  }, []);
 
   return (
     <LoadingContextValue.Provider
       value={{ loading, setLoading, setLoadingTimeout, setTitle, setSubtitle }}>
       {children}
       {loading && (
-        <Layer onClickOutside={() => setLoading(false)}>
-          <Box>
-            <Text>{title}</Text>
-          </Box>
+        <Layer
+          position="center"
+          onClickOutside={() => setLoading(false)}
+          onEsc={() => setLoading(false)}
+          style={{ border: '3px solid #1a1a1a', borderRadius: '10px' }}>
+          <Box pad="medium" gap="small" width="medium">
+            <Heading level={3} as="header" textAlign="center">
+              {title}
+            </Heading>
 
-          <Box>
-            <Text>{subtitle}</Text>
+            <Paragraph>{subtitle}</Paragraph>
+
+            {loadingTimeout ? (
+              <Meter value={meterValue} color="#1a1a1a" />
+            ) : (
+              <Box pad="small" justify="center" align="center">
+                <Spinner color="#1a1a1a" />
+              </Box>
+            )}
           </Box>
-          
-          <Text>Is LOADING </Text>
         </Layer>
       )}
     </LoadingContextValue.Provider>

@@ -148,6 +148,8 @@ i18n.use(initReactI18next).init({
         cantChallenge: "Can't challenge",
         pendingApplicationBy: 'Pending application by {{by}}',
         votedNofMEligible: 'Voted {{nVoted}} of {{totalVoters}} eligible members',
+        preparingData: 'Preparing the data to send to the network...',
+        approvingNewMember: 'Approving new member',
       },
     },
     SPA: {
@@ -294,6 +296,8 @@ i18n.use(initReactI18next).init({
         cantChallenge: 'No puedes denunciarla',
         pendingApplicationBy: 'Solicitud de miembro por parte de {{by}}',
         votedNofMEligible: 'Han votado: {{nVoted}} de {{totalVoters}} miembros con derecho a voto',
+        preparingData: 'Preparando los datos a enviar a la red...',
+        approvingNewMember: 'Aprobando a un nuevo miembro'
       },
     },
     CAT: {
@@ -439,6 +443,8 @@ i18n.use(initReactI18next).init({
         cantChallenge: 'No es pot denunciar-la',
         pendingApplicationBy: 'Solicitut de miembre par part de {{by}}',
         votedNofMEligible: 'Han votat: {{nVoted}} de {{totalVoters}} membres amb dret de vot',
+        preparingData: "S'estan preparant les dades per enviar-les a la xarxa...",
+        approvingNewMember: "Aprovació d'un nou membre",
       },
     },
   },
