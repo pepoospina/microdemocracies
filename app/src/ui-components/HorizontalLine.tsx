@@ -1,8 +1,8 @@
-import { BoxExtendedProps, Box } from 'grommet';
-import { useThemeContext } from '../components/app';
+import { BoxExtendedProps, Box } from 'grommet'
+import { useThemeContext } from '../components/app'
 
 export const HorizontalLine = (props: BoxExtendedProps): JSX.Element => {
-  const { constants } = useThemeContext();
+  const { constants } = useThemeContext()
 
   return (
     <Box
@@ -11,6 +11,7 @@ export const HorizontalLine = (props: BoxExtendedProps): JSX.Element => {
         height: '1px',
         backgroundColor: `${constants.colors.text}`,
         ...props.style,
-      }}></Box>
-  );
-};
+      }}
+    ></Box>
+  )
+}

@@ -1,21 +1,21 @@
-import { BoxExtendedProps, Box } from 'grommet';
-import React, { ReactElement } from 'react';
+import { BoxExtendedProps, Box } from 'grommet'
+import React, { ReactElement } from 'react'
 
-import { useThemeContext } from '../components/app';
+import { useThemeContext } from '../components/app'
 
 export interface ICircleIcon extends BoxExtendedProps {
-  icon: ReactElement;
-  size?: number;
+  icon: ReactElement
+  size?: number
 }
 
 export const CircleIcon = (props: ICircleIcon): JSX.Element => {
-  const { constants } = useThemeContext();
+  const { constants } = useThemeContext()
 
-  const size = props.size || 40;
+  const size = props.size || 40
   const icon = React.cloneElement(props.icon, {
     color: props.color || constants.colors.primary,
     size: `${size * 0.5}px`,
-  });
+  })
   return (
     <Box
       justify="center"
@@ -27,8 +27,9 @@ export const CircleIcon = (props: ICircleIcon): JSX.Element => {
         backgroundColor: constants.colors.primaryLight,
         overflow: 'hidden',
         ...props.style,
-      }}>
+      }}
+    >
       {icon}
     </Box>
-  );
-};
+  )
+}

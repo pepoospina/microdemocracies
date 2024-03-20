@@ -1,23 +1,23 @@
-import { ImageExtendedProps, Box, Image } from 'grommet';
-import { useThemeContext } from '../components/app';
+import { ImageExtendedProps, Box, Image } from 'grommet'
+import { useThemeContext } from '../components/app'
 
 export interface ICampaignIcon extends ImageExtendedProps {
-  iconSize?: string;
+  iconSize?: string
 }
 
 export const CampaignIcon = (props: ICampaignIcon): JSX.Element => {
-  const { constants } = useThemeContext();
+  const { constants } = useThemeContext()
 
-  const size = props.iconSize || '120px';
-  const reg = new RegExp('(\\d+\\s?)(\\w+)');
-  const parts = reg.exec(size);
+  const size = props.iconSize || '120px'
+  const reg = new RegExp('(\\d+\\s?)(\\w+)')
+  const parts = reg.exec(size)
 
   if (parts === null) {
-    throw new Error(`size wrong`);
+    throw new Error(`size wrong`)
   }
 
-  const value = +parts[1];
-  const units = parts[2];
+  const value = +parts[1]
+  const units = parts[2]
 
   return (
     <Box
@@ -29,8 +29,9 @@ export const CampaignIcon = (props: ICampaignIcon): JSX.Element => {
         border: '2px solid',
         borderColor: constants.colors.primaryLight,
         ...props.style,
-      }}>
+      }}
+    >
       <Image fit="cover" src={props.src || '/images/welcome-bg-1.png'}></Image>
     </Box>
-  );
-};
+  )
+}

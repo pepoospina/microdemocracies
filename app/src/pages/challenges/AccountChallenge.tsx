@@ -1,34 +1,34 @@
-import { Box, BoxExtendedProps, Spinner, Text } from 'grommet';
+import { Box, BoxExtendedProps, Spinner, Text } from 'grommet'
 
-import { AppConnectButton, AppConnectWidget } from '../../components/app/AppConnectButton';
-import { AppButton, AppCard, AppHeading, AppRemainingTime } from '../../ui-components';
+import { AppConnectButton, AppConnectWidget } from '../../components/app/AppConnectButton'
+import { AppButton, AppCard, AppHeading, AppRemainingTime } from '../../ui-components'
 
-import { useEffect, useState } from 'react';
-import { WaitingTransaction } from '../common/Loading';
-import { BoxCentered } from '../../ui-components/BoxCentered';
-import { useAccountContext } from '../../wallet/AccountContext';
-import { AppAccount } from '../../types';
-import { DateManager } from '../../utils/date.manager';
-import { ProgressBar } from './ProgressBar';
-import { t } from 'i18next';
-import { useConnectedMember } from '../../contexts/ConnectedAccountContext';
-import { LoadingDiv } from '../../ui-components/LoadingDiv';
-import { useChallengeRead } from '../../contexts/ChallengeContextRead';
-import { useChallengeWrite } from '../../contexts/ChallengeContextWrite';
-import { postAccountInvalidated } from '../../utils/project';
+import { useEffect, useState } from 'react'
+import { WaitingTransaction } from '../common/Loading'
+import { BoxCentered } from '../../ui-components/BoxCentered'
+import { useAccountContext } from '../../wallet/AccountContext'
+import { AppAccount } from '../../types'
+import { DateManager } from '../../utils/date.manager'
+import { ProgressBar } from './ProgressBar'
+import { t } from 'i18next'
+import { useConnectedMember } from '../../contexts/ConnectedAccountContext'
+import { LoadingDiv } from '../../ui-components/LoadingDiv'
+import { useChallengeRead } from '../../contexts/ChallengeContextRead'
+import { useChallengeWrite } from '../../contexts/ChallengeContextWrite'
+import { postAccountInvalidated } from '../../utils/project'
 
 interface IAccountChallenge extends BoxExtendedProps {
-  cardStyle?: React.CSSProperties;
-  account?: AppAccount;
+  cardStyle?: React.CSSProperties
+  account?: AppAccount
 }
 
 export const AccountChallenge = (props: IAccountChallenge) => {
-  const { isConnected } = useAccountContext();
-  const { tokenId } = useConnectedMember();
+  const { isConnected } = useAccountContext()
+  const { tokenId } = useConnectedMember()
 
-  const accountRead = props.account;
+  const accountRead = props.account
 
-  const { refetchChallenge, challengeRead, totalVoters } = useChallengeRead(accountRead?.tokenId);
+  const { refetchChallenge, challengeRead, totalVoters } = useChallengeRead(accountRead?.tokenId)
 
   const {
     sendChallenge,
@@ -42,57 +42,57 @@ export const AccountChallenge = (props: IAccountChallenge) => {
     isErrorVoting,
     errorVoting,
     events,
-  } = useChallengeWrite(accountRead?.tokenId);
+  } = useChallengeWrite(accountRead?.tokenId)
 
-  const [error, setError] = useState<boolean>();
+  const [error, setError] = useState<boolean>()
 
   /** when success challenge or vote, refetch */
   useEffect(() => {
     if (isSuccess) {
-      refetchChallenge();
+      refetchChallenge()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isSuccess]);
+  }, [isSuccess])
 
   /** when error stop sending and show the error */
   useEffect(() => {
     if (isErrorChallenging) {
-      setError((errorChallenging as any).shortMessage);
+      setError((errorChallenging as any).shortMessage)
     }
-  }, [isErrorChallenging, errorChallenging]);
+  }, [isErrorChallenging, errorChallenging])
 
   /** when error stop sending and show the error */
   useEffect(() => {
     if (isErrorVoting) {
-      setError((errorVoting as any).shortMessage);
+      setError((errorVoting as any).shortMessage)
     }
-  }, [isErrorVoting, errorVoting]);
+  }, [isErrorVoting, errorVoting])
 
   /** trigger delete member if successful */
   useEffect(() => {
     if (isSuccess && events) {
-      const allInvalidated = events.filter((e) => e.eventName === 'InvalidatedAccountEvent');
+      const allInvalidated = events.filter((e) => e.eventName === 'InvalidatedAccountEvent')
       allInvalidated.forEach((invalidated) => {
-        postAccountInvalidated(Number((invalidated.args as any).tokenId));
-      });
+        postAccountInvalidated(Number((invalidated.args as any).tokenId))
+      })
     }
-  }, [isSuccess, events]);
+  }, [isSuccess, events])
 
   const challenge = () => {
     if (sendChallenge) {
-      sendChallenge();
+      sendChallenge()
     }
-  };
+  }
 
-  const challenged = challengeRead !== undefined && challengeRead !== null;
-  const canChallenge = sendChallenge !== undefined && accountRead?.valid;
+  const challenged = challengeRead !== undefined && challengeRead !== null
+  const canChallenge = sendChallenge !== undefined && accountRead?.valid
 
   /** Status managing */
-  const date = new DateManager();
-  const duration = challengeRead ? date.durationTo(challengeRead?.endDate) : undefined;
+  const date = new DateManager()
+  const duration = challengeRead ? date.durationTo(challengeRead?.endDate) : undefined
 
-  const ratio = challengeRead && challengeRead.nVoted > 0 ? challengeRead.nFor / challengeRead.nVoted : 0;
-  const nVoted = challengeRead ? challengeRead.nVoted : undefined;
+  const ratio = challengeRead && challengeRead.nVoted > 0 ? challengeRead.nFor / challengeRead.nVoted : 0
+  const nVoted = challengeRead ? challengeRead.nVoted : undefined
 
   const challengeStatus = challengeRead ? (
     challengeRead.executed ? (
@@ -123,12 +123,12 @@ export const AccountChallenge = (props: IAccountChallenge) => {
     )
   ) : (
     <></>
-  );
+  )
 
   /** Voting management */
   const vote = (() => {
     if (!isConnected) {
-      return <AppConnectButton label="Connect and vote" style={{ margin: '16px 0 8px 0' }}></AppConnectButton>;
+      return <AppConnectButton label="Connect and vote" style={{ margin: '16px 0 8px 0' }}></AppConnectButton>
     }
 
     /** loading canVote information */
@@ -137,7 +137,7 @@ export const AccountChallenge = (props: IAccountChallenge) => {
         <BoxCentered fill style={{ height: '100px' }}>
           <Spinner></Spinner>
         </BoxCentered>
-      );
+      )
     }
 
     if (!canVote) {
@@ -147,10 +147,10 @@ export const AccountChallenge = (props: IAccountChallenge) => {
             {t('member')} #{tokenId} can't vote
           </Text>
         </Box>
-      );
+      )
     }
 
-    const alreadyVoted = myVote !== undefined;
+    const alreadyVoted = myVote !== undefined
 
     return sendVote ? (
       <Box style={{ marginTop: '16px' }}>
@@ -174,15 +174,15 @@ export const AccountChallenge = (props: IAccountChallenge) => {
       <BoxCentered fill>
         <Spinner></Spinner>
       </BoxCentered>
-    );
-  })();
+    )
+  })()
 
   const challengedContent = (
     <>
       {challengeStatus}
       {vote}
     </>
-  );
+  )
 
   const notChallengedContent = (
     <Box>
@@ -208,19 +208,19 @@ export const AccountChallenge = (props: IAccountChallenge) => {
         )}
       </Box>
     </Box>
-  );
+  )
 
   const content = (() => {
     if (accountRead === undefined || challengeRead === undefined) {
-      return <LoadingDiv height="50px" width="100%"></LoadingDiv>;
+      return <LoadingDiv height="50px" width="100%"></LoadingDiv>
     }
     if (challenged) {
-      return challengedContent;
+      return challengedContent
     }
     if (!challenged) {
-      return notChallengedContent;
+      return notChallengedContent
     }
-  })();
+  })()
 
   /** already read the account and the account challenge data */
   return (
@@ -230,5 +230,5 @@ export const AccountChallenge = (props: IAccountChallenge) => {
         <Box pad={{ vertical: 'small' }}>{content}</Box>
       </>
     </Box>
-  );
-};
+  )
+}

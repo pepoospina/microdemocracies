@@ -1,31 +1,26 @@
-import { useReadContract } from 'wagmi';
+import { useReadContract } from 'wagmi'
 
-import { AppChallenge, VoteOption } from '../types';
-import { registryABI } from '../utils/contracts.json';
-import { useProjectContext } from './ProjectContext';
+import { AppChallenge, VoteOption } from '../types'
+import { registryABI } from '../utils/contracts.json'
+import { useProjectContext } from './ProjectContext'
 
 export type ChallengeContextReadType = {
-  tokenId?: number;
-  refetchChallenge: (options?: {
-    throwOnError: boolean;
-    cancelRefetch: boolean;
-  }) => Promise<any>;
-  challengeRead: AppChallenge | undefined | null;
-  totalVoters?: number;
-  isLoadingChallenge: boolean;
-};
-
-export interface ChallengeContextProps {
-  tokenId?: number;
+  tokenId?: number
+  refetchChallenge: (options?: { throwOnError: boolean; cancelRefetch: boolean }) => Promise<any>
+  challengeRead: AppChallenge | undefined | null
+  totalVoters?: number
+  isLoadingChallenge: boolean
 }
 
-export const useChallengeRead = (
+export interface ChallengeContextProps {
   tokenId?: number
-): ChallengeContextReadType => {
-  const { address: projectAddress } = useProjectContext();
+}
+
+export const useChallengeRead = (tokenId?: number): ChallengeContextReadType => {
+  const { address: projectAddress } = useProjectContext()
 
   /** Vouch */
-  const tokenIdInternal = tokenId !== undefined ? BigInt(tokenId) : undefined;
+  const tokenIdInternal = tokenId !== undefined ? BigInt(tokenId) : undefined
 
   /** challenge details */
   const {
@@ -43,7 +38,7 @@ export const useChallengeRead = (
     query: {
       enabled: tokenIdInternal !== undefined && projectAddress !== undefined,
     },
-  });
+  })
 
   const { data: totalVoters } = useReadContract({
     address: projectAddress,
@@ -54,19 +49,15 @@ export const useChallengeRead = (
     query: {
       enabled: tokenIdInternal !== undefined && projectAddress !== undefined,
     },
-  });
+  })
 
   /** undefined means currently reading, null means read and not found */
   const challengeRead: AppChallenge | undefined | null = ((_challengeRead) => {
-    if (
-      isErrorChallengeRead &&
-      errorChallengeRead &&
-      errorChallengeRead.message.includes('')
-    ) {
-      return null;
+    if (isErrorChallengeRead && errorChallengeRead && errorChallengeRead.message.includes('')) {
+      return null
     }
     if (_challengeRead === undefined) {
-      return undefined;
+      return undefined
     }
     if (_challengeRead[0] > 0 && !isErrorChallengeRead) {
       return {
@@ -76,9 +67,9 @@ export const useChallengeRead = (
         nVoted: Number(_challengeRead[3]),
         nFor: Number(_challengeRead[4]),
         executed: _challengeRead[5],
-      };
+      }
     }
-  })(_challengeRead);
+  })(_challengeRead)
 
   return {
     tokenId: Number(tokenIdInternal),
@@ -86,20 +77,20 @@ export const useChallengeRead = (
     challengeRead,
     totalVoters: Number(totalVoters),
     isLoadingChallenge,
-  };
-};
+  }
+}
 
 export type ChallengeContextWriteType = {
-  sendChallenge?: () => void;
-  isChallenging: boolean;
-  isErrorChallenging: boolean;
-  errorChallenging?: Error;
-  canVote?: boolean;
-  sendVote?: (vote: VoteOption) => void;
-  isVoting: boolean;
-  isErrorVoting: boolean;
-  errorVoting?: Error;
-  myVote?: number;
-  isSending: boolean;
-  isSuccess: boolean;
-};
+  sendChallenge?: () => void
+  isChallenging: boolean
+  isErrorChallenging: boolean
+  errorChallenging?: Error
+  canVote?: boolean
+  sendVote?: (vote: VoteOption) => void
+  isVoting: boolean
+  isErrorVoting: boolean
+  errorVoting?: Error
+  myVote?: number
+  isSending: boolean
+  isSuccess: boolean
+}

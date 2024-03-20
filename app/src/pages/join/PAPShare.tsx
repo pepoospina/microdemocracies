@@ -1,37 +1,37 @@
-import { Box, Spinner } from 'grommet';
-import { Send, StatusGood } from 'grommet-icons';
-import { useTranslation } from 'react-i18next';
+import { Box, Spinner } from 'grommet'
+import { Send, StatusGood } from 'grommet-icons'
+import { useTranslation } from 'react-i18next'
 
-import { AppQRCode } from '../../components/AppQRCode';
+import { AppQRCode } from '../../components/AppQRCode'
 
-import { useProjectContext } from '../../contexts/ProjectContext';
-import { useCopyToClipboard } from '../../utils/copy.clipboard';
-import { AppButton } from '../../ui-components';
-import { RouteNames } from '../../route.names';
+import { useProjectContext } from '../../contexts/ProjectContext'
+import { useCopyToClipboard } from '../../utils/copy.clipboard'
+import { AppButton } from '../../ui-components'
+import { RouteNames } from '../../route.names'
 
 export interface IPAPShare {
-  cid?: string;
+  cid?: string
 }
 
 export const PAPShare = (props: IPAPShare) => {
-  const cid = props.cid;
-  const { t } = useTranslation();
+  const cid = props.cid
+  const { t } = useTranslation()
 
-  const { projectId } = useProjectContext();
+  const { projectId } = useProjectContext()
 
-  const { copy, copied } = useCopyToClipboard();
+  const { copy, copied } = useCopyToClipboard()
 
   const share = () => {
-    const link = `${window.origin}/p/${projectId}/${RouteNames.Invite}/${cid}`;
+    const link = `${window.origin}/p/${projectId}/${RouteNames.Invite}/${cid}`
     if (navigator.share) {
       navigator.share({
         url: link,
         text: t('askJoin'),
-      });
+      })
     } else {
-      copy(link);
+      copy(link)
     }
-  };
+  }
 
   return (
     <Box fill pad="large" justify="center">
@@ -45,7 +45,8 @@ export const PAPShare = (props: IPAPShare) => {
               reverse
               primary
               style={{ marginLeft: '12px', width: '100%' }}
-              label={copied ? 'link copied!' : 'share'}></AppButton>
+              label={copied ? 'link copied!' : 'share'}
+            ></AppButton>
           </Box>
         </Box>
       ) : (
@@ -54,5 +55,5 @@ export const PAPShare = (props: IPAPShare) => {
         </Box>
       )}
     </Box>
-  );
-};
+  )
+}

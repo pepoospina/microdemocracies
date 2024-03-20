@@ -1,14 +1,14 @@
-import { DropButtonExtendedProps, DropButton, Box } from 'grommet';
-import { useState, useEffect } from 'react';
+import { DropButtonExtendedProps, DropButton, Box } from 'grommet'
+import { useState, useEffect } from 'react'
 
 export const AppTip = (props: DropButtonExtendedProps) => {
-  const [hovering, setHovering] = useState<boolean>(false);
-  const [hoveringDrop, setHoveringDrop] = useState<boolean>(false);
+  const [hovering, setHovering] = useState<boolean>(false)
+  const [hoveringDrop, setHoveringDrop] = useState<boolean>(false)
 
-  const [open, setOpen] = useState<boolean>(false);
-  const [timer, setTimer] = useState<NodeJS.Timeout>();
+  const [open, setOpen] = useState<boolean>(false)
+  const [timer, setTimer] = useState<NodeJS.Timeout>()
 
-  const timeout = 200;
+  const timeout = 200
 
   useEffect(() => {
     // console.log(`useEffect`, { hovering, hoveringDrop });
@@ -16,27 +16,27 @@ export const AppTip = (props: DropButtonExtendedProps) => {
     if (hovering || hoveringDrop) {
       if (timer) {
         // console.log(`clearTimeout`, clearTimeout);
-        clearTimeout(timer);
+        clearTimeout(timer)
       }
 
-      setOpen(true);
+      setOpen(true)
     }
 
     if (!hovering && !hoveringDrop) {
       if (timer) {
         // console.log(`clearTimeout`, clearTimeout);
-        clearTimeout(timer);
+        clearTimeout(timer)
       }
 
       const t = setTimeout(() => {
-        setOpen(false);
-        clearTimeout(timer);
-      }, timeout);
+        setOpen(false)
+        clearTimeout(timer)
+      }, timeout)
 
-      setTimer(t);
+      setTimer(t)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [hovering, hoveringDrop]);
+  }, [hovering, hoveringDrop])
 
   return (
     <DropButton
@@ -58,8 +58,9 @@ export const AppTip = (props: DropButtonExtendedProps) => {
           style: { borderRadius: '20px', maxWidth: '280px' },
           ...props.dropProps,
         } as any
-      }>
+      }
+    >
       {props.children}
     </DropButton>
-  );
-};
+  )
+}

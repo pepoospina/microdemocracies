@@ -1,26 +1,26 @@
-import { Box } from 'grommet';
-import { useState, useRef, useEffect } from 'react';
+import { Box } from 'grommet'
+import { useState, useRef, useEffect } from 'react'
 
-import { AppButton } from './AppButton';
-import { IElement } from '../components/app';
+import { AppButton } from './AppButton'
+import { IElement } from '../components/app'
 
 interface IExpansibleParagraph extends IElement {
-  maxHeight: number;
+  maxHeight: number
 }
 
 export const ExpansiveParagraph = (props: IExpansibleParagraph): JSX.Element => {
-  const [parHeight, setParHeight] = useState(0);
-  const [expanded, setExpanded] = useState(false);
+  const [parHeight, setParHeight] = useState(0)
+  const [expanded, setExpanded] = useState(false)
 
-  const ref = useRef<HTMLParagraphElement>(null);
+  const ref = useRef<HTMLParagraphElement>(null)
 
   useEffect(() => {
     if (ref !== null && ref.current !== null) {
-      setParHeight(ref.current.clientHeight);
+      setParHeight(ref.current.clientHeight)
     }
-  }, []);
+  }, [])
 
-  const showExpand = parHeight > props.maxHeight;
+  const showExpand = parHeight > props.maxHeight
 
   return (
     <Box
@@ -29,7 +29,8 @@ export const ExpansiveParagraph = (props: IExpansibleParagraph): JSX.Element => 
         overflow: 'hidden',
         position: 'relative',
         width: '100%',
-      }}>
+      }}
+    >
       <p ref={ref} style={{ width: '100%', lineHeight: '200%', paddingBottom: '24px' }}>
         {props.children}
       </p>
@@ -54,12 +55,13 @@ export const ExpansiveParagraph = (props: IExpansibleParagraph): JSX.Element => 
                 ? 'none'
                 : 'linear-gradient(to bottom, rgb(255, 255, 255, 0), rgb(255, 255, 255, 1), rgb(255, 255, 255, 1))'
             }`,
-          }}>
+          }}
+        >
           <AppButton>{expanded ? 'Show-less' : 'Show-more'}</AppButton>
         </div>
       ) : (
         <></>
       )}
     </Box>
-  );
-};
+  )
+}

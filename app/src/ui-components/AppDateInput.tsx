@@ -1,4 +1,4 @@
-import { DateInputExtendedProps, DateInput } from 'grommet';
+import { DateInputExtendedProps, DateInput } from 'grommet'
 
 export const AppDateInput = (props: DateInputExtendedProps) => {
   return (
@@ -10,6 +10,7 @@ export const AppDateInput = (props: DateInputExtendedProps) => {
       }}
       inputProps={{ style: { fontWeight: 'normal' } }}
       format="mm/dd/yyyy"
-      {...props}></DateInput>
-  );
-};
+      {...props}
+    ></DateInput>
+  )
+}

@@ -1,12 +1,12 @@
-import { Box, Text } from 'grommet';
-import { StatusGood } from 'grommet-icons';
-import { AppButton, AppHeading } from '../../ui-components';
-import { useResponsive, useThemeContext } from '../../components/app';
-import { useEffect, useState } from 'react';
-import { PlatformDetails, platforms } from '../../utils/platforms';
-import { PlatformId, SelectedDetails } from '../../types';
-import { t } from 'i18next';
-import { cap as cap } from '../../utils/general';
+import { Box, Text } from 'grommet'
+import { StatusGood } from 'grommet-icons'
+import { AppButton, AppHeading } from '../../ui-components'
+import { useResponsive, useThemeContext } from '../../components/app'
+import { useEffect, useState } from 'react'
+import { PlatformDetails, platforms } from '../../utils/platforms'
+import { PlatformId, SelectedDetails } from '../../types'
+import { t } from 'i18next'
+import { cap as cap } from '../../utils/general'
 
 const detailsInit: SelectedDetails = {
   personal: {
@@ -29,7 +29,7 @@ const detailsInit: SelectedDetails = {
     [PlatformId.Discord]: false,
     [PlatformId.Custom]: false,
   },
-};
+}
 
 enum Options {
   NameAndLastame = 'NameAndLastame',
@@ -38,62 +38,62 @@ enum Options {
 }
 
 export const DetailsSelector = (props: { onChanged: (seleted: SelectedDetails) => void }) => {
-  const { constants } = useThemeContext();
-  const { mobile } = useResponsive();
+  const { constants } = useThemeContext()
+  const { mobile } = useResponsive()
 
-  const [details, setDetails] = useState<SelectedDetails>(detailsInit);
-  const [showSelectPlatform, setShowSelectPlatform] = useState<boolean>(false);
+  const [details, setDetails] = useState<SelectedDetails>(detailsInit)
+  const [showSelectPlatform, setShowSelectPlatform] = useState<boolean>(false)
 
-  const nameAndLastname = details.personal.firstName && details.personal.lastName;
+  const nameAndLastname = details.personal.firstName && details.personal.lastName
   const platformSelected = Object.keys(details.platform).reduce((selected: boolean, platformId) => {
-    return details.platform[platformId as PlatformId] || selected;
-  }, false);
+    return details.platform[platformId as PlatformId] || selected
+  }, false)
 
   const platformsSelected = Object.keys(details.platform).reduce((selected: string[], platformId) => {
     if (details.platform[platformId as PlatformId]) {
-      selected.push((platforms[platformId as PlatformId] as PlatformDetails).name);
+      selected.push((platforms[platformId as PlatformId] as PlatformDetails).name)
     }
-    return selected;
-  }, []);
-  const platformsSelectedText = platformsSelected.length ? platformsSelected.join(` ${t('and')} `) : t('social');
+    return selected
+  }, [])
+  const platformsSelectedText = platformsSelected.length ? platformsSelected.join(` ${t('and')} `) : t('social')
 
   useEffect(() => {
     if (props.onChanged) {
-      props.onChanged(details);
+      props.onChanged(details)
     }
-  }, [details, props.onChanged]);
+  }, [details, props.onChanged])
 
   const select = (option: Options) => {
     if (option === Options.NameAndLastame) {
       if (nameAndLastname) {
-        details.personal.firstName = false;
-        details.personal.lastName = false;
+        details.personal.firstName = false
+        details.personal.lastName = false
       } else {
-        details.personal.firstName = true;
-        details.personal.lastName = true;
+        details.personal.firstName = true
+        details.personal.lastName = true
       }
     }
 
     if (option === Options.IDNumber) {
       if (details.personal.nationalID) {
-        if (!details.personal.lastName) details.personal.firstName = false;
-        details.personal.nationalID = !details.personal.nationalID;
+        if (!details.personal.lastName) details.personal.firstName = false
+        details.personal.nationalID = !details.personal.nationalID
       } else {
-        if (details.personal.lastName) details.personal.firstName = true;
-        details.personal.nationalID = !details.personal.nationalID;
+        if (details.personal.lastName) details.personal.firstName = true
+        details.personal.nationalID = !details.personal.nationalID
       }
     }
 
-    setDetails({ ...details });
-  };
+    setDetails({ ...details })
+  }
 
   const togglePlatform = (platformId: PlatformId) => {
-    details.platform[platformId] = !details.platform[platformId];
-    setDetails({ ...details });
-    setShowSelectPlatform(false);
-  };
+    details.platform[platformId] = !details.platform[platformId]
+    setDetails({ ...details })
+    setShowSelectPlatform(false)
+  }
 
-  const idNumberStr = mobile ? t('IDNumber') : t('IDNumberLong');
+  const idNumberStr = mobile ? t('IDNumber') : t('IDNumberLong')
 
   return (
     <>
@@ -106,7 +106,8 @@ export const DetailsSelector = (props: { onChanged: (seleted: SelectedDetails) =
           <AppButton
             primary={nameAndLastname}
             label={t('nameAndLastName')}
-            onClick={() => select(Options.NameAndLastame)}></AppButton>
+            onClick={() => select(Options.NameAndLastame)}
+          ></AppButton>
         </Box>
         <Box justify="center" style={{ marginLeft: '12px', width: '40px', height: '40px' }}>
           {nameAndLastname ? <StatusGood color={constants.colors.primary} size={'40px'}></StatusGood> : <></>}
@@ -118,7 +119,8 @@ export const DetailsSelector = (props: { onChanged: (seleted: SelectedDetails) =
           <AppButton
             primary={platformSelected}
             label={showSelectPlatform ? t('hideList') : `${platformsSelectedText}`}
-            onClick={() => setShowSelectPlatform(!showSelectPlatform)}></AppButton>
+            onClick={() => setShowSelectPlatform(!showSelectPlatform)}
+          ></AppButton>
         </Box>
         <Box justify="center" style={{ marginLeft: '12px', width: '40px', height: '40px' }}>
           {platformSelected ? <StatusGood color={constants.colors.primary} size={'40px'}></StatusGood> : <></>}
@@ -137,9 +139,10 @@ export const DetailsSelector = (props: { onChanged: (seleted: SelectedDetails) =
                     <AppButton
                       primary={details.platform[platformID as PlatformId]}
                       label={(platforms[platformID as PlatformId] as PlatformDetails).name}
-                      onClick={() => togglePlatform(platformID as PlatformId)}></AppButton>
+                      onClick={() => togglePlatform(platformID as PlatformId)}
+                    ></AppButton>
                   </Box>
-                );
+                )
               })}
             </Box>
           </>
@@ -153,7 +156,8 @@ export const DetailsSelector = (props: { onChanged: (seleted: SelectedDetails) =
           <AppButton
             primary={details.personal.nationalID}
             label={idNumberStr}
-            onClick={() => select(Options.IDNumber)}></AppButton>
+            onClick={() => select(Options.IDNumber)}
+          ></AppButton>
         </Box>
         <Box justify="center" style={{ marginLeft: '12px', width: '40px', height: '40px' }}>
           {details.personal.nationalID ? (
@@ -164,5 +168,5 @@ export const DetailsSelector = (props: { onChanged: (seleted: SelectedDetails) =
         </Box>
       </Box>
     </>
-  );
-};
+  )
+}

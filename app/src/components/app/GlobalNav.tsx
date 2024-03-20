@@ -1,13 +1,13 @@
-import { Box, Text } from 'grommet';
-import { useNavigate } from 'react-router-dom';
+import { Box, Text } from 'grommet'
+import { useNavigate } from 'react-router-dom'
 
-import { AbsoluteRoutes } from '../../route.names';
-import { AppButton } from '../../ui-components';
-import { SetPageTitleType } from './AppContainer';
-import { ConnectedUser } from './ConnectedUser';
+import { AbsoluteRoutes } from '../../route.names'
+import { AppButton } from '../../ui-components'
+import { SetPageTitleType } from './AppContainer'
+import { ConnectedUser } from './ConnectedUser'
 
 export const GlobalNav = (props: { title?: SetPageTitleType }) => {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
   const title = (() => {
     return (
       <Box>
@@ -15,19 +15,17 @@ export const GlobalNav = (props: { title?: SetPageTitleType }) => {
           <Text size="small">{props.title?.prefix}</Text>
         </Box>
         <Box>
-          <Text
-            size="large"
-            style={{ fontWeight: 'bold', textTransform: 'uppercase' }}>
+          <Text size="large" style={{ fontWeight: 'bold', textTransform: 'uppercase' }}>
             {props.title?.main}
           </Text>
         </Box>
       </Box>
-    );
-  })();
+    )
+  })()
 
   const titleClicked = () => {
-    navigate(AbsoluteRoutes.App);
-  };
+    navigate(AbsoluteRoutes.App)
+  }
 
   return (
     <Box direction="row" justify="between" align="center">
@@ -36,5 +34,5 @@ export const GlobalNav = (props: { title?: SetPageTitleType }) => {
       </AppButton>
       <ConnectedUser></ConnectedUser>
     </Box>
-  );
-};
+  )
+}

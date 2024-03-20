@@ -1,40 +1,40 @@
-import { Anchor, AnchorExtendedProps } from 'grommet';
-import { useTranslation } from 'react-i18next';
+import { Anchor, AnchorExtendedProps } from 'grommet'
+import { useTranslation } from 'react-i18next'
 
-import { useConnectedMember } from '../../contexts/ConnectedAccountContext';
-import { useMember } from '../../contexts/MemberContext';
-import { LoadingDiv } from '../../ui-components/LoadingDiv';
-import { getPapShortname } from '../../utils/pap';
-import { useNavigate, useParams } from 'react-router-dom';
-import { AbsoluteRoutes } from '../../route.names';
+import { useConnectedMember } from '../../contexts/ConnectedAccountContext'
+import { useMember } from '../../contexts/MemberContext'
+import { LoadingDiv } from '../../ui-components/LoadingDiv'
+import { getPapShortname } from '../../utils/pap'
+import { useNavigate, useParams } from 'react-router-dom'
+import { AbsoluteRoutes } from '../../route.names'
 
 export const MemberAnchor = (props: { tokenId: number } & AnchorExtendedProps) => {
-  const { projectId } = useParams();
-  const navigate = useNavigate();
-  const { t } = useTranslation();
-  const { tokenId } = props;
-  const { tokenId: connectedTokenId } = useConnectedMember();
+  const { projectId } = useParams()
+  const navigate = useNavigate()
+  const { t } = useTranslation()
+  const { tokenId } = props
+  const { tokenId: connectedTokenId } = useConnectedMember()
 
-  const isLoggedMember = tokenId && connectedTokenId ? tokenId === connectedTokenId : false;
+  const isLoggedMember = tokenId && connectedTokenId ? tokenId === connectedTokenId : false
 
-  const { accountPap: memberPap } = useMember({ tokenId });
+  const { accountPap: memberPap } = useMember({ tokenId })
 
   if (!memberPap) {
-    return <LoadingDiv></LoadingDiv>;
+    return <LoadingDiv></LoadingDiv>
   }
 
-  const tag = getPapShortname(memberPap.object);
+  const tag = getPapShortname(memberPap.object)
 
   const goToMemberPage = () => {
     if (projectId) {
-      navigate(AbsoluteRoutes.ProjectMember(projectId, tokenId.toString()));
+      navigate(AbsoluteRoutes.ProjectMember(projectId, tokenId.toString()))
     }
-  };
+  }
 
   return (
     <Anchor style={{ marginRight: '5px', ...props.style }} onClick={() => goToMemberPage()}>
       {tag}
       {isLoggedMember ? ` (${t('you')})` : ''}
     </Anchor>
-  );
-};
+  )
+}

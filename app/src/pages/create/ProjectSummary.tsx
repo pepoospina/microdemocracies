@@ -1,18 +1,18 @@
-import { Box, Text } from 'grommet';
-import { StatementEditable } from '../voice/StatementEditable';
-import { DetailsSelectedSummary } from './DetailsSelectedSummary';
-import { AppCard, AppHeading } from '../../ui-components';
-import { PAP, SelectedDetails } from '../../types';
-import { AccountPerson } from '../account/AccountPerson';
-import { useTranslation } from 'react-i18next';
+import { Box, Text } from 'grommet'
+import { StatementEditable } from '../voice/StatementEditable'
+import { DetailsSelectedSummary } from './DetailsSelectedSummary'
+import { AppCard, AppHeading } from '../../ui-components'
+import { PAP, SelectedDetails } from '../../types'
+import { AccountPerson } from '../account/AccountPerson'
+import { useTranslation } from 'react-i18next'
 
 export const ProjectSummary = (props: {
-  whatStatement?: string;
-  whoStatement?: string;
-  selectedDetails?: SelectedDetails;
-  founderPap?: PAP;
+  whatStatement?: string
+  whoStatement?: string
+  selectedDetails?: SelectedDetails
+  founderPap?: PAP
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation()
 
   return (
     <Box>
@@ -47,5 +47,5 @@ export const ProjectSummary = (props: {
         <AccountPerson cardStyle={{ margin: '16px 0px 32px 0px' }} pap={props.founderPap}></AccountPerson>
       </Box>
     </Box>
-  );
-};
+  )
+}

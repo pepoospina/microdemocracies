@@ -1,141 +1,137 @@
-import { isAddress } from 'ethers/lib/utils';
-import { Box, Text } from 'grommet';
-import { useEffect, useState } from 'react';
-import React from 'react';
-import { useTranslation } from 'react-i18next';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { isAddress } from 'ethers/lib/utils'
+import { Box, Text } from 'grommet'
+import { useEffect, useState } from 'react'
+import React from 'react'
+import { useTranslation } from 'react-i18next'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 
-import { AppConnectWidget } from '../../components/app/AppConnectButton';
-import { useAppContainer } from '../../components/app/AppContainer';
-import { ViewportPage } from '../../components/app/Viewport';
-import { useProjectContext } from '../../contexts/ProjectContext';
-import { AbsoluteRoutes } from '../../route.names';
-import { DetailsAndPlatforms, PAP } from '../../types';
-import { AppCard } from '../../ui-components';
-import { BoxCentered } from '../../ui-components/BoxCentered';
-import { postApply } from '../../utils/project';
-import { SelectedDetailsHelper } from '../../utils/select.details';
-import { putObject } from '../../utils/store';
-import { useAccountContext } from '../../wallet/AccountContext';
-import { AppBottomButtons } from '../common/BottomButtons';
-import { Loading } from '../common/Loading';
-import { StatementEditable } from '../voice/StatementEditable';
-import { DetailsForm } from './DetailsForm';
-import { PAPEntry } from './PAPEntry';
-import { PAPShare } from './PAPShare';
+import { AppConnectWidget } from '../../components/app/AppConnectButton'
+import { useAppContainer } from '../../components/app/AppContainer'
+import { ViewportPage } from '../../components/app/Viewport'
+import { useProjectContext } from '../../contexts/ProjectContext'
+import { AbsoluteRoutes } from '../../route.names'
+import { DetailsAndPlatforms, PAP } from '../../types'
+import { AppCard } from '../../ui-components'
+import { BoxCentered } from '../../ui-components/BoxCentered'
+import { postApply } from '../../utils/project'
+import { SelectedDetailsHelper } from '../../utils/select.details'
+import { putObject } from '../../utils/store'
+import { useAccountContext } from '../../wallet/AccountContext'
+import { AppBottomButtons } from '../common/BottomButtons'
+import { Loading } from '../common/Loading'
+import { StatementEditable } from '../voice/StatementEditable'
+import { DetailsForm } from './DetailsForm'
+import { PAPEntry } from './PAPEntry'
+import { PAPShare } from './PAPShare'
 
 export interface IJoinProps {
-  dum?: any;
+  dum?: any
 }
 
 export const JoinPage = () => {
-  const navigate = useNavigate();
-  const { t, i18n } = useTranslation();
+  const navigate = useNavigate()
+  const { t, i18n } = useTranslation()
 
-  const { project, projectId } = useProjectContext();
-  const [pageIx, setPageIx] = useState<number>(0);
-  const [sending, setSending] = useState<boolean>(false);
-  const [searchParams] = useSearchParams();
-  const invitation = searchParams.get('invitation');
+  const { project, projectId } = useProjectContext()
+  const [pageIx, setPageIx] = useState<number>(0)
+  const [sending, setSending] = useState<boolean>(false)
+  const [searchParams] = useSearchParams()
+  const invitation = searchParams.get('invitation')
 
-  const { aaAddress: account } = useAccountContext();
+  const { aaAddress: account } = useAccountContext()
 
-  const [personal, setPersonal] = useState<DetailsAndPlatforms>({});
+  const [personal, setPersonal] = useState<DetailsAndPlatforms>({})
 
-  const [pap, setPap] = useState<PAP>();
-  const [cid, setCid] = useState<string>();
+  const [pap, setPap] = useState<PAP>()
+  const [cid, setCid] = useState<string>()
 
-  const askPlatform = SelectedDetailsHelper.hasPlatforms(
-    project?.selectedDetails
-  );
-  const askPersonal = SelectedDetailsHelper.hasPersonal(
-    project?.selectedDetails
-  );
+  const askPlatform = SelectedDetailsHelper.hasPlatforms(project?.selectedDetails)
+  const askPersonal = SelectedDetailsHelper.hasPersonal(project?.selectedDetails)
 
-  const { setTitle } = useAppContainer();
+  const { setTitle } = useAppContainer()
 
   useEffect(() => {
     switch (pageIx) {
       case 0:
-        setTitle({ prefix: t('joinA'), main: t('project') });
-        break;
+        setTitle({ prefix: t('joinA'), main: t('project') })
+        break
 
       case 1:
         setTitle({
           prefix: t('personalDetailsPre'),
           main: t('personalDetailsMain'),
-        });
-        break;
+        })
+        break
 
       case 2:
         setTitle({
           prefix: t('reviewApplicationPre'),
           main: t('reviewApplicationMain'),
-        });
-        break;
+        })
+        break
 
       case 3:
         setTitle({
           prefix: t('applicationSentPre'),
           main: t('applicationSentMain'),
-        });
-        break;
+        })
+        break
     }
-  }, [pageIx, i18n.language]);
+  }, [pageIx, i18n.language])
 
   const review = async () => {
     if (account === undefined || !isAddress(account)) {
-      throw new Error('Account not defined');
+      throw new Error('Account not defined')
     }
 
     setPap({
       person: personal,
       account,
-    });
+    })
 
-    nextPage();
-  };
+    nextPage()
+  }
 
-  const haveDetails = askPersonal || askPlatform;
+  const haveDetails = askPersonal || askPlatform
 
   const nextPage = () => {
     if (pageIx + 1 < pages.length) {
       if (pageIx === 0 && !haveDetails) {
-        setPageIx(pageIx + 2);
+        setPageIx(pageIx + 2)
       }
-      setPageIx(pageIx + 1);
+      setPageIx(pageIx + 1)
     }
-  };
+  }
 
   const prevPage = () => {
     if (pageIx - 1 >= 0) {
       if (pageIx === 2 && !haveDetails) {
-        setPageIx(pageIx - 2);
+        setPageIx(pageIx - 2)
       }
-      setPageIx(pageIx - 1);
+      setPageIx(pageIx - 1)
     }
-  };
+  }
 
   const send = async () => {
     if (pap) {
-      setSending(true);
-      const papEntity = await putObject<PAP>(pap);
+      setSending(true)
+      const papEntity = await putObject<PAP>(pap)
 
-      setCid(papEntity.cid);
+      setCid(papEntity.cid)
 
       if (invitation && projectId) {
         const application = {
           projectId,
           invitationId: invitation,
           papEntity,
-        };
-        await postApply(application);
+        }
+        await postApply(application)
       }
 
-      setSending(false);
-      nextPage();
+      setSending(false)
+      nextPage()
     }
-  };
+  }
 
   const pages: React.ReactNode[] = [
     <ViewportPage
@@ -146,8 +142,7 @@ export const JoinPage = () => {
             <Box margin={{ bottom: 'small' }}>
               <Text>{t('whoTitle')}:</Text>
             </Box>
-            <StatementEditable
-              value={project?.whoStatement}></StatementEditable>
+            <StatementEditable value={project?.whoStatement}></StatementEditable>
           </Box>
           <Box pad="large" style={{ flexShrink: 0 }} align="center">
             <AppConnectWidget></AppConnectWidget>
@@ -159,25 +154,22 @@ export const JoinPage = () => {
           left={{
             label: 'home',
             primary: false,
-            action: () =>
-              navigate(
-                AbsoluteRoutes.ProjectHome(projectId?.toString() as string)
-              ),
+            action: () => navigate(AbsoluteRoutes.ProjectHome(projectId?.toString() as string)),
           }}
           right={{
             label: 'next',
             primary: true,
             action: nextPage,
-          }}></AppBottomButtons>
-      }></ViewportPage>,
+          }}
+        ></AppBottomButtons>
+      }
+    ></ViewportPage>,
 
     <ViewportPage
       key="3"
       content={
         <Box pad="large">
-          <DetailsForm
-            selected={project?.selectedDetails}
-            onChange={(d) => setPersonal(d)}></DetailsForm>
+          <DetailsForm selected={project?.selectedDetails} onChange={(d) => setPersonal(d)}></DetailsForm>
         </Box>
       }
       nav={
@@ -189,8 +181,10 @@ export const JoinPage = () => {
             primary: true,
             action: review,
             disabled: !account,
-          }}></AppBottomButtons>
-      }></ViewportPage>,
+          }}
+        ></AppBottomButtons>
+      }
+    ></ViewportPage>,
     <ViewportPage
       key="4"
       content={
@@ -214,8 +208,10 @@ export const JoinPage = () => {
             label: t('send'),
             primary: true,
             action: send,
-          }}></AppBottomButtons>
-      }></ViewportPage>,
+          }}
+        ></AppBottomButtons>
+      }
+    ></ViewportPage>,
     <ViewportPage
       key="5"
       content={
@@ -233,19 +229,15 @@ export const JoinPage = () => {
           right={{
             label: t('done'),
             primary: true,
-            action: () =>
-              navigate(
-                AbsoluteRoutes.ProjectHome(projectId?.toString() as string)
-              ),
-          }}></AppBottomButtons>
-      }></ViewportPage>,
-  ];
+            action: () => navigate(AbsoluteRoutes.ProjectHome(projectId?.toString() as string)),
+          }}
+        ></AppBottomButtons>
+      }
+    ></ViewportPage>,
+  ]
 
   return (
-    <Box
-      justify="start"
-      align="center"
-      style={{ height: '100vh', width: '100%' }}>
+    <Box justify="start" align="center" style={{ height: '100vh', width: '100%' }}>
       {pages.map((page, ix) => {
         return (
           <div
@@ -254,11 +246,12 @@ export const JoinPage = () => {
               height: '100%',
               width: '100%',
               display: pageIx === ix ? 'block' : 'none',
-            }}>
+            }}
+          >
             {page}
           </div>
-        );
+        )
       })}
     </Box>
-  );
-};
+  )
+}

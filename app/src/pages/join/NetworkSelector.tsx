@@ -1,34 +1,34 @@
-import { Box } from 'grommet';
-import { AppButton, AppFormField, AppInput, AppSelect, FieldLabel, TwoColumns } from '../../ui-components';
-import { useState } from 'react';
-import { PlatformAccount, PlatformId } from '../../types';
-import { platforms } from '../../utils/platforms';
+import { Box } from 'grommet'
+import { AppButton, AppFormField, AppInput, AppSelect, FieldLabel, TwoColumns } from '../../ui-components'
+import { useState } from 'react'
+import { PlatformAccount, PlatformId } from '../../types'
+import { platforms } from '../../utils/platforms'
 
 export interface INetworkSelector {
-  onSelected: (user: PlatformAccount) => void;
+  onSelected: (user: PlatformAccount) => void
 }
 
 export const NetworkSelector = (props: INetworkSelector) => {
-  const [platform, setPlatform] = useState<PlatformId>();
-  const [username, _setUsername] = useState<string>('');
+  const [platform, setPlatform] = useState<PlatformId>()
+  const [username, _setUsername] = useState<string>('')
 
   const setNetworkSelected = (_network: PlatformId) => {
-    setPlatform(_network);
-  };
+    setPlatform(_network)
+  }
 
   const setUsername = (_username: string) => {
-    _setUsername(_username);
-  };
+    _setUsername(_username)
+  }
 
   const addAccount = () => {
-    if (!username || !platform) return;
-    _setUsername('');
+    if (!username || !platform) return
+    _setUsername('')
 
     props.onSelected({
       platform,
       username,
-    });
-  };
+    })
+  }
 
   return (
     <Box style={{ flexShrink: 0 }}>
@@ -44,9 +44,10 @@ export const NetworkSelector = (props: INetworkSelector) => {
                 )
               }
               onChange={(e) => setNetworkSelected(e.target.value)}
-              options={Object.keys(platforms)}>
+              options={Object.keys(platforms)}
+            >
               {(option: PlatformId) => {
-                return <Box style={{ padding: '8px 12px' }}>{platforms[option]?.name}</Box>;
+                return <Box style={{ padding: '8px 12px' }}>{platforms[option]?.name}</Box>
               }}
             </AppSelect>
           </AppFormField>
@@ -63,8 +64,9 @@ export const NetworkSelector = (props: INetworkSelector) => {
           primary
           style={{ width: '200px' }}
           onClick={() => addAccount()}
-          disabled={!username || !platform}></AppButton>
+          disabled={!username || !platform}
+        ></AppButton>
       </Box>
     </Box>
-  );
-};
+  )
+}

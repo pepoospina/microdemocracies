@@ -1,5 +1,5 @@
-import i18n from 'i18next';
-import { initReactI18next } from 'react-i18next';
+import i18n from 'i18next'
+import { initReactI18next } from 'react-i18next'
 
 i18n.use(initReactI18next).init({
   resources: {
@@ -297,7 +297,7 @@ i18n.use(initReactI18next).init({
         pendingApplicationBy: 'Solicitud de miembro por parte de {{by}}',
         votedNofMEligible: 'Han votado: {{nVoted}} de {{totalVoters}} miembros con derecho a voto',
         preparingData: 'Preparando los datos a enviar a la red...',
-        approvingNewMember: 'Aprobando a un nuevo miembro'
+        approvingNewMember: 'Aprobando a un nuevo miembro',
       },
     },
     CAT: {
@@ -454,6 +454,6 @@ i18n.use(initReactI18next).init({
   interpolation: {
     escapeValue: false,
   },
-});
+})
 
-export { i18n };
+export { i18n }

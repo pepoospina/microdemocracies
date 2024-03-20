@@ -1,15 +1,15 @@
-import { BoxExtendedProps, Box, Text } from 'grommet';
-import { useThemeContext } from '../components/app';
+import { BoxExtendedProps, Box, Text } from 'grommet'
+import { useThemeContext } from '../components/app'
 
 interface INumberedRow extends BoxExtendedProps {
-  number: number;
-  text: React.ReactNode;
-  disabled?: boolean;
-  hideLine?: boolean;
+  number: number
+  text: React.ReactNode
+  disabled?: boolean
+  hideLine?: boolean
 }
 
 export const NumberedRow = (props: INumberedRow): JSX.Element => {
-  const { constants } = useThemeContext();
+  const { constants } = useThemeContext()
 
   return (
     <Box direction="row" style={{ ...props.style }}>
@@ -23,7 +23,8 @@ export const NumberedRow = (props: INumberedRow): JSX.Element => {
             backgroundColor: props.disabled ? constants.colors.primaryLight : constants.colors.backgroundLight,
             color: props.disabled ? '#6D6D6D' : constants.colors.primary,
             textAlign: 'center',
-          }}>
+          }}
+        >
           {props.number}
         </Box>
         <Box fill style={{ padding: '8px 0px' }} align="center">
@@ -35,7 +36,8 @@ export const NumberedRow = (props: INumberedRow): JSX.Element => {
               style={{
                 width: '1px',
                 backgroundColor: '#ccc',
-              }}></Box>
+              }}
+            ></Box>
           )}
         </Box>
       </Box>
@@ -44,5 +46,5 @@ export const NumberedRow = (props: INumberedRow): JSX.Element => {
         <Box style={{ padding: '16px 0px 40px 0px' }}>{props.children}</Box>
       </Box>
     </Box>
-  );
-};
+  )
+}

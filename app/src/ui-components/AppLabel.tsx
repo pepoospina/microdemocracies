@@ -1,8 +1,8 @@
-import { BoxExtendedProps, Box } from 'grommet';
-import { useThemeContext } from '../components/app';
+import { BoxExtendedProps, Box } from 'grommet'
+import { useThemeContext } from '../components/app'
 
 export const AppLabel = (props: BoxExtendedProps): JSX.Element => {
-  const { constants } = useThemeContext();
+  const { constants } = useThemeContext()
 
   return (
     <Box
@@ -12,8 +12,9 @@ export const AppLabel = (props: BoxExtendedProps): JSX.Element => {
         color: constants.colors.text,
         fontWeight: '700',
         ...props.style,
-      }}>
+      }}
+    >
       {props.children}
     </Box>
-  );
-};
+  )
+}

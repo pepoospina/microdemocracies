@@ -1,23 +1,24 @@
-import { Box, Spinner, Text } from 'grommet';
+import { Box, Spinner, Text } from 'grommet'
 
-import { IStatementEditable, StatementEditable } from './StatementEditable';
-import { Favorite } from 'grommet-icons';
-import { AppButton } from '../../ui-components/AppButton';
-import { CircleIndicator } from '../../components/app/CircleIndicator';
-import { useStatementContext } from '../../contexts/StatementContext';
+import { IStatementEditable, StatementEditable } from './StatementEditable'
+import { Favorite } from 'grommet-icons'
+import { AppButton } from '../../ui-components/AppButton'
+import { CircleIndicator } from '../../components/app/CircleIndicator'
+import { useStatementContext } from '../../contexts/StatementContext'
 
 export const StatementCard = (props: {
-  containerStyle?: React.CSSProperties;
-  statmentCardProps?: IStatementEditable;
+  containerStyle?: React.CSSProperties
+  statmentCardProps?: IStatementEditable
 }) => {
-  const { statement, nBacking, canBack, back, alreadyBacked } = useStatementContext();
+  const { statement, nBacking, canBack, back, alreadyBacked } = useStatementContext()
 
   return (
     <Box style={{ position: 'relative', flexShrink: 0, ...props.containerStyle }}>
       <StatementEditable
         {...props.statmentCardProps}
         value={statement?.statement}
-        containerStyle={{ paddingBottom: '22px' }}></StatementEditable>
+        containerStyle={{ paddingBottom: '22px' }}
+      ></StatementEditable>
       <Box
         direction="row"
         justify="end"
@@ -29,7 +30,8 @@ export const StatementCard = (props: {
           bottom: '-12px',
           left: '0px',
           width: '100%',
-        }}>
+        }}
+      >
         <CircleIndicator
           borderWidth="4px"
           icon={
@@ -38,7 +40,8 @@ export const StatementCard = (props: {
                 {nBacking !== undefined ? <b>{nBacking}</b> : <Spinner color="white"></Spinner>}
               </Text>
             </Box>
-          }></CircleIndicator>
+          }
+        ></CircleIndicator>
         <AppButton plain onClick={() => back()} disabled={!canBack}>
           <CircleIndicator
             size={48}
@@ -48,7 +51,8 @@ export const StatementCard = (props: {
               ) : (
                 <Favorite color="white" style={{ height: '20px' }} />
               )
-            }></CircleIndicator>
+            }
+          ></CircleIndicator>
         </AppButton>
 
         {alreadyBacked ? (
@@ -60,5 +64,5 @@ export const StatementCard = (props: {
         )}
       </Box>
     </Box>
-  );
-};
+  )
+}

@@ -1,9 +1,9 @@
-import { BoxExtendedProps, Text } from 'grommet';
+import { BoxExtendedProps, Text } from 'grommet'
 
-import { AppCard } from '../../ui-components';
+import { AppCard } from '../../ui-components'
 
 interface IAccountChallenge extends BoxExtendedProps {
-  cardStyle?: React.CSSProperties;
+  cardStyle?: React.CSSProperties
 }
 
 export const AccountCircles = (props: IAccountChallenge) => {
@@ -17,5 +17,5 @@ export const AccountCircles = (props: IAccountChallenge) => {
         <Text>Vouched Circle (soon)</Text>
       </AppCard>
     </>
-  );
-};
+  )
+}

@@ -1,5 +1,5 @@
-import { Box, BoxExtendedProps, Text } from 'grommet';
-import { AppCard } from '../../ui-components';
+import { Box, BoxExtendedProps, Text } from 'grommet'
+import { AppCard } from '../../ui-components'
 
 export const Intro = (props: BoxExtendedProps) => {
   return (
@@ -19,5 +19,5 @@ export const Intro = (props: BoxExtendedProps) => {
         </Text>
       </AppCard>
     </Box>
-  );
-};
+  )
+}

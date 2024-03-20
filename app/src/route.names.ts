@@ -13,7 +13,7 @@ export const RouteNames = {
   VoiceBase: 'v',
   VoicePropose: `propose`,
   VoiceStatement: `s`,
-};
+}
 
 export const AbsoluteRoutes = {
   App: '/',
@@ -21,4 +21,4 @@ export const AbsoluteRoutes = {
   ProjectHome: (projectId: string) => `/${RouteNames.ProjectHome}/${projectId}`,
   ProjectMember: (projectId: string, tokenId: string) =>
     `/${RouteNames.ProjectHome}/${projectId}/${RouteNames.Member}/${tokenId}`,
-};
+}

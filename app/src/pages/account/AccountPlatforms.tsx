@@ -1,23 +1,23 @@
-import { Box } from 'grommet';
-import { SubtractCircle } from 'grommet-icons';
-import { AppButton } from '../../ui-components';
-import { PlatformAccount } from '../../types';
-import { PlatformUrl } from './PlatformUrl';
-import { platforms } from '../../utils/platforms';
+import { Box } from 'grommet'
+import { SubtractCircle } from 'grommet-icons'
+import { AppButton } from '../../ui-components'
+import { PlatformAccount } from '../../types'
+import { PlatformUrl } from './PlatformUrl'
+import { platforms } from '../../utils/platforms'
 
 export interface IAccountPlatforms {
-  users?: PlatformAccount[];
-  remove?: (user: PlatformAccount) => void;
+  users?: PlatformAccount[]
+  remove?: (user: PlatformAccount) => void
 }
 
 export const AccountPlatforms = (props: IAccountPlatforms) => {
-  const users = props.users ? props.users : [];
+  const users = props.users ? props.users : []
 
   return (
     <Box>
       {users.map((user) => {
-        const platform = platforms[user.platform];
-        const platformName = platform ? platform.name : 'custom';
+        const platform = platforms[user.platform]
+        const platformName = platform ? platform.name : 'custom'
 
         return (
           <Box key={JSON.stringify(user)} direction="row" style={{ height: '50px', flexShrink: 0 }}>
@@ -31,8 +31,8 @@ export const AccountPlatforms = (props: IAccountPlatforms) => {
               <></>
             )}
           </Box>
-        );
+        )
       })}
     </Box>
-  );
-};
+  )
+}

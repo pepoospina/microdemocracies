@@ -1,48 +1,48 @@
-import { Box, DropButton, Spinner, Text } from 'grommet';
-import { Add, FormPrevious, Group, Menu, UserAdd } from 'grommet-icons';
-import { useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { Box, DropButton, Spinner, Text } from 'grommet'
+import { Add, FormPrevious, Group, Menu, UserAdd } from 'grommet-icons'
+import { useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
+import { useNavigate } from 'react-router-dom'
 
-import { useResponsive, useThemeContext } from '../../components/app';
-import { useAppContainer } from '../../components/app/AppContainer';
-import { CircleIndicator } from '../../components/app/CircleIndicator';
-import { ViewportPage } from '../../components/app/Viewport';
-import { CHAIN_ID } from '../../config/appConfig';
-import { useConnectedMember } from '../../contexts/ConnectedAccountContext';
-import { useProjectContext } from '../../contexts/ProjectContext';
-import { StatementContext } from '../../contexts/StatementContext';
-import { AbsoluteRoutes, RouteNames } from '../../route.names';
-import { Address, AppButton, AppCard, AppHeading } from '../../ui-components';
-import { BoxCentered } from '../../ui-components/BoxCentered';
-import { cap } from '../../utils/general';
-import { AppBottomButtons } from '../common/BottomButtons';
-import { Loading } from '../common/Loading';
-import { StatementCard } from '../voice/StatementCard';
-import { ProjectCard } from './ProjectCard';
+import { useResponsive, useThemeContext } from '../../components/app'
+import { useAppContainer } from '../../components/app/AppContainer'
+import { CircleIndicator } from '../../components/app/CircleIndicator'
+import { ViewportPage } from '../../components/app/Viewport'
+import { CHAIN_ID } from '../../config/appConfig'
+import { useConnectedMember } from '../../contexts/ConnectedAccountContext'
+import { useProjectContext } from '../../contexts/ProjectContext'
+import { StatementContext } from '../../contexts/StatementContext'
+import { AbsoluteRoutes, RouteNames } from '../../route.names'
+import { Address, AppButton, AppCard, AppHeading } from '../../ui-components'
+import { BoxCentered } from '../../ui-components/BoxCentered'
+import { cap } from '../../utils/general'
+import { AppBottomButtons } from '../common/BottomButtons'
+import { Loading } from '../common/Loading'
+import { StatementCard } from '../voice/StatementCard'
+import { ProjectCard } from './ProjectCard'
 
 export interface IProjectHome {
-  dum?: any;
+  dum?: any
 }
 
 export const ProjectHomePage = (props: IProjectHome) => {
-  const { t, i18n } = useTranslation();
-  const navigate = useNavigate();
-  const { project, nMembers, statements } = useProjectContext();
-  const { tokenId } = useConnectedMember();
-  const { mobile } = useResponsive();
-  const { setTitle } = useAppContainer();
-  const { constants } = useThemeContext();
+  const { t, i18n } = useTranslation()
+  const navigate = useNavigate()
+  const { project, nMembers, statements } = useProjectContext()
+  const { tokenId } = useConnectedMember()
+  const { mobile } = useResponsive()
+  const { setTitle } = useAppContainer()
+  const { constants } = useThemeContext()
 
   const leave = () => {
-    console.log('soon');
-  };
+    console.log('soon')
+  }
 
   useEffect(() => {
-    setTitle({ prefix: '', main: t('project') });
-  }, [i18n.language]);
+    setTitle({ prefix: '', main: t('project') })
+  }, [i18n.language])
 
-  const newStr = mobile ? cap(t('propose')) : cap(t('proposeNew'));
+  const newStr = mobile ? cap(t('propose')) : cap(t('proposeNew'))
 
   if (project === undefined) {
     return (
@@ -50,7 +50,7 @@ export const ProjectHomePage = (props: IProjectHome) => {
         <Text>{t('loadingProject')}</Text>
         <Spinner></Spinner>
       </BoxCentered>
-    );
+    )
   }
 
   if (project === null) {
@@ -60,21 +60,21 @@ export const ProjectHomePage = (props: IProjectHome) => {
           <Text>{t('projectNotFound')}</Text>
         </AppCard>
       </BoxCentered>
-    );
+    )
   }
 
   const goToStatement = (id: string) => {
-    navigate(`${RouteNames.VoiceBase}/${RouteNames.VoiceStatement}/${id}`);
-  };
+    navigate(`${RouteNames.VoiceBase}/${RouteNames.VoiceStatement}/${id}`)
+  }
 
   const statementsContent = (() => {
-    if (statements === undefined) return <Loading></Loading>;
+    if (statements === undefined) return <Loading></Loading>
     if (statements !== undefined && statements.length === 0) {
       return (
         <AppCard>
           <Text>{t('noStatements')}</Text>
         </AppCard>
-      );
+      )
     }
 
     return statements.map((statement) => {
@@ -85,19 +85,17 @@ export const ProjectHomePage = (props: IProjectHome) => {
               key={statement.id}
               statmentCardProps={{
                 onClick: () => goToStatement(statement.id),
-              }}></StatementCard>
+              }}
+            ></StatementCard>
           </StatementContext>
         </Box>
-      );
-    });
-  })();
+      )
+    })
+  })()
 
   const content = (() => {
     return (
-      <Box
-        style={{ overflowY: 'auto' }}
-        margin={{ bottom: 'medium' }}
-        pad={{ left: 'medium' }}>
+      <Box style={{ overflowY: 'auto' }} margin={{ bottom: 'medium' }} pad={{ left: 'medium' }}>
         <Box style={{ flexShrink: 0 }} pad={{ right: 'medium' }}>
           <Box margin={{ vertical: 'large' }}>
             <AppHeading level="3">{t('communityVoice')}:</AppHeading>
@@ -107,8 +105,8 @@ export const ProjectHomePage = (props: IProjectHome) => {
           {statementsContent}
         </Box>
       </Box>
-    );
-  })();
+    )
+  })()
 
   return (
     <ViewportPage
@@ -116,9 +114,7 @@ export const ProjectHomePage = (props: IProjectHome) => {
         <Box>
           <Box pad={{ horizontal: 'medium' }}>
             <Box style={{ position: 'relative', flexShrink: 0 }}>
-              <ProjectCard
-                project={project}
-                statementStyle={{ paddingBottom: '28px' }}></ProjectCard>
+              <ProjectCard project={project} statementStyle={{ paddingBottom: '28px' }}></ProjectCard>
               <Box
                 direction="row"
                 justify="end"
@@ -130,7 +126,8 @@ export const ProjectHomePage = (props: IProjectHome) => {
                   bottom: '-12px',
                   left: '0px',
                   width: '100%',
-                }}>
+                }}
+              >
                 <AppButton plain onClick={() => navigate(RouteNames.Members)}>
                   <CircleIndicator
                     forceCircle={false}
@@ -141,24 +138,20 @@ export const ProjectHomePage = (props: IProjectHome) => {
                         <Text
                           color={constants.colors.textOnPrimary}
                           style={{ fontWeight: 'bold' }}
-                          margin={{ left: 'small' }}>
+                          margin={{ left: 'small' }}
+                        >
                           ({nMembers})
                         </Text>
                       </>
-                    }></CircleIndicator>
+                    }
+                  ></CircleIndicator>
                 </AppButton>
-                <AppButton
-                  plain
-                  disabled={tokenId === undefined}
-                  onClick={() => navigate(RouteNames.Invite)}>
+                <AppButton plain disabled={tokenId === undefined} onClick={() => navigate(RouteNames.Invite)}>
                   <CircleIndicator
                     forceCircle={true}
                     size={54}
-                    icon={
-                      <UserAdd
-                        color={constants.colors.textOnPrimary}
-                        style={{ marginLeft: '5px' }}></UserAdd>
-                    }></CircleIndicator>
+                    icon={<UserAdd color={constants.colors.textOnPrimary} style={{ marginLeft: '5px' }}></UserAdd>}
+                  ></CircleIndicator>
                 </AppButton>
                 <DropButton
                   dropProps={{ style: { marginTop: '56px' } }}
@@ -166,31 +159,25 @@ export const ProjectHomePage = (props: IProjectHome) => {
                     <Box pad="20px" gap="small">
                       <Box margin={{ bottom: 'small' }}>
                         <Text>{cap(t('projectAddress'))}</Text>
-                        <Address
-                          addressType="token"
-                          address={project?.address}
-                          chainId={CHAIN_ID}></Address>
+                        <Address addressType="token" address={project?.address} chainId={CHAIN_ID}></Address>
                       </Box>
 
                       <AppButton
                         disabled
                         plain
                         onClick={() => leave()}
-                        style={{ textTransform: 'none', paddingTop: '6px' }}>
-                        <Text style={{ fontWeight: 'bold' }}>
-                          {cap(t('leave'))}
-                        </Text>
+                        style={{ textTransform: 'none', paddingTop: '6px' }}
+                      >
+                        <Text style={{ fontWeight: 'bold' }}>{cap(t('leave'))}</Text>
                       </AppButton>
                     </Box>
-                  }>
+                  }
+                >
                   <CircleIndicator
                     forceCircle={true}
                     size={54}
-                    icon={
-                      <Menu
-                        color={constants.colors.textOnPrimary}
-                        style={{}}></Menu>
-                    }></CircleIndicator>
+                    icon={<Menu color={constants.colors.textOnPrimary} style={{}}></Menu>}
+                  ></CircleIndicator>
                 </DropButton>
               </Box>
             </Box>
@@ -199,9 +186,7 @@ export const ProjectHomePage = (props: IProjectHome) => {
           <Box>
             {tokenId === null ? (
               <Box pad={{ horizontal: 'medium' }} margin={{ top: 'medium' }}>
-                <AppButton
-                  onClick={() => navigate(RouteNames.Join)}
-                  label={'join'}></AppButton>
+                <AppButton onClick={() => navigate(RouteNames.Join)} label={'join'}></AppButton>
               </Box>
             ) : (
               <></>
@@ -220,11 +205,12 @@ export const ProjectHomePage = (props: IProjectHome) => {
           }}
           right={{
             primary: true,
-            action: () =>
-              navigate(`${RouteNames.VoiceBase}/${RouteNames.VoicePropose}`),
+            action: () => navigate(`${RouteNames.VoiceBase}/${RouteNames.VoicePropose}`),
             icon: <Add></Add>,
             label: newStr,
-          }}></AppBottomButtons>
-      }></ViewportPage>
-  );
-};
+          }}
+        ></AppBottomButtons>
+      }
+    ></ViewportPage>
+  )
+}

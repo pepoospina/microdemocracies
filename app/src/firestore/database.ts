@@ -1,4 +1,4 @@
-import { initializeApp } from 'firebase/app';
+import { initializeApp } from 'firebase/app'
 import {
   collection,
   collectionGroup,
@@ -7,8 +7,8 @@ import {
   initializeFirestore,
   persistentLocalCache,
   persistentMultipleTabManager,
-} from 'firebase/firestore';
-import { CollectionNames } from './collectionNames';
+} from 'firebase/firestore'
+import { CollectionNames } from './collectionNames'
 
 const firebaseConfig = {
   apiKey: 'AIzaSyD0Mg8hk5cQAfNc-ZNM-pM_76kZY4IXxM4',
@@ -17,18 +17,18 @@ const firebaseConfig = {
   storageBucket: 'microrevolutions-a6bcf.appspot.com',
   messagingSenderId: '960631524467',
   appId: '1:960631524467:web:a50a27aeaaa3c5990eee06',
-};
+}
 
-export const app = initializeApp(firebaseConfig);
+export const app = initializeApp(firebaseConfig)
 export const db = initializeFirestore(app, {
   localCache: persistentLocalCache({ tabManager: persistentMultipleTabManager() }),
-});
+})
 
-const isProd = process.env.NODE_ENV === 'production' || (process as any).env.NODE_ENV === 'test-prod';
+const isProd = process.env.NODE_ENV === 'production' || (process as any).env.NODE_ENV === 'test-prod'
 
 if (!isProd) {
-  console.log('RUNNING ON DEVELOPMENT NODE - CONNECTING TO LOCALSTORE FIRESTORE');
-  connectFirestoreEmulator(db, '127.0.0.1', 8080);
+  console.log('RUNNING ON DEVELOPMENT NODE - CONNECTING TO LOCALSTORE FIRESTORE')
+  connectFirestoreEmulator(db, '127.0.0.1', 8080)
 }
 
 export const collections = {
@@ -36,12 +36,12 @@ export const collections = {
   project: (id: number) => doc(db, CollectionNames.Projects, id.toString()),
   identity: (id: string) => doc(db, CollectionNames.Identities, id),
   projectInvites: (projectId: number) => {
-    const project = doc(db, CollectionNames.Projects, projectId.toString());
-    return collection(project, CollectionNames.ProjectInvitations);
+    const project = doc(db, CollectionNames.Projects, projectId.toString())
+    return collection(project, CollectionNames.ProjectInvitations)
   },
   userApplications: (aaAddress: string) => {
-    const user = doc(db, CollectionNames.Identities, aaAddress);
-    return collection(user, CollectionNames.Applications);
+    const user = doc(db, CollectionNames.Identities, aaAddress)
+    return collection(user, CollectionNames.Applications)
   },
   entities: collection(db, CollectionNames.Entities),
   members: collectionGroup(db, CollectionNames.ProjectMembers),
@@ -50,7 +50,7 @@ export const collections = {
   statements: collection(db, CollectionNames.Statements),
   statement: (statementId: string) => doc(db, CollectionNames.Statements, statementId),
   statementsBackers: (statementId: string) => {
-    const statement = doc(db, CollectionNames.Statements, statementId);
-    return collection(statement, CollectionNames.StatementsBackers);
+    const statement = doc(db, CollectionNames.Statements, statementId)
+    return collection(statement, CollectionNames.StatementsBackers)
   },
-};
+}
