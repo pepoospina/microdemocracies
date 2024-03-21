@@ -1,60 +1,60 @@
-import { Box, Text } from 'grommet';
-import { Camera, FormPrevious, Send, Square, StatusGood } from 'grommet-icons';
-import { QrScanner } from '@yudiel/react-qr-scanner';
-import { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { Box, Text } from 'grommet'
+import { Camera, FormPrevious, Send, Square, StatusGood } from 'grommet-icons'
+import { QrScanner } from '@yudiel/react-qr-scanner'
+import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { useNavigate } from 'react-router-dom'
 
-import { AppButton, AppCard, AppHeading } from '../../ui-components';
-import { RouteNames } from '../../route.names';
-import { useProjectContext } from '../../contexts/ProjectContext';
-import { useAccountContext } from '../../wallet/AccountContext';
-import { AppQRCode } from '../../components/AppQRCode';
-import { AppConnectButton } from '../../components/app/AppConnectButton';
-import { ViewportPage } from '../../components/app/Viewport';
-import { AppBottomButton } from '../common/BottomButtons';
-import { StatementEditable } from '../voice/StatementEditable';
-import { ApplicationCard } from '../vouches/ApplicationCard';
-import { useCopyToClipboard } from '../../utils/copy.clipboard';
-import { useAppContainer } from '../../components/app/AppContainer';
-import { cap } from '../../utils/general';
+import { AppButton, AppCard, AppHeading } from '../../ui-components'
+import { RouteNames } from '../../route.names'
+import { useProjectContext } from '../../contexts/ProjectContext'
+import { useAccountContext } from '../../wallet/AccountContext'
+import { AppQRCode } from '../../components/AppQRCode'
+import { AppConnectButton } from '../../components/app/AppConnectButton'
+import { ViewportPage } from '../../components/app/Viewport'
+import { AppBottomButton } from '../common/BottomButtons'
+import { StatementEditable } from '../voice/StatementEditable'
+import { ApplicationCard } from '../vouches/ApplicationCard'
+import { useCopyToClipboard } from '../../utils/copy.clipboard'
+import { useAppContainer } from '../../components/app/AppContainer'
+import { cap } from '../../utils/general'
 
 export const InvitePage = (): JSX.Element => {
-  const { t, i18n } = useTranslation();
-  const { project, projectId, inviteId, resetLink, applications, resettingLink } = useProjectContext();
-  const { aaAddress } = useAccountContext();
-  const { copy, copied } = useCopyToClipboard();
+  const { t, i18n } = useTranslation()
+  const { project, projectId, inviteId, resetLink, applications, resettingLink } = useProjectContext()
+  const { aaAddress } = useAccountContext()
+  const { copy, copied } = useCopyToClipboard()
 
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
-  const { setTitle } = useAppContainer();
+  const { setTitle } = useAppContainer()
 
   useEffect(() => {
-    setTitle({ prefix: cap(t('inviteNew')), main: t('members') });
-  }, [i18n.language]);
+    setTitle({ prefix: cap(t('inviteNew')), main: t('members') })
+  }, [i18n.language])
 
-  const [showLink, setShowLink] = useState<boolean>(false);
-  const [scan, setScan] = useState<boolean>(false);
+  const [showLink, setShowLink] = useState<boolean>(false)
+  const [scan, setScan] = useState<boolean>(false)
 
   const setResult = (cid: string) => {
-    navigate(RouteNames.InviteAccount(cid));
-  };
+    navigate(RouteNames.InviteAccount(cid))
+  }
 
-  const inviteLink = `${window.origin}/p/${projectId}/join?invitation=${inviteId}`;
+  const inviteLink = `${window.origin}/p/${projectId}/join?invitation=${inviteId}`
 
   const share = () => {
     if (navigator.share) {
       navigator.share({
         url: inviteLink,
         text: t('joinOurMsg'),
-      });
+      })
     } else {
-      copy(inviteLink);
+      copy(inviteLink)
     }
-  };
+  }
 
   const content = (() => {
-    if (aaAddress === undefined) return <AppConnectButton></AppConnectButton>;
+    if (aaAddress === undefined) return <AppConnectButton></AppConnectButton>
 
     if (showLink) {
       return (
@@ -69,7 +69,7 @@ export const InvitePage = (): JSX.Element => {
             <AppQRCode input={inviteLink}></AppQRCode>
           </Box>
         </Box>
-      );
+      )
     }
 
     if (scan) {
@@ -80,7 +80,7 @@ export const InvitePage = (): JSX.Element => {
           </Box>
           <QrScanner onDecode={(result) => setResult(result)} onError={(error) => console.log(error?.message)} />
         </Box>
-      );
+      )
     }
 
     return (
@@ -94,7 +94,8 @@ export const InvitePage = (): JSX.Element => {
           disabled={inviteId === undefined}
           label={copied ? t('linkCopied') : t('shareLink')}
           primary
-          onClick={() => share()}></AppButton>
+          onClick={() => share()}
+        ></AppButton>
 
         <AppHeading level="3" style={{ marginTop: '64px' }}>
           {t('orUseQR')}
@@ -105,13 +106,15 @@ export const InvitePage = (): JSX.Element => {
           disabled={aaAddress === undefined || projectId === undefined}
           label={t('showQr')}
           onClick={() => setShowLink(true)}
-          margin={{ vertical: 'medium' }}></AppButton>
+          margin={{ vertical: 'medium' }}
+        ></AppButton>
         <AppButton
           reverse
           icon={<Camera></Camera>}
           label={!scan ? t('scanQr') : t('cancel')}
           onClick={() => setScan(!scan)}
-          style={{ marginBottom: '16px' }}></AppButton>
+          style={{ marginBottom: '16px' }}
+        ></AppButton>
 
         <AppHeading level="3" style={{ marginTop: '24px' }}>
           {t('resetLink')}
@@ -124,11 +127,12 @@ export const InvitePage = (): JSX.Element => {
             margin={{ bottom: 'large' }}
             onClick={() => resetLink()}
             label={resettingLink ? t('resetting') : t('reset')}
-            disabled={resettingLink}></AppButton>
+            disabled={resettingLink}
+          ></AppButton>
         </Box>
       </Box>
-    );
-  })();
+    )
+  })()
 
   return (
     <ViewportPage
@@ -145,15 +149,14 @@ export const InvitePage = (): JSX.Element => {
                 <Box style={{ marginBottom: '16px' }}>
                   <ApplicationCard application={application}></ApplicationCard>
                 </Box>
-              );
+              )
             })}
           </Box>
 
           {content}
         </Box>
       }
-      nav={
-        <AppBottomButton icon={<FormPrevious />} label={t('back')} onClick={() => navigate(-1)}></AppBottomButton>
-      }></ViewportPage>
-  );
-};
+      nav={<AppBottomButton icon={<FormPrevious />} label={t('back')} onClick={() => navigate(-1)}></AppBottomButton>}
+    ></ViewportPage>
+  )
+}

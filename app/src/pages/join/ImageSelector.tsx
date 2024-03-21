@@ -1,5 +1,5 @@
-import { Box } from 'grommet';
+import { Box } from 'grommet'
 
 export const AppImageSelector = () => {
-  return <Box>Image Selector</Box>;
-};
+  return <Box>Image Selector</Box>
+}

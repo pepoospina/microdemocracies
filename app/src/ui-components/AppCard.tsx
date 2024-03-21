@@ -1,13 +1,13 @@
-import { BoxExtendedProps, Box } from 'grommet';
-import { FormDown, FormUp, Refresh } from 'grommet-icons';
-import React, { useState } from 'react';
+import { BoxExtendedProps, Box } from 'grommet'
+import { FormDown, FormUp, Refresh } from 'grommet-icons'
+import React, { useState } from 'react'
 
-import { useThemeContext } from '../components/app';
-import { StyleConstants } from '../components/app/themes';
+import { useThemeContext } from '../components/app'
+import { StyleConstants } from '../components/app/themes'
 
 export interface AppCardProps extends BoxExtendedProps {
-  reloading?: boolean;
-  onReload?: () => any;
+  reloading?: boolean
+  onReload?: () => any
 }
 
 const cardStyle = (constants: StyleConstants): React.CSSProperties => {
@@ -17,18 +17,18 @@ const cardStyle = (constants: StyleConstants): React.CSSProperties => {
     borderColor: constants.colors.primaryLight,
     padding: '16px 24px',
     borderRadius: '8px',
-  };
-};
+  }
+}
 
 export const AppCard = React.forwardRef<HTMLDivElement, AppCardProps>((props, ref) => {
-  const { constants } = useThemeContext();
+  const { constants } = useThemeContext()
 
   /** filter props that are not Box */
   const boxProps = Object.keys(props)
     .filter((key) => ['onReload', 'reloading'].indexOf(key) < 0)
-    .reduce((newObj, key) => Object.assign(newObj, { [key]: (props as any)[key] }), {});
+    .reduce((newObj, key) => Object.assign(newObj, { [key]: (props as any)[key] }), {})
 
-  const showReload = props.onReload !== undefined;
+  const showReload = props.onReload !== undefined
   return (
     <Box
       {...boxProps}
@@ -37,7 +37,8 @@ export const AppCard = React.forwardRef<HTMLDivElement, AppCardProps>((props, re
         position: 'relative',
         ...cardStyle(constants),
         ...props.style,
-      }}>
+      }}
+    >
       {props.children}
       {showReload ? (
         <Box
@@ -50,26 +51,27 @@ export const AppCard = React.forwardRef<HTMLDivElement, AppCardProps>((props, re
           }}
           onClick={(): void => {
             if (props.onReload) {
-              props.onReload();
+              props.onReload()
             }
-          }}>
+          }}
+        >
           <Refresh color={constants.colors.primaryLight} style={{ height: '20px', width: '20px' }}></Refresh>
         </Box>
       ) : (
         <></>
       )}
     </Box>
-  );
-});
+  )
+})
 
 interface IExpansibleCard extends BoxExtendedProps {
-  hiddenPart: React.ReactElement | React.ReactElement[];
+  hiddenPart: React.ReactElement | React.ReactElement[]
 }
 
 export const ExpansibleCard = (props: IExpansibleCard): JSX.Element => {
-  const { constants } = useThemeContext();
+  const { constants } = useThemeContext()
 
-  const [expanded, setExpanded] = useState(false);
+  const [expanded, setExpanded] = useState(false)
 
   const circleStyle: React.CSSProperties = {
     borderRadius: '15px',
@@ -78,9 +80,9 @@ export const ExpansibleCard = (props: IExpansibleCard): JSX.Element => {
     backgroundColor: 'white',
     height: '30px',
     width: '27px',
-  };
+  }
 
-  const iconStyle: React.CSSProperties = { height: '20px', width: '20px' };
+  const iconStyle: React.CSSProperties = { height: '20px', width: '20px' }
 
   return (
     <Box
@@ -88,7 +90,8 @@ export const ExpansibleCard = (props: IExpansibleCard): JSX.Element => {
       style={{
         ...cardStyle(constants),
         ...props.style,
-      }}>
+      }}
+    >
       {props.children}
       {expanded ? props.hiddenPart : <></>}
 
@@ -103,7 +106,8 @@ export const ExpansibleCard = (props: IExpansibleCard): JSX.Element => {
           bottom: '-15px',
           cursor: 'pointer',
           width: `100%`,
-        }}>
+        }}
+      >
         {expanded ? (
           <Box align="center" justify="center" style={{ ...circleStyle }}>
             <FormUp style={{ ...iconStyle }}></FormUp>
@@ -115,5 +119,5 @@ export const ExpansibleCard = (props: IExpansibleCard): JSX.Element => {
         )}
       </Box>
     </Box>
-  );
-};
+  )
+}

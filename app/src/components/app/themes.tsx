@@ -1,38 +1,38 @@
-import { dark, grommet, ThemeType } from 'grommet/themes';
-import { deepMerge } from 'grommet/utils';
-import { css } from 'styled-components';
+import { dark, grommet, ThemeType } from 'grommet/themes'
+import { deepMerge } from 'grommet/utils'
+import { css } from 'styled-components'
 
-export const theme = {};
+export const theme = {}
 
 export interface StyleConstants {
   headingFontSizes: {
-    1: string;
-    2: string;
-    3: string;
-    4: string;
-  };
+    1: string
+    2: string
+    3: string
+    4: string
+  }
   textFontSizes: {
-    large: string;
-    medium: string;
-    normal: string;
-    small: string;
-    xsmall: string;
-  };
+    large: string
+    medium: string
+    normal: string
+    small: string
+    xsmall: string
+  }
   colors: {
-    primary: string;
-    primaryLight: string;
-    text: string;
-    textOnPrimary: string;
-    headings: string;
-    backgroundLight: string;
-    backgroundLightDarker: string;
-    border: string;
-    links: string;
-  };
+    primary: string
+    primaryLight: string
+    text: string
+    textOnPrimary: string
+    headings: string
+    backgroundLight: string
+    backgroundLightDarker: string
+    border: string
+    links: string
+  }
 }
 
 export interface ExtendedThemeType extends ThemeType {
-  constants: StyleConstants;
+  constants: StyleConstants
 }
 
 const constants: StyleConstants = {
@@ -60,7 +60,7 @@ const constants: StyleConstants = {
     backgroundLightDarker: '#cacaca',
     links: '#004766',
   },
-};
+}
 
 const extension: ExtendedThemeType = {
   constants,
@@ -168,7 +168,7 @@ const extension: ExtendedThemeType = {
           border-color: #8b7d7d;
           border-radius: 24px;
         }
-      `;
+      `
     },
   },
   textInput: {
@@ -182,7 +182,7 @@ const extension: ExtendedThemeType = {
             border-color: #8b7d7d;
             border-radius: 24px;
           }
-        `;
+        `
       },
     },
   },
@@ -216,7 +216,7 @@ const extension: ExtendedThemeType = {
     color: constants.colors.links,
     textDecoration: 'underline',
   },
-};
+}
 
-export const lightTheme = deepMerge(grommet, extension);
-export const darkTheme = deepMerge(dark, extension);
+export const lightTheme = deepMerge(grommet, extension)
+export const darkTheme = deepMerge(dark, extension)

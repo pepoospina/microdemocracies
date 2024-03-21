@@ -1,38 +1,34 @@
-import { Box, Text } from 'grommet';
-import { useTranslation } from 'react-i18next';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Box, Text } from 'grommet'
+import { useTranslation } from 'react-i18next'
+import { useNavigate, useParams } from 'react-router-dom'
 
-import { useThemeContext } from '../../components/app';
-import { useMember } from '../../contexts/MemberContext';
-import { AbsoluteRoutes } from '../../route.names';
-import { AppProjectMember } from '../../types';
-import { AppButton } from '../../ui-components';
-import { LoadingDiv } from '../../ui-components/LoadingDiv';
-import { getPapShortname } from '../../utils/pap';
+import { useThemeContext } from '../../components/app'
+import { useMember } from '../../contexts/MemberContext'
+import { AbsoluteRoutes } from '../../route.names'
+import { AppProjectMember } from '../../types'
+import { AppButton } from '../../ui-components'
+import { LoadingDiv } from '../../ui-components/LoadingDiv'
+import { getPapShortname } from '../../utils/pap'
 
-export const MemberCard = (props: {
-  member?: AppProjectMember;
-}): JSX.Element => {
-  const { constants } = useThemeContext();
-  const { t } = useTranslation();
-  const { projectId } = useParams();
-  const navigate = useNavigate();
+export const MemberCard = (props: { member?: AppProjectMember }): JSX.Element => {
+  const { constants } = useThemeContext()
+  const { t } = useTranslation()
+  const { projectId } = useParams()
+  const navigate = useNavigate()
   const { accountPap } = useMember({
     tokenId: props.member?.tokenId,
-  });
+  })
 
-  const member = props.member;
+  const member = props.member
 
   const goTo = () => {
     if (member && projectId) {
-      navigate(
-        AbsoluteRoutes.ProjectMember(projectId, member.tokenId.toString())
-      );
+      navigate(AbsoluteRoutes.ProjectMember(projectId, member.tokenId.toString()))
     }
-  };
+  }
 
   if (!member) {
-    return <LoadingDiv></LoadingDiv>;
+    return <LoadingDiv></LoadingDiv>
   }
 
   return (
@@ -42,18 +38,15 @@ export const MemberCard = (props: {
         style={{
           backgroundColor: constants.colors.primary,
           color: constants.colors.textOnPrimary,
-        }}>
+        }}
+      >
         <Text>
           <b>
             {t('member')} #{props.member?.tokenId}
           </b>
         </Text>
-        {!accountPap ? (
-          <LoadingDiv></LoadingDiv>
-        ) : (
-          getPapShortname(accountPap.object)
-        )}
+        {!accountPap ? <LoadingDiv></LoadingDiv> : getPapShortname(accountPap.object)}
       </Box>
     </AppButton>
-  );
-};
+  )
+}

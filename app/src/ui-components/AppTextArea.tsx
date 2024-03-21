@@ -1,39 +1,39 @@
-import { TextAreaExtendedProps, TextArea } from 'grommet';
-import { useRef } from 'react';
-import { useThemeContext } from '../components/app';
+import { TextAreaExtendedProps, TextArea } from 'grommet'
+import { useRef } from 'react'
+import { useThemeContext } from '../components/app'
 
 interface IAppTextArea extends TextAreaExtendedProps {
-  autoResize?: boolean;
+  autoResize?: boolean
 }
 
 export const AppTextArea = (props: IAppTextArea): JSX.Element => {
-  const ref = useRef<HTMLTextAreaElement>();
-  const { constants } = useThemeContext();
+  const ref = useRef<HTMLTextAreaElement>()
+  const { constants } = useThemeContext()
 
   const autosize = (): void => {
     if (ref.current === undefined) {
-      return;
+      return
     }
 
     if (ref.current.value === '') {
-      ref.current.style.height = '0px';
-      return;
+      ref.current.style.height = '0px'
+      return
     }
 
     if (ref.current.scrollHeight > ref.current.clientHeight) {
-      console.log('ref');
-      ref.current.style.height = `${ref.current.scrollHeight + 20}px`;
+      console.log('ref')
+      ref.current.style.height = `${ref.current.scrollHeight + 20}px`
     }
-  };
+  }
 
   const onChange = (): void => {
     if (props.autoResize) {
-      autosize();
+      autosize()
     }
-  };
+  }
 
   if (ref === null || ref === undefined) {
-    return <></>;
+    return <></>
   }
 
   return (
@@ -41,8 +41,8 @@ export const AppTextArea = (props: IAppTextArea): JSX.Element => {
       ref={ref as any}
       {...props}
       onChange={(event): void => {
-        onChange();
-        if (props.onChange) props.onChange(event);
+        onChange()
+        if (props.onChange) props.onChange(event)
       }}
       style={{
         overflow: 'hidden',
@@ -53,6 +53,7 @@ export const AppTextArea = (props: IAppTextArea): JSX.Element => {
         fontWeight: 'normal',
         resize: 'vertical',
         minHeight: '100px',
-      }}></TextArea>
-  );
-};
+      }}
+    ></TextArea>
+  )
+}

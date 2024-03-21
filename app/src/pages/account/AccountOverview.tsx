@@ -1,24 +1,24 @@
-import { Anchor, Box, Spinner, Text } from 'grommet';
+import { Anchor, Box, Spinner, Text } from 'grommet'
 
-import { AccountPerson } from './AccountPerson';
-import { AppCard } from '../../ui-components';
-import { BoxCentered } from '../../ui-components/BoxCentered';
-import { useTranslation } from 'react-i18next';
-import { cap } from '../../utils/general';
-import { AppAccount, Entity, PAP } from '../../types';
-import { MemberAnchor } from '../vouches/MemberAnchor';
+import { AccountPerson } from './AccountPerson'
+import { AppCard } from '../../ui-components'
+import { BoxCentered } from '../../ui-components/BoxCentered'
+import { useTranslation } from 'react-i18next'
+import { cap } from '../../utils/general'
+import { AppAccount, Entity, PAP } from '../../types'
+import { MemberAnchor } from '../vouches/MemberAnchor'
 
 export const AccountOverview = (props: { account?: AppAccount; pap?: Entity<PAP>; showAccount?: boolean }) => {
-  const { t } = useTranslation();
-  const { account: accountRead, pap: accountPapRead } = props;
-  const isFounder = accountRead && accountRead.voucher > 10e70;
+  const { t } = useTranslation()
+  const { account: accountRead, pap: accountPapRead } = props
+  const isFounder = accountRead && accountRead.voucher > 10e70
 
   if (!accountPapRead) {
     return (
       <BoxCentered fill style={{ flexShrink: 0 }}>
         <Spinner></Spinner>
       </BoxCentered>
-    );
+    )
   }
 
   return (
@@ -46,5 +46,5 @@ export const AccountOverview = (props: { account?: AppAccount; pap?: Entity<PAP>
         <></>
       )}
     </Box>
-  );
-};
+  )
+}

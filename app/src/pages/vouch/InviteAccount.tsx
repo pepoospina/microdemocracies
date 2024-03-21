@@ -1,38 +1,38 @@
-import { Box, Spinner, Text } from 'grommet';
-import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { FormPrevious } from 'grommet-icons';
+import { Box, Spinner, Text } from 'grommet'
+import { useEffect, useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
+import { FormPrevious } from 'grommet-icons'
 
-import { getEntity } from '../../utils/store';
-import { Entity, PAP } from '../../types';
-import { AccountPerson } from '../account/AccountPerson';
-import { AppBottomButton } from '../common/BottomButtons';
-import { ViewportPage } from '../../components/app/Viewport';
-import { VouchMemberWidget } from './VouchMemberWidget';
-import { useTranslation } from 'react-i18next';
-import { useAppContainer } from '../../components/app/AppContainer';
+import { getEntity } from '../../utils/store'
+import { Entity, PAP } from '../../types'
+import { AccountPerson } from '../account/AccountPerson'
+import { AppBottomButton } from '../common/BottomButtons'
+import { ViewportPage } from '../../components/app/Viewport'
+import { VouchMemberWidget } from './VouchMemberWidget'
+import { useTranslation } from 'react-i18next'
+import { useAppContainer } from '../../components/app/AppContainer'
 
 export const InviteAccountPage = () => {
-  const { t, i18n } = useTranslation();
-  const navigate = useNavigate();
-  const { hash } = useParams();
-  const { setTitle } = useAppContainer();
+  const { t, i18n } = useTranslation()
+  const navigate = useNavigate()
+  const { hash } = useParams()
+  const { setTitle } = useAppContainer()
 
   useEffect(() => {
-    setTitle({ prefix: t('approveNew'), main: t('member') });
-  }, [i18n.language]);
+    setTitle({ prefix: t('approveNew'), main: t('member') })
+  }, [i18n.language])
 
   /** convert hash into pap and send to VouchWidget */
-  const [pap, setPap] = useState<Entity<PAP>>();
+  const [pap, setPap] = useState<Entity<PAP>>()
 
   useEffect(() => {
     if (hash) {
       getEntity<PAP>(hash).then((pap) => {
-        setPap(pap);
-      });
+        setPap(pap)
+      })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [hash]);
+  }, [hash])
 
   const content = (() => {
     if (!pap)
@@ -40,7 +40,7 @@ export const InviteAccountPage = () => {
         <Box fill align="center" justify="center">
           <Spinner></Spinner>
         </Box>
-      );
+      )
 
     return (
       <>
@@ -51,8 +51,8 @@ export const InviteAccountPage = () => {
           </Box>
         </Box>
       </>
-    );
-  })();
+    )
+  })()
 
   return (
     <ViewportPage
@@ -71,7 +71,9 @@ export const InviteAccountPage = () => {
         <AppBottomButton
           onClick={() => navigate(-1)}
           icon={<FormPrevious></FormPrevious>}
-          label={t('back')}></AppBottomButton>
-      }></ViewportPage>
-  );
-};
+          label={t('back')}
+        ></AppBottomButton>
+      }
+    ></ViewportPage>
+  )
+}

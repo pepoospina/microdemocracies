@@ -1,3 +1,3 @@
-export * from './IElement';
-export * from './ResponsiveApp';
-export * from './ThemedApp';
+export * from './IElement'
+export * from './ResponsiveApp'
+export * from './ThemedApp'

@@ -1,34 +1,34 @@
-import { Box } from 'grommet';
-import { NetworkSelector } from './NetworkSelector';
-import { useEffect, useState } from 'react';
-import { AppHeading } from '../../ui-components';
+import { Box } from 'grommet'
+import { NetworkSelector } from './NetworkSelector'
+import { useEffect, useState } from 'react'
+import { AppHeading } from '../../ui-components'
 
-import { PlatformAccount } from '../../types';
-import { AccountPlatforms } from '../account/AccountPlatforms';
+import { PlatformAccount } from '../../types'
+import { AccountPlatforms } from '../account/AccountPlatforms'
 
 export interface IPlatformsSelector {
-  onChange: (platforms: PlatformAccount[]) => any;
+  onChange: (platforms: PlatformAccount[]) => any
 }
 
 export const AppPlatformsSelector = (props: IPlatformsSelector) => {
-  const [users, setUsers] = useState<PlatformAccount[]>([]);
+  const [users, setUsers] = useState<PlatformAccount[]>([])
 
   useEffect(() => {
-    props.onChange(users);
+    props.onChange(users)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [users]);
+  }, [users])
 
   const selected = (user: PlatformAccount) => {
-    setUsers((users) => [...users, user]);
-  };
+    setUsers((users) => [...users, user])
+  }
 
   const remove = (user: PlatformAccount) => {
-    const index = users.findIndex((u) => u.platform === user.platform && u.username === user.username);
+    const index = users.findIndex((u) => u.platform === user.platform && u.username === user.username)
     if (index !== -1) {
-      users.splice(index, 1);
-      setUsers([...users]);
+      users.splice(index, 1)
+      setUsers([...users])
     }
-  };
+  }
 
   return (
     <Box style={{ height: '100%' }}>
@@ -41,5 +41,5 @@ export const AppPlatformsSelector = (props: IPlatformsSelector) => {
         <AccountPlatforms users={users} remove={remove}></AccountPlatforms>
       </Box>
     </Box>
-  );
-};
+  )
+}

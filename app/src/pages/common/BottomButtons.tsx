@@ -1,27 +1,27 @@
-import { Box } from 'grommet';
-import { AppButton, AppCard, IButton } from '../../ui-components';
-import { ReactElement } from 'react';
-import { FormPrevious, FormNext } from 'grommet-icons';
+import { Box } from 'grommet'
+import { AppButton, AppCard, IButton } from '../../ui-components'
+import { ReactElement } from 'react'
+import { FormPrevious, FormNext } from 'grommet-icons'
 
 export const AppBottomButton = (props: IButton) => {
   return (
     <Box style={{ width: '100%' }} pad="small" align="center">
       <AppButton {...props} style={{ width: '100%' }}></AppButton>
     </Box>
-  );
-};
+  )
+}
 
 export interface IButtonWithAction {
-  label?: string;
-  action?: () => void;
-  primary?: boolean;
-  disabled?: boolean;
-  icon?: ReactElement;
+  label?: string
+  action?: () => void
+  primary?: boolean
+  disabled?: boolean
+  icon?: ReactElement
 }
 
 export const AppBottomButtons = (props: { left?: IButtonWithAction; right?: IButtonWithAction; popUp?: string }) => {
-  const { left, right } = props;
-  const style = { flexGrow: '1', maxWidth: '300px', width: '50%' };
+  const { left, right } = props
+  const style = { flexGrow: '1', maxWidth: '300px', width: '50%' }
   return (
     <Box direction="row" justify="evenly" style={{ position: 'relative' }} gap="small" pad="small">
       {left ? (
@@ -31,7 +31,8 @@ export const AppBottomButtons = (props: { left?: IButtonWithAction; right?: IBut
           onClick={left.action}
           label={left.label}
           primary={left.primary}
-          disabled={left.disabled}></AppButton>
+          disabled={left.disabled}
+        ></AppButton>
       ) : (
         <></>
       )}
@@ -43,7 +44,8 @@ export const AppBottomButtons = (props: { left?: IButtonWithAction; right?: IBut
           onClick={right.action}
           label={right.label}
           primary={right.primary}
-          disabled={right.disabled}></AppButton>
+          disabled={right.disabled}
+        ></AppButton>
       ) : (
         <></>
       )}
@@ -53,5 +55,5 @@ export const AppBottomButtons = (props: { left?: IButtonWithAction; right?: IBut
         <></>
       )}
     </Box>
-  );
-};
+  )
+}

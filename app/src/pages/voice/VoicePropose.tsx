@@ -1,67 +1,67 @@
-import { Box, Text } from 'grommet';
-import { useEffect, useState } from 'react';
+import { Box, Text } from 'grommet'
+import { useEffect, useState } from 'react'
 
-import { AppButton, AppCard, AppHeading } from '../../ui-components';
-import { AppConnectButton } from '../../components/app/AppConnectButton';
-import { useNavigate } from 'react-router-dom';
-import { AppBottomButtons } from '../common/BottomButtons';
-import { Add, FormPrevious } from 'grommet-icons';
-import { useAccountContext } from '../../wallet/AccountContext';
-import { StatementEditable } from './StatementEditable';
-import { useSemaphoreContext } from '../../contexts/SemaphoreContext';
-import { Loading } from '../common/Loading';
-import { ViewportPage } from '../../components/app/Viewport';
-import { useStatementSend } from './useStatementSend';
-import { useTranslation } from 'react-i18next';
-import { useAppContainer } from '../../components/app/AppContainer';
-import { i18n } from '../../i18n/i18n';
-import { cap } from '../../utils/general';
-import { RouteNames } from '../../route.names';
-import { useProjectContext } from '../../contexts/ProjectContext';
-import { BoxCentered } from '../../ui-components/BoxCentered';
-import { MIN_LIKES_PUBLIC, MIN_MEMBERS } from '../../config/appConfig';
-import { BulletList } from '../../ui-components/BulletList';
+import { AppButton, AppCard, AppHeading } from '../../ui-components'
+import { AppConnectButton } from '../../components/app/AppConnectButton'
+import { useNavigate } from 'react-router-dom'
+import { AppBottomButtons } from '../common/BottomButtons'
+import { Add, FormPrevious } from 'grommet-icons'
+import { useAccountContext } from '../../wallet/AccountContext'
+import { StatementEditable } from './StatementEditable'
+import { useSemaphoreContext } from '../../contexts/SemaphoreContext'
+import { Loading } from '../common/Loading'
+import { ViewportPage } from '../../components/app/Viewport'
+import { useStatementSend } from './useStatementSend'
+import { useTranslation } from 'react-i18next'
+import { useAppContainer } from '../../components/app/AppContainer'
+import { i18n } from '../../i18n/i18n'
+import { cap } from '../../utils/general'
+import { RouteNames } from '../../route.names'
+import { useProjectContext } from '../../contexts/ProjectContext'
+import { BoxCentered } from '../../ui-components/BoxCentered'
+import { MIN_LIKES_PUBLIC, MIN_MEMBERS } from '../../config/appConfig'
+import { BulletList } from '../../ui-components/BulletList'
 
 export const VoicePropose = (): JSX.Element => {
-  const { t } = useTranslation();
-  const { isConnected } = useAccountContext();
-  const { proposeStatement, statementId } = useStatementSend();
-  const { nMembers } = useProjectContext();
+  const { t } = useTranslation()
+  const { isConnected } = useAccountContext()
+  const { proposeStatement, statementId } = useStatementSend()
+  const { nMembers } = useProjectContext()
 
-  const { publicId } = useSemaphoreContext();
+  const { publicId } = useSemaphoreContext()
 
-  const [done, setDone] = useState<boolean>(false);
-  const [isProposing, setIsProposing] = useState<boolean>(false);
-  const navigate = useNavigate();
+  const [done, setDone] = useState<boolean>(false)
+  const [isProposing, setIsProposing] = useState<boolean>(false)
+  const navigate = useNavigate()
 
-  const { setTitle } = useAppContainer();
+  const { setTitle } = useAppContainer()
 
   useEffect(() => {
-    setTitle({ prefix: cap(t('proposeNew')), main: t('statement') });
-  }, [i18n.language]);
+    setTitle({ prefix: cap(t('proposeNew')), main: t('statement') })
+  }, [i18n.language])
 
-  const [input, setInput] = useState<string>();
+  const [input, setInput] = useState<string>()
 
   const _proposeStatement = async (input: string) => {
     if (proposeStatement) {
-      setIsProposing(true);
-      proposeStatement(input).then(() => {});
+      setIsProposing(true)
+      proposeStatement(input).then(() => {})
     }
-  };
+  }
 
   useEffect(() => {
     if (statementId) {
-      setIsProposing(false);
-      setDone(true);
-      navigate(`../${RouteNames.VoiceStatement}/${statementId}`);
+      setIsProposing(false)
+      setDone(true)
+      navigate(`../${RouteNames.VoiceStatement}/${statementId}`)
     }
-  }, [statementId]);
+  }, [statementId])
 
-  const readyToPropose = isConnected && input && proposeStatement !== undefined && publicId && !done;
+  const readyToPropose = isConnected && input && proposeStatement !== undefined && publicId && !done
 
   const content = (() => {
     if (nMembers === undefined) {
-      return <Loading></Loading>;
+      return <Loading></Loading>
     }
     if (nMembers < 3) {
       return (
@@ -74,9 +74,10 @@ export const VoicePropose = (): JSX.Element => {
             primary
             icon={<Add />}
             label={t('invite')}
-            onClick={() => navigate('../../invite')}></AppButton>
+            onClick={() => navigate('../../invite')}
+          ></AppButton>
         </BoxCentered>
-      );
+      )
     }
     return (
       <Box pad="large">
@@ -86,9 +87,10 @@ export const VoicePropose = (): JSX.Element => {
               <StatementEditable
                 editable={!isProposing}
                 onChanged={(value?: string) => {
-                  if (value) setInput(value);
+                  if (value) setInput(value)
                 }}
-                placeholder={`${t('newStatement')}...`}></StatementEditable>
+                placeholder={`${t('newStatement')}...`}
+              ></StatementEditable>
             </Box>
 
             <AppHeading level="3" style={{ textAlign: 'center' }}>
@@ -101,7 +103,8 @@ export const VoicePropose = (): JSX.Element => {
                   <Text>{t('canBackN', { nMembers })}.</Text>,
                   <Text>{t('aStatementNeeds', { nLikes: MIN_LIKES_PUBLIC })}.</Text>,
                   <Text>{t('youNeedToLike')}.</Text>,
-                ]}></BulletList>
+                ]}
+              ></BulletList>
             </AppCard>
 
             <Box justify="center" style={{ margin: '36px 0', width: '100%' }}>
@@ -119,8 +122,8 @@ export const VoicePropose = (): JSX.Element => {
           <AppCard>{t('statementProposed')}!</AppCard>
         )}
       </Box>
-    );
-  })();
+    )
+  })()
 
   return (
     <ViewportPage
@@ -136,11 +139,13 @@ export const VoicePropose = (): JSX.Element => {
             label: t('propose'),
             icon: <Add></Add>,
             action: () => {
-              if (input) _proposeStatement(input);
+              if (input) _proposeStatement(input)
             },
             disabled: !readyToPropose || isProposing,
             primary: true,
-          }}></AppBottomButtons>
-      }></ViewportPage>
-  );
-};
+          }}
+        ></AppBottomButtons>
+      }
+    ></ViewportPage>
+  )
+}

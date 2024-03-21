@@ -1,14 +1,14 @@
-import { ReactNode } from 'react';
-import { BoxCentered } from '../../ui-components/BoxCentered';
+import { ReactNode } from 'react'
+import { BoxCentered } from '../../ui-components/BoxCentered'
 
 export const CircleIndicator = (props: {
-  icon: ReactNode;
-  size?: number;
-  borderWidth?: string;
-  forceCircle?: boolean;
+  icon: ReactNode
+  size?: number
+  borderWidth?: string
+  forceCircle?: boolean
 }) => {
-  const forceCircle = props.forceCircle !== undefined ? props.forceCircle : true;
-  const size = props.size || 36;
+  const forceCircle = props.forceCircle !== undefined ? props.forceCircle : true
+  const size = props.size || 36
 
   return (
     <BoxCentered
@@ -21,8 +21,9 @@ export const CircleIndicator = (props: {
         borderRadius: `${size / 2}px`,
       }}
       pad={{ horizontal: forceCircle ? '0px' : 'medium' }}
-      direction="row">
+      direction="row"
+    >
       {props.icon}
     </BoxCentered>
-  );
-};
+  )
+}

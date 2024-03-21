@@ -1,101 +1,99 @@
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react'
 
-import { StatementRead } from '../types';
-import { useConnectedMember } from './ConnectedAccountContext';
-import { countStatementBackings, getStatement } from '../firestore/getters';
-import { useBackingSend } from '../pages/voice/useBackingSend';
-import { useQuery } from '@tanstack/react-query';
+import { StatementRead } from '../types'
+import { useConnectedMember } from './ConnectedAccountContext'
+import { countStatementBackings, getStatement } from '../firestore/getters'
+import { useBackingSend } from '../pages/voice/useBackingSend'
+import { useQuery } from '@tanstack/react-query'
 
 export type StatementContextType = {
-  statement?: StatementRead;
-  nBacking?: number;
-  canBack: boolean;
-  back: () => void;
-  isBacking: boolean;
-  alreadyBacked?: boolean;
-};
-
-interface IStatementContext {
-  statement?: StatementRead;
-  statementId?: string;
-  children: React.ReactNode;
+  statement?: StatementRead
+  nBacking?: number
+  canBack: boolean
+  back: () => void
+  isBacking: boolean
+  alreadyBacked?: boolean
 }
 
-const StatementContextValue = createContext<StatementContextType | undefined>(
-  undefined
-);
+interface IStatementContext {
+  statement?: StatementRead
+  statementId?: string
+  children: React.ReactNode
+}
+
+const StatementContextValue = createContext<StatementContextType | undefined>(undefined)
 
 export const StatementContext = (props: IStatementContext) => {
-  const { statement: propsStatement, statementId: propsStatementId } = props;
+  const { statement: propsStatement, statementId: propsStatementId } = props
 
   if (!propsStatement && !propsStatementId) {
-    throw new Error('Either statement or statementId must be provided.');
+    throw new Error('Either statement or statementId must be provided.')
   }
 
-  const statementId = propsStatement
-    ? propsStatement.id
-    : (propsStatementId as string);
+  const statementId = propsStatement ? propsStatement.id : (propsStatementId as string)
 
-  const { tokenId } = useConnectedMember();
-  const [isBacking, setIsBacking] = useState<boolean>(false);
-  const [alreadyBacked, setAlreadyBacked] = useState<boolean>();
+  const { tokenId } = useConnectedMember()
+  const [isBacking, setIsBacking] = useState<boolean>(false)
+  const [alreadyBacked, setAlreadyBacked] = useState<boolean>()
 
-  const { data: statementRead } = useQuery({queryKey: [`${propsStatementId}`], queryFn:async () => {
-    if (propsStatementId) {
-      return getStatement(statementId);
-    }
-  } });
-    
-    
-  
+  const { data: statementRead } = useQuery({
+    queryKey: [`${propsStatementId}`],
+    queryFn: async () => {
+      if (propsStatementId) {
+        return getStatement(statementId)
+      }
+    },
+  })
 
-  const statement = propsStatement ? propsStatement : statementRead;
+  const statement = propsStatement ? propsStatement : statementRead
 
   const {
     data: nBacking,
     isLoading,
     refetch: refetchCount,
-  } = useQuery({queryKey:  ['statementBackers', statement?.id], queryFn: () => {
-    if (statement) {
-      return countStatementBackings(statement.id);
-    }
-  }});
-    
+  } = useQuery({
+    queryKey: ['statementBackers', statement?.id],
+    queryFn: () => {
+      if (statement) {
+        return countStatementBackings(statement.id)
+      }
+    },
+  })
 
-  const { backStatement, isSuccessBacking, errorBacking } = useBackingSend();
+  const { backStatement, isSuccessBacking, errorBacking } = useBackingSend()
 
-  const canBack = tokenId !== undefined && tokenId !== null;
+  const canBack = tokenId !== undefined && tokenId !== null
 
   const back = () => {
     if (backStatement && statement) {
-      setIsBacking(true);
-      backStatement(statement.id, statement.treeId);
+      setIsBacking(true)
+      backStatement(statement.id, statement.treeId)
     }
-  };
+  }
 
   useEffect(() => {
     if (isSuccessBacking) {
-      setIsBacking(false);
-      refetchCount();
+      setIsBacking(false)
+      refetchCount()
     }
-  }, [isSuccessBacking]);
+  }, [isSuccessBacking])
 
   useEffect(() => {
     if (errorBacking) {
-      setIsBacking(false);
+      setIsBacking(false)
       if (errorBacking.toLocaleLowerCase().includes('already posted')) {
-        setAlreadyBacked(true);
+        setAlreadyBacked(true)
       }
     }
-  }, [errorBacking]);
+  }, [errorBacking])
 
   useEffect(() => {
     if (alreadyBacked) {
       setTimeout(() => {
-        setAlreadyBacked(false);
-      }, 3000);
+        setAlreadyBacked(false)
+      }, 3000)
     }
-  }, [alreadyBacked]);
+  }, [alreadyBacked])
 
   return (
     <StatementContextValue.Provider
@@ -106,14 +104,15 @@ export const StatementContext = (props: IStatementContext) => {
         back,
         isBacking,
         alreadyBacked,
-      }}>
+      }}
+    >
       {props.children}
     </StatementContextValue.Provider>
-  );
-};
+  )
+}
 
 export const useStatementContext = (): StatementContextType => {
-  const context = useContext(StatementContextValue);
-  if (!context) throw Error('context not found');
-  return context;
-};
+  const context = useContext(StatementContextValue)
+  if (!context) throw Error('context not found')
+  return context
+}
