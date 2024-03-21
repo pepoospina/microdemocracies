@@ -10,9 +10,9 @@ import {
   Text,
 } from 'grommet';
 import { ReactNode } from 'react';
-import { AppHeading } from '../../ui-components/AppHeading';
 
 import { IElement, useResponsive, useThemeContext } from '.';
+import { AppHeading } from '../../ui-components/AppHeading';
 
 export const MAX_WIDTH_LANDING = 1600;
 export const MAX_WIDTH_APP = 700;
@@ -46,7 +46,11 @@ export const ViewportHeadingSmall = (props: { label: ReactNode }) => {
 
 export const ViewportHeadingLarge = (props: { label: ReactNode }) => {
   return (
-    <Box justify="center" align="center" pad="medium" style={{ textAlign: 'center' }}>
+    <Box
+      justify="center"
+      align="center"
+      pad="medium"
+      style={{ textAlign: 'center' }}>
       <AppHeading level="1">{props.label}</AppHeading>
     </Box>
   );
@@ -59,6 +63,7 @@ export const ViewportHeadingLarge = (props: { label: ReactNode }) => {
 export const ViewportPage = (props: { content: ReactNode; nav: ReactNode }) => {
   const { mobile } = useResponsive();
   const pad = mobile ? 'none' : 'large';
+
   return (
     <Box
       id="viewport-page"
