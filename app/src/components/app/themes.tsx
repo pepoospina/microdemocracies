@@ -159,7 +159,7 @@ const extension: ExtendedThemeType = {
     },
   },
   textArea: {
-    extend: (props) => {
+    extend: () => {
       return css`
         * {
           padding: 14px 36px;
@@ -173,7 +173,7 @@ const extension: ExtendedThemeType = {
   },
   textInput: {
     container: {
-      extend: (props) => {
+      extend: () => {
         return css`
           * {
             padding: 14px 36px;

@@ -28,7 +28,7 @@ export const getLatestGroup = async (projectId: number) => {
   const identitiesSorted = sortIdentities(identities);
 
   const serializedGroup: Omit<SerializedSemaphoreGroup, 'merkleRoot'> = {
-    name: `microrevolutions-${projectId}`,
+    name: `microdemocracies-${projectId}`,
     id: `${projectId}`,
     depth: TREE_DEPTH, // 262,144 members
     members: identitiesSorted.map((id) => id.publicId),
@@ -42,7 +42,7 @@ export const getGroupOfTree = async (treeId: string) => {
   const tree = await getTreeFull(treeId);
 
   const serializedGroup: Omit<SerializedSemaphoreGroup, 'merkleRoot'> = {
-    name: `microrevolutions-treeId:${treeId}`,
+    name: `microdemocracies-treeId:${treeId}`,
     id: `${tree.projectId}`,
     depth: TREE_DEPTH, // 262,144 members
     members: tree.publicIds,

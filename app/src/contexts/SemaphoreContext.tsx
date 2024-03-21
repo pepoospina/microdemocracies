@@ -1,15 +1,21 @@
-import { PropsWithChildren, createContext, useContext, useEffect, useState } from 'react';
-
 import { Identity } from '@semaphore-protocol/identity';
+import {
+  PropsWithChildren,
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 
-import { useAccountContext } from '../wallet/AccountContext';
-
-import { AppGetProof, AppPublicIdentity } from '../types';
 import { getPublicIdentity } from '../firestore/getters';
+import { AppGetProof, AppPublicIdentity } from '../types';
+import {
+  ProofAndTree,
+  generateProof as _generateProof,
+} from '../utils/identity';
 import { getControlMessage } from '../utils/identity.utils';
-import { ProofAndTree, generateProof as _generateProof } from '../utils/identity';
-
 import { postIdentity } from '../utils/statements';
+import { useAccountContext } from '../wallet/AccountContext';
 import { useAppSigner } from '../wallet/SignerContext';
 
 export type SemaphoreContextType = {
@@ -20,11 +26,13 @@ export type SemaphoreContextType = {
   disconnect: () => void;
 };
 
-const SemaphoreContextValue = createContext<SemaphoreContextType | undefined>(undefined);
+const SemaphoreContextValue = createContext<SemaphoreContextType | undefined>(
+  undefined
+);
 
 export const SemaphoreContext = (props: PropsWithChildren) => {
-  const { owner, aaAddress } = useAccountContext();
   const { signMessage, disconnect: disconnectSigner } = useAppSigner();
+  const { owner, aaAddress } = useAccountContext();
 
   // console.log({ walletClient, isError, isLoading });
   const [isCreatingPublicId, setIsCreatingPublicId] = useState<boolean>(false);
@@ -44,7 +52,7 @@ export const SemaphoreContext = (props: PropsWithChildren) => {
   // keep identity inline with aaAddress
   useEffect(() => {
     checkStoredIdentity();
-  }, [aaAddress, owner, signMessage]);
+  }, [aaAddress, owner]);
 
   const checkStoredIdentity = async () => {
     try {
@@ -99,7 +107,10 @@ export const SemaphoreContext = (props: PropsWithChildren) => {
         }
 
         // store the secret identity on this device (so we dont have to ask for a signature with metamask from now on)
-        localStorage.setItem('identity', JSON.stringify({ identity: _identity.toString(), aaAddress }));
+        localStorage.setItem(
+          'identity',
+          JSON.stringify({ identity: _identity.toString(), aaAddress })
+        );
         setIdentity(_identity);
       }
 
@@ -114,7 +125,12 @@ export const SemaphoreContext = (props: PropsWithChildren) => {
 
   // exposes a call to the generateProof function using the connected identity
   const generateProof = identity
-    ? async (input: { signal: string; nullifier: string; projectId?: number; treeId?: string }) => {
+    ? async (input: {
+        signal: string;
+        nullifier: string;
+        projectId?: number;
+        treeId?: string;
+      }) => {
         return _generateProof({ identity, ...input });
       }
     : undefined;

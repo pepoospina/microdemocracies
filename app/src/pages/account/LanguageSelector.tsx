@@ -1,10 +1,13 @@
-import { Box, Image } from 'grommet';
-import { AppButton, AppCircleDropButtonResponsive } from '../../ui-components';
-import { useResponsive } from '../../components/app';
+import { Box, Image, Text } from 'grommet';
 import { useState } from 'react';
-import { Language, useAppLanguage } from '../../components/app/AppLanguage';
 
-const LanguageValue = (key: Language, hideIfMobile: boolean = false) => {
+import { Language, useAppLanguage } from '../../components/app/AppLanguage';
+import { useResponsive } from '../../components/app/ResponsiveApp';
+import { AppButton } from '../../ui-components/AppButton';
+import { AppModal } from '../../ui-components/AppModal';
+import { BoxCentered } from '../../ui-components/BoxCentered';
+
+export const LanguageValue = (key: Language, hideIfMobile: boolean = false) => {
   const { mobile } = useResponsive();
 
   const flag = (() => {
@@ -12,20 +15,16 @@ const LanguageValue = (key: Language, hideIfMobile: boolean = false) => {
   })();
 
   return (
-    <Box direction="row" align="center" gap={!mobile ? 'small' : '0px'} justify="center">
+    <Box direction="row" align="center" gap={!mobile ? 'small' : '0px'}>
       <Box>{mobile && hideIfMobile ? '' : `(${key})`}</Box>
-      <Box>{flag}</Box>
+      <Box margin={{ left: 'small' }}>{flag}</Box>
     </Box>
   );
 };
 
 export const LanguageSelector = (props: {}) => {
   const { selected, change } = useAppLanguage();
-  const { vw } = useResponsive();
-
-  const [showDrop, setShowDrop] = useState<boolean>();
-
-  const width = vw > 600 ? 240 : 200;
+  const [showDrop, setShowDrop] = useState<boolean>(false);
 
   const changeLanguage = (key: Language) => {
     change(key);
@@ -33,24 +32,28 @@ export const LanguageSelector = (props: {}) => {
   };
 
   return (
-    <AppCircleDropButtonResponsive
-      label={LanguageValue(selected, true)}
-      open={showDrop}
-      onClose={() => setShowDrop(false)}
-      onOpen={() => setShowDrop(true)}
-      dropContent={
-        <Box style={{ width: `${width}px` }} pad="20px" gap="small">
-          {Object.keys(Language).map((key: string) => {
-            return (
-              <AppButton
-                key={key}
-                style={{ width: `${width - 40}px` }}
-                label={LanguageValue(key as Language, false)}
-                onClick={() => changeLanguage(key as Language)}></AppButton>
-            );
-          })}
-        </Box>
-      }
-      dropProps={{ style: { width: `${width + 40}px`, marginTop: '60px' } }}></AppCircleDropButtonResponsive>
+    <>
+      <AppButton
+        plain
+        label={<Text size="small">{LanguageValue(selected, false)}</Text>}
+        onClick={() => setShowDrop(!showDrop)}></AppButton>
+      {showDrop ? (
+        <AppModal onClosed={() => setShowDrop(false)} heading="Choose language">
+          <BoxCentered pad="large" gap="medium" align="center" justify="center">
+            {Object.keys(Language).map((key: string) => {
+              return (
+                <AppButton
+                  style={{ width: '180px', textAlign: 'center' }}
+                  key={key}
+                  label={LanguageValue(key as Language, false)}
+                  onClick={() => changeLanguage(key as Language)}></AppButton>
+              );
+            })}
+          </BoxCentered>
+        </AppModal>
+      ) : (
+        <></>
+      )}
+    </>
   );
 };

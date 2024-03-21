@@ -1,7 +1,10 @@
 {
-  "name": "@microrevolutions/app",
+  "name": "@microdemocracies/app",
   "version": "0.0.0",
   "private": true,
+  "engines": {
+    "node": "18.16.0"
+  },
   "scripts": {
     "start": "craco start",
     "start-remote": "NODE_ENV=test-prod craco start --config craco.config.prod.js",
@@ -12,11 +15,14 @@
     "deploy": "sh ./deploy.sh "
   },
   "dependencies": {
-    "@alchemy/aa-accounts": "^0.2.0",
-    "@alchemy/aa-alchemy": "^0.2.0",
-    "@alchemy/aa-core": "^0.2.0",
+    "@alchemy/aa-accounts": "^3.1.0",
+    "@alchemy/aa-alchemy": "^3.1.0",
+    "@alchemy/aa-core": "^3.1.0",
+    "@alchemy/aa-signers": "^3.1.0",
+    "@magiclabs/wagmi-connector": "^1.1.5",
     "@semaphore-protocol/identity": "^3.15.0",
     "@semaphore-protocol/proof": "^3.15.0",
+    "@tanstack/react-query": "^5.22.2",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
@@ -27,21 +33,22 @@
     "@types/react-mailchimp-subscribe": "^2.1.1",
     "@types/styled-components": "^5.1.25",
     "@types/uuid": "^8.3.4",
-    "@wagmi/core": "^1.4.13",
+    "@wagmi/core": "^2.6.5",
+    "@web3modal/wagmi": "^4.0.9",
     "@yudiel/react-qr-scanner": "^1.1.10",
+    "add": "^2.0.6",
     "buffer": "^6.0.3",
     "canonical-json": "^0.0.4",
     "cbor-js": "^0.1.0",
     "cids": "^1.1.9",
     "crypto-browserify": "^3.12.0",
     "date-fns": "^2.30.0",
-    "ethers": "^5.7.2",
     "firebase": "^10.5.0",
     "framer-motion": "^7.5.3",
     "grommet": "^2.25.3",
     "grommet-icons": "^4.8.0",
     "i18next": "^23.7.7",
-    "magic-sdk": "^21.2.0",
+    "magic-sdk": "^22.1.1",
     "multiformats": "^9.6.5",
     "multihashing-async": "^2.1.4",
     "os-browserify": "^0.3.0",
@@ -59,9 +66,8 @@
     "stream": "^0.0.2",
     "styled-components": "^5.3.5",
     "use-debounce": "^8.0.1",
-    "viem": "^1.18.9",
-    "wagmi": "^1.4.5",
-    "typescript": "^5.2.2",
+    "viem": "2.x",
+    "wagmi": "^2.5.7",
     "web-vitals": "^2.1.4",
     "workbox-background-sync": "^6.6.0",
     "workbox-broadcast-update": "^6.6.0",
@@ -97,6 +103,8 @@
     ]
   },
   "devDependencies": {
-    "@craco/craco": "^7.1.0"
+    "@craco/craco": "^7.1.0",
+    "@trivago/prettier-plugin-sort-imports": "^4.3.0",
+    "typescript": "^5.2.2"
   }
 }

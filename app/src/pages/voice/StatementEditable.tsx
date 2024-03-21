@@ -11,6 +11,7 @@ export interface IStatementEditable {
   editable?: boolean;
   value?: string;
   onChanged?: (value?: string) => void;
+  onClick?: (e: React.MouseEvent) => void;
   containerStyle?: React.CSSProperties;
 }
 
@@ -66,9 +67,11 @@ export const StatementEditable = (props: IStatementEditable) => {
           color: constants.colors.textOnPrimary,
           fontSize: '48px',
           borderRadius: '6px',
+          cursor: props.onClick ? 'pointer' : '',
           ...props.containerStyle,
         }}
-        pad="small">
+        pad="small"
+        onClick={props.onClick}>
         <Box>
           <ReactQuill
             placeholder={props.placeholder}

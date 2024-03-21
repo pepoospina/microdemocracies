@@ -5,20 +5,19 @@ import { AppStatementCreate } from '../../types';
 import { useProjectContext } from '../../contexts/ProjectContext';
 import { useSemaphoreContext } from '../../contexts/SemaphoreContext';
 import { hashMessage } from 'viem';
-import { useVoiceRead } from '../../contexts/VoiceReadContext';
 
 export type VoiceSendContextType = {
   proposeStatement?: (statement: string) => Promise<boolean>;
   isSuccessStatement: boolean;
+  statementId?: string;
 };
 
 export const useStatementSend = (): VoiceSendContextType => {
-  const { projectId } = useProjectContext();
+  const { projectId, refetchStatements } = useProjectContext();
   const { publicId, generateProof } = useSemaphoreContext();
 
-  const { refetchStatements } = useVoiceRead();
-
   const [isSuccessStatement, setIsSuccessStatement] = useState<boolean>(false);
+  const [statementId, setStatementId] = useState<string>();
 
   const generateStatementProof =
     projectId && publicId && generateProof !== undefined
@@ -41,12 +40,13 @@ export const useStatementSend = (): VoiceSendContextType => {
               treeId: proofAndTree.treeId,
               statement: _statement,
             };
-            const res = await postStatement(statement);
-            if (res) {
+            const id = await postStatement(statement);
+            if (id !== undefined) {
               refetchStatements();
               setIsSuccessStatement(true);
+              setStatementId(id);
             }
-            return res;
+            return id;
           }
         }
       : undefined;
@@ -60,5 +60,6 @@ export const useStatementSend = (): VoiceSendContextType => {
   return {
     proposeStatement,
     isSuccessStatement,
+    statementId,
   };
 };

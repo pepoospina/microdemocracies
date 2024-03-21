@@ -1,0 +1,17 @@
+{
+  "folders": [
+    {
+      "path": "firebase/functions",
+      "name": "firebase/functions"
+    },
+    {
+      "path": "contracts",
+      "name": "contracts"
+    },
+    {
+      "path": "app",
+      "name": "app"
+    }
+  ],
+  "settings": {}
+}

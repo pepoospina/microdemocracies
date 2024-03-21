@@ -5,8 +5,10 @@ import {
   AppInvite,
   AppProjectCreate,
   AppProjectMember,
+  AppProjectMemberId,
   AppPublicIdentity,
   AppStatementCreate,
+  AppStatementRead,
   AppTree,
   Entity,
   HexStr,
@@ -27,6 +29,22 @@ export const setStatementBacker = async (
     .statementsBackers(backing.statementId)
     .doc(getBackingId(backing));
   await docRef.set(backing);
+
+  /** keep the sum of backers updated */
+  const statementRef = collections.statements.doc(backing.statementId);
+  const statementData = await statementRef.get();
+
+  if (!statementData.exists) {
+    throw new Error(`Statement not found ${backing.statementId}`);
+  }
+
+  const statement = statementData.data() as AppStatementRead;
+  const currentnBackers =
+    statement.nBackers !== undefined ? statement.nBackers : 0;
+  statement.nBackers = currentnBackers + 1;
+
+  statementRef.set(statement);
+
   return docRef.id;
 };
 
@@ -71,6 +89,28 @@ export const setProjectMember = async (
     .doc(id);
   await docRef.set(member);
   return docRef.id;
+};
+
+export const deleteProjectMember = async (
+  member: AppProjectMemberId
+): Promise<void> => {
+  const id = member.aaAddress;
+  const docRef = collections
+    .projectMembers(member.projectId.toString())
+    .doc(id);
+  await docRef.delete();
+};
+
+export const getProjectMembers = async (
+  projectId: number
+): Promise<AppProjectMember[]> => {
+  const membersCollection = collections.projectMembers(projectId.toString());
+  const membersFull = await membersCollection.get();
+  const members = membersFull.docs.map((member) => {
+    return member.data() as AppProjectMember;
+  });
+
+  return members;
 };
 
 export const setTree = async (tree: AppTree): Promise<string> => {

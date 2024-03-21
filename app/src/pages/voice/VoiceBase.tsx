@@ -1,5 +1,5 @@
 import { Outlet } from 'react-router-dom';
 
-export const VoiceBase = (props: {}) => {
+export const VoiceBasePage = (props: {}) => {
   return <Outlet />;
 };

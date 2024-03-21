@@ -1,4 +1,4 @@
-import { getDocs, where, query, and, getDoc, doc as docRef, getCountFromServer } from 'firebase/firestore';
+import { getDocs, where, query, getDoc, doc as docRef, getCountFromServer, orderBy } from 'firebase/firestore';
 import { collections } from './database';
 import { AppApplication, AppProject, AppPublicIdentity, Entity, HexStr, StatementRead } from '../types';
 import { postInvite } from '../utils/project';
@@ -15,7 +15,7 @@ export const getProject = async (projectId: number) => {
 };
 
 export const getAccountProjects = async (aaAddress: HexStr) => {
-  const q = query(collections.members, where('aaAddress', '==', aaAddress));
+  const q = query(collections.members, where('aaAddress', '==', aaAddress), orderBy('projectId', 'desc'));
   const snap = await getDocs(q);
 
   const projectIds = snap.docs.map((doc) => {
@@ -28,11 +28,13 @@ export const getAccountProjects = async (aaAddress: HexStr) => {
     })
   );
 
+  console.log({ projects });
+
   return projects;
 };
 
 export const getTopStatements = async (projectId: number) => {
-  const q = query(collections.statements, where('projectId', '==', projectId));
+  const q = query(collections.statements, where('projectId', '==', projectId), where('nBackers', '>=', 2));
   const snap = await getDocs(q);
 
   return snap.docs.map((doc) => {
@@ -41,6 +43,20 @@ export const getTopStatements = async (projectId: number) => {
       id: doc.id,
     } as unknown as StatementRead;
   });
+};
+
+export const getStatement = async (statementId: string) => {
+  const ref = collections.statement(statementId);
+  const doc = await getDoc(ref);
+
+  if (!doc.exists) {
+    return undefined;
+  }
+
+  return {
+    ...doc.data(),
+    id: doc.id,
+  } as unknown as StatementRead;
 };
 
 export const countStatementBackings = async (statementId: string) => {

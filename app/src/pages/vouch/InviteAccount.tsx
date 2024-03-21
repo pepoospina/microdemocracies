@@ -10,11 +10,17 @@ import { AppBottomButton } from '../common/BottomButtons';
 import { ViewportPage } from '../../components/app/Viewport';
 import { VouchMemberWidget } from './VouchMemberWidget';
 import { useTranslation } from 'react-i18next';
+import { useAppContainer } from '../../components/app/AppContainer';
 
-export const InviteAccount = () => {
-  const { t } = useTranslation();
+export const InviteAccountPage = () => {
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const { hash } = useParams();
+  const { setTitle } = useAppContainer();
+
+  useEffect(() => {
+    setTitle({ prefix: t('approveNew'), main: t('member') });
+  }, [i18n.language]);
 
   /** convert hash into pap and send to VouchWidget */
   const [pap, setPap] = useState<Entity<PAP>>();
@@ -49,16 +55,23 @@ export const InviteAccount = () => {
   })();
 
   return (
-    <ViewportPage>
-      <Box justify="center" align="center" style={{ flexShrink: '0', height: '50px' }}>
-        <Text size="22px" weight="bold">
-          {t('appName')}
-        </Text>
-      </Box>
+    <ViewportPage
+      content={
+        <>
+          <Box justify="center" align="center" style={{ flexShrink: '0', height: '50px' }}>
+            <Text size="22px" weight="bold">
+              {t('appName')}
+            </Text>
+          </Box>
 
-      {content}
-
-      <AppBottomButton onClick={() => navigate(-1)} icon={<FormPrevious></FormPrevious>} label="back"></AppBottomButton>
-    </ViewportPage>
+          {content}
+        </>
+      }
+      nav={
+        <AppBottomButton
+          onClick={() => navigate(-1)}
+          icon={<FormPrevious></FormPrevious>}
+          label={t('back')}></AppBottomButton>
+      }></ViewportPage>
   );
 };

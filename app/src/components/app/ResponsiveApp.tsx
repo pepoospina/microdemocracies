@@ -1,5 +1,12 @@
 import { ResponsiveContext } from 'grommet';
-import { createContext, CSSProperties, useCallback, useContext, useEffect, useState } from 'react';
+import {
+  createContext,
+  CSSProperties,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 
 import { IElement } from './IElement';
 import { parseCssUnits } from '../../utils/general';
@@ -16,11 +23,13 @@ export type ResponsiveStylePoint = string[] | string;
 export type ResponsiveStyleValue = [ResponsiveStylePoint, CSSProperties];
 export type ResponsiveStyleConfig = ResponsiveStyleValue[] | CSSProperties;
 
-const AppResponsiveContext = createContext<ResponsiveContextType | undefined>(undefined);
+const AppResponsiveContext = createContext<ResponsiveContextType | undefined>(
+  undefined
+);
 
 export const ResponsiveApp = (props: IElement): JSX.Element => {
   const size = useContext(ResponsiveContext);
-  const mobile = size.includes('small');
+  const mobile = size ? size.includes('small') : false;
   const [vw, setVw] = useState<number>(window.innerWidth);
 
   useEffect(() => {
@@ -63,7 +72,9 @@ export const ResponsiveApp = (props: IElement): JSX.Element => {
     (config: ResponsiveStyleConfig): CSSProperties => {
       if (config instanceof Array) {
         const found = config.find(([point, _]) => {
-          return typeof point === 'string' ? point === size : point.includes(size);
+          return typeof point === 'string'
+            ? point === size
+            : point.includes(size);
         });
         return found ? found[1] : {};
       } else {
@@ -75,7 +86,8 @@ export const ResponsiveApp = (props: IElement): JSX.Element => {
   );
 
   return (
-    <AppResponsiveContext.Provider value={{ vw, mobile, scaleText, responsiveStyle, size }}>
+    <AppResponsiveContext.Provider
+      value={{ vw, mobile, scaleText, responsiveStyle, size }}>
       {props.children}
     </AppResponsiveContext.Provider>
   );
@@ -83,6 +95,9 @@ export const ResponsiveApp = (props: IElement): JSX.Element => {
 
 export function useResponsive(): ResponsiveContextType {
   const context = useContext(AppResponsiveContext);
-  if (!context) throw Error('useWeb3React can only be used within the Web3ReactProvider component');
+  if (!context)
+    throw Error(
+      'useResponsive can only be used within the Web3ReactProvider component'
+    );
   return context;
 }

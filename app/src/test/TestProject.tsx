@@ -1,30 +1,25 @@
-import { useEffect, useState } from 'react';
-
-import { AppButton, AppHeading } from '../ui-components';
-import { BoxCentered } from '../ui-components/BoxCentered';
-import { useProjectContext } from '../contexts/ProjectContext';
-import { useVoiceRead } from '../contexts/VoiceReadContext';
-import { useAppSigner } from '../wallet/SignerContext';
-import { useAccountContext } from '../wallet/AccountContext';
-import { StatementCard } from '../pages/voice/StatementCard';
 import { Box } from 'grommet';
+import { useEffect, useState } from 'react';
+import { useConnect } from 'wagmi';
+
+import { useProjectContext } from '../contexts/ProjectContext';
+import { StatementContext } from '../contexts/StatementContext';
+import { StatementCard } from '../pages/voice/StatementCard';
 import { useBackingSend } from '../pages/voice/useBackingSend';
 import { useStatementSend } from '../pages/voice/useStatementSend';
+import { AppButton, AppHeading } from '../ui-components';
+import { BoxCentered } from '../ui-components/BoxCentered';
+import { useAccountContext } from '../wallet/AccountContext';
+import { useAppSigner } from '../wallet/SignerContext';
 
 export const TestProject = () => {
-  const { connectTest } = useAppSigner();
-  const { isConnected } = useAccountContext();
-  const { projectId } = useProjectContext();
+  const { connect } = useAppSigner();
+  const { isConnected,  } = useAccountContext();
+  const { projectId, statements } = useProjectContext();
   const { proposeStatement, isSuccessStatement } = useStatementSend();
   const { backStatement } = useBackingSend();
-  const { statements } = useVoiceRead();
 
   const [random, setRandom] = useState<string>();
-
-  /** each step triggers the useEffect below it. */
-  const connect = () => {
-    connectTest(0);
-  };
 
   const startTest = async () => {
     if (!proposeStatement) {
@@ -71,7 +66,14 @@ export const TestProject = () => {
   return (
     <BoxCentered fill gap="large">
       <AppHeading level="3">Project {projectId}</AppHeading>
-      {!isConnected ? <AppButton onClick={() => connect()} label="Connect" primary></AppButton> : <></>}
+      {!isConnected ? (
+        <AppButton
+          onClick={() => connect()}
+          label="Connect"
+          primary></AppButton>
+      ) : (
+        <></>
+      )}
       <AppButton
         disabled={proposeStatement === undefined}
         onClick={() => startTest()}
@@ -82,7 +84,11 @@ export const TestProject = () => {
         {statements ? (
           statements.map((statement, ix) => {
             return (
-              <StatementCard containerStyle={{ marginBottom: '22px' }} key={ix} statement={statement}></StatementCard>
+              <StatementContext statement={statement}>
+                <StatementCard
+                  containerStyle={{ marginBottom: '22px' }}
+                  key={ix}></StatementCard>
+              </StatementContext>
             );
           })
         ) : (

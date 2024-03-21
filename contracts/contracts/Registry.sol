@@ -9,7 +9,7 @@ import "@openzeppelin/contracts/token/ERC721/extensions/IERC721Metadata.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/IERC721Enumerable.sol";
 import "@openzeppelin/contracts/proxy/utils/Initializable.sol";
 
-// import "hardhat/console.sol";
+import "hardhat/console.sol";
 
 /**
  * @title Registry
@@ -21,7 +21,7 @@ contract Registry is Context, IERC721, IERC721Metadata, Initializable {
     uint256 public PENDING_PERIOD;
     uint256 public VOTING_PERIOD;
     uint256 public QUIET_ENDING_PERIOD;
-    
+
     string public statementCid;
 
     uint256 public constant FOUNDERS_VOUCHER = type(uint256).max;
@@ -40,7 +40,7 @@ contract Registry is Context, IERC721, IERC721Metadata, Initializable {
     }
 
     struct Account {
-        address account;    
+        address account;
         uint256 voucher;
         bool valid;
         uint256 timesChallenged;
@@ -56,9 +56,10 @@ contract Registry is Context, IERC721, IERC721Metadata, Initializable {
         uint256 nFor;
     }
 
+    /** Vouces keep track of the tree of vouches */
     mapping(uint256 => Vouches) vouches;
 
-    /** 
+    /**
      * two mappings hold the address to token id relationship,
      * but this is a one-to-one relationship. TokenIds
      * are preferred as they can be memorized by users.
@@ -75,9 +76,10 @@ contract Registry is Context, IERC721, IERC721Metadata, Initializable {
     event InvalidatedAccountEvent(uint256 indexed tokenId);
     event InvalidatedByChallenge(uint256 indexed tokenId);
     event InvalidatedByInvalidVoucher(uint256 indexed tokenId);
+    event AccountLeftEvent(address indexed account, uint256 indexed tokenId);
 
     event ChallengeEvent(uint256 indexed tokenId);
-    event ChallengeExecuted(uint256 tokenId, int8 outcome);        
+    event ChallengeExecuted(uint256 tokenId, int8 outcome);
     event VoteEvent(uint256 indexed voterTokenId, uint256 tokenId, int8 vote);
     event InvalidatedVoteEvent(uint256 indexed tokenId, uint256 indexed voterTokenId);
     event VotingPeriodExtendedEvent(uint256 newEndDate);
@@ -85,7 +87,8 @@ contract Registry is Context, IERC721, IERC721Metadata, Initializable {
     /** Errors */
     error ErrorAccountSolidified();
     error CantChallengeInvalidAccount();
-    error ChallangeAlreadyActive();    
+    error OnlyMemberCanChallenge();
+    error ChallangeAlreadyActive();
     error ErrorChallangeAlreadyExecuted();
     error ErrorChallangeNotActive();
     error ErrorVotingPeriodEnded();
@@ -101,15 +104,16 @@ contract Registry is Context, IERC721, IERC721Metadata, Initializable {
     error UnexpectedExecutedCondition();
 
     /** Constructor */
-    function initRegistry (
-        string memory __symbol, 
-        string memory __name, 
-        address[] memory addresses, 
-        string[] memory foundersCids, 
-        string memory _statementCid, 
+    function initRegistry(
+        string memory __symbol,
+        string memory __name,
+        address[] memory addresses,
+        string[] memory foundersCids,
+        string memory _statementCid,
         uint256 _PENDING_PERIOD,
-        uint256 _VOTING_PERIOD, 
-        uint256 _QUIET_ENDING_PERIOD ) external initializer {
+        uint256 _VOTING_PERIOD,
+        uint256 _QUIET_ENDING_PERIOD
+    ) external initializer {
         statementCid = _statementCid;
         _symbol = __symbol;
         _name = __name;
@@ -129,7 +133,7 @@ contract Registry is Context, IERC721, IERC721Metadata, Initializable {
     /***************
     EXTERNAL FUNCTIONS
     ***************/
-    /** 
+    /**
      * The msgSender must be a valid account in the registry and vouch
      * for the provided account and personCid pair
      */
@@ -140,28 +144,32 @@ contract Registry is Context, IERC721, IERC721Metadata, Initializable {
 
     function getCurrentChallenge(uint256 _tokenId) internal returns (Challenge storage) {
         uint256 timesChallenged = accounts[_tokenId].timesChallenged;
-        
+
         if (challenges[_tokenId].length != timesChallenged + 1) {
-            /** the currentChallenge must be the last challenge in the array, 
+            /** the currentChallenge must be the last challenge in the array,
              * the first time is read it does not exist so we create it */
             challenges[_tokenId].push();
         }
-        
+
         return challenges[_tokenId][timesChallenged];
     }
 
     function challenge(uint256 _tokenId) external {
-        if(isSolidified(_tokenId)) {
+        if (isSolidified(_tokenId)) {
             revert ErrorAccountSolidified();
         }
 
-        if(!accounts[_tokenId].valid) {
+        if (!accounts[_tokenId].valid) {
             revert CantChallengeInvalidAccount();
         }
 
+        if (_tokenIdOf(_msgSender()) == 0) {
+            revert OnlyMemberCanChallenge();
+        }
+
         Challenge storage _challenge = getCurrentChallenge(_tokenId);
-        if(_challenge.creationDate > 0) revert ChallangeAlreadyActive();
-        if(_challenge.executed) revert UnexpectedExecutedCondition();
+        if (_challenge.creationDate > 0) revert ChallangeAlreadyActive();
+        if (_challenge.executed) revert UnexpectedExecutedCondition();
 
         _challenge.creationDate = block.timestamp;
         _challenge.endDate = block.timestamp + VOTING_PERIOD;
@@ -173,12 +181,12 @@ contract Registry is Context, IERC721, IERC721Metadata, Initializable {
     function vote(uint256 _tokenId, int8 _vote) external {
         uint256 voterTokenId = _tokenIdOf(_msgSender());
         Challenge storage _challenge = getCurrentChallenge(_tokenId);
-        
-        if(_challenge.creationDate == 0) revert ErrorChallangeNotActive();
-        if(_challenge.executed) revert ErrorChallangeAlreadyExecuted();
-        if(block.timestamp > _challenge.endDate) revert ErrorVotingPeriodEnded();
-        if(!canVote(voterTokenId, _tokenId)) revert ErrorVoterCantVote();
-        if(_challenge.votes[voterTokenId] != 0) revert ErrorAlreadyVoted();
+
+        if (_challenge.creationDate == 0) revert ErrorChallangeNotActive();
+        if (_challenge.executed) revert ErrorChallangeAlreadyExecuted();
+        if (block.timestamp > _challenge.endDate) revert ErrorVotingPeriodEnded();
+        if (!canVote(voterTokenId, _tokenId)) revert ErrorVoterCantVote();
+        if (_challenge.votes[voterTokenId] != 0) revert ErrorAlreadyVoted();
 
         _challenge.votes[voterTokenId] = _vote == 1 ? int8(1) : int8(-1);
         _challenge.nVoted += 1;
@@ -189,6 +197,12 @@ contract Registry is Context, IERC721, IERC721Metadata, Initializable {
         _executeVote(_challenge, _tokenId);
     }
 
+    function leave() external {
+        uint256 tokenId = _tokenIdOf(_msgSender());
+        _invalidateAccount(tokenId);
+        emit AccountLeftEvent(_msgSender(), tokenId);
+    }
+
     function executeVote(uint256 _tokenId) external {
         Challenge storage _challenge = getCurrentChallenge(_tokenId);
         _executeVote(_challenge, _tokenId);
@@ -196,7 +210,7 @@ contract Registry is Context, IERC721, IERC721Metadata, Initializable {
 
     function invalidateInvalidVoucher(uint256 tokenId) external {
         uint256 voucherTokenId = accounts[tokenId].voucher;
-        if(accounts[voucherTokenId].valid) revert ErrorVoucherIsValid();
+        if (accounts[voucherTokenId].valid) revert ErrorVoucherIsValid();
 
         emit InvalidatedByInvalidVoucher(tokenId);
         _invalidateAccount(tokenId);
@@ -241,14 +255,14 @@ contract Registry is Context, IERC721, IERC721Metadata, Initializable {
         return number;
     }
 
-    /** 
+    /**
      * A tokenId can vote if
      * - The voter account is valid
      * - AND either
      * - voterTokenId was vouched by voucherTokenId (which is the voucher of the challenged tokenId)
      * - OR the voterTokenId is the voucherTokenId themselves.
-     * 
-     * The FOUNDERS_VOUCHER can, in theory vote on founders challenges, but no address owns that 
+     *
+     * The FOUNDERS_VOUCHER can, in theory vote on founders challenges, but no address owns that
      * token and so no problem
      * */
     function canVote(uint256 voterTokenId, uint256 challengedTokenId) public view returns (bool) {
@@ -256,12 +270,12 @@ contract Registry is Context, IERC721, IERC721Metadata, Initializable {
         if (voterTokenId == 0) return false;
 
         uint256 voucherTokenId = accounts[challengedTokenId].voucher;
-        if(!accounts[voucherTokenId].valid) revert VoucherNoLongerInvalid();
+        if (!accounts[voucherTokenId].valid) revert VoucherNoLongerInvalid();
 
         bool isInCircle = accounts[voterTokenId].voucher == voucherTokenId || voterTokenId == voucherTokenId;
 
         if (accounts[voterTokenId].valid && isInCircle) return true;
-        
+
         return false;
     }
 
@@ -273,11 +287,11 @@ contract Registry is Context, IERC721, IERC721Metadata, Initializable {
         return !isPending && account.valid;
     }
 
-    function tokenIdOf(address owner) external view returns(uint256){
+    function tokenIdOf(address owner) external view returns (uint256) {
         return _tokenIdOf(owner);
     }
 
-    function _tokenIdOf(address owner) internal view returns(uint256){
+    function _tokenIdOf(address owner) internal view returns (uint256) {
         return owned[owner];
     }
 
@@ -291,14 +305,16 @@ contract Registry is Context, IERC721, IERC721Metadata, Initializable {
     }
 
     function ownerOf(uint256 tokenId) external view override returns (address owner) {
-        return _ownerOf(tokenId); 
+        return _ownerOf(tokenId);
     }
 
     function _ownerOf(uint256 tokenId) internal view returns (address owner) {
-        return accounts[tokenId].account; 
+        return accounts[tokenId].account;
     }
 
-    function getChallenge(uint256 tokenId) external view returns (uint256 creationDate, uint256 endDate, int8 lastOutcome, uint256 nVoted, uint256 nFor, bool executed) {
+    function getChallenge(
+        uint256 tokenId
+    ) external view returns (uint256 creationDate, uint256 endDate, int8 lastOutcome, uint256 nVoted, uint256 nFor, bool executed) {
         uint256 challengeIndex = accounts[tokenId].timesChallenged;
         return this.getSpecificChallenge(tokenId, challengeIndex);
     }
@@ -308,7 +324,10 @@ contract Registry is Context, IERC721, IERC721Metadata, Initializable {
         return this.getSpecificChallengeVote(tokenId, voterTokenId, challengeIndex);
     }
 
-    function getSpecificChallenge(uint256 tokenId, uint256 challengeIndex) external view returns (uint256 creationDate, uint256 endDate, int8 lastOutcome, uint256 nVoted, uint256 nFor, bool executed) {
+    function getSpecificChallenge(
+        uint256 tokenId,
+        uint256 challengeIndex
+    ) external view returns (uint256 creationDate, uint256 endDate, int8 lastOutcome, uint256 nVoted, uint256 nFor, bool executed) {
         Challenge storage _challenge = challenges[tokenId][challengeIndex];
         return (_challenge.creationDate, _challenge.endDate, _challenge.lastOutcome, _challenge.nVoted, _challenge.nFor, _challenge.executed);
     }
@@ -343,14 +362,14 @@ contract Registry is Context, IERC721, IERC721Metadata, Initializable {
     /** Claiming is always enabled (effectively possible only when a non-zero approved merkleRoot is set) */
     function _vouch(uint256 _voucherTokenId, address _account, string memory _personCid) internal {
         uint256 _tokenId = nextTokenId();
-        if(!accounts[_voucherTokenId].valid) revert ErrorVoucherNotValid();
+        if (!accounts[_voucherTokenId].valid) revert ErrorVoucherNotValid();
         if (owned[_account] != 0) revert AccountAlreadyOwnsOneToken();
-        
+
         Vouches storage tokenVouches = vouches[_voucherTokenId];
         Vouch storage __vouch = tokenVouches.vouches[_tokenId];
 
-        /** 
-         * Store the vouch data, validate and store the account data, set the owned mapping and update the 
+        /**
+         * Store the vouch data, validate and store the account data, set the owned mapping and update the
          * total number of vouches and entries in the registry
          */
         __vouch.personCid = _personCid;
@@ -365,6 +384,7 @@ contract Registry is Context, IERC721, IERC721Metadata, Initializable {
         tokenVouches.number += 1;
         __totalSupply += 1;
 
+        /** mint event */
         emit Transfer(address(0), _account, _tokenId);
         emit VouchEvent(_voucherTokenId, _tokenId, _personCid);
     }
@@ -373,22 +393,27 @@ contract Registry is Context, IERC721, IERC721Metadata, Initializable {
         Account storage account = accounts[tokenId];
 
         if (!account.valid) revert ErrorAccountNotValid();
-        
-        /** 
+        address orgAccount = account.account;
+        uint256 orgVoucher = account.voucher;
+
+        /**
          * invalidate and remove the one-to-one relationship
          * between the accounts and the owned mappings
          */
         account.valid = false;
-        
+
         owned[account.account] = 0;
         account.account = address(0);
+        account.voucher = 0;
 
         /** decrease the number of valid members of the circle */
-        vouches[account.voucher].number -= 1;
+        vouches[orgVoucher].number -= 1;
+
         /** decrease the number of total entries in the registry */
         __totalSupply -= 1;
 
-        emit Transfer(account.account, address(0), tokenId);
+        /** burn event */
+        emit Transfer(orgAccount, address(0), tokenId);
         emit InvalidatedAccountEvent(tokenId);
     }
 
@@ -397,7 +422,7 @@ contract Registry is Context, IERC721, IERC721Metadata, Initializable {
         uint256 activeRatio = 0;
         uint256 relRatio = 0;
 
-        /** 
+        /**
          * keep track of outcome changes, if outcome changed recently,
          * extend the voting period
          */
@@ -406,14 +431,14 @@ contract Registry is Context, IERC721, IERC721Metadata, Initializable {
         }
 
         int8 currentOutcome = relRatio >= 0.5e18 ? int8(1) : int8(-1);
-        
+
         /** Initialize the lastoutcome */
         if (_challenge.lastOutcome != currentOutcome) {
             _challenge.lastOutcome = currentOutcome;
-            
+
             uint256 timeRemaining = _challenge.endDate - block.timestamp;
 
-            if(timeRemaining < QUIET_ENDING_PERIOD) {
+            if (timeRemaining < QUIET_ENDING_PERIOD) {
                 uint256 newEndDate = _challenge.endDate + (QUIET_ENDING_PERIOD - timeRemaining);
                 emit VotingPeriodExtendedEvent(newEndDate);
                 _challenge.endDate = newEndDate;
@@ -439,7 +464,7 @@ contract Registry is Context, IERC721, IERC721Metadata, Initializable {
             _invalidateAccount(_tokenId);
         }
 
-        if(executed) {
+        if (executed) {
             emit ChallengeExecuted(_tokenId, outcome);
             _challenge.executed = true;
             accounts[_tokenId].timesChallenged++;
@@ -451,8 +476,8 @@ contract Registry is Context, IERC721, IERC721Metadata, Initializable {
      * A voter should call "vote" to invalidate an account and "_invalidateVote" on all the open challenges of the recently invalidated account.
      */
     function _invalidateVote(uint256 tokenId, Challenge storage _challenge, uint256 voterTokenId) internal {
-        if(_challenge.votes[voterTokenId] == 0) revert ErrorVoteNotFound();
-        if(accounts[voterTokenId].valid) revert ErrorVoterValid();
+        if (_challenge.votes[voterTokenId] == 0) revert ErrorVoteNotFound();
+        if (accounts[voterTokenId].valid) revert ErrorVoterValid();
 
         /** decrease the total number of voters */
         _challenge.nVoted -= 1;
@@ -496,6 +521,6 @@ contract Registry is Context, IERC721, IERC721Metadata, Initializable {
     function tokenURI(uint256 tokenId) external view override returns (string memory) {
         uint256 voucherTokenId = accounts[tokenId].voucher;
         string memory cid = vouches[voucherTokenId].vouches[tokenId].personCid;
-        return string(abi.encodePacked(baseURI, cid)); 
+        return string(abi.encodePacked(baseURI, cid));
     }
 }

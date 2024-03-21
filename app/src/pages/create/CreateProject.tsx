@@ -8,23 +8,27 @@ import { AppCard, AppHeading } from '../../ui-components';
 import { DetailsSelector } from './DetailsSelector';
 import { DetailsForm } from '../join/DetailsForm';
 
-import { AppConnect } from '../../components/app/AppConnect';
+import { AppConnectWidget } from '../../components/app/AppConnectButton';
 import { ProjectSummary } from './ProjectSummary';
 import { BoxCentered } from '../../ui-components/BoxCentered';
 
-import { ViewportHeadingLarge, ViewportPage } from '../../components/app/Viewport';
-import { Bold } from '../landing/LandingPage';
+import { ViewportPage } from '../../components/app/Viewport';
 import { AppBottomButtons } from '../common/BottomButtons';
 import { useCreateProject } from './useCreateProject';
-import { RouteNames } from '../../App';
+import { AbsoluteRoutes } from '../../route.names';
 import { Trans, useTranslation } from 'react-i18next';
+import { Bold } from '../../ui-components/Bold';
+import { useAppContainer } from '../../components/app/AppContainer';
+import { useAccountContext } from '../../wallet/AccountContext';
 
 const NPAGES = 5;
 
 export const CreateProject = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const [pageIx, setPageIx] = useState(0);
+  const { setTitle } = useAppContainer();
+  const { aaAddress } = useAccountContext();
 
   const {
     founderPap,
@@ -42,22 +46,26 @@ export const CreateProject = () => {
 
   useEffect(() => {
     if (projectId) {
-      navigate(RouteNames.ProjectHome(projectId.toString()));
+      navigate(AbsoluteRoutes.ProjectHome(projectId.toString()));
     }
   }, [navigate, projectId]);
+
+  useEffect(() => {
+    setTitle({ prefix: t('startA'), main: t('project') });
+  }, [setTitle, i18n.language]);
 
   const boxStyle: React.CSSProperties = {
     flexGrow: '1',
     justifyContent: 'center',
   };
 
-  const headingStyle: React.CSSProperties = {
-    marginBottom: '4vw',
-  };
-
   const nextPage = () => {
     if (pageIx < NPAGES - 1) {
-      setPageIx(pageIx + 1);
+      if (pageIx === 2 && aaAddress) {
+        setPageIx(pageIx + 2);
+      } else {
+        setPageIx(pageIx + 1);
+      }
     }
 
     if (pageIx === NPAGES - 1) {
@@ -70,7 +78,11 @@ export const CreateProject = () => {
       navigate(-1);
     }
     if (pageIx > 0) {
-      setPageIx(pageIx - 1);
+      if (pageIx === 4 && aaAddress) {
+        setPageIx(pageIx - 2);
+      } else {
+        setPageIx(pageIx - 1);
+      }
     }
   };
 
@@ -81,7 +93,13 @@ export const CreateProject = () => {
 
   const nextStr = (() => {
     if (pageIx === 1) return t('next');
-    if (pageIx === 2) return t('next');
+    if (pageIx === 2) {
+      if (aaAddress) {
+        return t('review');
+      } else {
+        return t('next');
+      }
+    }
     if (pageIx === 3) return t('review');
     if (pageIx === 4) return t('create');
     return t('next');
@@ -93,6 +111,7 @@ export const CreateProject = () => {
   })();
 
   const nextDisabled = (() => {
+    if (pageIx === 2 && aaAddress && !founderPap) return true;
     if (pageIx === 3 && !founderPap) return true;
     if (pageIx === 4 && !whoStatement) return true;
     return false;
@@ -109,11 +128,16 @@ export const CreateProject = () => {
 
   const pages: ReactNode[] = [
     <Box style={boxStyle} pad="large">
-      <Box style={{ marginBottom: '12px', fontSize: '10px', fontWeight: '300', flexShrink: 0 }}>
-        <AppHeading style={headingStyle} level="3">
-          {t('whoTitle')}:
-        </AppHeading>
+      <Box pad={{ vertical: 'large' }} style={{ flexShrink: 0 }}>
+        <AppCard>
+          <Text>
+            <Trans i18nKey={'tryoutMsg'} components={{ Bold: <Bold></Bold> }}></Trans>
+          </Text>
+        </AppCard>
       </Box>
+      <AppHeading level="3" style={{ marginBottom: '24px' }}>
+        {t('whoTitle')}
+      </AppHeading>
       <Box>
         <StatementEditable
           onChanged={(value) => {
@@ -128,34 +152,27 @@ export const CreateProject = () => {
     </Box>,
 
     <Box style={boxStyle} pad="large">
-      <AppHeading style={headingStyle} level="3">
-        {t('toJoinMsg')}:
+      <AppHeading level="3" style={{ marginBottom: '18px' }}>
+        {t('toJoinMsg')}
       </AppHeading>
       <DetailsSelector onChanged={(details) => setDetails(details)}></DetailsSelector>
     </Box>,
 
-    <Box style={boxStyle}>
-      <Box style={{ width: '100%', flexShrink: 0 }} pad="large">
-        <AppHeading style={headingStyle} level="3">
-          {t('yourDetails')}:
-        </AppHeading>
-
-        <DetailsForm selected={selectedDetails} onChange={(details) => setFounderDetails(details)}></DetailsForm>
-      </Box>
+    <Box style={boxStyle} pad="large">
+      <AppHeading level="3" style={{ marginBottom: '18px' }}>
+        {t('yourDetails')}
+      </AppHeading>
+      <DetailsForm selected={selectedDetails} onChange={(details) => setFounderDetails(details)}></DetailsForm>
     </Box>,
 
-    <Box style={boxStyle}>
-      <Box style={{ width: '100%', flexShrink: 0 }} pad="large">
-        <AppHeading style={headingStyle} level="3">
-          {t('connectAccount')}:
-        </AppHeading>
-        <Box pad="large" style={{ flexShrink: 0 }}>
-          <AppConnect></AppConnect>
-        </Box>
-      </Box>
+    <Box style={{ ...boxStyle, paddingTop: '80px' }} pad="large" align="center">
+      <AppConnectWidget></AppConnectWidget>
     </Box>,
 
-    <Box style={boxStyle}>
+    <Box style={boxStyle} pad="large">
+      <AppHeading level="3" style={{ marginBottom: '18px' }}>
+        {t('projectSummary')}
+      </AppHeading>
       <ProjectSummary
         selectedDetails={selectedDetails}
         whatStatement={''}
@@ -165,45 +182,33 @@ export const CreateProject = () => {
   ];
 
   return (
-    <ViewportPage>
-      <ViewportHeadingLarge label={t('startProject')}></ViewportHeadingLarge>
-
-      <Box style={{ flexGrow: '1' }} justify="center">
-        {pageIx === 0 ? (
-          <Box pad={{ horizontal: 'large' }} style={{ flexShrink: 0 }}>
-            <AppCard>
-              <Text>
-                <Trans i18nKey={'tryoutMsg'} components={{ Bold: <Bold></Bold> }}></Trans>
-              </Text>
-            </AppCard>
-          </Box>
-        ) : (
-          <></>
-        )}
-
-        {pages.map((page, ix) => {
-          return (
-            <div key={ix} style={{ width: '100%', display: pageIx === ix ? 'block' : 'none' }}>
-              {page}
-            </div>
-          );
-        })}
-      </Box>
-
-      <AppBottomButtons
-        popUp={isError ? error?.message : undefined}
-        left={{
-          action: () => prevPage(),
-          icon: <FormPrevious></FormPrevious>,
-          label: prevStr,
-        }}
-        right={{
-          action: () => nextPage(),
-          icon: <FormNext></FormNext>,
-          label: nextStr,
-          disabled: nextDisabled,
-          primary: nextPrimary,
-        }}></AppBottomButtons>
-    </ViewportPage>
+    <ViewportPage
+      content={
+        <Box style={{ flexGrow: '1' }} justify="center">
+          {pages.map((page, ix) => {
+            return (
+              <div key={ix} style={{ width: '100%', display: pageIx === ix ? 'block' : 'none' }}>
+                {page}
+              </div>
+            );
+          })}
+        </Box>
+      }
+      nav={
+        <AppBottomButtons
+          popUp={isError ? error?.message : undefined}
+          left={{
+            action: () => prevPage(),
+            icon: <FormPrevious></FormPrevious>,
+            label: prevStr,
+          }}
+          right={{
+            action: () => nextPage(),
+            icon: <FormNext></FormNext>,
+            label: nextStr,
+            disabled: nextDisabled,
+            primary: nextPrimary,
+          }}></AppBottomButtons>
+      }></ViewportPage>
   );
 };

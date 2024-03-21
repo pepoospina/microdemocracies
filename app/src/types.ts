@@ -117,6 +117,7 @@ export interface AppStatement {
   statement: string;
   treeId: string;
   proof: SemaphoreProofStrings;
+  nBackers?: number;
 }
 
 export type AppStatementRead = AppStatement & { id: string };
@@ -166,9 +167,21 @@ export interface AppReturnMerklePass {
   treeId: string;
 }
 
+export interface AppProjectMemberId {
+  projectId: number;
+  aaAddress: HexStr;
+}
+
 export interface AppProjectMember {
   projectId: number;
   aaAddress: HexStr;
+  tokenId: number;
+  voucherTokenId: number;
+}
+
+export interface AppProjectMemberToken {
+  projectId: number;
+  tokenId: number;
 }
 
 export interface AppProjectIndex {

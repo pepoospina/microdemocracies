@@ -1,11 +1,20 @@
 import { useCallback, useEffect, useState } from 'react';
+import {
+  DecodeEventLogReturnType,
+  encodeFunctionData,
+  zeroAddress,
+} from 'viem';
+import { usePublicClient } from 'wagmi';
 
-import { registryABI } from '../utils/contracts.json';
 import { HexStr } from '../types';
-import { useProjectContext } from './ProjectContext';
-import { useAccountContext } from '../wallet/AccountContext';
-import { DecodeEventLogReturnType, encodeFunctionData, zeroAddress } from 'viem';
+import {
+  TransferEventType,
+  VouchEventType,
+  registryABI,
+} from '../utils/contracts.json';
 import { postMember } from '../utils/project';
+import { useAccountContext } from '../wallet/AccountContext';
+import { useProjectContext } from './ProjectContext';
 
 export type VouchHookType = {
   setVouchParams: (account: HexStr, personCid: string) => void;
@@ -18,30 +27,68 @@ export type VouchHookType = {
 
 export const useVouch = (): VouchHookType => {
   /** Vouch */
-  const { address, projectId } = useProjectContext();
-  const { reset, addUserOp, isSuccess, isSending, events } = useAccountContext();
+  const publicClient = usePublicClient();
 
-  const [vouchParamsInternal, setVouchParamsInternal] = useState<[HexStr, string]>();
+  const { address, projectId, refetch: refetchProject } = useProjectContext();
+  const { sendUserOps, isSuccess, isSending, events } = useAccountContext();
+
+  const [vouchParamsInternal, setVouchParamsInternal] =
+    useState<[HexStr, string]>();
 
   const setVouchParams = useCallback((account: HexStr, personCid: string) => {
     setVouchParamsInternal([account, personCid]);
   }, []);
 
-  const checkAndPostMember = async (_events: DecodeEventLogReturnType[], _projectId: number) => {
-    if (!vouchParamsInternal) throw Error('Unexpected vouchParamsInternal undefined');
+  const checkAndPostMember = async (
+    _events: DecodeEventLogReturnType[],
+    _projectId: number
+  ) => {
+    if (!vouchParamsInternal)
+      throw Error('Unexpected vouchParamsInternal undefined');
+    if (!address) throw Error('Unexpected address undefined');
+
     const vouchedAddress = vouchParamsInternal[0];
 
-    const transfer = _events?.find((e) => {
-      return (
-        e.eventName === 'Transfer' && (e.args as any).from === zeroAddress && (e.args as any).to === vouchedAddress
-      );
-    });
+    const transfer = _events?.find((e: any) => {
+      if (e.eventName === 'Transfer') {
+        const event = e as TransferEventType;
+        return (
+          event.args.from === zeroAddress && event.args.to === vouchedAddress
+        );
+      }
+    }) as TransferEventType | undefined;
 
-    if (transfer) {
+    /** get the tokenId of the vouched address */
+    const vouchedTokenId = publicClient
+      ? await publicClient.readContract({
+          address: address,
+          abi: registryABI,
+          args: [vouchedAddress],
+          functionName: 'tokenIdOf',
+        })
+      : undefined;
+
+    /** find the exact vouch event */
+    const vouch = _events?.find((e: any) => {
+      if (e.eventName === 'VouchEvent') {
+        const event = e as VouchEventType;
+        return event.args.to === vouchedTokenId;
+      }
+    }) as VouchEventType | undefined;
+
+    if (!transfer || !vouch) {
+      throw Error('Unexpected transfer or vouch event not found');
+    }
+
+    if (transfer && vouch) {
       await postMember({
         projectId: _projectId,
         aaAddress: vouchedAddress,
+        tokenId: Number(vouch.args.to),
+        voucherTokenId: Number(vouch.args.from),
       });
+
+      refetchProject();
     }
   };
 
@@ -52,7 +99,7 @@ export const useVouch = (): VouchHookType => {
   }, [events, projectId, vouchParamsInternal]);
 
   const sendVouch =
-    address && addUserOp && vouchParamsInternal
+    address && sendUserOps && vouchParamsInternal
       ? async () => {
           const callData = encodeFunctionData({
             abi: registryABI,
@@ -60,14 +107,13 @@ export const useVouch = (): VouchHookType => {
             args: vouchParamsInternal,
           });
 
-          addUserOp(
+          sendUserOps([
             {
               target: address,
               data: callData,
               value: BigInt(0),
             },
-            true
-          );
+          ]);
         }
       : undefined;
 

@@ -1,33 +1,59 @@
-import { AppButton, AppModal, IButton } from '../../ui-components';
-import { Box } from 'grommet';
-import { useState } from 'react';
-import { AppConnect } from './AppConnect';
-import { useAppSigner } from '../../wallet/SignerContext';
+import { BoxExtendedProps } from 'grommet';
+import { StatusGood } from 'grommet-icons';
 import { useTranslation } from 'react-i18next';
 
-export const AppConnectButton = (props: IButton) => {
+import { useSemaphoreContext } from '../../contexts/SemaphoreContext';
+import { Loading } from '../../pages/common/Loading';
+import { AppButton, AppHeading } from '../../ui-components';
+import { useAccountContext } from '../../wallet/AccountContext';
+import { useAppSigner } from '../../wallet/SignerContext';
+
+export const AppConnectButton = (
+  props: { label?: string } & BoxExtendedProps
+) => {
   const { t } = useTranslation();
-  const [showModal, setShowModal] = useState<boolean>();
-
-  const { hasInjected, connectInjected } = useAppSigner();
-
-  const connect = () => {
-    if (hasInjected) {
-      connectInjected();
-    } else {
-      setShowModal(true);
-    }
-  };
+  const { connect } = useAppSigner();
 
   return (
-    <Box>
-      {showModal ? (
-        <AppModal heading={t('connect')} onClosed={() => setShowModal(false)}>
-          <AppConnect></AppConnect>
-        </AppModal>
-      ) : (
-        <AppButton label={t('connect')} onClick={() => connect()} style={{ ...props.style }}></AppButton>
-      )}
-    </Box>
+    <AppButton
+      style={{ ...props.style }}
+      onClick={() => connect()}
+      label={t('connectWalletBtn')}></AppButton>
+  );
+};
+
+export const AppConnectWidget = () => {
+  const { t } = useTranslation();
+  
+  const { isConnecting } = useAppSigner();
+  const { isConnected, aaAddress } = useAccountContext();
+  const { publicId } = useSemaphoreContext();
+
+  const isFullyConnected =
+    isConnected && publicId !== undefined && aaAddress !== undefined;
+  const isLoading = isConnecting || (aaAddress && !isFullyConnected);
+
+  if (!isFullyConnected) {
+    return (
+      <>
+        <AppHeading level="3" style={{ marginBottom: '18px' }}>
+          {t('connectAccount')}
+        </AppHeading>
+        {isLoading ? (
+          <Loading></Loading>
+        ) : (
+          <AppConnectButton></AppConnectButton>
+        )}
+      </>
+    );
+  }
+
+  return (
+    <>
+      <AppHeading level="3" style={{ marginBottom: '18px' }}>
+        {t('accountReady')}
+      </AppHeading>
+      <StatusGood size="48px" />
+    </>
   );
 };
