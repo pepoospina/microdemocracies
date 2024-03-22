@@ -1,12 +1,14 @@
 import { useQuery } from '@tanstack/react-query'
+
 import { useEffect, useState } from 'react'
-import { useReadContract } from 'wagmi'
 
 import { AppAccount, AppVouch, Entity, HexStr, PAP } from '../types'
 import { registryABI } from '../utils/contracts.json'
 import { getEntity } from '../utils/store'
 import { useAccountContext } from '../wallet/AccountContext'
 import { useProjectContext } from './ProjectContext'
+
+import { useReadContract } from 'wagmi'
 
 export type AccountContextType = {
   refetch: (options?: { throwOnError: boolean; cancelRefetch: boolean }) => Promise<any>
@@ -35,7 +37,7 @@ export const useMember = (props: AccountContextProps): AccountContextType => {
 
   /** Read Account (either one or the other) */
   if (props.tokenId !== undefined && props.address !== undefined)
-    throw new Error('Both tokenId and address cant be provided')
+    throw new Error("Both tokenId and address can't be provided")
 
   const _tokenIdProp =
     props.address === undefined ? (props.tokenId !== undefined ? BigInt(props.tokenId) : undefined) : undefined

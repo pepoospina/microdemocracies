@@ -1,4 +1,5 @@
-import { ReactNode, createContext, useContext } from 'react'
+import { ReactNode, createContext, useContext, useEffect } from 'react'
+
 import { usePublicClient, useReadContract } from 'wagmi'
 
 import { AppAccount, AppChallenge } from '../types'
@@ -6,6 +7,7 @@ import { registryABI } from '../utils/contracts.json'
 import { useAccountContext } from '../wallet/AccountContext'
 import { useMember } from './MemberContext'
 import { useProjectContext } from './ProjectContext'
+import { useToastNotificationContext } from './ToastNotificationsContext'
 
 export type ConnectedMemberContextType = {
   tokenId?: number | null
@@ -24,7 +26,12 @@ export const ConnectedMemberContext = (props: ConnectedMemberContextProps) => {
   const publicClient = usePublicClient()
   const { aaAddress } = useAccountContext()
 
-  const { data: tokenId, isSuccess } = useReadContract({
+  const {
+    data: tokenId,
+    isSuccess,
+    isError: isErrorWithTokenId,
+    error: errorWithTokenId,
+  } = useReadContract({
     address: projectAddress,
     abi: registryABI,
     functionName: 'tokenIdOf',
@@ -47,6 +54,35 @@ export const ConnectedMemberContext = (props: ConnectedMemberContextProps) => {
     args: tokenId ? [tokenId] : undefined,
     query: { enabled: tokenId !== undefined && projectAddress !== undefined },
   })
+
+  const {
+    setVisible,
+    setTitle: setNotificationTitle,
+    setMessage: setNotificationMessage,
+    setStatus: setNotificationType,
+  } = useToastNotificationContext()
+
+  useEffect(() => {
+    if (!isErrorChallengeRead || !isErrorWithTokenId) return
+
+    setVisible(true)
+    setNotificationTitle('Error with challenge writing')
+
+    if (errorChallengeRead || errorWithTokenId) {
+      setNotificationType('critical')
+      if (errorChallengeRead) setNotificationMessage(errorChallengeRead.message)
+      if (errorWithTokenId) setNotificationMessage(errorWithTokenId.message)
+    }
+  }, [
+    errorChallengeRead,
+    errorWithTokenId,
+    isErrorChallengeRead,
+    isErrorWithTokenId,
+    setNotificationMessage,
+    setNotificationTitle,
+    setNotificationType,
+    setVisible,
+  ])
 
   const myChallenge: AppChallenge | undefined | null = ((_challengeRead) => {
     if (isErrorChallengeRead && errorChallengeRead && errorChallengeRead.message.includes('')) {

@@ -1,8 +1,11 @@
+import { useEffect } from 'react'
+
 import { useReadContract } from 'wagmi'
 
 import { AppChallenge, VoteOption } from '../types'
 import { registryABI } from '../utils/contracts.json'
 import { useProjectContext } from './ProjectContext'
+import { useToastNotificationContext } from './ToastNotificationsContext'
 
 export type ChallengeContextReadType = {
   tokenId?: number
@@ -50,6 +53,25 @@ export const useChallengeRead = (tokenId?: number): ChallengeContextReadType => 
       enabled: tokenIdInternal !== undefined && projectAddress !== undefined,
     },
   })
+
+  const {
+    setVisible,
+    setTitle: setNotificationTitle,
+    setMessage: setNotificationMessage,
+    setStatus: setNotificationType,
+  } = useToastNotificationContext()
+
+  useEffect(() => {
+    if (!errorChallengeRead) return
+
+    setVisible(true)
+    setNotificationTitle('Error with challenge')
+
+    if (errorChallengeRead) {
+      setNotificationType('critical')
+      setNotificationMessage(errorChallengeRead.message)
+    }
+  }, [errorChallengeRead, setNotificationMessage, setNotificationTitle, setNotificationType, setVisible])
 
   /** undefined means currently reading, null means read and not found */
   const challengeRead: AppChallenge | undefined | null = ((_challengeRead) => {

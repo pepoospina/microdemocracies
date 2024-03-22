@@ -1,5 +1,6 @@
-import { Box, Heading, Layer, Meter, Paragraph, Spinner } from 'grommet'
 import { ReactNode, createContext, useContext, useEffect, useState } from 'react'
+
+import { Box, Heading, Layer, Meter, Paragraph, Spinner } from 'grommet'
 
 export type LoadingContextType = {
   loading: boolean
