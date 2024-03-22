@@ -3,6 +3,7 @@ import { AppLanguage } from './@app/components/app/AppLanguage';
 import { ViewportContainer } from './@app/components/app/Viewport';
 import { i18n } from './@app/i18n/i18n';
 import { ResponsiveApp, ThemedApp } from './@app/components/app';
+import { GlobalStyles } from './@app/components/styles/GlobalStyles';
 
 import { LandingPage } from './components/landing/LandingPage';
 
@@ -11,6 +12,7 @@ function App() {
     <div className="App">
       <I18nextProvider i18n={i18n}>
         <AppLanguage>
+          <GlobalStyles />
           <ThemedApp>
             <ResponsiveApp>
               <ViewportContainer>
