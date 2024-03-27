@@ -1,8 +1,9 @@
+import { useEffect } from 'react'
+
+import { useNavigate } from 'react-router-dom'
+
 import { Box, DropButton, Spinner, Text } from 'grommet'
 import { Add, FormPrevious, Group, Menu, UserAdd } from 'grommet-icons'
-import { useEffect } from 'react'
-import { useTranslation } from 'react-i18next'
-import { useNavigate } from 'react-router-dom'
 
 import { useResponsive, useThemeContext } from '../../components/app'
 import { useAppContainer } from '../../components/app/AppContainer'
@@ -10,6 +11,7 @@ import { CircleIndicator } from '../../components/app/CircleIndicator'
 import { ViewportPage } from '../../components/app/Viewport'
 import { CHAIN_ID } from '../../config/appConfig'
 import { useConnectedMember } from '../../contexts/ConnectedAccountContext'
+import { useLoadingContext } from '../../contexts/LoadingContext'
 import { useProjectContext } from '../../contexts/ProjectContext'
 import { StatementContext } from '../../contexts/StatementContext'
 import { AbsoluteRoutes, RouteNames } from '../../route.names'
@@ -21,12 +23,15 @@ import { Loading } from '../common/Loading'
 import { StatementCard } from '../voice/StatementCard'
 import { ProjectCard } from './ProjectCard'
 
+import { useTranslation } from 'react-i18next'
+
 export interface IProjectHome {
   dum?: any
 }
 
 export const ProjectHomePage = (props: IProjectHome) => {
   const { t, i18n } = useTranslation()
+  const { setSubtitle, setLoading, setExpectedLoadingTime } = useLoadingContext()
   const navigate = useNavigate()
   const { project, nMembers, statements } = useProjectContext()
   const { tokenId } = useConnectedMember()
@@ -43,6 +48,15 @@ export const ProjectHomePage = (props: IProjectHome) => {
   }, [i18n.language])
 
   const newStr = mobile ? cap(t('propose')) : cap(t('proposeNew'))
+
+  useEffect(() => {
+    if (!project) {
+      setSubtitle(t('loadingProject'))
+    } else {
+      /** finally close the project create modal if it was on */
+      setLoading(false)
+    }
+  }, [project])
 
   if (project === undefined) {
     return (
@@ -95,7 +109,11 @@ export const ProjectHomePage = (props: IProjectHome) => {
 
   const content = (() => {
     return (
-      <Box style={{ overflowY: 'auto' }} margin={{ bottom: 'medium' }} pad={{ left: 'medium' }}>
+      <Box
+        style={{ overflowY: 'auto' }}
+        margin={{ bottom: 'medium' }}
+        pad={{ left: 'medium' }}
+      >
         <Box style={{ flexShrink: 0 }} pad={{ right: 'medium' }}>
           <Box margin={{ vertical: 'large' }}>
             <AppHeading level="3">{t('communityVoice')}:</AppHeading>
@@ -114,7 +132,10 @@ export const ProjectHomePage = (props: IProjectHome) => {
         <Box>
           <Box pad={{ horizontal: 'medium' }}>
             <Box style={{ position: 'relative', flexShrink: 0 }}>
-              <ProjectCard project={project} statementStyle={{ paddingBottom: '28px' }}></ProjectCard>
+              <ProjectCard
+                project={project}
+                statementStyle={{ paddingBottom: '28px' }}
+              ></ProjectCard>
               <Box
                 direction="row"
                 justify="end"
@@ -146,11 +167,20 @@ export const ProjectHomePage = (props: IProjectHome) => {
                     }
                   ></CircleIndicator>
                 </AppButton>
-                <AppButton plain disabled={tokenId === undefined} onClick={() => navigate(RouteNames.Invite)}>
+                <AppButton
+                  plain
+                  disabled={tokenId === undefined}
+                  onClick={() => navigate(RouteNames.Invite)}
+                >
                   <CircleIndicator
                     forceCircle={true}
                     size={54}
-                    icon={<UserAdd color={constants.colors.textOnPrimary} style={{ marginLeft: '5px' }}></UserAdd>}
+                    icon={
+                      <UserAdd
+                        color={constants.colors.textOnPrimary}
+                        style={{ marginLeft: '5px' }}
+                      ></UserAdd>
+                    }
                   ></CircleIndicator>
                 </AppButton>
                 <DropButton
@@ -159,7 +189,11 @@ export const ProjectHomePage = (props: IProjectHome) => {
                     <Box pad="20px" gap="small">
                       <Box margin={{ bottom: 'small' }}>
                         <Text>{cap(t('projectAddress'))}</Text>
-                        <Address addressType="token" address={project?.address} chainId={CHAIN_ID}></Address>
+                        <Address
+                          addressType="token"
+                          address={project?.address}
+                          chainId={CHAIN_ID}
+                        ></Address>
                       </Box>
 
                       <AppButton
@@ -186,7 +220,10 @@ export const ProjectHomePage = (props: IProjectHome) => {
           <Box>
             {tokenId === null ? (
               <Box pad={{ horizontal: 'medium' }} margin={{ top: 'medium' }}>
-                <AppButton onClick={() => navigate(RouteNames.Join)} label={'join'}></AppButton>
+                <AppButton
+                  onClick={() => navigate(RouteNames.Join)}
+                  label={'join'}
+                ></AppButton>
               </Box>
             ) : (
               <></>

@@ -1,9 +1,11 @@
-import { utils } from 'ethers'
 import { useCallback, useEffect, useMemo, useState } from 'react'
+
 import { encodeFunctionData } from 'viem'
+
 import { usePublicClient } from 'wagmi'
 
 import { PENDING_PERIOD, QUIET_ENDING_PERIOD, VOTING_PERIOD } from '../../config/appConfig'
+import { useLoadingContext } from '../../contexts/LoadingContext'
 import { registryABI, registryFactoryABI } from '../../contracts/abis'
 import { DetailsAndPlatforms, HexStr, PAP, SelectedDetails } from '../../types'
 import { getFactoryAddress } from '../../utils/contracts.json'
@@ -11,6 +13,9 @@ import { postMember, postProject } from '../../utils/project'
 import { putObject } from '../../utils/store'
 import { RegistryCreatedEvent } from '../../utils/viem.types'
 import { useAccountContext } from '../../wallet/AccountContext'
+
+import { utils } from 'ethers'
+import { useTranslation } from 'react-i18next'
 
 export interface CreateProjectStatus {
   founderPap?: PAP
@@ -24,19 +29,21 @@ export interface CreateProjectStatus {
   isSuccess: boolean
   isError: boolean
   error?: Error
-  projectId?: number
+  projectId?: number // projectId is used to signal the successful creation of the project.
 }
 
 export const useCreateProject = (): CreateProjectStatus => {
+  const { t } = useTranslation()
   const {
     sendUserOps,
     aaAddress,
     isSuccess: isSuccessUserOp,
     events,
-    owner,
     reset,
     error: errorUserOp,
   } = useAccountContext()
+
+  const { setSubtitle } = useLoadingContext()
   const publicClient = usePublicClient()
 
   const [founderDetails, setFounderDetails] = useState<DetailsAndPlatforms>()
@@ -118,13 +125,14 @@ export const useCreateProject = (): CreateProjectStatus => {
 
   const registerProject = useCallback(
     async (event: RegistryCreatedEvent) => {
-      if (!owner) throw new Error('Owner not defined')
       if (!aaAddress) throw new Error('aaAddress not defined')
 
       const projectId = Number(event.args.number)
       const address = event.args.newRegistry as HexStr
 
       if (!selectedDetails) throw new Error('selectedDetails undefined')
+
+      setSubtitle(t('registeringProject'))
 
       /** sign the "what" of the project */
       await postProject({
@@ -170,12 +178,14 @@ export const useCreateProject = (): CreateProjectStatus => {
       setProjectId((event.args as any).number)
       setIsCreating(false)
     },
-    [owner, aaAddress, selectedDetails, whoStatement, publicClient],
+    [aaAddress, selectedDetails, whoStatement, publicClient],
   )
 
   useEffect(() => {
     if (isSuccessUserOp && events) {
-      const event = events.find((e) => e.eventName === 'RegistryCreated') as RegistryCreatedEvent | undefined
+      const event = events.find((e) => e.eventName === 'RegistryCreated') as
+        | RegistryCreatedEvent
+        | undefined
       if (event) {
         reset()
         registerProject(event)

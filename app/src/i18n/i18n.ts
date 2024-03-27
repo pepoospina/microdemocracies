@@ -23,11 +23,13 @@ i18n.use(initReactI18next).init({
         carousel01: 'Find something you know <Bold>needs</Bold> to change',
         carousel01sub: 'Dare others to change it, <Bold>together</Bold>',
         carousel02: 'Talk <Bold>without fear</Bold>',
-        carousel02sub: 'Post <Bold>anonymously</Bold> into the community board, but only if you are a member',
+        carousel02sub:
+          'Post <Bold>anonymously</Bold> into the community board, but only if you are a member',
         carousel03: 'Amplify your <Bold>voice</Bold>',
         carousel03sub: 'Anonymously <Bold>back</Bold> the statements you agree with',
         carousel04: 'Raise and spend funds <Bold>transparently</Bold>',
-        carousel04sub: '<Bold>Collectively</Bold> control the community funds, no banks need. (coming soon)',
+        carousel04sub:
+          '<Bold>Collectively</Bold> control the community funds, no banks need. (coming soon)',
         connectWallet: 'Connect your Web3 Wallet',
         connectWalletBtn: 'Sign in',
         notFound: 'not found',
@@ -78,7 +80,8 @@ i18n.use(initReactI18next).init({
         and: 'and',
         social: 'Social',
         account: 'account',
-        choosePlatformsMsg: 'Chose the platform(s) account(s) that will be asked to participants',
+        choosePlatformsMsg:
+          'Chose the platform(s) account(s) that will be asked to participants',
         firstName: 'First Name',
         lastName: 'Last Name',
         username: 'username',
@@ -91,7 +94,8 @@ i18n.use(initReactI18next).init({
         joinOurMsg: `Join our microdemocracy!`,
         close: 'Close',
         shareToInvite: 'Share to invite',
-        resettingMsg: 'Re-setting the link will invalidate the invitations sent with previous links',
+        resettingMsg:
+          'Re-setting the link will invalidate the invitations sent with previous links',
         reset: 'Reset link',
         resetting: 'Resetting...',
         shareLinkMsg: 'Share link with new members or show them a QR they can scan.',
@@ -131,9 +135,12 @@ i18n.use(initReactI18next).init({
         askSupport: 'Please support my statement',
         applicationAcceptedAs: 'Member accepted as',
         important: 'Important!',
-        atLeastNMembers: 'There must be at least {{nMembers}} members to propose a statement',
-        canBackN: 'Only the existing {{nMembers}} members will be able to back this statement',
-        aStatementNeeds: 'A statement needs {{nLikes}} likes to appear on the microdemocracy home page',
+        atLeastNMembers:
+          'There must be at least {{nMembers}} members to propose a statement',
+        canBackN:
+          'Only the existing {{nMembers}} members will be able to back this statement',
+        aStatementNeeds:
+          'A statement needs {{nLikes}} likes to appear on the microdemocracy home page',
         youNeedToLike: 'You also need to like your statement after publishing it',
         ownedBy: 'Owned by',
         send: 'Send',
@@ -148,8 +155,13 @@ i18n.use(initReactI18next).init({
         cantChallenge: "Can't challenge",
         pendingApplicationBy: 'Pending application by {{by}}',
         votedNofMEligible: 'Voted {{nVoted}} of {{totalVoters}} eligible members',
-        preparingData: 'Preparing the data to send to the network...',
+        preparingData: 'Preparing your operation...',
         approvingNewMember: 'Approving new member',
+        errorCreatingProject: 'Error creating project',
+        waitingSignature: 'Waiting for your signature...',
+        waitingTransaction: 'Sending operation to the network...',
+        operationSuccessful: 'Onchain opperation successful!',
+        registeringProject: 'Registering your microdemocracy...',
       },
     },
     SPA: {
@@ -172,9 +184,11 @@ i18n.use(initReactI18next).init({
         carousel01: 'Encuentra algo que sabes que <Bold>necesita</Bold> cambiar',
         carousel01sub: 'Desafía a otros a cambiarlo, <Bold>juntos</Bold>',
         carousel02: 'Habla <Bold>sin miedo</Bold>',
-        carousel02sub: 'Publica <Bold>anónimamente</Bold> en el tablón de la comunidad, pero sólo si eres miembro',
+        carousel02sub:
+          'Publica <Bold>anónimamente</Bold> en el tablón de la comunidad, pero sólo si eres miembro',
         carousel03: 'Amplifica tu <Bold>voz</Bold>',
-        carousel03sub: 'Apoya <Bold>anónimamente</Bold> las declaraciones con las que estés de acuerdo',
+        carousel03sub:
+          'Apoya <Bold>anónimamente</Bold> las declaraciones con las que estés de acuerdo',
         carousel04: 'Recauda y gasta fondos de manera <Bold>transparente</Bold>',
         carousel04sub:
           'Controla <Bold>colectivamente</Bold> los fondos de la comunidad, no se necesitan bancos. (próximamente)',
@@ -220,7 +234,8 @@ i18n.use(initReactI18next).init({
           '<Bold>¡SOLO PRUEBAS!</Bold> Esta aplicación está actualmente en desarrollo. No la uses para crear comunidades reales todavía.',
         IDNumber: 'Documento de ID',
         IDNumberLong: 'Documento de ID (Últimos 4 dígitos)',
-        toJoinMsg: 'Para unirse a tu microdemocracia, los participantes deberán proporcionar su',
+        toJoinMsg:
+          'Para unirse a tu microdemocracia, los participantes deberán proporcionar su',
         toJoinMsg2: 'Se pedirá a los participantes que proporcionen',
         selectMsgOpts: 'Selecciona o des-seleciona entre las siguientes opciones',
         nameAndLastName: 'Nombre y Apellido',
@@ -228,7 +243,8 @@ i18n.use(initReactI18next).init({
         and: 'y',
         social: 'Red social',
         account: 'cuenta',
-        choosePlatformsMsg: 'Elige la(s) cuenta(s) de la(s) plataforma(s) que se pedirá a los participantes',
+        choosePlatformsMsg:
+          'Elige la(s) cuenta(s) de la(s) plataforma(s) que se pedirá a los participantes',
         firstName: 'Nombre',
         lastName: 'Apellido',
         username: 'nombre de usuario',
@@ -241,10 +257,12 @@ i18n.use(initReactI18next).init({
         joinOurMsg: `'Únete a nuestra microdemocracia!`,
         close: 'Cerrar',
         shareToInvite: 'Compartir para invitar',
-        resettingMsg: 'Resetear el enlace invalidará las invitaciones enviadas con enlaces anteriores',
+        resettingMsg:
+          'Resetear el enlace invalidará las invitaciones enviadas con enlaces anteriores',
         reset: 'resetear enlace',
         resetting: 'reseteando...',
-        shareLinkMsg: 'Comparte el enlace con nuevos miembros o pídeles que escaneen el codigo QR',
+        shareLinkMsg:
+          'Comparte el enlace con nuevos miembros o pídeles que escaneen el codigo QR',
         linkCopied: '¡enlace copiado!',
         shareLink: 'compartir enlace',
         showQr: 'mostrar QR',
@@ -279,9 +297,12 @@ i18n.use(initReactI18next).init({
         askSupport: 'Apoya mi declaración',
         applicationAcceptedAs: 'Miembro aceptado como',
         important: 'Importante!',
-        atLeastNMembers: 'Debe haber al menos {{nMembers}} miembros para proponer una declaración',
-        canBackN: 'Únicamente los {{nMembers}} miembros actuales podrán apoyar esta declaración',
-        aStatementNeeds: 'Una declaración necesita {{nLikes}} likes para aparecer en la página de la microdemocracia',
+        atLeastNMembers:
+          'Debe haber al menos {{nMembers}} miembros para proponer una declaración',
+        canBackN:
+          'Únicamente los {{nMembers}} miembros actuales podrán apoyar esta declaración',
+        aStatementNeeds:
+          'Una declaración necesita {{nLikes}} likes para aparecer en la página de la microdemocracia',
         youNeedToLike: 'Tú también debes darle like a tu declaración después de publicarla',
         ownedBy: 'Controlada por',
         send: 'Enviar',
@@ -295,7 +316,8 @@ i18n.use(initReactI18next).init({
         challenge: 'denunciar',
         cantChallenge: 'No puedes denunciarla',
         pendingApplicationBy: 'Solicitud de miembro por parte de {{by}}',
-        votedNofMEligible: 'Han votado: {{nVoted}} de {{totalVoters}} miembros con derecho a voto',
+        votedNofMEligible:
+          'Han votado: {{nVoted}} de {{totalVoters}} miembros con derecho a voto',
         preparingData: 'Preparando los datos a enviar a la red...',
         approvingNewMember: 'Aprobando a un nuevo miembro',
       },
@@ -320,9 +342,11 @@ i18n.use(initReactI18next).init({
         carousel01: 'Troba alguna cosa que saps que <Bold>necessita</Bold> canviar',
         carousel01sub: 'Desafia altres a canviar-ho, <Bold>juntes</Bold>',
         carousel02: 'Parla <Bold>sense por</Bold>',
-        carousel02sub: 'Publica <Bold>anònimament</Bold> al tauler de la comunitat, però només si ets membre',
+        carousel02sub:
+          'Publica <Bold>anònimament</Bold> al tauler de la comunitat, però només si ets membre',
         carousel03: 'Amplifica la teva <Bold>veu</Bold>',
-        carousel03sub: "Dóna suport <Bold>anònimament</Bold> a les declaracions amb les quals estiguis d'acord",
+        carousel03sub:
+          "Dóna suport <Bold>anònimament</Bold> a les declaracions amb les quals estiguis d'acord",
         carousel04: 'Recaptar i gastar fons de manera <Bold>transparent</Bold>',
         carousel04sub:
           'Controla <Bold>col·lectivament</Bold> els fons de la comunitat, no es necessiten bancs. (properament)',
@@ -357,7 +381,8 @@ i18n.use(initReactI18next).init({
         founder: 'Fundador',
         accountInvalidated: 'Compte invalidat',
         creatingProject: 'Creant la teva microdemocracia',
-        examplesWho: '<Bold>Exemples són:</Bold> "VIU A...", "ESTUDIA A...", "VOL...", etc.',
+        examplesWho:
+          '<Bold>Exemples són:</Bold> "VIU A...", "ESTUDIA A...", "VOL...", etc.',
         wantsTo: 'Vol',
         whoTitle: 'Aquesta microdemocracia és per a la gent que',
         yourDetails: 'Els teus detalls',
@@ -367,7 +392,8 @@ i18n.use(initReactI18next).init({
           '<Bold>NOMÉS PROVES!</Bold> Aquesta aplicació està actualment en desenvolupament. No l’utilitzis per crear comunitats reals encara.',
         IDNumber: "Document d'ID",
         IDNumberLong: "Document d'ID (Últims 4 dígits)",
-        toJoinMsg: 'Per unir-se a la teva microdemocracia, els participants hauran de proporcionar el seu',
+        toJoinMsg:
+          'Per unir-se a la teva microdemocracia, els participants hauran de proporcionar el seu',
         toJoinMsg2: 'Se’ls demanarà als participants que proporcionin',
         selectMsgOpts: 'Selecciona o des-selecciona entre les següents opcions',
         nameAndLastName: 'Nom i Cognom',
@@ -375,7 +401,8 @@ i18n.use(initReactI18next).init({
         and: 'i',
         social: 'Xarxa social',
         account: 'compte',
-        choosePlatformsMsg: 'Trieu el(s) compte(s) de la(s) plataforma(s) que se’ls demanarà als participants',
+        choosePlatformsMsg:
+          'Trieu el(s) compte(s) de la(s) plataforma(s) que se’ls demanarà als participants',
         firstName: 'Nom',
         lastName: 'Cognom',
         username: "nom d'usuari",
@@ -388,10 +415,12 @@ i18n.use(initReactI18next).init({
         joinOurMsg: 'Uneix-te a la nostra microdemocracia!',
         close: 'Tancar',
         shareToInvite: 'Compartir per convidar',
-        resettingMsg: "Reiniciar l'enllaç invalidarà les invitacions enviades amb enllaços anteriors",
+        resettingMsg:
+          "Reiniciar l'enllaç invalidarà les invitacions enviades amb enllaços anteriors",
         reset: 'reiniciar enllaç',
         resetting: 'reiniciant...',
-        shareLinkMsg: "Comparteix l'enllaç amb nous membres o demana'ls que escanejin el codi QR",
+        shareLinkMsg:
+          "Comparteix l'enllaç amb nous membres o demana'ls que escanejin el codi QR",
         linkCopied: 'enllaç copiat!',
         shareLink: 'compartir enllaç',
         showQr: 'mostrar QR',
@@ -426,10 +455,14 @@ i18n.use(initReactI18next).init({
         askSupport: 'Dona suport a la meva declaració',
         applicationAcceptedAs: 'Membre aceptat com a',
         important: 'Important!',
-        atLeastNMembers: "Hi ha d'haver almenys {{nMembers}} membres per proposar una declaració",
-        canBackN: 'Únicament els {{nMembers}} membres actuals podran donar suport a aquesta declaració',
-        aStatementNeeds: 'Una declaració necessita {{Likes}} likes per aparèixer a la pàgina de la microdemocràcia',
-        youNeedToLike: 'Tu també has de donar-li like a la teva declaració després de publicar-la',
+        atLeastNMembers:
+          "Hi ha d'haver almenys {{nMembers}} membres per proposar una declaració",
+        canBackN:
+          'Únicament els {{nMembers}} membres actuals podran donar suport a aquesta declaració',
+        aStatementNeeds:
+          'Una declaració necessita {{Likes}} likes per aparèixer a la pàgina de la microdemocràcia',
+        youNeedToLike:
+          'Tu també has de donar-li like a la teva declaració després de publicar-la',
         ownedBy: 'Controlat per',
         send: 'Enviar',
         likesNeeded: 'Calen {{nLikes}} suports més per ser public!',
@@ -442,7 +475,8 @@ i18n.use(initReactI18next).init({
         challenge: 'denunciar',
         cantChallenge: 'No es pot denunciar-la',
         pendingApplicationBy: 'Solicitut de miembre par part de {{by}}',
-        votedNofMEligible: 'Han votat: {{nVoted}} de {{totalVoters}} membres amb dret de vot',
+        votedNofMEligible:
+          'Han votat: {{nVoted}} de {{totalVoters}} membres amb dret de vot',
         preparingData: "S'estan preparant les dades per enviar-les a la xarxa...",
         approvingNewMember: "Aprovació d'un nou membre",
       },

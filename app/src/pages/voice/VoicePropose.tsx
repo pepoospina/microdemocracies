@@ -39,7 +39,7 @@ export const VoicePropose = (): JSX.Element => {
   const navigate = useNavigate()
 
   const { setTitle } = useAppContainer()
-  const { setLoading, setTitle: setTitleToLoading, setSubtitle, setLoadingTimeout } = useLoadingContext()
+  const { setLoading, setTitle: setTitleToLoading, setSubtitle, setExpectedLoadingTime } = useLoadingContext()
 
   useEffect(() => {
     setTitle({ prefix: cap(t('proposeNew')), main: t('statement') })
@@ -55,7 +55,7 @@ export const VoicePropose = (): JSX.Element => {
       setIsProposing(true)
       proposeStatement(input).then(() => {
         setLoading(false)
-        setLoadingTimeout(false)
+        setExpectedLoadingTime(15)
       })
     }
   }

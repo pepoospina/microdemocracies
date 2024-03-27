@@ -35,7 +35,12 @@ export const VouchMemberWidget = (props: { pap: Entity<PAP> }) => {
   const { setVouchParams, sendVouch, isErrorSending, errorSending, isSuccess } = useVouch()
 
   const { account } = useConnectedMember()
-  const { setLoading, setLoadingTimeout, setTitle: setTitleToLoading, setSubtitle } = useLoadingContext()
+  const {
+    setLoading,
+    setExpectedLoadingTime,
+    setTitle: setTitleToLoading,
+    setSubtitle,
+  } = useLoadingContext()
 
   const {
     setVisible,
@@ -65,7 +70,6 @@ export const VouchMemberWidget = (props: { pap: Entity<PAP> }) => {
   useEffect(() => {
     if (isSuccess) {
       setLoading(false)
-      setLoadingTimeout(false)
       setSending(false)
       setError(undefined)
       deleteApplication()
@@ -103,6 +107,7 @@ export const VouchMemberWidget = (props: { pap: Entity<PAP> }) => {
       setError(undefined)
       setSending(true)
       setLoading(true)
+      setExpectedLoadingTime(15000)
       setTitleToLoading(t('approvingNewMember'))
       setSubtitle(t('preparingData'))
       sendVouch()
@@ -130,7 +135,14 @@ export const VouchMemberWidget = (props: { pap: Entity<PAP> }) => {
       return <WaitingTransaction></WaitingTransaction>
     }
     if (isConnected) {
-      return <AppButton label="accept" onClick={() => vouch()} disabled={!sendVouch && isConnected} primary></AppButton>
+      return (
+        <AppButton
+          label="accept"
+          onClick={() => vouch()}
+          disabled={!sendVouch && isConnected}
+          primary
+        ></AppButton>
+      )
     }
 
     return <AppConnectButton></AppConnectButton>

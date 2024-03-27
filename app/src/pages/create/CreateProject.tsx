@@ -30,7 +30,7 @@ export const CreateProject = () => {
   const { t, i18n } = useTranslation()
   const navigate = useNavigate()
   const [pageIx, setPageIx] = useState(0)
-  const { setTitle } = useAppContainer() 
+  const { setTitle } = useAppContainer()
   const { aaAddress } = useAccountContext()
 
   const {
@@ -47,7 +47,12 @@ export const CreateProject = () => {
     createProject,
   } = useCreateProject()
 
-  const { setLoading, setTitle: setTitleToLoading, setSubtitle } = useLoadingContext()
+  const {
+    setLoading,
+    setTitle: setTitleToLoading,
+    setSubtitle,
+    setExpectedLoadingTime,
+  } = useLoadingContext()
   const {
     setVisible,
     setTitle: setNotificationTitle,
@@ -70,13 +75,20 @@ export const CreateProject = () => {
     if (!isError) return
 
     setVisible(true)
-    setNotificationTitle('Error with signature')
+    setNotificationTitle(t('errorCreatingProject'))
 
     if (error) {
       setNotificationType('critical')
       setNotificationMessage(error.message)
     }
-  }, [error, isError, setNotificationMessage, setNotificationTitle, setNotificationType, setVisible])
+  }, [
+    error,
+    isError,
+    setNotificationMessage,
+    setNotificationTitle,
+    setNotificationType,
+    setVisible,
+  ])
 
   const boxStyle: React.CSSProperties = {
     flexGrow: '1',
@@ -93,9 +105,11 @@ export const CreateProject = () => {
     }
 
     if (pageIx === NPAGES - 1) {
+      /** Loading modal shown */
       setLoading(true)
       setTitleToLoading(t('creatingProject'))
       setSubtitle(t('preparingData'))
+      setExpectedLoadingTime(30000)
       createProject()
     }
   }
@@ -190,7 +204,10 @@ export const CreateProject = () => {
       <AppHeading level="3" style={{ marginBottom: '18px' }}>
         {t('yourDetails')}
       </AppHeading>
-      <DetailsForm selected={selectedDetails} onChange={(details) => setFounderDetails(details)}></DetailsForm>
+      <DetailsForm
+        selected={selectedDetails}
+        onChange={(details) => setFounderDetails(details)}
+      ></DetailsForm>
     </Box>,
 
     <Box style={{ ...boxStyle, paddingTop: '80px' }} pad="large" align="center">

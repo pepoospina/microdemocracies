@@ -1,13 +1,16 @@
-import { ReactNode, createContext, useContext, useEffect, useState } from 'react'
+import { ReactNode, createContext, useContext, useEffect, useRef, useState } from 'react'
 
 import { Box, Heading, Layer, Meter, Paragraph, Spinner } from 'grommet'
+
+import { useThemeContext } from '../components/app'
 
 export type LoadingContextType = {
   loading: boolean
   setLoading: (loading: boolean) => void
-  setLoadingTimeout: (loadingTimeout: boolean) => void
+  setExpectedLoadingTime: (loadingTimeout: number) => void
   setTitle: (title: string) => void
   setSubtitle: (subtitle: string) => void
+  setPause: (loading: boolean) => void
   //   setIcon: (icon: any) => void;
 }
 
@@ -16,39 +19,83 @@ export interface LoadingContextProps {
 }
 
 const LoadingContextValue = createContext<LoadingContextType | undefined>(undefined)
+const PERIOD = 100
+const RATE_CHANGE_AT = 0.6
 
 export const LoadingContext = ({ children }: LoadingContextProps) => {
+  const { constants } = useThemeContext()
   const [loading, setLoading] = useState<boolean>(false)
-  const [loadingTimeout, setLoadingTimeout] = useState<boolean>(false)
+  const [expectedLoadingTime, _setExpectedLoadingTime] = useState<number>()
+  const [timeElapsed, setTimeElapsed] = useState<number>()
+  const [pause, setPause] = useState<boolean>(false)
+
+  const timeElapsedRef = useRef<number>() // needed to prevent infinit loop effect trigger if setTimeElapsed depends on timeElapsed
+  const pauseRef = useRef<boolean>() // needed to prevent infinit loop effect trigger if setTimeElapsed depends on timeElapsed
+
   const [title, setTitle] = useState<string>('')
   const [subtitle, setSubtitle] = useState<string>('')
-  //   const [icon, setIcon] = useState();
 
-  const [meterValue, setMeterValue] = useState<number>(0)
-  const [meterIncrement, setMeterIncrement] = useState<number>(1)
+  useEffect(() => {
+    timeElapsedRef.current = timeElapsed
+  }, [timeElapsed])
+
+  useEffect(() => {
+    pauseRef.current = pause
+  }, [pause])
+
+  /** an always-running periodic call */
+  const updateTime = () => {
+    if (expectedLoadingTime && timeElapsedRef.current !== undefined) {
+      const ratio = timeElapsedRef.current / expectedLoadingTime
+      const ratioPending = 1 - ratio
+      const increment = (() => {
+        if (pauseRef.current) {
+          return 0
+        }
+
+        if (ratio < RATE_CHANGE_AT) {
+          return PERIOD
+        } else {
+          // slow down as we reach the end
+          return (PERIOD * ratioPending) / (1 - RATE_CHANGE_AT)
+        }
+      })()
+
+      setTimeElapsed(timeElapsedRef.current + increment)
+    }
+  }
 
   useEffect(() => {
     const intervalId = setInterval(() => {
-      setMeterValue((oldValue) => {
-        if (oldValue >= 100) setMeterIncrement(-1)
-        else if (oldValue <= 0) setMeterIncrement(1)
-
-        return oldValue + meterIncrement
-      })
-    }, 500)
+      updateTime()
+    }, PERIOD)
 
     return () => clearInterval(intervalId)
-  }, [meterIncrement])
+  }, [expectedLoadingTime])
+
+  const setExpectedLoadingTime = (timeMs: number) => {
+    setTimeElapsed(0)
+    _setExpectedLoadingTime(timeMs)
+  }
 
   return (
-    <LoadingContextValue.Provider value={{ loading, setLoading, setLoadingTimeout, setTitle, setSubtitle }}>
+    <LoadingContextValue.Provider
+      value={{
+        loading,
+        setLoading,
+        setExpectedLoadingTime,
+        setTitle,
+        setSubtitle,
+        setPause,
+      }}
+    >
       {children}
       {loading && (
         <Layer
           position="center"
           onClickOutside={() => setLoading(false)}
           onEsc={() => setLoading(false)}
-          style={{ border: '3px solid #1a1a1a', borderRadius: '10px' }}
+          style={{ borderRadius: '4px' }}
           responsive={false}
         >
           <Box pad="medium" gap="small" width="medium">
@@ -58,11 +105,15 @@ export const LoadingContext = ({ children }: LoadingContextProps) => {
 
             <Paragraph>{subtitle}</Paragraph>
 
-            {loadingTimeout ? (
-              <Meter value={meterValue} color="#1a1a1a" />
+            {expectedLoadingTime ? (
+              <Meter
+                value={timeElapsed}
+                color={constants.colors.primary}
+                max={expectedLoadingTime}
+              />
             ) : (
               <Box pad="small" justify="center" align="center">
-                <Spinner color="#1a1a1a" />
+                <Spinner color={constants.colors.primary} />
               </Box>
             )}
           </Box>
