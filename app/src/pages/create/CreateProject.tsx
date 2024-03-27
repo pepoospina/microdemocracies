@@ -109,7 +109,7 @@ export const CreateProject = () => {
       setLoading(true)
       setTitleToLoading(t('creatingProject'))
       setSubtitle(t('preparingData'))
-      setExpectedLoadingTime(30000)
+      setExpectedLoadingTime(17000)
       createProject()
     }
   }

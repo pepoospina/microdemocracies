@@ -11,6 +11,7 @@ export type LoadingContextType = {
   setTitle: (title: string) => void
   setSubtitle: (subtitle: string) => void
   setPause: (loading: boolean) => void
+  setUserCanClose: (canClose: boolean) => void
   //   setIcon: (icon: any) => void;
 }
 
@@ -28,6 +29,7 @@ export const LoadingContext = ({ children }: LoadingContextProps) => {
   const [expectedLoadingTime, _setExpectedLoadingTime] = useState<number>()
   const [timeElapsed, setTimeElapsed] = useState<number>()
   const [pause, setPause] = useState<boolean>(false)
+  const [userCanClose, setUserCanClose] = useState<boolean>(false)
 
   const timeElapsedRef = useRef<number>() // needed to prevent infinit loop effect trigger if setTimeElapsed depends on timeElapsed
   const pauseRef = useRef<boolean>() // needed to prevent infinit loop effect trigger if setTimeElapsed depends on timeElapsed
@@ -78,6 +80,12 @@ export const LoadingContext = ({ children }: LoadingContextProps) => {
     _setExpectedLoadingTime(timeMs)
   }
 
+  const userClose = () => {
+    if (userCanClose) {
+      setLoading(false)
+    }
+  }
+
   return (
     <LoadingContextValue.Provider
       value={{
@@ -87,17 +95,19 @@ export const LoadingContext = ({ children }: LoadingContextProps) => {
         setTitle,
         setSubtitle,
         setPause,
+        setUserCanClose,
       }}
     >
       {children}
       {loading && (
         <Layer
           position="center"
-          onClickOutside={() => setLoading(false)}
-          onEsc={() => setLoading(false)}
+          onClickOutside={() => userClose()}
+          onEsc={() => userClose()}
           style={{ borderRadius: '4px' }}
           responsive={false}
         >
+          {' '}
           <Box pad="medium" gap="small" width="medium">
             <Heading level={3} as="header" textAlign="center">
               {title}
