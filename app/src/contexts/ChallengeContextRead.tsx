@@ -9,7 +9,10 @@ import { useToastNotificationContext } from './ToastNotificationsContext'
 
 export type ChallengeContextReadType = {
   tokenId?: number
-  refetchChallenge: (options?: { throwOnError: boolean; cancelRefetch: boolean }) => Promise<any>
+  refetchChallenge: (options?: {
+    throwOnError: boolean
+    cancelRefetch: boolean
+  }) => Promise<any>
   challengeRead: AppChallenge | undefined | null
   totalVoters?: number
   isLoadingChallenge: boolean
@@ -54,28 +57,19 @@ export const useChallengeRead = (tokenId?: number): ChallengeContextReadType => 
     },
   })
 
-  const {
-    setVisible,
-    setTitle: setNotificationTitle,
-    setMessage: setNotificationMessage,
-    setStatus: setNotificationType,
-  } = useToastNotificationContext()
-
   useEffect(() => {
-    if (!errorChallengeRead) return
-
-    setVisible(true)
-    setNotificationTitle('Error with challenge')
-
-    if (errorChallengeRead) {
-      setNotificationType('critical')
-      setNotificationMessage(errorChallengeRead.message)
+    if (isErrorChallengeRead) {
+      console.log({ errorChallengeRead })
     }
-  }, [errorChallengeRead, setNotificationMessage, setNotificationTitle, setNotificationType, setVisible])
+  }, [errorChallengeRead, isErrorChallengeRead])
 
   /** undefined means currently reading, null means read and not found */
   const challengeRead: AppChallenge | undefined | null = ((_challengeRead) => {
-    if (isErrorChallengeRead && errorChallengeRead && errorChallengeRead.message.includes('')) {
+    if (
+      isErrorChallengeRead &&
+      errorChallengeRead &&
+      errorChallengeRead.message.includes('')
+    ) {
       return null
     }
     if (_challengeRead === undefined) {
