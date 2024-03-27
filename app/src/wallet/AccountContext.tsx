@@ -1,7 +1,10 @@
 import { AlchemySmartAccountClient, createLightAccountAlchemyClient } from '@alchemy/aa-alchemy'
 import { BatchUserOperationCallData, WalletClientSigner } from '@alchemy/aa-core'
+
 import { PropsWithChildren, createContext, useContext, useEffect, useState } from 'react'
+
 import { DecodeEventLogReturnType, decodeEventLog, getAddress } from 'viem'
+
 import { usePublicClient, useReadContract } from 'wagmi'
 
 import { ALCHEMY_GAS_POLICY_ID, ALCHEMY_RPC_URL } from '../config/appConfig'

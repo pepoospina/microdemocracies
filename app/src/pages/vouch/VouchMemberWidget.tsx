@@ -1,13 +1,15 @@
-import { Anchor, Box, Text } from 'grommet'
 import { useEffect, useState } from 'react'
-import { useTranslation } from 'react-i18next'
+
 import { useNavigate, useParams } from 'react-router-dom'
+
+import { Anchor, Box, Text } from 'grommet'
 
 import { AppConnectButton } from '../../components/app/AppConnectButton'
 import { useConnectedMember } from '../../contexts/ConnectedAccountContext'
 import { useLoadingContext } from '../../contexts/LoadingContext'
 import { useMember } from '../../contexts/MemberContext'
 import { useProjectContext } from '../../contexts/ProjectContext'
+import { useToastNotificationContext } from '../../contexts/ToastNotificationsContext'
 import { useVouch } from '../../contexts/VouchContext'
 import { AbsoluteRoutes } from '../../route.names'
 import { Entity, PAP } from '../../types'
@@ -16,13 +18,15 @@ import { postDeleteApplication } from '../../utils/project'
 import { useAccountContext } from '../../wallet/AccountContext'
 import { WaitingTransaction } from '../common/Loading'
 
+import { useTranslation } from 'react-i18next'
+
 export const VouchMemberWidget = (props: { pap: Entity<PAP> }) => {
   const { projectId } = useParams()
   const { t } = useTranslation()
   const { pap } = props
 
   const navigate = useNavigate()
-  const { isConnected } = useAccountContext()
+  const { isConnected, error: errorWithAccount } = useAccountContext()
   const { refetch: refetchRegistry, refetchApplications } = useProjectContext()
 
   const [sending, setSending] = useState<boolean>(false)
@@ -32,6 +36,13 @@ export const VouchMemberWidget = (props: { pap: Entity<PAP> }) => {
 
   const { account } = useConnectedMember()
   const { setLoading, setLoadingTimeout, setTitle: setTitleToLoading, setSubtitle } = useLoadingContext()
+
+  const {
+    setVisible,
+    setTitle: setNotificationTitle,
+    setMessage: setNotificationMessage,
+    setStatus: setNotificationType,
+  } = useToastNotificationContext()
 
   const {
     account: vouchedAccount,
@@ -64,11 +75,28 @@ export const VouchMemberWidget = (props: { pap: Entity<PAP> }) => {
   }, [isSuccess])
 
   useEffect(() => {
-    if (isErrorSending) {
+    if (isErrorSending || errorWithAccount) {
       setSending(false)
-      setError((errorSending as any).shortMessage)
+      setVisible(true)
+      setNotificationTitle('Error')
+      setNotificationType('critical')
+
+      if (isErrorSending) {
+        setError((errorSending as any).shortMessage)
+        setNotificationMessage((errorSending as any).message)
+      }
+
+      if (!!errorWithAccount) setNotificationMessage(errorWithAccount.message)
     }
-  }, [isErrorSending, errorSending])
+  }, [
+    isErrorSending,
+    errorSending,
+    errorWithAccount,
+    setVisible,
+    setNotificationTitle,
+    setNotificationType,
+    setNotificationMessage,
+  ])
 
   const vouch = () => {
     if (sendVouch) {

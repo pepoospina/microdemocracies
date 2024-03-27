@@ -25,17 +25,20 @@ export const LoadingContext = ({ children }: LoadingContextProps) => {
   //   const [icon, setIcon] = useState();
 
   const [meterValue, setMeterValue] = useState<number>(0)
+  const [meterIncrement, setMeterIncrement] = useState<number>(1)
 
   useEffect(() => {
     const intervalId = setInterval(() => {
       setMeterValue((oldValue) => {
-        if (oldValue === 100) return 0
-        return Math.min(oldValue + Math.random() * 10, 100)
+        if (oldValue >= 100) setMeterIncrement(-1)
+        else if (oldValue <= 0) setMeterIncrement(1)
+
+        return oldValue + meterIncrement
       })
     }, 500)
 
     return () => clearInterval(intervalId)
-  }, [])
+  }, [meterIncrement])
 
   return (
     <LoadingContextValue.Provider value={{ loading, setLoading, setLoadingTimeout, setTitle, setSubtitle }}>
@@ -46,6 +49,7 @@ export const LoadingContext = ({ children }: LoadingContextProps) => {
           onClickOutside={() => setLoading(false)}
           onEsc={() => setLoading(false)}
           style={{ border: '3px solid #1a1a1a', borderRadius: '10px' }}
+          responsive={false}
         >
           <Box pad="medium" gap="small" width="medium">
             <Heading level={3} as="header" textAlign="center">
