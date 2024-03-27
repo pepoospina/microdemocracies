@@ -1,6 +1,6 @@
 import { ReactNode, createContext, useContext, useEffect } from 'react'
 
-import { usePublicClient, useReadContract } from 'wagmi'
+import { useReadContract } from 'wagmi'
 
 import { AppAccount, AppChallenge } from '../types'
 import { registryABI } from '../utils/contracts.json'
@@ -23,7 +23,6 @@ export interface ConnectedMemberContextProps {
 
 export const ConnectedMemberContext = (props: ConnectedMemberContextProps) => {
   const { address: projectAddress } = useProjectContext()
-  const publicClient = usePublicClient()
   const { aaAddress } = useAccountContext()
 
   const {
