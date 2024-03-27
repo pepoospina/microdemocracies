@@ -16,7 +16,7 @@ export type AccountContextType = {
   accountPap?: Entity<PAP>
   vouchRead?: AppVouch
   voucherPapRead?: Entity<PAP>
-  isLoadingAccount: boolean
+  isLoadingAccount: boolean 
   voucherTokenId?: number
   tokenId?: number
   address?: string

@@ -22,7 +22,6 @@ export const ToastNotificationsContext = ({ children }: ToastNotificationsContex
   const [message, setMessage] = useState<string>('')
   const [status, setStatus] = useState<StatusType | undefined>(undefined)
   const [time, setTime] = useState<number>(5000)
-  console.log({ visible, title, message, status, time })
 
   const clear = () => {
     setTimeout(() => {

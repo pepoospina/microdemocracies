@@ -30,7 +30,7 @@ export const CreateProject = () => {
   const { t, i18n } = useTranslation()
   const navigate = useNavigate()
   const [pageIx, setPageIx] = useState(0)
-  const { setTitle } = useAppContainer()
+  const { setTitle } = useAppContainer() 
   const { aaAddress } = useAccountContext()
 
   const {

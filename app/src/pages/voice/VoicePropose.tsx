@@ -1,26 +1,30 @@
-import { Box, Text } from 'grommet'
 import { useEffect, useState } from 'react'
 
-import { AppButton, AppCard, AppHeading } from '../../ui-components'
-import { AppConnectButton } from '../../components/app/AppConnectButton'
 import { useNavigate } from 'react-router-dom'
-import { AppBottomButtons } from '../common/BottomButtons'
+
+import { Box, Text } from 'grommet'
 import { Add, FormPrevious } from 'grommet-icons'
-import { useAccountContext } from '../../wallet/AccountContext'
-import { StatementEditable } from './StatementEditable'
-import { useSemaphoreContext } from '../../contexts/SemaphoreContext'
-import { Loading } from '../common/Loading'
-import { ViewportPage } from '../../components/app/Viewport'
-import { useStatementSend } from './useStatementSend'
-import { useTranslation } from 'react-i18next'
+
+import { AppConnectButton } from '../../components/app/AppConnectButton'
 import { useAppContainer } from '../../components/app/AppContainer'
-import { i18n } from '../../i18n/i18n'
-import { cap } from '../../utils/general'
-import { RouteNames } from '../../route.names'
-import { useProjectContext } from '../../contexts/ProjectContext'
-import { BoxCentered } from '../../ui-components/BoxCentered'
+import { ViewportPage } from '../../components/app/Viewport'
 import { MIN_LIKES_PUBLIC, MIN_MEMBERS } from '../../config/appConfig'
+import { useLoadingContext } from '../../contexts/LoadingContext'
+import { useProjectContext } from '../../contexts/ProjectContext'
+import { useSemaphoreContext } from '../../contexts/SemaphoreContext'
+import { i18n } from '../../i18n/i18n'
+import { RouteNames } from '../../route.names'
+import { AppButton, AppCard, AppHeading } from '../../ui-components'
+import { BoxCentered } from '../../ui-components/BoxCentered'
 import { BulletList } from '../../ui-components/BulletList'
+import { cap } from '../../utils/general'
+import { useAccountContext } from '../../wallet/AccountContext'
+import { AppBottomButtons } from '../common/BottomButtons'
+import { Loading } from '../common/Loading'
+import { StatementEditable } from './StatementEditable'
+import { useStatementSend } from './useStatementSend'
+
+import { useTranslation } from 'react-i18next'
 
 export const VoicePropose = (): JSX.Element => {
   const { t } = useTranslation()
@@ -35,6 +39,7 @@ export const VoicePropose = (): JSX.Element => {
   const navigate = useNavigate()
 
   const { setTitle } = useAppContainer()
+  const { setLoading, setTitle: setTitleToLoading, setSubtitle, setLoadingTimeout } = useLoadingContext()
 
   useEffect(() => {
     setTitle({ prefix: cap(t('proposeNew')), main: t('statement') })
@@ -44,8 +49,14 @@ export const VoicePropose = (): JSX.Element => {
 
   const _proposeStatement = async (input: string) => {
     if (proposeStatement) {
+      setLoading(true)
+      setTitleToLoading(t('sendingProposal'))
+      setSubtitle(t('preparingData'))
       setIsProposing(true)
-      proposeStatement(input).then(() => {})
+      proposeStatement(input).then(() => {
+        setLoading(false)
+        setLoadingTimeout(false)
+      })
     }
   }
 
@@ -109,13 +120,6 @@ export const VoicePropose = (): JSX.Element => {
 
             <Box justify="center" style={{ margin: '36px 0', width: '100%' }}>
               {!isConnected ? <AppConnectButton label={t('connectToPropose')}></AppConnectButton> : <></>}
-              {isProposing ? (
-                <Box>
-                  <Loading label={t('sendingProposal')}></Loading>
-                </Box>
-              ) : (
-                <></>
-              )}
             </Box>
           </>
         ) : (

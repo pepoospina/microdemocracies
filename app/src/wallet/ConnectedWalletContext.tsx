@@ -1,10 +1,12 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { createWeb3Modal } from '@web3modal/wagmi/react'
 import { defaultWagmiConfig } from '@web3modal/wagmi/react/config'
-import { WagmiProvider } from 'wagmi'
+
+import { WagmiProvider, http } from 'wagmi'
 import { baseSepolia } from 'wagmi/chains'
 
 import { WALLETCONNECT_PROJECT_ID } from '../config/appConfig'
+import { ALCHEMY_RPC_URL } from '../config/appConfig'
 
 export const chain = baseSepolia
 
@@ -21,6 +23,9 @@ const config = defaultWagmiConfig({
   chains: [chain],
   projectId,
   metadata,
+  transports: {
+    [chain.id]: http(ALCHEMY_RPC_URL),
+  },
 })
 
 createWeb3Modal({
