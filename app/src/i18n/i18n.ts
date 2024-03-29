@@ -150,6 +150,7 @@ i18n.use(initReactI18next).init({
         votedNofMEligible: 'Voted {{nVoted}} of {{totalVoters}} eligible members',
         preparingData: 'Preparing the data to send to the network...',
         approvingNewMember: 'Approving new member',
+        finish: 'Finish',
       },
     },
     SPA: {
