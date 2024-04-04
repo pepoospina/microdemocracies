@@ -18,7 +18,6 @@ import { AppButton, AppCard, AppHeading } from '../../ui-components'
 import { BoxCentered } from '../../ui-components/BoxCentered'
 import { BulletList } from '../../ui-components/BulletList'
 import { cap } from '../../utils/general'
-import { useAccountContext } from '../../wallet/AccountContext'
 import { AppBottomButtons } from '../common/BottomButtons'
 import { Loading } from '../common/Loading'
 import { StatementEditable } from './StatementEditable'
@@ -28,7 +27,8 @@ import { useTranslation } from 'react-i18next'
 
 export const VoicePropose = (): JSX.Element => {
   const { t } = useTranslation()
-  const { isConnected } = useAccountContext()
+
+  const { isConnected } = useSemaphoreContext()
   const { proposeStatement, statementId } = useStatementSend()
   const { nMembers } = useProjectContext()
 
@@ -39,7 +39,13 @@ export const VoicePropose = (): JSX.Element => {
   const navigate = useNavigate()
 
   const { setTitle } = useAppContainer()
-  const { setLoading, setTitle: setTitleToLoading, setSubtitle, setExpectedLoadingTime } = useLoadingContext()
+
+  const {
+    setLoading,
+    setTitle: setTitleToLoading,
+    setSubtitle,
+    setExpectedLoadingTime,
+  } = useLoadingContext()
 
   useEffect(() => {
     setTitle({ prefix: cap(t('proposeNew')), main: t('statement') })
@@ -68,7 +74,8 @@ export const VoicePropose = (): JSX.Element => {
     }
   }, [statementId])
 
-  const readyToPropose = isConnected && input && proposeStatement !== undefined && publicId && !done
+  const readyToPropose =
+    isConnected && input && proposeStatement !== undefined && publicId && !done
 
   const content = (() => {
     if (nMembers === undefined) {
@@ -119,7 +126,11 @@ export const VoicePropose = (): JSX.Element => {
             </AppCard>
 
             <Box justify="center" style={{ margin: '36px 0', width: '100%' }}>
-              {!isConnected ? <AppConnectButton label={t('connectToPropose')}></AppConnectButton> : <></>}
+              {!isConnected ? (
+                <AppConnectButton label={t('connectToPropose')}></AppConnectButton>
+              ) : (
+                <></>
+              )}
             </Box>
           </>
         ) : (

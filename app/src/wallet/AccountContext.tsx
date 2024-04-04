@@ -47,7 +47,7 @@ export const AccountContext = (props: PropsWithChildren) => {
   const { t } = useTranslation()
   const { signer, address } = useAppSigner()
   const publicClient = usePublicClient()
-  const { setLoading, setPause, setSubtitle } = useLoadingContext()
+  const { setLoading, setPause, setTitle, setSubtitle } = useLoadingContext()
 
   /** ALCHEMY provider to send transactions using AA */
   const [alchemyClientAA, setAlchemyClientAA] = useState<AlchemySmartAccountClient>()
@@ -63,6 +63,9 @@ export const AccountContext = (props: PropsWithChildren) => {
 
   useEffect(() => {
     if (signer) {
+      setTitle(t('waitingSignature'))
+      setSubtitle('Sign in to get aaAccount')
+
       createLightAccountAlchemyClient({
         rpcUrl: ALCHEMY_RPC_URL,
         chain: chain,
@@ -203,7 +206,6 @@ export const AccountContext = (props: PropsWithChildren) => {
       setIsSending(false)
       setEvents(events as any)
     } catch (e: any) {
-      console.error(e)
       setError(e)
       setLoading(false)
     }

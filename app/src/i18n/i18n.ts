@@ -86,7 +86,7 @@ i18n.use(initReactI18next).init({
         lastName: 'Last Name',
         username: 'username',
         waitingSignatures: 'Creating Public Id - Waiting for Signatures',
-        connecting: 'connecting',
+        connecting: 'Connecting',
         canJoin: 'Can join anyone who',
         notWhoGiven: 'Forgot to include who can join',
         anyoneWho: 'Anyone <Bold>who</Bold>',

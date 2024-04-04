@@ -9,6 +9,7 @@ import { useConnectedMember } from '../../contexts/ConnectedAccountContext'
 import { useLoadingContext } from '../../contexts/LoadingContext'
 import { useMember } from '../../contexts/MemberContext'
 import { useProjectContext } from '../../contexts/ProjectContext'
+import { useSemaphoreContext } from '../../contexts/SemaphoreContext'
 import { useToastNotificationContext } from '../../contexts/ToastNotificationsContext'
 import { useVouch } from '../../contexts/VouchContext'
 import { AbsoluteRoutes } from '../../route.names'
@@ -26,7 +27,8 @@ export const VouchMemberWidget = (props: { pap: Entity<PAP> }) => {
   const { pap } = props
 
   const navigate = useNavigate()
-  const { isConnected, error: errorWithAccount } = useAccountContext()
+  const { error: errorWithAccount } = useAccountContext()
+  const { isConnected } = useSemaphoreContext()
   const { refetch: refetchRegistry, refetchApplications } = useProjectContext()
 
   const [sending, setSending] = useState<boolean>(false)

@@ -4,6 +4,8 @@ import { Box, Heading, Layer, Meter, Paragraph, Spinner } from 'grommet'
 
 import { useThemeContext } from '../components/app'
 
+import styled from 'styled-components'
+
 export type LoadingContextType = {
   loading: boolean
   setLoading: (loading: boolean) => void
@@ -86,6 +88,33 @@ export const LoadingContext = ({ children }: LoadingContextProps) => {
     }
   }
 
+  const layerBreakpoints = {
+    xsmall: '200px',
+    small: '380px',
+    medium: '600px',
+    large: '780px',
+  }
+
+  const BoxWrapper = styled.div`
+    width: 100%;
+
+    @media (max-width: ${layerBreakpoints.xsmall}) {
+      width: 250px;
+    }
+
+    @media (max-width: ${layerBreakpoints.small}) and (min-width: ${layerBreakpoints.xsmall}) {
+      width: 300px;
+    }
+
+    @media (max-width: ${layerBreakpoints.medium}) and (min-width: ${layerBreakpoints.small}) {
+      width: 350px;
+    }
+
+    @media (max-width: ${layerBreakpoints.large}) and (min-width: ${layerBreakpoints.medium}) {
+      width: 650px;
+    }
+  `
+
   return (
     <LoadingContextValue.Provider
       value={{
@@ -108,25 +137,27 @@ export const LoadingContext = ({ children }: LoadingContextProps) => {
           responsive={false}
         >
           {' '}
-          <Box pad="medium" gap="small" width="medium">
-            <Heading level={3} as="header" textAlign="center">
-              {title}
-            </Heading>
+          <BoxWrapper>
+            <Box pad="medium" gap="small" style={{ borderRadius: '10px' }}>
+              <Heading level={3} as="header" textAlign="center">
+                {title}
+              </Heading>
 
-            <Paragraph>{subtitle}</Paragraph>
+              <Paragraph textAlign="center">{subtitle}</Paragraph>
 
-            {expectedLoadingTime ? (
-              <Meter
-                value={timeElapsed}
-                color={constants.colors.primary}
-                max={expectedLoadingTime}
-              />
-            ) : (
-              <Box pad="small" justify="center" align="center">
-                <Spinner color={constants.colors.primary} />
-              </Box>
-            )}
-          </Box>
+              {expectedLoadingTime ? (
+                <Meter
+                  value={timeElapsed}
+                  color={constants.colors.primary}
+                  max={expectedLoadingTime}
+                />
+              ) : (
+                <Box pad="small" justify="center" align="center">
+                  <Spinner color={constants.colors.primary} />
+                </Box>
+              )}
+            </Box>
+          </BoxWrapper>
         </Layer>
       )}
     </LoadingContextValue.Provider>
