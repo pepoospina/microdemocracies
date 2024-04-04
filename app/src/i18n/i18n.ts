@@ -168,6 +168,8 @@ i18n.use(initReactI18next).init({
         waitingTransaction: 'Sending operation to the network...',
         operationSuccessful: 'Onchain opperation successful!',
         registeringProject: 'Registering your microdemocracy...',
+        noLikesNeeded:
+          'Congratulations! this statement is already public in the microdemocracy homepage',
       },
     },
     SPA: {
