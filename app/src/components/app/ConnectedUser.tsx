@@ -1,7 +1,7 @@
+import { useState } from 'react'
+
 import { Box, Text } from 'grommet'
 import { UserExpert } from 'grommet-icons'
-import { useState } from 'react'
-import { useTranslation } from 'react-i18next'
 
 import { CHAIN_ID } from '../../config/appConfig'
 import { useSemaphoreContext } from '../../contexts/SemaphoreContext'
@@ -13,17 +13,23 @@ import { useAccountContext } from '../../wallet/AccountContext'
 import { AppConnectButton } from './AppConnectButton'
 import { useThemeContext } from './ThemedApp'
 
+import { useTranslation } from 'react-i18next'
+
 export const ConnectedUser = (props: {}) => {
   const { t } = useTranslation()
-  const { aaAddress, isConnected, owner } = useAccountContext()
-  const { isCreatingPublicId, disconnect } = useSemaphoreContext()
+  const { aaAddress, owner } = useAccountContext()
+  const { isCreatingPublicId, disconnect, isConnected } = useSemaphoreContext()
   const { constants } = useThemeContext()
 
   const [showDrop, setShowDrop] = useState<boolean>(false)
 
   const content = (() => {
     if (!isConnected) {
-      return <AppConnectButton style={{ fontSize: '16px', padding: '6px 8px' }}></AppConnectButton>
+      return (
+        <AppConnectButton
+          style={{ fontSize: '16px', padding: '6px 8px' }}
+        ></AppConnectButton>
+      )
     }
 
     if (!aaAddress || isCreatingPublicId) {
@@ -33,7 +39,12 @@ export const ConnectedUser = (props: {}) => {
     return (
       <AppCircleDropButton
         plain
-        label={<UserExpert color={constants.colors.primary} style={{ margin: '2px 0px 0px 5px' }}></UserExpert>}
+        label={
+          <UserExpert
+            color={constants.colors.primary}
+            style={{ margin: '2px 0px 0px 5px' }}
+          ></UserExpert>
+        }
         open={showDrop}
         onClose={() => setShowDrop(false)}
         onOpen={() => setShowDrop(true)}
@@ -48,7 +59,11 @@ export const ConnectedUser = (props: {}) => {
               <LanguageSelector></LanguageSelector>
             </Box>
 
-            <AppButton plain onClick={() => disconnect()} style={{ textTransform: 'none', paddingTop: '6px' }}>
+            <AppButton
+              plain
+              onClick={() => disconnect()}
+              style={{ textTransform: 'none', paddingTop: '6px' }}
+            >
               <Text style={{ fontWeight: 'bold' }}>{cap(t('logout'))}</Text>
             </AppButton>
           </Box>

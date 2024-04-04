@@ -1,12 +1,14 @@
+import { useEffect } from 'react'
+
+import { useNavigate } from 'react-router-dom'
+
 import { Box, Button, Text } from 'grommet'
 import { Add } from 'grommet-icons'
-import { useEffect } from 'react'
-import { useTranslation } from 'react-i18next'
-import { useNavigate } from 'react-router-dom'
 
 import { AppConnectButton } from '../../components/app/AppConnectButton'
 import { useAppContainer } from '../../components/app/AppContainer'
 import { ViewportPage } from '../../components/app/Viewport'
+import { useSemaphoreContext } from '../../contexts/SemaphoreContext'
 import { AppCard } from '../../ui-components'
 import { useAccountContext } from '../../wallet/AccountContext'
 import { useAccountDataContext } from '../../wallet/AccountDataContext'
@@ -14,8 +16,11 @@ import { AppBottomButton } from '../common/BottomButtons'
 import { Loading } from '../common/Loading'
 import { ProjectCard } from '../project/ProjectCard'
 
+import { useTranslation } from 'react-i18next'
+
 export const AppHome = (props: {}) => {
-  const { isConnected, aaAddress } = useAccountContext()
+  const { aaAddress } = useAccountContext()
+  const { isConnected } = useSemaphoreContext()
   const { setTitle } = useAppContainer()
 
   const { projects } = useAccountDataContext()
@@ -56,7 +61,11 @@ export const AppHome = (props: {}) => {
       <Box pad={{ horizontal: 'medium' }}>
         {projects.map((project, ix) => {
           return (
-            <Box key={ix} margin={{ top: 'medium' }} style={{ position: 'relative', flexShrink: 0 }}>
+            <Box
+              key={ix}
+              margin={{ top: 'medium' }}
+              style={{ position: 'relative', flexShrink: 0 }}
+            >
               <ProjectCard project={project}></ProjectCard>
               <Button
                 onClick={() => projectClicked(project.projectId)}
@@ -78,7 +87,11 @@ export const AppHome = (props: {}) => {
     <ViewportPage
       content={projectsContent}
       nav={
-        <AppBottomButton onClick={() => navigate('/start')} icon={<Add></Add>} label={t('startNew')}></AppBottomButton>
+        <AppBottomButton
+          onClick={() => navigate('/start')}
+          icon={<Add></Add>}
+          label={t('startNew')}
+        ></AppBottomButton>
       }
     ></ViewportPage>
   )

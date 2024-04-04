@@ -1,12 +1,18 @@
+import { useEffect } from 'react'
+
 import { useReadContract } from 'wagmi'
 
 import { AppChallenge, VoteOption } from '../types'
 import { registryABI } from '../utils/contracts.json'
 import { useProjectContext } from './ProjectContext'
+import { useToastNotificationContext } from './ToastNotificationsContext'
 
 export type ChallengeContextReadType = {
   tokenId?: number
-  refetchChallenge: (options?: { throwOnError: boolean; cancelRefetch: boolean }) => Promise<any>
+  refetchChallenge: (options?: {
+    throwOnError: boolean
+    cancelRefetch: boolean
+  }) => Promise<any>
   challengeRead: AppChallenge | undefined | null
   totalVoters?: number
   isLoadingChallenge: boolean
@@ -51,9 +57,19 @@ export const useChallengeRead = (tokenId?: number): ChallengeContextReadType => 
     },
   })
 
+  useEffect(() => {
+    if (isErrorChallengeRead) {
+      console.log({ errorChallengeRead })
+    }
+  }, [errorChallengeRead, isErrorChallengeRead])
+
   /** undefined means currently reading, null means read and not found */
   const challengeRead: AppChallenge | undefined | null = ((_challengeRead) => {
-    if (isErrorChallengeRead && errorChallengeRead && errorChallengeRead.message.includes('')) {
+    if (
+      isErrorChallengeRead &&
+      errorChallengeRead &&
+      errorChallengeRead.message.includes('')
+    ) {
       return null
     }
     if (_challengeRead === undefined) {

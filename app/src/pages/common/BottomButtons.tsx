@@ -1,7 +1,9 @@
-import { Box } from 'grommet'
-import { AppButton, AppCard, IButton } from '../../ui-components'
 import { ReactElement } from 'react'
+
+import { Box } from 'grommet'
 import { FormPrevious, FormNext } from 'grommet-icons'
+
+import { AppButton, AppCard, IButton } from '../../ui-components'
 
 export const AppBottomButton = (props: IButton) => {
   return (
@@ -46,11 +48,6 @@ export const AppBottomButtons = (props: { left?: IButtonWithAction; right?: IBut
           primary={right.primary}
           disabled={right.disabled}
         ></AppButton>
-      ) : (
-        <></>
-      )}
-      {props.popUp !== undefined ? (
-        <AppCard style={{ position: 'absolute', right: '20px', top: '-120px', width: '360px' }}>{props.popUp}</AppCard>
       ) : (
         <></>
       )}

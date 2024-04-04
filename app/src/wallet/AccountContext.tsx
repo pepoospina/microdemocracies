@@ -1,16 +1,29 @@
-import { AlchemySmartAccountClient, createLightAccountAlchemyClient } from '@alchemy/aa-alchemy'
+import {
+  AlchemySmartAccountClient,
+  createLightAccountAlchemyClient,
+} from '@alchemy/aa-alchemy'
 import { BatchUserOperationCallData, WalletClientSigner } from '@alchemy/aa-core'
+
 import { PropsWithChildren, createContext, useContext, useEffect, useState } from 'react'
+
 import { DecodeEventLogReturnType, decodeEventLog, getAddress } from 'viem'
+
 import { usePublicClient, useReadContract } from 'wagmi'
 
 import { ALCHEMY_GAS_POLICY_ID, ALCHEMY_RPC_URL } from '../config/appConfig'
 import { useLoadingContext } from '../contexts/LoadingContext'
 import { HexStr } from '../types'
-import { aaWalletAbi, getFactoryAddress, registryABI, registryFactoryABI } from '../utils/contracts.json'
+import {
+  aaWalletAbi,
+  getFactoryAddress,
+  registryABI,
+  registryFactoryABI,
+} from '../utils/contracts.json'
 import { AccountDataContext } from './AccountDataContext'
 import { chain } from './ConnectedWalletContext'
 import { useAppSigner } from './SignerContext'
+
+import { useTranslation } from 'react-i18next'
 
 const DEBUG = true
 
@@ -31,9 +44,10 @@ const AccountContextValue = createContext<AccountContextType | undefined>(undefi
 
 /** Manages the AA user ops and their execution */
 export const AccountContext = (props: PropsWithChildren) => {
+  const { t } = useTranslation()
   const { signer, address } = useAppSigner()
   const publicClient = usePublicClient()
-  const { setLoading, setLoadingTimeout } = useLoadingContext()
+  const { setLoading, setPause, setTitle, setSubtitle } = useLoadingContext()
 
   /** ALCHEMY provider to send transactions using AA */
   const [alchemyClientAA, setAlchemyClientAA] = useState<AlchemySmartAccountClient>()
@@ -49,6 +63,9 @@ export const AccountContext = (props: PropsWithChildren) => {
 
   useEffect(() => {
     if (signer) {
+      setTitle(t('waitingSignature'))
+      setSubtitle('Sign in to get aaAccount')
+
       createLightAccountAlchemyClient({
         rpcUrl: ALCHEMY_RPC_URL,
         chain: chain,
@@ -73,8 +90,6 @@ export const AccountContext = (props: PropsWithChildren) => {
     setIsSending(false)
     setError(undefined)
     setEvents(undefined)
-    setLoading(false)
-    setLoadingTimeout(false)
   }
 
   const {
@@ -93,7 +108,8 @@ export const AccountContext = (props: PropsWithChildren) => {
     if (!address) return undefined
     if (
       ownerError &&
-      (ownerError as any).shortMessage === 'The contract function "owner" returned no data ("0x").' &&
+      (ownerError as any).shortMessage ===
+        'The contract function "owner" returned no data ("0x").' &&
       address
     )
       return address
@@ -124,15 +140,20 @@ export const AccountContext = (props: PropsWithChildren) => {
       if (DEBUG) console.log('uoSimResult', { uoSimResult })
 
       if (DEBUG) console.log('sendUserOps', { userOps: _userOps })
+
+      setPause(true)
+      setSubtitle(t('waitingSignature'))
+
       const res = await (alchemyClientAA as any).sendUserOperation({
         uo: _userOps,
       })
 
-      setLoadingTimeout(true)
-
       if (DEBUG) console.log('sendUserOps - res', { res })
-
       if (DEBUG) console.log('waiting')
+
+      setPause(false)
+      setSubtitle(t('waitingTransaction'))
+
       const txHash = await alchemyClientAA.waitForUserOperationTransaction({
         hash: res.hash,
       })
@@ -142,6 +163,7 @@ export const AccountContext = (props: PropsWithChildren) => {
       if (DEBUG) console.log('getting tx')
 
       if (!publicClient) throw new Error(`publicClient undefined`)
+
       const tx = await publicClient.waitForTransactionReceipt({
         hash: txHash,
       })
@@ -178,14 +200,14 @@ export const AccountContext = (props: PropsWithChildren) => {
 
       console.log({ events })
 
+      setSubtitle(t('operationSuccessful'))
+
       setIsSuccess(true)
       setIsSending(false)
       setEvents(events as any)
     } catch (e: any) {
-      console.error(e)
       setError(e)
       setLoading(false)
-      setLoadingTimeout(false)
     }
   }
 

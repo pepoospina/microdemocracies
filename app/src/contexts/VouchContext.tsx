@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
+
 import { DecodeEventLogReturnType, encodeFunctionData, zeroAddress } from 'viem'
+
 import { usePublicClient } from 'wagmi'
 
 import { HexStr } from '../types'
@@ -25,6 +27,8 @@ export const useVouch = (): VouchHookType => {
   const { sendUserOps, isSuccess, isSending, events } = useAccountContext()
 
   const [vouchParamsInternal, setVouchParamsInternal] = useState<[HexStr, string]>()
+  const [isErrorSending, setIsErrorSending] = useState<boolean>(false)
+  const [errorSending, setErrorSending] = useState<any | null>(null)
 
   const setVouchParams = useCallback((account: HexStr, personCid: string) => {
     setVouchParamsInternal([account, personCid])
@@ -86,24 +90,26 @@ export const useVouch = (): VouchHookType => {
   const sendVouch =
     address && sendUserOps && vouchParamsInternal
       ? async () => {
-          const callData = encodeFunctionData({
-            abi: registryABI,
-            functionName: 'vouch',
-            args: vouchParamsInternal,
-          })
+          try {
+            const callData = encodeFunctionData({
+              abi: registryABI,
+              functionName: 'vouch',
+              args: vouchParamsInternal,
+            })
 
-          sendUserOps([
-            {
-              target: address,
-              data: callData,
-              value: BigInt(0),
-            },
-          ])
+            sendUserOps([
+              {
+                target: address,
+                data: callData,
+                value: BigInt(0),
+              },
+            ])
+          } catch (error) {
+            setIsErrorSending(true)
+            setErrorSending(error)
+          }
         }
       : undefined
-
-  const isErrorSending = false
-  const errorSending = new Error()
 
   return {
     setVouchParams,

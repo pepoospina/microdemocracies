@@ -1,4 +1,5 @@
 import { Identity } from '@semaphore-protocol/identity'
+
 import { PropsWithChildren, createContext, useContext, useEffect, useState } from 'react'
 
 import { getPublicIdentity } from '../firestore/getters'
@@ -8,6 +9,9 @@ import { getControlMessage } from '../utils/identity.utils'
 import { postIdentity } from '../utils/statements'
 import { useAccountContext } from '../wallet/AccountContext'
 import { useAppSigner } from '../wallet/SignerContext'
+import { useLoadingContext } from './LoadingContext'
+
+import { useTranslation } from 'react-i18next'
 
 export type SemaphoreContextType = {
   publicId?: string
@@ -15,31 +19,40 @@ export type SemaphoreContextType = {
   isCreatingPublicId: boolean
   errorCreating?: Error
   disconnect: () => void
+  isConnected: boolean
 }
 
 const SemaphoreContextValue = createContext<SemaphoreContextType | undefined>(undefined)
 
 export const SemaphoreContext = (props: PropsWithChildren) => {
-  const { signMessage, disconnect: disconnectSigner } = useAppSigner()
-  const { owner, aaAddress } = useAccountContext()
+  const { t } = useTranslation()
+  const { setLoading, setTitle, setSubtitle, setUserCanClose } = useLoadingContext()
 
-  // console.log({ walletClient, isError, isLoading });
+  const { signMessage, disconnect: disconnectSigner } = useAppSigner()
+  const { owner, aaAddress, isConnected: isAccountConnected } = useAccountContext()
+
   const [isCreatingPublicId, setIsCreatingPublicId] = useState<boolean>(false)
   const [errorCreating, setErrorCreating] = useState<Error>()
 
   const [identity, setIdentity] = useState<Identity>()
   const [publicId, setPublicId] = useState<string>()
+  const [isConnected, setIsConnected] = useState<boolean>(false)
 
   // keep publicId aligned with identity
   useEffect(() => {
-    if (identity) {
+    if (isAccountConnected && identity) {
       const _publicId = identity.getCommitment().toString()
       setPublicId(_publicId)
+      setIsConnected(true)
+      setLoading(false)
     }
-  }, [identity])
+  }, [identity, isAccountConnected])
 
   // keep identity inline with aaAddress
   useEffect(() => {
+    setTitle(t('waitingSignatures'))
+    setSubtitle(t('waitingSignatures'))
+
     checkStoredIdentity()
   }, [aaAddress, owner])
 
@@ -96,7 +109,10 @@ export const SemaphoreContext = (props: PropsWithChildren) => {
         }
 
         // store the secret identity on this device (so we dont have to ask for a signature with metamask from now on)
-        localStorage.setItem('identity', JSON.stringify({ identity: _identity.toString(), aaAddress }))
+        localStorage.setItem(
+          'identity',
+          JSON.stringify({ identity: _identity.toString(), aaAddress }),
+        )
         setIdentity(_identity)
       }
 
@@ -105,13 +121,19 @@ export const SemaphoreContext = (props: PropsWithChildren) => {
       console.error(e)
       setIsCreatingPublicId(false)
       setErrorCreating(e)
+      setUserCanClose(true)
     }
     setIsCreatingPublicId(false)
   }
 
   // exposes a call to the generateProof function using the connected identity
   const generateProof = identity
-    ? async (input: { signal: string; nullifier: string; projectId?: number; treeId?: string }) => {
+    ? async (input: {
+        signal: string
+        nullifier: string
+        projectId?: number
+        treeId?: string
+      }) => {
         return _generateProof({ identity, ...input })
       }
     : undefined
@@ -120,6 +142,7 @@ export const SemaphoreContext = (props: PropsWithChildren) => {
     localStorage.removeItem('identity')
     setIdentity(undefined)
     setPublicId(undefined)
+    setIsConnected(false)
     disconnectSigner()
   }
 
@@ -131,6 +154,7 @@ export const SemaphoreContext = (props: PropsWithChildren) => {
         isCreatingPublicId,
         errorCreating,
         disconnect,
+        isConnected,
       }}
     >
       {props.children}

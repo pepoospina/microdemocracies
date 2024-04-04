@@ -1,13 +1,15 @@
+import { ReactNode, useEffect, useState } from 'react'
+
+import { useNavigate } from 'react-router-dom'
+
 import { Box, Spinner, Text } from 'grommet'
 import { FormNext, FormPrevious } from 'grommet-icons'
-import { ReactNode, useEffect, useState } from 'react'
-import { Trans, useTranslation } from 'react-i18next'
-import { useNavigate } from 'react-router-dom'
 
 import { AppConnectWidget } from '../../components/app/AppConnectButton'
 import { useAppContainer } from '../../components/app/AppContainer'
 import { ViewportPage } from '../../components/app/Viewport'
 import { useLoadingContext } from '../../contexts/LoadingContext'
+import { useToastNotificationContext } from '../../contexts/ToastNotificationsContext'
 import { AbsoluteRoutes } from '../../route.names'
 import { AppCard, AppHeading } from '../../ui-components'
 import { Bold } from '../../ui-components/Bold'
@@ -19,6 +21,8 @@ import { StatementEditable } from '../voice/StatementEditable'
 import { DetailsSelector } from './DetailsSelector'
 import { ProjectSummary } from './ProjectSummary'
 import { useCreateProject } from './useCreateProject'
+
+import { Trans, useTranslation } from 'react-i18next'
 
 const NPAGES = 5
 
@@ -43,7 +47,18 @@ export const CreateProject = () => {
     createProject,
   } = useCreateProject()
 
-  const { setLoading, setTitle: setTitleToLoading, setSubtitle } = useLoadingContext()
+  const {
+    setLoading,
+    setTitle: setTitleToLoading,
+    setSubtitle,
+    setExpectedLoadingTime,
+  } = useLoadingContext()
+  const {
+    setVisible,
+    setTitle: setNotificationTitle,
+    setMessage: setNotificationMessage,
+    setStatus: setNotificationType,
+  } = useToastNotificationContext()
 
   useEffect(() => {
     if (projectId) {
@@ -53,7 +68,27 @@ export const CreateProject = () => {
 
   useEffect(() => {
     setTitle({ prefix: t('startA'), main: t('project') })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [setTitle, i18n.language])
+
+  useEffect(() => {
+    if (!isError) return
+
+    setVisible(true)
+    setNotificationTitle(t('errorCreatingProject'))
+
+    if (error) {
+      setNotificationType('critical')
+      setNotificationMessage(error.message)
+    }
+  }, [
+    error,
+    isError,
+    setNotificationMessage,
+    setNotificationTitle,
+    setNotificationType,
+    setVisible,
+  ])
 
   const boxStyle: React.CSSProperties = {
     flexGrow: '1',
@@ -70,9 +105,11 @@ export const CreateProject = () => {
     }
 
     if (pageIx === NPAGES - 1) {
+      /** Loading modal shown */
       setLoading(true)
       setTitleToLoading(t('creatingProject'))
       setSubtitle(t('preparingData'))
+      setExpectedLoadingTime(17000)
       createProject()
     }
   }
@@ -167,7 +204,10 @@ export const CreateProject = () => {
       <AppHeading level="3" style={{ marginBottom: '18px' }}>
         {t('yourDetails')}
       </AppHeading>
-      <DetailsForm selected={selectedDetails} onChange={(details) => setFounderDetails(details)}></DetailsForm>
+      <DetailsForm
+        selected={selectedDetails}
+        onChange={(details) => setFounderDetails(details)}
+      ></DetailsForm>
     </Box>,
 
     <Box style={{ ...boxStyle, paddingTop: '80px' }} pad="large" align="center">

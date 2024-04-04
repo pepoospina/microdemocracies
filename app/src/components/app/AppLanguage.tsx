@@ -1,4 +1,5 @@
 import { PropsWithChildren, createContext, useContext, useEffect, useState } from 'react'
+
 import { useTranslation } from 'react-i18next'
 
 export enum Language {
@@ -68,6 +69,6 @@ export const AppLanguage = (props: PropsWithChildren): JSX.Element => {
 
 export const useAppLanguage = (): AppLanguageType => {
   const context = useContext(ThemeContextValue)
-  if (!context) throw Error('useThemeContext can only be used within the CampaignContext component')
+  if (!context) throw Error('useAppLanguage can only be used within the AppLanguage component')
   return context
 }

@@ -1,11 +1,14 @@
 import { useCallback, useEffect, useState } from 'react'
+
 import { DecodeEventLogReturnType, encodeFunctionData } from 'viem'
+
 import { useReadContract } from 'wagmi'
 
 import { VoteOption } from '../types'
 import { registryABI } from '../utils/contracts.json'
 import { useAccountContext } from '../wallet/AccountContext'
 import { useProjectContext } from './ProjectContext'
+import { useToastNotificationContext } from './ToastNotificationsContext'
 
 export type ChallengeContextWriteType = {
   sendChallenge?: () => void
@@ -73,6 +76,34 @@ export const useChallengeWrite = (tokenId?: number): ChallengeContextWriteType =
       refetchMyVote()
     }
   }, [isSuccess, refetchMyVote])
+
+  const {
+    setVisible,
+    setTitle: setNotificationTitle,
+    setMessage: setNotificationMessage,
+    setStatus: setNotificationType,
+  } = useToastNotificationContext()
+
+  useEffect(() => {
+    if (!errorChallenging || !isErrorVoting) return
+
+    setVisible(true)
+    setNotificationTitle('Error with challenge writing')
+
+    if (errorVoting || errorChallenging) {
+      setNotificationType('critical')
+      if (errorVoting) setNotificationMessage(errorVoting.message)
+      if (errorChallenging) setNotificationMessage(errorChallenging.message)
+    }
+  }, [
+    errorChallenging,
+    errorVoting,
+    isErrorVoting,
+    setNotificationMessage,
+    setNotificationTitle,
+    setNotificationType,
+    setVisible,
+  ])
 
   /** Challenge */
   const sendChallenge = useCallback(async () => {
