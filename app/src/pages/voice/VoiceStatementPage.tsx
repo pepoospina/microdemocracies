@@ -1,54 +1,55 @@
-import { Box, Text } from 'grommet';
-
-import { AppBottomButton } from '../common/BottomButtons';
-import { FormPrevious, Send, StatusGood } from 'grommet-icons';
-import { ViewportPage } from '../../components/app/Viewport';
-import { useProjectContext } from '../../contexts/ProjectContext';
-import { useTranslation } from 'react-i18next';
-import { useNavigate, useParams } from 'react-router-dom';
-import { StatementCard } from './StatementCard';
-import { useAppContainer } from '../../components/app/AppContainer';
-import { useEffect } from 'react';
-import { ProjectCard } from '../project/ProjectCard';
-import { Loading } from '../common/Loading';
-import { AppButton, AppCard, AppHeading } from '../../ui-components';
-import { useStatementContext } from '../../contexts/StatementContext';
-import { useCopyToClipboard } from '../../utils/copy.clipboard';
-import { MIN_LIKES_PUBLIC } from '../../config/appConfig';
+import { useAppContainer } from '../../components/app/AppContainer'
+import { ViewportPage } from '../../components/app/Viewport'
+import { MIN_LIKES_PUBLIC } from '../../config/appConfig'
+import { useProjectContext } from '../../contexts/ProjectContext'
+import { useStatementContext } from '../../contexts/StatementContext'
+import { AbsoluteRoutes } from '../../route.names'
+import { AppButton, AppCard, AppHeading } from '../../ui-components'
+import { useCopyToClipboard } from '../../utils/copy.clipboard'
+import { AppBottomButtons } from '../common/BottomButtons'
+import { Loading } from '../common/Loading'
+import { ProjectCard } from '../project/ProjectCard'
+import { StatementCard } from './StatementCard'
+import { Box, Text } from 'grommet'
+import { FormPrevious, Send, StatusGood } from 'grommet-icons'
+import { useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
+import { useNavigate, useParams } from 'react-router-dom'
 
 export const VoiceStatementPage = (): JSX.Element => {
-  const { t } = useTranslation();
-  const navigate = useNavigate();
+  const { t } = useTranslation()
+  const navigate = useNavigate()
 
-  const { statementId } = useParams();
-  const { project } = useProjectContext();
-  const { setTitle } = useAppContainer();
-  const { nBacking } = useStatementContext();
+  const { statementId } = useParams()
+  const { project, projectId } = useProjectContext()
+  const { setTitle } = useAppContainer()
+  const { nBacking } = useStatementContext()
 
-  const { copy, copied } = useCopyToClipboard();
+  const { copy, copied } = useCopyToClipboard()
 
   const share = () => {
-    const link = window.location.href;
+    const link = window.location.href
     if (navigator.share) {
       navigator.share({
         url: link,
         text: t('askSupport'),
-      });
+      })
     } else {
-      copy(link);
+      copy(link)
     }
-  };
-
-  useEffect(() => {
-    setTitle({ prefix: t('project'), main: t('statement') });
-  }, []);
-
-  if (!project || !statementId) {
-    return <Loading></Loading>;
   }
 
-  const nBackingDef = nBacking !== undefined ? nBacking : 0;
-  const isShown = nBackingDef !== undefined && nBackingDef >= 2;
+  useEffect(() => {
+    setTitle({ prefix: t('project'), main: t('statement') })
+  }, [])
+
+  if (!project || !statementId) {
+    return <Loading></Loading>
+  }
+
+  const nBackingDef = nBacking !== undefined ? nBacking : 0
+  const isShown = nBackingDef !== undefined && nBackingDef >= 2
+  console.log({ nBackingDef, isShown })
 
   return (
     <ViewportPage
@@ -72,7 +73,8 @@ export const VoiceStatementPage = (): JSX.Element => {
                       reverse
                       primary
                       style={{ width: '100%' }}
-                      label={copied ? 'link copied!' : 'share'}></AppButton>
+                      label={copied ? 'link copied!' : 'share'}
+                    ></AppButton>
                   </Box>
                 </Box>
               </Box>
@@ -91,7 +93,19 @@ export const VoiceStatementPage = (): JSX.Element => {
         </Box>
       }
       nav={
-        <AppBottomButton label={t('back')} icon={<FormPrevious />} onClick={() => navigate(-1)}></AppBottomButton>
-      }></ViewportPage>
-  );
-};
+        <AppBottomButtons
+          left={{
+            action: () => navigate(-1),
+            label: t('back'),
+            icon: <FormPrevious />,
+          }}
+          right={{
+            primary: true,
+            action: () => navigate(`${AbsoluteRoutes.ProjectHome(projectId?.toString() as string)}`),
+            label: t('finish'),
+          }}
+        ></AppBottomButtons>
+      }
+    ></ViewportPage>
+  )
+}

@@ -1,21 +1,21 @@
-import { BoxExtendedProps, Box } from 'grommet';
-import { ReactElement, useState, useRef, useEffect } from 'react';
+import { BoxExtendedProps, Box } from 'grommet'
+import { ReactElement, useState, useRef, useEffect } from 'react'
 
 export interface IFixedHeightPar extends BoxExtendedProps {
-  _content: ReactElement;
+  _content: ReactElement
 }
 
 export const FixedHeightPar = (props: IFixedHeightPar) => {
-  const [showGradient, setShowGradient] = useState<boolean>(false);
-  const container = useRef<HTMLDivElement>(null);
-  const paragraph = useRef<HTMLDivElement>(null);
+  const [showGradient, setShowGradient] = useState<boolean>(false)
+  const container = useRef<HTMLDivElement>(null)
+  const paragraph = useRef<HTMLDivElement>(null)
   useEffect(() => {
     if (container !== null && paragraph !== null && container.current !== null && paragraph.current !== null) {
       if (container.current.clientHeight < paragraph.current.scrollHeight) {
-        setShowGradient(true);
+        setShowGradient(true)
       }
     }
-  }, [container, paragraph]);
+  }, [container, paragraph])
   return (
     <Box
       ref={container}
@@ -24,7 +24,8 @@ export const FixedHeightPar = (props: IFixedHeightPar) => {
         overflow: 'hidden',
         position: 'relative',
         ...props.style,
-      }}>
+      }}
+    >
       <Box ref={paragraph}>{props.content}</Box>
       {showGradient ? (
         <Box
@@ -39,12 +40,13 @@ export const FixedHeightPar = (props: IFixedHeightPar) => {
             position: 'absolute',
             bottom: '0px',
             right: '0px',
-          }}>
+          }}
+        >
           <Box style={{ marginRight: '24px' }}>. . .</Box>
         </Box>
       ) : (
         <></>
       )}
     </Box>
-  );
-};
+  )
+}

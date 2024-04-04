@@ -1,13 +1,13 @@
-import { BoxExtendedProps, Box } from 'grommet';
-import { useThemeContext } from '../components/app';
+import { BoxExtendedProps, Box } from 'grommet'
+import { useThemeContext } from '../components/app'
 
 export interface IParameter extends BoxExtendedProps {
-  label: string;
-  text?: string;
+  label: string
+  text?: string
 }
 
 export const Parameter = (props: IParameter): JSX.Element => {
-  const { constants } = useThemeContext();
+  const { constants } = useThemeContext()
 
   return (
     <Box style={{ ...props.style }}>
@@ -18,7 +18,8 @@ export const Parameter = (props: IParameter): JSX.Element => {
           textTransform: 'uppercase',
           fontSize: constants.textFontSizes.small,
           fontWeight: '700',
-        }}>
+        }}
+      >
         {props.label}
       </Box>
       <Box>
@@ -29,11 +30,12 @@ export const Parameter = (props: IParameter): JSX.Element => {
             style={{
               fontWeight: '500',
               fontSize: constants.textFontSizes.normal,
-            }}>
+            }}
+          >
             {props.text}
           </Box>
         )}
       </Box>
     </Box>
-  );
-};
+  )
+}

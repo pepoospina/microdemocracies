@@ -1,11 +1,11 @@
 export interface PersonDetails {
-  firstName?: string;
-  lastName?: string;
-  placeOfBirth?: string;
-  dateOfBirth?: string;
-  nationality?: string;
-  nationalID?: string;
-  organization?: string;
+  firstName?: string
+  lastName?: string
+  placeOfBirth?: string
+  dateOfBirth?: string
+  nationality?: string
+  nationalID?: string
+  organization?: string
 }
 
 export enum PlatformId {
@@ -21,53 +21,53 @@ export enum PlatformId {
 }
 
 export interface PlatformAccount {
-  platform: PlatformId;
-  username: string;
-  proofUrl?: string;
+  platform: PlatformId
+  username: string
+  proofUrl?: string
 }
 
 export interface DetailsAndPlatforms {
-  personal?: PersonDetails;
-  platforms?: PlatformAccount[];
+  personal?: PersonDetails
+  platforms?: PlatformAccount[]
 }
 
 export interface PAP {
-  person: DetailsAndPlatforms;
-  account: HexStr;
+  person: DetailsAndPlatforms
+  account: HexStr
 }
 
 export interface Page {
-  number: number;
-  perPage: number;
-  total?: number;
-  totalPages?: number;
+  number: number
+  perPage: number
+  total?: number
+  totalPages?: number
 }
 
 export interface Entity<T = any> {
-  cid: string;
-  object: T;
+  cid: string
+  object: T
 }
 
-export type EntityCreate = Omit<Entity, 'hash'> & { hash?: string };
+export type EntityCreate = Omit<Entity, 'hash'> & { hash?: string }
 
-export type HexStr = `0x${string}`;
+export type HexStr = `0x${string}`
 
 export interface AppAccount {
-  account: HexStr;
-  valid: boolean;
-  voucher: number;
-  tokenId: number;
+  account: HexStr
+  valid: boolean
+  voucher: number
+  tokenId: number
 }
 
 export interface AppProject {
-  projectId: number;
-  address: HexStr;
-  whatStatement: string;
-  whoStatement: string;
-  selectedDetails: SelectedDetails;
+  projectId: number
+  address: HexStr
+  whatStatement: string
+  whoStatement: string
+  selectedDetails: SelectedDetails
 }
 
-export type AppProjectCreate = AppProject;
+export type AppProjectCreate = AppProject
 
 export enum PersonalDetailId {
   firstName = 'firstName',
@@ -80,49 +80,49 @@ export enum PersonalDetailId {
 }
 
 export interface SelectedDetails {
-  personal: Partial<Record<PersonalDetailId, boolean>>;
-  platform: Partial<Record<PlatformId, boolean>>;
+  personal: Partial<Record<PersonalDetailId, boolean>>
+  platform: Partial<Record<PlatformId, boolean>>
 }
 
 export interface AppVouch {
-  from: number;
-  to: number;
-  personCid: string;
-  vouchDate: number;
+  from: number
+  to: number
+  personCid: string
+  vouchDate: number
 }
 
 export interface AppChallenge {
-  creationDate: number;
-  endDate: number;
-  lastOutcome: number;
-  nVoted: number;
-  nFor: number;
-  executed: boolean;
+  creationDate: number
+  endDate: number
+  lastOutcome: number
+  nVoted: number
+  nFor: number
+  executed: boolean
 }
 
-export type VoteOption = 1 | -1;
+export type VoteOption = 1 | -1
 
 export interface SemaphoreProofStrings {
-  merkleTreeRoot: string;
-  signal: string;
-  nullifierHash: string;
-  externalNullifier: string;
-  proof: PackedProofString;
+  merkleTreeRoot: string
+  signal: string
+  nullifierHash: string
+  externalNullifier: string
+  proof: PackedProofString
 }
 
-export type PackedProofString = [string, string, string, string, string, string, string, string];
+export type PackedProofString = [string, string, string, string, string, string, string, string]
 
 export interface AppStatement {
-  projectId: number;
-  statement: string;
-  treeId: string;
-  proof: SemaphoreProofStrings;
-  nBackers?: number;
+  projectId: number
+  statement: string
+  treeId: string
+  proof: SemaphoreProofStrings
+  nBackers?: number
 }
 
-export type AppStatementRead = AppStatement & { id: string };
+export type AppStatementRead = AppStatement & { id: string }
 
-export type AppStatementCreate = AppStatement;
+export type AppStatementCreate = AppStatement
 
 export enum StatmentReactions {
   Back = 'back',
@@ -131,85 +131,85 @@ export enum StatmentReactions {
 }
 
 export interface AppBackingCreate {
-  statementId: string;
-  proof: SemaphoreProofStrings;
+  statementId: string
+  proof: SemaphoreProofStrings
 }
 
 export interface SignedObject<T> {
-  object: T;
-  signature: HexStr;
+  object: T
+  signature: HexStr
 }
 
-export type StatementRead = AppStatement & { id: string; treeId: string };
+export type StatementRead = AppStatement & { id: string; treeId: string }
 
 export interface AppPublicIdentity {
-  publicId: string;
-  owner: HexStr;
-  aaAddress: HexStr;
-  signature: HexStr;
+  publicId: string
+  owner: HexStr
+  aaAddress: HexStr
+  signature: HexStr
 }
 
 export interface AppGetProof {
-  projectId?: number;
-  treeId?: string;
-  signal: string;
-  nullifier: string;
+  projectId?: number
+  treeId?: string
+  signal: string
+  nullifier: string
 }
 
 export interface AppGetMerklePass {
-  projectId?: number;
-  treeId?: string;
-  publicId: string;
+  projectId?: number
+  treeId?: string
+  publicId: string
 }
 
 export interface AppReturnMerklePass {
-  merklePass: any;
-  treeId: string;
+  merklePass: any
+  treeId: string
 }
 
 export interface AppProjectMemberId {
-  projectId: number;
-  aaAddress: HexStr;
+  projectId: number
+  aaAddress: HexStr
 }
 
 export interface AppProjectMember {
-  projectId: number;
-  aaAddress: HexStr;
-  tokenId: number;
-  voucherTokenId: number;
+  projectId: number
+  aaAddress: HexStr
+  tokenId: number
+  voucherTokenId: number
 }
 
 export interface AppProjectMemberToken {
-  projectId: number;
-  tokenId: number;
+  projectId: number
+  tokenId: number
 }
 
 export interface AppProjectIndex {
-  deployAt: number;
-  indexedAt: number;
+  deployAt: number
+  indexedAt: number
 }
 
 export interface AppTree {
-  projectId: number;
-  root: string;
-  publicIds: string[];
+  projectId: number
+  root: string
+  publicIds: string[]
 }
 
 export interface AppInvite {
-  creationDate: number;
-  projectId: number;
-  memberAddress: HexStr;
+  creationDate: number
+  projectId: number
+  memberAddress: HexStr
 }
 
 export interface AppApply {
-  papEntity: Entity<PAP>;
-  invitationId: string;
-  projectId: number;
+  papEntity: Entity<PAP>
+  invitationId: string
+  projectId: number
 }
 
 export interface AppApplication {
-  papEntity: Entity<PAP>;
-  memberAddress: string;
-  invitationId: string;
-  projectId: number;
+  papEntity: Entity<PAP>
+  memberAddress: string
+  invitationId: string
+  projectId: number
 }

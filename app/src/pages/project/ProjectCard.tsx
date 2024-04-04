@@ -1,13 +1,13 @@
-import { Box, Text } from 'grommet';
-import { AppProject } from '../../types';
-import { StatementEditable } from '../voice/StatementEditable';
-import { Trans } from 'react-i18next';
-import { Bold } from '../../ui-components/Bold';
+import { Box, Text } from 'grommet'
+import { AppProject } from '../../types'
+import { StatementEditable } from '../voice/StatementEditable'
+import { Trans } from 'react-i18next'
+import { Bold } from '../../ui-components/Bold'
 
 export const ProjectCard = (props: {
-  project: AppProject;
-  containerStyle?: React.CSSProperties;
-  statementStyle?: React.CSSProperties;
+  project: AppProject
+  containerStyle?: React.CSSProperties
+  statementStyle?: React.CSSProperties
 }) => {
   return (
     <Box style={{ position: 'relative', ...props.containerStyle }}>
@@ -18,7 +18,8 @@ export const ProjectCard = (props: {
       </Box>
       <StatementEditable
         value={props.project.whoStatement}
-        containerStyle={{ paddingTop: '22px', ...props.statementStyle }}></StatementEditable>
+        containerStyle={{ paddingTop: '22px', ...props.statementStyle }}
+      ></StatementEditable>
     </Box>
-  );
-};
+  )
+}

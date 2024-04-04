@@ -1,13 +1,13 @@
-import { PlatformId } from '../types';
+import { PlatformId } from '../types'
 
 export interface PlatformDetails {
-  name: string;
-  usernameUrl?: (username: string) => string;
-  iconUri?: string;
-  placeholder?: string;
+  name: string
+  usernameUrl?: (username: string) => string
+  iconUri?: string
+  placeholder?: string
 }
 
-type Platforms = Partial<Record<PlatformId, PlatformDetails>>;
+type Platforms = Partial<Record<PlatformId, PlatformDetails>>
 
 export const platforms: Platforms = {
   [PlatformId.X]: {
@@ -42,4 +42,4 @@ export const platforms: Platforms = {
     name: 'Custom',
     usernameUrl: (username: string) => `${username}`,
   },
-};
+}

@@ -64,7 +64,13 @@ export const ierc20ABI = [
     name: 'balanceOf',
     outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
   },
-  { stateMutability: 'view', type: 'function', inputs: [], name: 'totalSupply', outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }] },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [],
+    name: 'totalSupply',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+  },
   {
     stateMutability: 'nonpayable',
     type: 'function',
@@ -350,7 +356,13 @@ export const ierc721EnumerableABI = [
     name: 'tokenOfOwnerByIndex',
     outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
   },
-  { stateMutability: 'view', type: 'function', inputs: [], name: 'totalSupply', outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }] },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [],
+    name: 'totalSupply',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+  },
   {
     stateMutability: 'nonpayable',
     type: 'function',
@@ -433,7 +445,13 @@ export const ierc721MetadataABI = [
     name: 'isApprovedForAll',
     outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
   },
-  { stateMutability: 'view', type: 'function', inputs: [], name: 'name', outputs: [{ name: '', internalType: 'string', type: 'string' }] },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [],
+    name: 'name',
+    outputs: [{ name: '', internalType: 'string', type: 'string' }],
+  },
   {
     stateMutability: 'view',
     type: 'function',
@@ -481,7 +499,13 @@ export const ierc721MetadataABI = [
     name: 'supportsInterface',
     outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
   },
-  { stateMutability: 'view', type: 'function', inputs: [], name: 'symbol', outputs: [{ name: '', internalType: 'string', type: 'string' }] },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [],
+    name: 'symbol',
+    outputs: [{ name: '', internalType: 'string', type: 'string' }],
+  },
   {
     stateMutability: 'view',
     type: 'function',
@@ -507,7 +531,12 @@ export const ierc721MetadataABI = [
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 export const initializableABI = [
-  { type: 'event', anonymous: false, inputs: [{ name: 'version', internalType: 'uint8', type: 'uint8', indexed: false }], name: 'Initialized' },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [{ name: 'version', internalType: 'uint8', type: 'uint8', indexed: false }],
+    name: 'Initialized',
+  },
 ] as const
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -530,7 +559,11 @@ export const registryABI = [
   { type: 'error', inputs: [], name: 'ErrorVoucherIsValid' },
   { type: 'error', inputs: [], name: 'ErrorVoucherNotValid' },
   { type: 'error', inputs: [], name: 'OnlyMemberCanChallenge' },
-  { type: 'error', inputs: [{ name: 'prod1', internalType: 'uint256', type: 'uint256' }], name: 'PRBMath__MulDivFixedPointOverflow' },
+  {
+    type: 'error',
+    inputs: [{ name: 'prod1', internalType: 'uint256', type: 'uint256' }],
+    name: 'PRBMath__MulDivFixedPointOverflow',
+  },
   {
     type: 'error',
     inputs: [
@@ -570,7 +603,12 @@ export const registryABI = [
     ],
     name: 'ApprovalForAll',
   },
-  { type: 'event', anonymous: false, inputs: [{ name: 'tokenId', internalType: 'uint256', type: 'uint256', indexed: true }], name: 'ChallengeEvent' },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [{ name: 'tokenId', internalType: 'uint256', type: 'uint256', indexed: true }],
+    name: 'ChallengeEvent',
+  },
   {
     type: 'event',
     anonymous: false,
@@ -580,9 +618,24 @@ export const registryABI = [
     ],
     name: 'ChallengeExecuted',
   },
-  { type: 'event', anonymous: false, inputs: [{ name: 'version', internalType: 'uint8', type: 'uint8', indexed: false }], name: 'Initialized' },
-  { type: 'event', anonymous: false, inputs: [{ name: 'tokenId', internalType: 'uint256', type: 'uint256', indexed: true }], name: 'InvalidatedAccountEvent' },
-  { type: 'event', anonymous: false, inputs: [{ name: 'tokenId', internalType: 'uint256', type: 'uint256', indexed: true }], name: 'InvalidatedByChallenge' },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [{ name: 'version', internalType: 'uint8', type: 'uint8', indexed: false }],
+    name: 'Initialized',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [{ name: 'tokenId', internalType: 'uint256', type: 'uint256', indexed: true }],
+    name: 'InvalidatedAccountEvent',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [{ name: 'tokenId', internalType: 'uint256', type: 'uint256', indexed: true }],
+    name: 'InvalidatedByChallenge',
+  },
   {
     type: 'event',
     anonymous: false,
@@ -634,11 +687,41 @@ export const registryABI = [
     ],
     name: 'VouchEvent',
   },
-  { stateMutability: 'view', type: 'function', inputs: [], name: 'FOUNDERS_VOUCHER', outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }] },
-  { stateMutability: 'view', type: 'function', inputs: [], name: 'PENDING_PERIOD', outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }] },
-  { stateMutability: 'view', type: 'function', inputs: [], name: 'QUIET_ENDING_PERIOD', outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }] },
-  { stateMutability: 'view', type: 'function', inputs: [], name: 'VOTING_PERIOD', outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }] },
-  { stateMutability: 'view', type: 'function', inputs: [], name: '_nEntries', outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }] },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [],
+    name: 'FOUNDERS_VOUCHER',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [],
+    name: 'PENDING_PERIOD',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [],
+    name: 'QUIET_ENDING_PERIOD',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [],
+    name: 'VOTING_PERIOD',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [],
+    name: '_nEntries',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+  },
   {
     stateMutability: 'nonpayable',
     type: 'function',
@@ -666,7 +749,13 @@ export const registryABI = [
     name: 'canVote',
     outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
   },
-  { stateMutability: 'nonpayable', type: 'function', inputs: [{ name: '_tokenId', internalType: 'uint256', type: 'uint256' }], name: 'challenge', outputs: [] },
+  {
+    stateMutability: 'nonpayable',
+    type: 'function',
+    inputs: [{ name: '_tokenId', internalType: 'uint256', type: 'uint256' }],
+    name: 'challenge',
+    outputs: [],
+  },
   {
     stateMutability: 'nonpayable',
     type: 'function',
@@ -841,7 +930,13 @@ export const registryABI = [
     outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
   },
   { stateMutability: 'nonpayable', type: 'function', inputs: [], name: 'leave', outputs: [] },
-  { stateMutability: 'view', type: 'function', inputs: [], name: 'name', outputs: [{ name: '', internalType: 'string', type: 'string' }] },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [],
+    name: 'name',
+    outputs: [{ name: '', internalType: 'string', type: 'string' }],
+  },
   {
     stateMutability: 'view',
     type: 'function',
@@ -882,7 +977,13 @@ export const registryABI = [
     name: 'setApprovalForAll',
     outputs: [],
   },
-  { stateMutability: 'view', type: 'function', inputs: [], name: 'statementCid', outputs: [{ name: '', internalType: 'string', type: 'string' }] },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [],
+    name: 'statementCid',
+    outputs: [{ name: '', internalType: 'string', type: 'string' }],
+  },
   {
     stateMutability: 'view',
     type: 'function',
@@ -890,7 +991,13 @@ export const registryABI = [
     name: 'supportsInterface',
     outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
   },
-  { stateMutability: 'view', type: 'function', inputs: [], name: 'symbol', outputs: [{ name: '', internalType: 'string', type: 'string' }] },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [],
+    name: 'symbol',
+    outputs: [{ name: '', internalType: 'string', type: 'string' }],
+  },
   {
     stateMutability: 'view',
     type: 'function',
@@ -905,7 +1012,13 @@ export const registryABI = [
     name: 'tokenURI',
     outputs: [{ name: '', internalType: 'string', type: 'string' }],
   },
-  { stateMutability: 'view', type: 'function', inputs: [], name: 'totalSupply', outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }] },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [],
+    name: 'totalSupply',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+  },
   {
     stateMutability: 'nonpayable',
     type: 'function',
@@ -944,7 +1057,11 @@ export const registryABI = [
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 export const registryFactoryABI = [
-  { stateMutability: 'nonpayable', type: 'constructor', inputs: [{ name: '_master', internalType: 'address payable', type: 'address' }] },
+  {
+    stateMutability: 'nonpayable',
+    type: 'constructor',
+    inputs: [{ name: '_master', internalType: 'address payable', type: 'address' }],
+  },
   {
     type: 'event',
     anonymous: false,
@@ -979,5 +1096,11 @@ export const registryFactoryABI = [
     name: 'create',
     outputs: [{ name: 'proxy', internalType: 'address payable', type: 'address' }],
   },
-  { stateMutability: 'view', type: 'function', inputs: [], name: 'mrCounter', outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }] },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [],
+    name: 'mrCounter',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+  },
 ] as const

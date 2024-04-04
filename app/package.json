@@ -12,7 +12,8 @@
     "build": "craco build --config craco.config.prod.js",
     "eject": "react-scripts eject",
     "test-prod": "craco build --config craco.config.prod.js && cd build && http-server --proxy http://localhost:8080?",
-    "deploy": "sh ./deploy.sh "
+    "deploy": "sh ./deploy.sh ",
+    "prettier": "prettier -w \"src/**/*.{ts,tsx,css,js}\""
   },
   "dependencies": {
     "@alchemy/aa-accounts": "^3.1.0",
@@ -105,6 +106,7 @@
   "devDependencies": {
     "@craco/craco": "^7.1.0",
     "@trivago/prettier-plugin-sort-imports": "^4.3.0",
+    "prettier": "^3.2.5",
     "typescript": "^5.2.2"
   }
 }

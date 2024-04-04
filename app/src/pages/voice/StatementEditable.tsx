@@ -1,63 +1,63 @@
-import { Box, Text } from 'grommet';
-import { useEffect, useState } from 'react';
-import ReactQuill, { Quill } from 'react-quill';
-import 'react-quill/dist/quill.bubble.css';
-import './statements.css';
-import { useThemeContext } from '../../components/app';
-import { useTranslation } from 'react-i18next';
+import { Box, Text } from 'grommet'
+import { useEffect, useState } from 'react'
+import ReactQuill, { Quill } from 'react-quill'
+import 'react-quill/dist/quill.bubble.css'
+import './statements.css'
+import { useThemeContext } from '../../components/app'
+import { useTranslation } from 'react-i18next'
 
 export interface IStatementEditable {
-  placeholder?: string;
-  editable?: boolean;
-  value?: string;
-  onChanged?: (value?: string) => void;
-  onClick?: (e: React.MouseEvent) => void;
-  containerStyle?: React.CSSProperties;
+  placeholder?: string
+  editable?: boolean
+  value?: string
+  onChanged?: (value?: string) => void
+  onClick?: (e: React.MouseEvent) => void
+  containerStyle?: React.CSSProperties
 }
 
 export const StatementEditable = (props: IStatementEditable) => {
-  const { t } = useTranslation();
-  const { constants } = useThemeContext();
-  const [text, setText] = useState<string>();
+  const { t } = useTranslation()
+  const { constants } = useThemeContext()
+  const [text, setText] = useState<string>()
 
-  const editable = props.editable !== undefined && props.editable;
+  const editable = props.editable !== undefined && props.editable
 
   useEffect(() => {
     if (props.onChanged) {
-      props.onChanged(text);
+      props.onChanged(text)
     }
-  }, [text, props.onChanged]);
+  }, [text, props.onChanged])
 
   useEffect(() => {
-    setText(props.value);
-  }, [props.value]);
+    setText(props.value)
+  }, [props.value])
 
   useEffect(() => {
-    const LinkBlot = Quill.import('formats/link');
+    const LinkBlot = Quill.import('formats/link')
 
     class CustomLinkBlot extends LinkBlot {
       static create(value: any) {
-        let node = super.create(value);
-        value = this.sanitize(value);
+        let node = super.create(value)
+        value = this.sanitize(value)
 
-        node.setAttribute('href', value);
+        node.setAttribute('href', value)
         // If link does not start with 'http://' or 'https://', prepend 'http://'
         if (!/^https?:\/\//i.test(value)) {
-          node.setAttribute('href', `http://${value}`);
+          node.setAttribute('href', `http://${value}`)
         }
-        return node;
+        return node
       }
     }
 
-    Quill.register(CustomLinkBlot, true);
-  }, []);
+    Quill.register(CustomLinkBlot, true)
+  }, [])
 
   const modules = {
     toolbar: [
       ['bold', 'italic', 'underline'], // toggled buttons
       ['link'], // link button
     ],
-  };
+  }
 
   return (
     <>
@@ -71,7 +71,8 @@ export const StatementEditable = (props: IStatementEditable) => {
           ...props.containerStyle,
         }}
         pad="small"
-        onClick={props.onClick}>
+        onClick={props.onClick}
+      >
         <Box>
           <ReactQuill
             placeholder={props.placeholder}
@@ -93,5 +94,5 @@ export const StatementEditable = (props: IStatementEditable) => {
         <></>
       )}
     </>
-  );
-};
+  )
+}

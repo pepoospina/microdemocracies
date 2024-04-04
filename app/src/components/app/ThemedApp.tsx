@@ -1,37 +1,38 @@
-import { Grommet, BoxExtendedProps } from 'grommet';
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useState } from 'react'
 
-import { darkTheme, ExtendedThemeType, lightTheme, StyleConstants } from './themes';
+import { Grommet, BoxExtendedProps } from 'grommet'
+
+import { darkTheme, ExtendedThemeType, lightTheme, StyleConstants } from './themes'
 
 export type ThemeContextType = {
-  theme: ExtendedThemeType;
-  constants: StyleConstants;
-  setTheme: (dark: boolean) => void;
-};
-
-export interface ThemeContextProps extends BoxExtendedProps {
-  dum?: string;
+  theme: ExtendedThemeType
+  constants: StyleConstants
+  setTheme: (dark: boolean) => void
 }
 
-const ThemeContextValue = createContext<ThemeContextType | undefined>(undefined);
+export interface ThemeContextProps extends BoxExtendedProps {
+  dum?: string
+}
+
+const ThemeContextValue = createContext<ThemeContextType | undefined>(undefined)
 
 export const ThemedApp = (props: ThemeContextProps): JSX.Element => {
-  const [isDark, setIsDark] = useState<boolean>(false);
-  const theme = isDark ? darkTheme : lightTheme;
+  const [isDark, setIsDark] = useState<boolean>(false)
+  const theme = isDark ? darkTheme : lightTheme
 
   const setTheme = (dark: boolean): void => {
-    setIsDark(dark);
-  };
+    setIsDark(dark)
+  }
 
   return (
     <ThemeContextValue.Provider value={{ theme, constants: theme.constants, setTheme }}>
       <Grommet theme={theme}>{props.children}</Grommet>
     </ThemeContextValue.Provider>
-  );
-};
+  )
+}
 
 export const useThemeContext = (): ThemeContextType => {
-  const context = useContext(ThemeContextValue);
-  if (!context) throw Error('useThemeContext can only be used within the CampaignContext component');
-  return context;
-};
+  const context = useContext(ThemeContextValue)
+  if (!context) throw Error('useThemeContext can only be used within the ThemedApp component')
+  return context
+}

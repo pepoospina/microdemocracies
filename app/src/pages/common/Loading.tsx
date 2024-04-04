@@ -1,9 +1,9 @@
-import { Box, Spinner, Text } from 'grommet';
-import { useTranslation } from 'react-i18next';
-import { cap } from '../../utils/general';
+import { Box, Spinner, Text } from 'grommet'
+import { useTranslation } from 'react-i18next'
+import { cap } from '../../utils/general'
 
 export const Loading = (props: { label?: string }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation()
   return (
     <Box align="center">
       <Box margin={{ bottom: 'small' }}>
@@ -13,10 +13,10 @@ export const Loading = (props: { label?: string }) => {
         <Spinner></Spinner>
       </Box>
     </Box>
-  );
-};
+  )
+}
 
 export const WaitingTransaction = () => {
-  const { t } = useTranslation();
-  return <Loading label={t('waitingTx')}></Loading>;
-};
+  const { t } = useTranslation()
+  return <Loading label={t('waitingTx')}></Loading>
+}

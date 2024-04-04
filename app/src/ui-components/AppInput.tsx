@@ -1,10 +1,10 @@
-import { TextInput, TextInputProps } from 'grommet';
-import React from 'react';
+import { TextInput, TextInputProps } from 'grommet'
+import React from 'react'
 
-import { useThemeContext } from '../components/app';
+import { useThemeContext } from '../components/app'
 
 export const AppInput = React.forwardRef<HTMLInputElement, TextInputProps>((props, ref): JSX.Element => {
-  const { constants } = useThemeContext();
+  const { constants } = useThemeContext()
 
   return (
     <TextInput
@@ -18,6 +18,7 @@ export const AppInput = React.forwardRef<HTMLInputElement, TextInputProps>((prop
         paddingLeft: '16px',
         fontWeight: 'normal',
         ...props.style,
-      }}></TextInput>
-  );
-});
+      }}
+    ></TextInput>
+  )
+})

@@ -1,42 +1,46 @@
-import { ReactNode, createContext, useContext } from 'react';
-import { usePublicClient, useReadContract } from 'wagmi';
+import { ReactNode, createContext, useContext, useEffect } from 'react'
 
-import { AppAccount, AppChallenge } from '../types';
-import { registryABI } from '../utils/contracts.json';
-import { useAccountContext } from '../wallet/AccountContext';
-import { useMember } from './MemberContext';
-import { useProjectContext } from './ProjectContext';
+import { useReadContract } from 'wagmi'
+
+import { AppAccount, AppChallenge } from '../types'
+import { registryABI } from '../utils/contracts.json'
+import { useAccountContext } from '../wallet/AccountContext'
+import { useMember } from './MemberContext'
+import { useProjectContext } from './ProjectContext'
+import { useToastNotificationContext } from './ToastNotificationsContext'
 
 export type ConnectedMemberContextType = {
-  tokenId?: number | null;
-  account?: AppAccount;
-  myChallenge: AppChallenge | undefined | null;
-};
+  tokenId?: number | null
+  account?: AppAccount
+  myChallenge: AppChallenge | undefined | null
+}
 
-const ConnectedMemberContextValue = createContext<
-  ConnectedMemberContextType | undefined
->(undefined);
+const ConnectedMemberContextValue = createContext<ConnectedMemberContextType | undefined>(undefined)
 
 export interface ConnectedMemberContextProps {
-  children: ReactNode;
+  children: ReactNode
 }
 
 export const ConnectedMemberContext = (props: ConnectedMemberContextProps) => {
-  const { address: projectAddress } = useProjectContext();
-  const publicClient = usePublicClient();
-  const { aaAddress } = useAccountContext();
+  const { address: projectAddress } = useProjectContext()
+  const { aaAddress } = useAccountContext()
 
-  const { data: tokenId, isSuccess } = useReadContract({
+  const {
+    data: tokenId,
+    isSuccess,
+    isError: isErrorWithTokenId,
+    error: errorWithTokenId,
+  } = useReadContract({
     address: projectAddress,
     abi: registryABI,
     functionName: 'tokenIdOf',
     args: aaAddress ? [aaAddress] : undefined,
     query: { enabled: aaAddress !== undefined && projectAddress !== undefined },
-  });
+  })
 
   const { account: accountRead } = useMember({
     tokenId: tokenId ? Number(tokenId) : undefined,
-  });
+  })
 
   const {
     data: _challengeRead,
@@ -48,18 +52,43 @@ export const ConnectedMemberContext = (props: ConnectedMemberContextProps) => {
     functionName: 'getChallenge',
     args: tokenId ? [tokenId] : undefined,
     query: { enabled: tokenId !== undefined && projectAddress !== undefined },
-  });
+  })
+
+  const {
+    setVisible,
+    setTitle: setNotificationTitle,
+    setMessage: setNotificationMessage,
+    setStatus: setNotificationType,
+  } = useToastNotificationContext()
+
+  useEffect(() => {
+    if (!isErrorChallengeRead || !isErrorWithTokenId) return
+
+    setVisible(true)
+    setNotificationTitle('Error with challenge writing')
+
+    if (errorChallengeRead || errorWithTokenId) {
+      setNotificationType('critical')
+      if (errorChallengeRead) setNotificationMessage(errorChallengeRead.message)
+      if (errorWithTokenId) setNotificationMessage(errorWithTokenId.message)
+    }
+  }, [
+    errorChallengeRead,
+    errorWithTokenId,
+    isErrorChallengeRead,
+    isErrorWithTokenId,
+    setNotificationMessage,
+    setNotificationTitle,
+    setNotificationType,
+    setVisible,
+  ])
 
   const myChallenge: AppChallenge | undefined | null = ((_challengeRead) => {
-    if (
-      isErrorChallengeRead &&
-      errorChallengeRead &&
-      errorChallengeRead.message.includes('')
-    ) {
-      return null;
+    if (isErrorChallengeRead && errorChallengeRead && errorChallengeRead.message.includes('')) {
+      return null
     }
     if (_challengeRead === undefined) {
-      return undefined;
+      return undefined
     }
     if (_challengeRead[0] > 0 && !isErrorChallengeRead) {
       return {
@@ -69,11 +98,11 @@ export const ConnectedMemberContext = (props: ConnectedMemberContextProps) => {
         nVoted: Number(_challengeRead[3]),
         nFor: Number(_challengeRead[4]),
         executed: _challengeRead[5],
-      };
+      }
     }
-  })(_challengeRead);
+  })(_challengeRead)
 
-  const _tokenId = tokenId ? Number(tokenId) : isSuccess ? null : undefined;
+  const _tokenId = tokenId ? Number(tokenId) : isSuccess ? null : undefined
 
   return (
     <ConnectedMemberContextValue.Provider
@@ -81,14 +110,15 @@ export const ConnectedMemberContext = (props: ConnectedMemberContextProps) => {
         tokenId: _tokenId,
         account: accountRead,
         myChallenge,
-      }}>
+      }}
+    >
       {props.children}
     </ConnectedMemberContextValue.Provider>
-  );
-};
+  )
+}
 
 export const useConnectedMember = (): ConnectedMemberContextType => {
-  const context = useContext(ConnectedMemberContextValue);
-  if (!context) throw Error('context not found');
-  return context;
-};
+  const context = useContext(ConnectedMemberContextValue)
+  if (!context) throw Error('context not found')
+  return context
+}

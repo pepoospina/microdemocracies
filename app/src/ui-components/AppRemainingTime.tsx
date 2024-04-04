@@ -1,14 +1,14 @@
-import { Duration } from 'date-fns';
-import { Box, Text } from 'grommet';
+import { Duration } from 'date-fns'
+import { Box, Text } from 'grommet'
 
 export interface IAppRemainingTime {
-  compactFormat?: boolean;
-  remainingTime: Duration;
-  suffix?: string;
+  compactFormat?: boolean
+  remainingTime: Duration
+  suffix?: string
 }
 
 export const AppRemainingTime = (props: IAppRemainingTime) => {
-  const { compactFormat, remainingTime } = props;
+  const { compactFormat, remainingTime } = props
 
   const remainignTimeUI = (): JSX.Element => {
     if (compactFormat)
@@ -18,7 +18,7 @@ export const AppRemainingTime = (props: IAppRemainingTime) => {
             <strong>{remainingTime.days}</strong> <span> days {props.suffix}</span>
           </Text>
         </Box>
-      );
+      )
     else
       return (
         <Box gap="10px" direction="row">
@@ -35,8 +35,8 @@ export const AppRemainingTime = (props: IAppRemainingTime) => {
             <strong>{remainingTime.seconds}</strong> <span> seconds {props.suffix}</span>
           </Box>
         </Box>
-      );
-  };
+      )
+  }
 
-  return remainignTimeUI();
-};
+  return remainignTimeUI()
+}

@@ -1,34 +1,39 @@
-import { Box, Button, Text } from 'grommet';
-import { Add } from 'grommet-icons';
-import { useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react'
 
-import { AppConnectButton } from '../../components/app/AppConnectButton';
-import { useAppContainer } from '../../components/app/AppContainer';
-import { ViewportPage } from '../../components/app/Viewport';
-import { AppCard } from '../../ui-components';
-import { useAccountContext } from '../../wallet/AccountContext';
-import { useAccountDataContext } from '../../wallet/AccountDataContext';
-import { AppBottomButton } from '../common/BottomButtons';
-import { Loading } from '../common/Loading';
-import { ProjectCard } from '../project/ProjectCard';
+import { useNavigate } from 'react-router-dom'
+
+import { Box, Button, Text } from 'grommet'
+import { Add } from 'grommet-icons'
+
+import { AppConnectButton } from '../../components/app/AppConnectButton'
+import { useAppContainer } from '../../components/app/AppContainer'
+import { ViewportPage } from '../../components/app/Viewport'
+import { useSemaphoreContext } from '../../contexts/SemaphoreContext'
+import { AppCard } from '../../ui-components'
+import { useAccountContext } from '../../wallet/AccountContext'
+import { useAccountDataContext } from '../../wallet/AccountDataContext'
+import { AppBottomButton } from '../common/BottomButtons'
+import { Loading } from '../common/Loading'
+import { ProjectCard } from '../project/ProjectCard'
+
+import { useTranslation } from 'react-i18next'
 
 export const AppHome = (props: {}) => {
-  const { isConnected, aaAddress } = useAccountContext();
-  const { setTitle } = useAppContainer();
+  const { aaAddress } = useAccountContext()
+  const { isConnected } = useSemaphoreContext()
+  const { setTitle } = useAppContainer()
 
-  const { projects } = useAccountDataContext();
-  const navigate = useNavigate();
-  const { t, i18n } = useTranslation();
+  const { projects } = useAccountDataContext()
+  const navigate = useNavigate()
+  const { t, i18n } = useTranslation()
 
   useEffect(() => {
-    setTitle({ prefix: t('your'), main: t('appName') });
-  }, [i18n.language]);
+    setTitle({ prefix: t('your'), main: t('appName') })
+  }, [i18n.language])
 
   const projectClicked = (projectId: number) => {
-    navigate(`/p/${projectId}`);
-  };
+    navigate(`/p/${projectId}`)
+  }
 
   const projectsContent = (() => {
     if (!isConnected)
@@ -39,12 +44,11 @@ export const AppHome = (props: {}) => {
           </AppCard>
           <AppConnectButton></AppConnectButton>
         </Box>
-      );
+      )
     if (!aaAddress) {
-      return <Loading></Loading>;
+      return <Loading></Loading>
     }
-    if (projects === undefined)
-      return <Loading label={t('loadingProjects')}></Loading>;
+    if (projects === undefined) return <Loading label={t('loadingProjects')}></Loading>
     if (projects.length === 0)
       return (
         <Box pad="medium">
@@ -52,7 +56,7 @@ export const AppHome = (props: {}) => {
             <Text>{t('noProjects')}</Text>
           </AppCard>
         </Box>
-      );
+      )
     return (
       <Box pad={{ horizontal: 'medium' }}>
         {projects.map((project, ix) => {
@@ -60,7 +64,8 @@ export const AppHome = (props: {}) => {
             <Box
               key={ix}
               margin={{ top: 'medium' }}
-              style={{ position: 'relative', flexShrink: 0 }}>
+              style={{ position: 'relative', flexShrink: 0 }}
+            >
               <ProjectCard project={project}></ProjectCard>
               <Button
                 onClick={() => projectClicked(project.projectId)}
@@ -69,13 +74,14 @@ export const AppHome = (props: {}) => {
                   position: 'absolute',
                   height: '100%',
                   width: '100%',
-                }}></Button>
+                }}
+              ></Button>
             </Box>
-          );
+          )
         })}
       </Box>
-    );
-  })();
+    )
+  })()
 
   return (
     <ViewportPage
@@ -84,7 +90,9 @@ export const AppHome = (props: {}) => {
         <AppBottomButton
           onClick={() => navigate('/start')}
           icon={<Add></Add>}
-          label={t('startNew')}></AppBottomButton>
-      }></ViewportPage>
-  );
-};
+          label={t('startNew')}
+        ></AppBottomButton>
+      }
+    ></ViewportPage>
+  )
+}

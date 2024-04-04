@@ -1,46 +1,47 @@
-import { useCallback, useEffect, useState } from 'react';
-import { DecodeEventLogReturnType, encodeFunctionData } from 'viem';
-import { useReadContract } from 'wagmi';
+import { useCallback, useEffect, useState } from 'react'
 
-import { VoteOption } from '../types';
-import { registryABI } from '../utils/contracts.json';
-import { useAccountContext } from '../wallet/AccountContext';
-import { useProjectContext } from './ProjectContext';
+import { DecodeEventLogReturnType, encodeFunctionData } from 'viem'
+
+import { useReadContract } from 'wagmi'
+
+import { VoteOption } from '../types'
+import { registryABI } from '../utils/contracts.json'
+import { useAccountContext } from '../wallet/AccountContext'
+import { useProjectContext } from './ProjectContext'
+import { useToastNotificationContext } from './ToastNotificationsContext'
 
 export type ChallengeContextWriteType = {
-  sendChallenge?: () => void;
-  isChallenging: boolean;
-  isErrorChallenging: boolean;
-  errorChallenging?: Error;
-  canVote?: boolean;
-  sendVote?: (vote: VoteOption) => void;
-  isVoting: boolean;
-  isErrorVoting: boolean;
-  errorVoting?: Error;
-  myVote?: number;
-  isSending: boolean;
-  isSuccess: boolean;
-  events?: DecodeEventLogReturnType[];
-};
+  sendChallenge?: () => void
+  isChallenging: boolean
+  isErrorChallenging: boolean
+  errorChallenging?: Error
+  canVote?: boolean
+  sendVote?: (vote: VoteOption) => void
+  isVoting: boolean
+  isErrorVoting: boolean
+  errorVoting?: Error
+  myVote?: number
+  isSending: boolean
+  isSuccess: boolean
+  events?: DecodeEventLogReturnType[]
+}
 
-export const useChallengeWrite = (
-  tokenId?: number
-): ChallengeContextWriteType => {
-  const { address: projectAddress } = useProjectContext();
-  const { sendUserOps, isSuccess, isSending, events } = useAccountContext();
+export const useChallengeWrite = (tokenId?: number): ChallengeContextWriteType => {
+  const { address: projectAddress } = useProjectContext()
+  const { sendUserOps, isSuccess, isSending, events } = useAccountContext()
 
-  const tokenIdInternal = tokenId !== undefined ? BigInt(tokenId) : undefined;
+  const tokenIdInternal = tokenId !== undefined ? BigInt(tokenId) : undefined
 
-  const [isChallenging, setIsChallening] = useState<boolean>(false);
-  const [isErrorChallenging, setIsErrorChallenging] = useState<boolean>(false);
-  const [errorChallenging, setErrorChallenging] = useState<Error>();
+  const [isChallenging, setIsChallening] = useState<boolean>(false)
+  const [isErrorChallenging, setIsErrorChallenging] = useState<boolean>(false)
+  const [errorChallenging, setErrorChallenging] = useState<Error>()
 
-  const [isVoting, setIsVoting] = useState<boolean>(false);
-  const [isErrorVoting, setIsErrorVoting] = useState<boolean>(false);
-  const [errorVoting, setErrorVoting] = useState<Error>();
+  const [isVoting, setIsVoting] = useState<boolean>(false)
+  const [isErrorVoting, setIsErrorVoting] = useState<boolean>(false)
+  const [errorVoting, setErrorVoting] = useState<Error>()
 
   /** can vote */
-  const { aaAddress: connectedAddress } = useAccountContext();
+  const { aaAddress: connectedAddress } = useAccountContext()
 
   const { data: tokenIdOfAddress } = useReadContract({
     address: projectAddress,
@@ -50,64 +51,80 @@ export const useChallengeWrite = (
     query: {
       enabled: connectedAddress !== undefined && projectAddress !== undefined,
     },
-  });
+  })
 
   const { data: canVote } = useReadContract({
     address: projectAddress,
     abi: registryABI,
     functionName: 'canVote',
-    args:
-      tokenIdOfAddress && tokenIdInternal
-        ? [tokenIdOfAddress, tokenIdInternal]
-        : undefined,
-    query: { enabled:
-      tokenIdOfAddress !== undefined &&
-      tokenIdInternal !== undefined &&
-      projectAddress !== undefined,}
-  });
+    args: tokenIdOfAddress && tokenIdInternal ? [tokenIdOfAddress, tokenIdInternal] : undefined,
+    query: { enabled: tokenIdOfAddress !== undefined && tokenIdInternal !== undefined && projectAddress !== undefined },
+  })
 
   const { data: _myVote, refetch: refetchMyVote } = useReadContract({
     address: projectAddress,
     abi: registryABI,
     functionName: 'getChallengeVote',
-    args:
-      tokenIdOfAddress && tokenIdInternal
-        ? [tokenIdInternal, tokenIdOfAddress]
-        : undefined,
-    query: {enabled:
-      tokenIdOfAddress !== undefined &&
-      tokenIdInternal !== undefined &&
-      projectAddress !== undefined,}
-  });
+    args: tokenIdOfAddress && tokenIdInternal ? [tokenIdInternal, tokenIdOfAddress] : undefined,
+    query: { enabled: tokenIdOfAddress !== undefined && tokenIdInternal !== undefined && projectAddress !== undefined },
+  })
 
-  const myVote = _myVote !== undefined && _myVote !== 0 ? _myVote : undefined;
+  const myVote = _myVote !== undefined && _myVote !== 0 ? _myVote : undefined
 
   useEffect(() => {
     if (isSuccess) {
-      refetchMyVote();
+      refetchMyVote()
     }
-  }, [isSuccess, refetchMyVote]);
+  }, [isSuccess, refetchMyVote])
+
+  const {
+    setVisible,
+    setTitle: setNotificationTitle,
+    setMessage: setNotificationMessage,
+    setStatus: setNotificationType,
+  } = useToastNotificationContext()
+
+  useEffect(() => {
+    if (!errorChallenging || !isErrorVoting) return
+
+    setVisible(true)
+    setNotificationTitle('Error with challenge writing')
+
+    if (errorVoting || errorChallenging) {
+      setNotificationType('critical')
+      if (errorVoting) setNotificationMessage(errorVoting.message)
+      if (errorChallenging) setNotificationMessage(errorChallenging.message)
+    }
+  }, [
+    errorChallenging,
+    errorVoting,
+    isErrorVoting,
+    setNotificationMessage,
+    setNotificationTitle,
+    setNotificationType,
+    setVisible,
+  ])
 
   /** Challenge */
   const sendChallenge = useCallback(async () => {
-    if (!sendUserOps || !tokenIdInternal || !projectAddress) return;
+    if (!sendUserOps || !tokenIdInternal || !projectAddress) return
 
-    setIsChallening(true);
-    setIsErrorChallenging(false);
-    setErrorChallenging(undefined);
+    setIsChallening(true)
+    setIsErrorChallenging(false)
+    setErrorChallenging(undefined)
 
     try {
       const callDataChallenge = encodeFunctionData({
         abi: registryABI,
         functionName: 'challenge',
         args: [tokenIdInternal],
-      });
+      })
 
       const callDataVote = encodeFunctionData({
         abi: registryABI,
         functionName: 'vote',
         args: [tokenIdInternal, 1],
-      });
+      })
 
       sendUserOps([
         {
@@ -120,30 +137,30 @@ export const useChallengeWrite = (
           data: callDataVote,
           value: BigInt(0),
         },
-      ]);
+      ])
     } catch (e: any) {
-      console.error(e);
-      setIsChallening(false);
-      setIsErrorChallenging(true);
-      setErrorChallenging(e);
+      console.error(e)
+      setIsChallening(false)
+      setIsErrorChallenging(true)
+      setErrorChallenging(e)
     }
-  }, [sendUserOps, projectAddress, tokenIdInternal]);
+  }, [sendUserOps, projectAddress, tokenIdInternal])
 
   /** Vote transactions */
   const sendVote = useCallback(
     async (vote: VoteOption) => {
-      if (!sendUserOps || !tokenIdInternal || !projectAddress) return;
+      if (!sendUserOps || !tokenIdInternal || !projectAddress) return
 
-      setIsVoting(true);
-      setIsErrorVoting(false);
-      setErrorVoting(undefined);
+      setIsVoting(true)
+      setIsErrorVoting(false)
+      setErrorVoting(undefined)
 
       try {
         const callDataVote = encodeFunctionData({
           abi: registryABI,
           functionName: 'vote',
           args: [tokenIdInternal, vote],
-        });
+        })
 
         sendUserOps([
           {
@@ -151,16 +168,16 @@ export const useChallengeWrite = (
             data: callDataVote,
             value: BigInt(0),
           },
-        ]);
+        ])
       } catch (e: any) {
-        console.error(e);
-        setIsVoting(false);
-        setIsErrorVoting(true);
-        setErrorVoting(e);
+        console.error(e)
+        setIsVoting(false)
+        setIsErrorVoting(true)
+        setErrorVoting(e)
       }
     },
-    [sendUserOps, projectAddress, tokenIdInternal]
-  );
+    [sendUserOps, projectAddress, tokenIdInternal],
+  )
 
   return {
     sendChallenge,
@@ -176,5 +193,5 @@ export const useChallengeWrite = (
     isSuccess,
     isSending,
     events,
-  };
-};
+  }
+}

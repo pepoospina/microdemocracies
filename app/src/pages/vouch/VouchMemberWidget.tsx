@@ -1,82 +1,122 @@
-import { Box, Anchor, Text } from 'grommet';
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react'
 
-import { AbsoluteRoutes } from '../../route.names';
-import { AppConnectButton } from '../../components/app/AppConnectButton';
-import { useConnectedMember } from '../../contexts/ConnectedAccountContext';
-import { useProjectContext } from '../../contexts/ProjectContext';
-import { useVouch } from '../../contexts/VouchContext';
-import { Entity, PAP } from '../../types';
-import { AppCard, AppButton } from '../../ui-components';
-import { useAccountContext } from '../../wallet/AccountContext';
-import { WaitingTransaction } from '../common/Loading';
-import { useNavigate, useParams } from 'react-router-dom';
-import { postDeleteApplication } from '../../utils/project';
-import { useTranslation } from 'react-i18next';
-import { useMember } from '../../contexts/MemberContext';
+import { useNavigate, useParams } from 'react-router-dom'
+
+import { Anchor, Box, Text } from 'grommet'
+
+import { AppConnectButton } from '../../components/app/AppConnectButton'
+import { useConnectedMember } from '../../contexts/ConnectedAccountContext'
+import { useLoadingContext } from '../../contexts/LoadingContext'
+import { useMember } from '../../contexts/MemberContext'
+import { useProjectContext } from '../../contexts/ProjectContext'
+import { useSemaphoreContext } from '../../contexts/SemaphoreContext'
+import { useToastNotificationContext } from '../../contexts/ToastNotificationsContext'
+import { useVouch } from '../../contexts/VouchContext'
+import { AbsoluteRoutes } from '../../route.names'
+import { Entity, PAP } from '../../types'
+import { AppButton, AppCard } from '../../ui-components'
+import { postDeleteApplication } from '../../utils/project'
+import { useAccountContext } from '../../wallet/AccountContext'
+import { WaitingTransaction } from '../common/Loading'
+
+import { useTranslation } from 'react-i18next'
 
 export const VouchMemberWidget = (props: { pap: Entity<PAP> }) => {
-  const { projectId } = useParams();
-  const { t } = useTranslation();
-  const { pap } = props;
+  const { projectId } = useParams()
+  const { t } = useTranslation()
+  const { pap } = props
 
-  const navigate = useNavigate();
-  const { isConnected } = useAccountContext();
-  const { refetch: refetchRegistry, refetchApplications } = useProjectContext();
+  const navigate = useNavigate()
+  const { error: errorWithAccount } = useAccountContext()
+  const { isConnected } = useSemaphoreContext()
+  const { refetch: refetchRegistry, refetchApplications } = useProjectContext()
 
-  const [sending, setSending] = useState<boolean>(false);
-  const [error, setError] = useState<boolean>();
+  const [sending, setSending] = useState<boolean>(false)
+  const [error, setError] = useState<boolean>()
 
-  const { setVouchParams, sendVouch, isErrorSending, errorSending, isSuccess } = useVouch();
+  const { setVouchParams, sendVouch, isErrorSending, errorSending, isSuccess } = useVouch()
 
-  const { account } = useConnectedMember();
+  const { account } = useConnectedMember()
+  const {
+    setLoading,
+    setExpectedLoadingTime,
+    setTitle: setTitleToLoading,
+    setSubtitle,
+  } = useLoadingContext()
+
+  const {
+    setVisible,
+    setTitle: setNotificationTitle,
+    setMessage: setNotificationMessage,
+    setStatus: setNotificationType,
+  } = useToastNotificationContext()
 
   const {
     account: vouchedAccount,
     tokenId: vouchedTokenId,
     refetch: refetchVouchedAccount,
-  } = useMember({ address: pap.object.account });
+  } = useMember({ address: pap.object.account })
 
   useEffect(() => {
-    setVouchParams(pap.object.account, pap.cid);
-  }, []);
+    setVouchParams(pap.object.account, pap.cid)
+  }, [])
 
   const deleteApplication = () => {
     /** delete applications and update */
     postDeleteApplication(pap.object.account).then(() => {
-      refetchApplications();
-      refetchRegistry();
-    });
-  };
+      refetchApplications()
+      refetchRegistry()
+    })
+  }
 
   useEffect(() => {
-    // console.log('useEffect isSuccess', { isSuccess });
     if (isSuccess) {
-      setSending(false);
-      setError(undefined);
-      deleteApplication();
-      refetchVouchedAccount();
+      setLoading(false)
+      setSending(false)
+      setError(undefined)
+      deleteApplication()
+      refetchVouchedAccount()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isSuccess]);
+  }, [isSuccess])
 
   useEffect(() => {
-    // console.log('useEffect isErrorSending', { isErrorSending, errorSending });
-    if (isErrorSending) {
-      setSending(false);
-      setError((errorSending as any).shortMessage);
+    if (isErrorSending || errorWithAccount) {
+      setSending(false)
+      setVisible(true)
+      setNotificationTitle('Error')
+      setNotificationType('critical')
+
+      if (isErrorSending) {
+        setError((errorSending as any).shortMessage)
+        setNotificationMessage((errorSending as any).message)
+      }
+
+      if (!!errorWithAccount) setNotificationMessage(errorWithAccount.message)
     }
-  }, [isErrorSending, errorSending]);
+  }, [
+    isErrorSending,
+    errorSending,
+    errorWithAccount,
+    setVisible,
+    setNotificationTitle,
+    setNotificationType,
+    setNotificationMessage,
+  ])
 
   const vouch = () => {
     if (sendVouch) {
-      setError(undefined);
-      setSending(true);
-      sendVouch();
+      setError(undefined)
+      setSending(true)
+      setLoading(true)
+      setExpectedLoadingTime(15000)
+      setTitleToLoading(t('approvingNewMember'))
+      setSubtitle(t('preparingData'))
+      sendVouch()
     }
-  };
+  }
 
-  const alreadyVouched = vouchedAccount && vouchedAccount.valid;
+  const alreadyVouched = vouchedAccount && vouchedAccount.valid
 
   const vouchingStatus = (() => {
     if (isConnected && (!account || !account.valid)) {
@@ -84,29 +124,34 @@ export const VouchMemberWidget = (props: { pap: Entity<PAP> }) => {
         <AppCard style={{ marginBottom: '16px' }}>
           <Text>{t('onlyMembersCanInvite')}.</Text>
         </AppCard>
-      );
+      )
     }
     if (error) {
       return (
         <AppCard style={{ marginBottom: '16px' }}>
           <Text>{error}</Text>
         </AppCard>
-      );
+      )
     }
     if (sending) {
-      return <WaitingTransaction></WaitingTransaction>;
+      return <WaitingTransaction></WaitingTransaction>
     }
     if (isConnected) {
       return (
-        <AppButton label="accept" onClick={() => vouch()} disabled={!sendVouch && isConnected} primary></AppButton>
-      );
+        <AppButton
+          label="accept"
+          onClick={() => vouch()}
+          disabled={!sendVouch && isConnected}
+          primary
+        ></AppButton>
+      )
     }
 
-    return <AppConnectButton></AppConnectButton>;
-  })();
+    return <AppConnectButton></AppConnectButton>
+  })()
 
   if (!alreadyVouched) {
-    return vouchingStatus;
+    return vouchingStatus
   }
 
   return (
@@ -117,13 +162,14 @@ export const VouchMemberWidget = (props: { pap: Entity<PAP> }) => {
           <Anchor
             onClick={() => {
               if (vouchedTokenId && projectId) {
-                navigate(AbsoluteRoutes.ProjectMember(projectId, vouchedTokenId.toString()));
+                navigate(AbsoluteRoutes.ProjectMember(projectId, vouchedTokenId.toString()))
               }
-            }}>
+            }}
+          >
             {t('member')} #{vouchedTokenId}
           </Anchor>
         </Text>
       </AppCard>
     </Box>
-  );
-};
+  )
+}

@@ -1,0 +1,19 @@
+{
+  "tabWidth": 2,
+  "printWidth": 92,
+  "trailingComma": "all",
+  "singleQuote": true,
+  "semi": false,
+  "endOfLine": "auto",
+  "importOrder": [
+    "^react$",
+    "^react-dom$",
+    "^react-router-dom",
+    "^grommet",
+    "^viem",
+    "^wagmi",
+    "^\\..*",
+    "^\\w"
+  ],
+  "importOrderSeparation": true
+}

@@ -1,36 +1,39 @@
-import { Box, Text } from 'grommet';
-import { UserExpert } from 'grommet-icons';
-import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useState } from 'react'
 
-import { CHAIN_ID } from '../../config/appConfig';
-import { useSemaphoreContext } from '../../contexts/SemaphoreContext';
-import { LanguageSelector } from '../../pages/account/LanguageSelector';
-import { Loading } from '../../pages/common/Loading';
-import { Address, AppButton, AppCircleDropButton } from '../../ui-components';
-import { cap } from '../../utils/general';
-import { useAccountContext } from '../../wallet/AccountContext';
-import { AppConnectButton } from './AppConnectButton';
-import { useThemeContext } from './ThemedApp';
+import { Box, Text } from 'grommet'
+import { UserExpert } from 'grommet-icons'
+
+import { CHAIN_ID } from '../../config/appConfig'
+import { useSemaphoreContext } from '../../contexts/SemaphoreContext'
+import { LanguageSelector } from '../../pages/account/LanguageSelector'
+import { Loading } from '../../pages/common/Loading'
+import { Address, AppButton, AppCircleDropButton } from '../../ui-components'
+import { cap } from '../../utils/general'
+import { useAccountContext } from '../../wallet/AccountContext'
+import { AppConnectButton } from './AppConnectButton'
+import { useThemeContext } from './ThemedApp'
+
+import { useTranslation } from 'react-i18next'
 
 export const ConnectedUser = (props: {}) => {
-  const { t } = useTranslation();
-  const { aaAddress, isConnected, owner } = useAccountContext();
-  const { isCreatingPublicId, disconnect } = useSemaphoreContext();
-  const { constants } = useThemeContext();
+  const { t } = useTranslation()
+  const { aaAddress, owner } = useAccountContext()
+  const { isCreatingPublicId, disconnect, isConnected } = useSemaphoreContext()
+  const { constants } = useThemeContext()
 
-  const [showDrop, setShowDrop] = useState<boolean>(false);
+  const [showDrop, setShowDrop] = useState<boolean>(false)
 
   const content = (() => {
     if (!isConnected) {
       return (
         <AppConnectButton
-          style={{ fontSize: '16px', padding: '6px 8px' }}></AppConnectButton>
-      );
+          style={{ fontSize: '16px', padding: '6px 8px' }}
+        ></AppConnectButton>
+      )
     }
 
     if (!aaAddress || isCreatingPublicId) {
-      return <Loading></Loading>;
+      return <Loading></Loading>
     }
 
     return (
@@ -39,7 +42,8 @@ export const ConnectedUser = (props: {}) => {
         label={
           <UserExpert
             color={constants.colors.primary}
-            style={{ margin: '2px 0px 0px 5px' }}></UserExpert>
+            style={{ margin: '2px 0px 0px 5px' }}
+          ></UserExpert>
         }
         open={showDrop}
         onClose={() => setShowDrop(false)}
@@ -58,21 +62,20 @@ export const ConnectedUser = (props: {}) => {
             <AppButton
               plain
               onClick={() => disconnect()}
-              style={{ textTransform: 'none', paddingTop: '6px' }}>
+              style={{ textTransform: 'none', paddingTop: '6px' }}
+            >
               <Text style={{ fontWeight: 'bold' }}>{cap(t('logout'))}</Text>
             </AppButton>
           </Box>
         }
-        dropProps={{ style: { marginTop: '60px' } }}></AppCircleDropButton>
-    );
-  })();
+        dropProps={{ style: { marginTop: '60px' } }}
+      ></AppCircleDropButton>
+    )
+  })()
 
   return (
-    <Box
-      style={{ width: '84px', height: '60px' }}
-      align="center"
-      justify="center">
+    <Box style={{ width: '84px', height: '60px' }} align="center" justify="center">
       {content}
     </Box>
-  );
-};
+  )
+}
