@@ -1,22 +1,25 @@
-import { Box, Spinner, Text } from 'grommet'
-import { useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
-import { FormPrevious } from 'grommet-icons'
-
-import { getEntity } from '../../utils/store'
-import { Entity, PAP } from '../../types'
-import { AccountPerson } from '../account/AccountPerson'
-import { AppBottomButton } from '../common/BottomButtons'
-import { ViewportPage } from '../../components/app/Viewport'
-import { VouchMemberWidget } from './VouchMemberWidget'
-import { useTranslation } from 'react-i18next'
 import { useAppContainer } from '../../components/app/AppContainer'
+import { ViewportPage } from '../../components/app/Viewport'
+import { useMember } from '../../contexts/MemberContext'
+import { useProjectContext } from '../../contexts/ProjectContext'
+import { AbsoluteRoutes } from '../../route.names'
+import { Entity, PAP } from '../../types'
+import { getEntity } from '../../utils/store'
+import { AccountPerson } from '../account/AccountPerson'
+import { AppBottomButtons } from '../common/BottomButtons'
+import { VouchMemberWidget } from './VouchMemberWidget'
+import { Box, Spinner, Text } from 'grommet'
+import { FormPrevious } from 'grommet-icons'
+import { useEffect, useState, useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
+import { useNavigate, useParams } from 'react-router-dom'
 
 export const InviteAccountPage = () => {
   const { t, i18n } = useTranslation()
   const navigate = useNavigate()
   const { hash } = useParams()
   const { setTitle } = useAppContainer()
+  const { projectId } = useProjectContext()
 
   useEffect(() => {
     setTitle({ prefix: t('approveNew'), main: t('member') })
@@ -68,11 +71,18 @@ export const InviteAccountPage = () => {
         </>
       }
       nav={
-        <AppBottomButton
-          onClick={() => navigate(-1)}
-          icon={<FormPrevious></FormPrevious>}
-          label={t('back')}
-        ></AppBottomButton>
+        <AppBottomButtons
+          left={{
+            action: () => navigate(-1),
+            label: t('back'),
+            icon: <FormPrevious />,
+          }}
+          right={{
+            primary: true,
+            action: () => navigate(`${AbsoluteRoutes.ProjectHome(projectId?.toString() as string)}`),
+            label: t('finish'),
+          }}
+        ></AppBottomButtons>
       }
     ></ViewportPage>
   )
