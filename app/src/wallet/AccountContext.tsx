@@ -63,9 +63,6 @@ export const AccountContext = (props: PropsWithChildren) => {
 
   useEffect(() => {
     if (signer) {
-      setTitle(t('waitingSignature'))
-      setSubtitle('Sign in to get aaAccount')
-
       createLightAccountAlchemyClient({
         rpcUrl: ALCHEMY_RPC_URL,
         chain: chain,

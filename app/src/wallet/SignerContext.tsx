@@ -15,6 +15,7 @@ import { useDisconnect, useWalletClient } from 'wagmi'
 
 import { useLoadingContext } from '../contexts/LoadingContext'
 import { HexStr } from '../types'
+import { cap } from '../utils/general'
 import { createMagicSigner, magic } from './magic.signer'
 
 import { useTranslation } from 'react-i18next'
@@ -26,7 +27,6 @@ export type SignerContextType = {
   address?: HexStr
   signMessage?: (message: string) => Promise<HexStr>
   isConnecting: boolean
-  isChecking: boolean
   errorConnecting?: Error
   disconnect: () => void
 }
@@ -44,19 +44,27 @@ export const SignerContext = (props: PropsWithChildren) => {
   const { data: injectedSigner } = useWalletClient()
 
   const [isConnecting, setIsConnecting] = useState<boolean>(false)
-  const [isChecking, setIsChecking] = useState<boolean>(true)
   const [errorConnecting, setErrorConnecting] = useState<Error>()
 
   const signer: WalletClient | undefined = injectedSigner ? injectedSigner : magicSigner
 
+  /** check for users */
   useEffect(() => {
-    setIsChecking(true)
+    /**
+     * show loading when first loading a page
+     * (to cover the time where the connected account is checked)
+     * */
+    setLoading(true)
+    setUserCanClose(false)
+    setTitle(cap(t('loading')))
+    setSubtitle(t('pleaseWait'))
+
     magic.user.isLoggedIn().then((res) => {
       if (res && !magicSigner) {
         console.log('Autoconnecting Magic')
         connectMagic()
       } else {
-        setIsChecking(false)
+        setLoading(false)
       }
     })
   }, [])
@@ -80,7 +88,6 @@ export const SignerContext = (props: PropsWithChildren) => {
 
   const connectMagic = () => {
     console.log('connecting magic signer', { signer })
-    setIsChecking(false)
     setIsConnecting(true)
     createMagicSigner().then((signer) => {
       console.log('connected magic signer', { signer })
@@ -98,8 +105,8 @@ export const SignerContext = (props: PropsWithChildren) => {
   const connect = () => {
     setLoading(true)
     setUserCanClose(false)
-    setTitle(t('connecting'))
-    setSubtitle('Connect your wallet to continue')
+    setTitle(t('connectingUser'))
+    setSubtitle(t('connectWallet'))
 
     try {
       if (hasInjected) {
@@ -138,7 +145,6 @@ export const SignerContext = (props: PropsWithChildren) => {
       value={{
         connect,
         isConnecting,
-        isChecking,
         errorConnecting,
         signMessage,
         hasInjected,

@@ -50,9 +50,6 @@ export const SemaphoreContext = (props: PropsWithChildren) => {
 
   // keep identity inline with aaAddress
   useEffect(() => {
-    setTitle(t('waitingSignatures'))
-    setSubtitle(t('waitingSignatures'))
-
     checkStoredIdentity()
   }, [aaAddress, owner])
 
@@ -83,11 +80,15 @@ export const SemaphoreContext = (props: PropsWithChildren) => {
         if (!aaAddress) return
         if (!signMessage) return
 
+        setSubtitle(t('waitingIdentitySignature'))
+
         console.log('creating publiId', { owner, aaAddress })
 
         setIsCreatingPublicId(true)
 
         const secret = await signMessage('Prepare anonymous identity')
+
+        setSubtitle(t('preparingIdentity'))
         const _identity = new Identity(secret)
         const _publicId = _identity.getCommitment().toString()
 
@@ -96,6 +97,8 @@ export const SemaphoreContext = (props: PropsWithChildren) => {
 
         // if not found, store the identity
         if (identity === undefined) {
+          setSubtitle(t('waitingIdentityOwnership'))
+
           const signature = await signMessage(getControlMessage(_publicId))
           const details: AppPublicIdentity = {
             owner,
