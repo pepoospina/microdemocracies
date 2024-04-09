@@ -1,4 +1,5 @@
 import { hashMessage } from 'viem'
+
 import { AppBackingCreate, AppStatementCreate, SemaphoreProofStrings } from '../types'
 
 export const getIdentityId = (publicId: string) => {

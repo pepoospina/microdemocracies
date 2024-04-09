@@ -34,7 +34,10 @@ export const useVouch = (): VouchHookType => {
     setVouchParamsInternal([account, personCid])
   }, [])
 
-  const checkAndPostMember = async (_events: DecodeEventLogReturnType[], _projectId: number) => {
+  const checkAndPostMember = async (
+    _events: DecodeEventLogReturnType[],
+    _projectId: number,
+  ) => {
     if (!vouchParamsInternal) throw Error('Unexpected vouchParamsInternal undefined')
     if (!address) throw Error('Unexpected address undefined')
 

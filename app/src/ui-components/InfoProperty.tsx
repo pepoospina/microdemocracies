@@ -1,4 +1,5 @@
 import { BoxExtendedProps, Box } from 'grommet'
+
 import { AppLabel } from './AppLabel'
 
 export interface IInfoProperty extends BoxExtendedProps {

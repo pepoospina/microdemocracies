@@ -1,6 +1,7 @@
+import React, { useState } from 'react'
+
 import { BoxExtendedProps, Box } from 'grommet'
 import { FormDown, FormUp, Refresh } from 'grommet-icons'
-import React, { useState } from 'react'
 
 import { useThemeContext } from '../components/app'
 import { StyleConstants } from '../components/app/themes'
@@ -55,7 +56,10 @@ export const AppCard = React.forwardRef<HTMLDivElement, AppCardProps>((props, re
             }
           }}
         >
-          <Refresh color={constants.colors.primaryLight} style={{ height: '20px', width: '20px' }}></Refresh>
+          <Refresh
+            color={constants.colors.primaryLight}
+            style={{ height: '20px', width: '20px' }}
+          ></Refresh>
         </Box>
       ) : (
         <></>

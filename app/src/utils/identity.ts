@@ -1,11 +1,10 @@
 import { Identity } from '@semaphore-protocol/identity'
 import { SemaphoreProof, generateProof as _generateProof } from '@semaphore-protocol/proof'
+
 import { getPublicIdentity } from '../firestore/getters'
-
 import { AppGetProof, AppPublicIdentity, HexStr } from '../types'
-
-import { getMerklePass, postIdentity } from './statements'
 import { getControlMessage } from './identity.utils'
+import { getMerklePass, postIdentity } from './statements'
 
 export type MessageSigner = (message: string) => Promise<HexStr>
 
@@ -37,7 +36,11 @@ export const checkOrStoreId = async (
   }
 }
 
-export const connectIdentity = async (owner: HexStr, aaAddress: HexStr, signMessage: MessageSigner) => {
+export const connectIdentity = async (
+  owner: HexStr,
+  aaAddress: HexStr,
+  signMessage: MessageSigner,
+) => {
   const secret = await signMessage('Prepare anonymous identity')
   const identity = new Identity(secret)
   const _publicId = identity.getCommitment().toString()
@@ -48,7 +51,9 @@ export const connectIdentity = async (owner: HexStr, aaAddress: HexStr, signMess
   return identity
 }
 
-export const generateProof = async (input: AppGetProof & { identity: Identity }): Promise<ProofAndTree> => {
+export const generateProof = async (
+  input: AppGetProof & { identity: Identity },
+): Promise<ProofAndTree> => {
   const { projectId, treeId, identity, signal, nullifier } = input
 
   /**

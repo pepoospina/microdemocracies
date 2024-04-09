@@ -1,3 +1,5 @@
+import { ReactNode } from 'react'
+
 import {
   AreasType,
   Box,
@@ -9,7 +11,6 @@ import {
   ResponsiveContext,
   Text,
 } from 'grommet'
-import { ReactNode } from 'react'
 
 import { IElement, useResponsive, useThemeContext } from '.'
 import { AppHeading } from '../../ui-components/AppHeading'

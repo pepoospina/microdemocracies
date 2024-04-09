@@ -1,9 +1,9 @@
-import { isAddress } from 'ethers/lib/utils'
-import { Box, Text } from 'grommet'
 import { useEffect, useState } from 'react'
 import React from 'react'
-import { useTranslation } from 'react-i18next'
+
 import { useNavigate, useSearchParams } from 'react-router-dom'
+
+import { Box, Text } from 'grommet'
 
 import { AppConnectWidget } from '../../components/app/AppConnectButton'
 import { useAppContainer } from '../../components/app/AppContainer'
@@ -23,6 +23,9 @@ import { StatementEditable } from '../voice/StatementEditable'
 import { DetailsForm } from './DetailsForm'
 import { PAPEntry } from './PAPEntry'
 import { PAPShare } from './PAPShare'
+
+import { isAddress } from 'ethers/lib/utils'
+import { useTranslation } from 'react-i18next'
 
 export interface IJoinProps {
   dum?: any
@@ -154,7 +157,8 @@ export const JoinPage = () => {
           left={{
             label: 'home',
             primary: false,
-            action: () => navigate(AbsoluteRoutes.ProjectHome(projectId?.toString() as string)),
+            action: () =>
+              navigate(AbsoluteRoutes.ProjectHome(projectId?.toString() as string)),
           }}
           right={{
             label: 'next',
@@ -169,7 +173,10 @@ export const JoinPage = () => {
       key="3"
       content={
         <Box pad="large">
-          <DetailsForm selected={project?.selectedDetails} onChange={(d) => setPersonal(d)}></DetailsForm>
+          <DetailsForm
+            selected={project?.selectedDetails}
+            onChange={(d) => setPersonal(d)}
+          ></DetailsForm>
         </Box>
       }
       nav={
@@ -229,7 +236,8 @@ export const JoinPage = () => {
           right={{
             label: t('done'),
             primary: true,
-            action: () => navigate(AbsoluteRoutes.ProjectHome(projectId?.toString() as string)),
+            action: () =>
+              navigate(AbsoluteRoutes.ProjectHome(projectId?.toString() as string)),
           }}
         ></AppBottomButtons>
       }

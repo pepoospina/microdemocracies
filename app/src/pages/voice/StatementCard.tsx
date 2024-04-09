@@ -1,10 +1,10 @@
 import { Box, Spinner, Text } from 'grommet'
-
-import { IStatementEditable, StatementEditable } from './StatementEditable'
 import { Favorite } from 'grommet-icons'
-import { AppButton } from '../../ui-components/AppButton'
+
 import { CircleIndicator } from '../../components/app/CircleIndicator'
 import { useStatementContext } from '../../contexts/StatementContext'
+import { AppButton } from '../../ui-components/AppButton'
+import { IStatementEditable, StatementEditable } from './StatementEditable'
 
 export const StatementCard = (props: {
   containerStyle?: React.CSSProperties
@@ -37,7 +37,11 @@ export const StatementCard = (props: {
           icon={
             <Box>
               <Text color="white">
-                {nBacking !== undefined ? <b>{nBacking}</b> : <Spinner color="white"></Spinner>}
+                {nBacking !== undefined ? (
+                  <b>{nBacking}</b>
+                ) : (
+                  <Spinner color="white"></Spinner>
+                )}
               </Text>
             </Box>
           }

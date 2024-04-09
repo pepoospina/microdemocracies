@@ -1,10 +1,13 @@
-import { Box, Text } from 'grommet'
 import { useEffect, useState } from 'react'
+
+import { Box, Text } from 'grommet'
+
+import { useThemeContext } from '../../components/app'
+import './statements.css'
+
+import { useTranslation } from 'react-i18next'
 import ReactQuill, { Quill } from 'react-quill'
 import 'react-quill/dist/quill.bubble.css'
-import './statements.css'
-import { useThemeContext } from '../../components/app'
-import { useTranslation } from 'react-i18next'
 
 export interface IStatementEditable {
   placeholder?: string
@@ -86,7 +89,10 @@ export const StatementEditable = (props: IStatementEditable) => {
       </Box>
       {editable ? (
         <Box pad="small">
-          <Text size="small" style={{ textAlign: 'center', color: constants.colors.primaryLight }}>
+          <Text
+            size="small"
+            style={{ textAlign: 'center', color: constants.colors.primaryLight }}
+          >
             {t('helpEditable')}
           </Text>
         </Box>

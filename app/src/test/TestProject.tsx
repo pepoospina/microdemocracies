@@ -1,5 +1,7 @@
-import { Box } from 'grommet'
 import { useEffect, useState } from 'react'
+
+import { Box } from 'grommet'
+
 import { useConnect } from 'wagmi'
 
 import { useProjectContext } from '../contexts/ProjectContext'
@@ -66,7 +68,11 @@ export const TestProject = () => {
   return (
     <BoxCentered fill gap="large">
       <AppHeading level="3">Project {projectId}</AppHeading>
-      {!isConnected ? <AppButton onClick={() => connect()} label="Connect" primary></AppButton> : <></>}
+      {!isConnected ? (
+        <AppButton onClick={() => connect()} label="Connect" primary></AppButton>
+      ) : (
+        <></>
+      )}
       <AppButton
         disabled={proposeStatement === undefined}
         onClick={() => startTest()}
@@ -79,7 +85,10 @@ export const TestProject = () => {
           statements.map((statement, ix) => {
             return (
               <StatementContext statement={statement}>
-                <StatementCard containerStyle={{ marginBottom: '22px' }} key={ix}></StatementCard>
+                <StatementCard
+                  containerStyle={{ marginBottom: '22px' }}
+                  key={ix}
+                ></StatementCard>
               </StatementContext>
             )
           })

@@ -1,15 +1,30 @@
-import { onSnapshot } from 'firebase/firestore'
+import { useQuery } from '@tanstack/react-query'
+
 import { createContext, useContext, useEffect, useState } from 'react'
+
 import { useParams } from 'react-router-dom'
+
 import { useReadContract } from 'wagmi'
 
 import { collections } from '../firestore/database'
-import { getApplications, getInviteId, getProject, getTopStatements } from '../firestore/getters'
-import { AppApplication, AppProject, AppProjectMember, HexStr, StatementRead } from '../types'
+import {
+  getApplications,
+  getInviteId,
+  getProject,
+  getTopStatements,
+} from '../firestore/getters'
+import {
+  AppApplication,
+  AppProject,
+  AppProjectMember,
+  HexStr,
+  StatementRead,
+} from '../types'
 import { registryABI } from '../utils/contracts.json'
 import { getProjectMembers, postInvite } from '../utils/project'
 import { useAccountContext } from '../wallet/AccountContext'
-import { useQuery } from '@tanstack/react-query'
+
+import { onSnapshot } from 'firebase/firestore'
 
 export type ProjectContextType = {
   project?: AppProject | null

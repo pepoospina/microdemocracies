@@ -1,4 +1,5 @@
 import { BoxExtendedProps, Box } from 'grommet'
+
 import { useThemeContext } from '../components/app'
 
 export const HorizontalLine = (props: BoxExtendedProps): JSX.Element => {

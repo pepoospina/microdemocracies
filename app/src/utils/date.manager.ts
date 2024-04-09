@@ -33,7 +33,10 @@ export class DateManager {
     }
   }
 
-  static from(date?: DateManager | Date | number | string, utc: boolean = false): DateManager {
+  static from(
+    date?: DateManager | Date | number | string,
+    utc: boolean = false,
+  ): DateManager {
     const datem = new DateManager(date, utc)
     return datem
   }

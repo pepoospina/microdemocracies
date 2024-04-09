@@ -1,8 +1,9 @@
-import { Magic } from 'magic-sdk'
 import { createWalletClient, custom } from 'viem'
 
 import { MAGIC_API_KEY } from '../config/appConfig'
 import { chain } from './ConnectedWalletContext'
+
+import { Magic } from 'magic-sdk'
 
 // instantiate Magic SDK instance
 export const magic = new Magic(MAGIC_API_KEY)

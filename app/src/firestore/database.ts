@@ -1,3 +1,5 @@
+import { CollectionNames } from './collectionNames'
+
 import { initializeApp } from 'firebase/app'
 import {
   collection,
@@ -8,7 +10,6 @@ import {
   persistentLocalCache,
   persistentMultipleTabManager,
 } from 'firebase/firestore'
-import { CollectionNames } from './collectionNames'
 
 const firebaseConfig = {
   apiKey: 'AIzaSyD0Mg8hk5cQAfNc-ZNM-pM_76kZY4IXxM4',
@@ -24,7 +25,8 @@ export const db = initializeFirestore(app, {
   localCache: persistentLocalCache({ tabManager: persistentMultipleTabManager() }),
 })
 
-const isProd = process.env.NODE_ENV === 'production' || (process as any).env.NODE_ENV === 'test-prod'
+const isProd =
+  process.env.NODE_ENV === 'production' || (process as any).env.NODE_ENV === 'test-prod'
 
 if (!isProd) {
   console.log('RUNNING ON DEVELOPMENT NODE - CONNECTING TO LOCALSTORE FIRESTORE')

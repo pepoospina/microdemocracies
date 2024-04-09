@@ -1,12 +1,23 @@
+import { useState, useEffect } from 'react'
+
+import {
+  DetailsAndPlatforms,
+  PersonDetails,
+  PlatformAccount,
+  PlatformId,
+  SelectedDetails,
+} from '../../types'
 import { AppForm, AppFormField, AppInput, FieldLabel } from '../../ui-components'
 import { PlatformDetails, platforms } from '../../utils/platforms'
-import { DetailsAndPlatforms, PersonDetails, PlatformAccount, PlatformId, SelectedDetails } from '../../types'
-import { useState, useEffect } from 'react'
+
 import { useTranslation } from 'react-i18next'
 
 const formInit = {}
 
-export const DetailsForm = (props: { selected?: SelectedDetails; onChange: (values: DetailsAndPlatforms) => void }) => {
+export const DetailsForm = (props: {
+  selected?: SelectedDetails
+  onChange: (values: DetailsAndPlatforms) => void
+}) => {
   const { t } = useTranslation()
   const [formValues, setFormValuesState] = useState<any>(formInit)
 
@@ -36,7 +47,11 @@ export const DetailsForm = (props: { selected?: SelectedDetails; onChange: (valu
   }
 
   return (
-    <AppForm value={formValues} onChange={setFormValuesState} style={{ height: '100%', width: '100%' }}>
+    <AppForm
+      value={formValues}
+      onChange={setFormValuesState}
+      style={{ height: '100%', width: '100%' }}
+    >
       {props.selected?.personal.firstName ? (
         <AppFormField
           name="firstName"

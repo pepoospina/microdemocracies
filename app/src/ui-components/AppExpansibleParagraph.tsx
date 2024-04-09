@@ -1,8 +1,9 @@
-import { Box } from 'grommet'
 import { useState, useRef, useEffect } from 'react'
 
-import { AppButton } from './AppButton'
+import { Box } from 'grommet'
+
 import { IElement } from '../components/app'
+import { AppButton } from './AppButton'
 
 interface IExpansibleParagraph extends IElement {
   maxHeight: number

@@ -33,6 +33,7 @@ export const ThemedApp = (props: ThemeContextProps): JSX.Element => {
 
 export const useThemeContext = (): ThemeContextType => {
   const context = useContext(ThemeContextValue)
-  if (!context) throw Error('useThemeContext can only be used within the ThemedApp component')
+  if (!context)
+    throw Error('useThemeContext can only be used within the ThemedApp component')
   return context
 }

@@ -21,11 +21,21 @@ export interface IButtonWithAction {
   icon?: ReactElement
 }
 
-export const AppBottomButtons = (props: { left?: IButtonWithAction; right?: IButtonWithAction; popUp?: string }) => {
+export const AppBottomButtons = (props: {
+  left?: IButtonWithAction
+  right?: IButtonWithAction
+  popUp?: string
+}) => {
   const { left, right } = props
   const style = { flexGrow: '1', maxWidth: '300px', width: '50%' }
   return (
-    <Box direction="row" justify="evenly" style={{ position: 'relative' }} gap="small" pad="small">
+    <Box
+      direction="row"
+      justify="evenly"
+      style={{ position: 'relative' }}
+      gap="small"
+      pad="small"
+    >
       {left ? (
         <AppButton
           icon={!left.icon ? <FormPrevious /> : left.icon}

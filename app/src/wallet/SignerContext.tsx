@@ -56,7 +56,7 @@ export const SignerContext = (props: PropsWithChildren) => {
      * */
     setLoading(true)
     setUserCanClose(false)
-    setTitle(cap(t('loading')))
+    setTitle(cap(t('loadingProjects')))
     setSubtitle(t('pleaseWait'))
 
     magic.user.isLoggedIn().then((res) => {

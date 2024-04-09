@@ -1,21 +1,22 @@
+import { useEffect, useState } from 'react'
+
 import { Box, BoxExtendedProps, Spinner, Text } from 'grommet'
 
 import { AppConnectButton, AppConnectWidget } from '../../components/app/AppConnectButton'
-import { AppButton, AppCard, AppHeading, AppRemainingTime } from '../../ui-components'
-
-import { useEffect, useState } from 'react'
-import { WaitingTransaction } from '../common/Loading'
-import { BoxCentered } from '../../ui-components/BoxCentered'
-import { useAccountContext } from '../../wallet/AccountContext'
-import { AppAccount } from '../../types'
-import { DateManager } from '../../utils/date.manager'
-import { ProgressBar } from './ProgressBar'
-import { t } from 'i18next'
-import { useConnectedMember } from '../../contexts/ConnectedAccountContext'
-import { LoadingDiv } from '../../ui-components/LoadingDiv'
 import { useChallengeRead } from '../../contexts/ChallengeContextRead'
 import { useChallengeWrite } from '../../contexts/ChallengeContextWrite'
+import { useConnectedMember } from '../../contexts/ConnectedAccountContext'
+import { AppAccount } from '../../types'
+import { AppButton, AppCard, AppHeading, AppRemainingTime } from '../../ui-components'
+import { BoxCentered } from '../../ui-components/BoxCentered'
+import { LoadingDiv } from '../../ui-components/LoadingDiv'
+import { DateManager } from '../../utils/date.manager'
 import { postAccountInvalidated } from '../../utils/project'
+import { useAccountContext } from '../../wallet/AccountContext'
+import { WaitingTransaction } from '../common/Loading'
+import { ProgressBar } from './ProgressBar'
+
+import { t } from 'i18next'
 
 interface IAccountChallenge extends BoxExtendedProps {
   cardStyle?: React.CSSProperties
@@ -28,7 +29,9 @@ export const AccountChallenge = (props: IAccountChallenge) => {
 
   const accountRead = props.account
 
-  const { refetchChallenge, challengeRead, totalVoters } = useChallengeRead(accountRead?.tokenId)
+  const { refetchChallenge, challengeRead, totalVoters } = useChallengeRead(
+    accountRead?.tokenId,
+  )
 
   const {
     sendChallenge,
@@ -91,7 +94,10 @@ export const AccountChallenge = (props: IAccountChallenge) => {
   const date = new DateManager()
   const duration = challengeRead ? date.durationTo(challengeRead?.endDate) : undefined
 
-  const ratio = challengeRead && challengeRead.nVoted > 0 ? challengeRead.nFor / challengeRead.nVoted : 0
+  const ratio =
+    challengeRead && challengeRead.nVoted > 0
+      ? challengeRead.nFor / challengeRead.nVoted
+      : 0
   const nVoted = challengeRead ? challengeRead.nVoted : undefined
 
   const challengeStatus = challengeRead ? (
@@ -105,7 +111,11 @@ export const AccountChallenge = (props: IAccountChallenge) => {
           <Text>Account challenged! </Text>
           {duration ? (
             <>
-              <AppRemainingTime remainingTime={duration} compactFormat suffix="left"></AppRemainingTime>
+              <AppRemainingTime
+                remainingTime={duration}
+                compactFormat
+                suffix="left"
+              ></AppRemainingTime>
             </>
           ) : (
             <></>
@@ -113,7 +123,9 @@ export const AccountChallenge = (props: IAccountChallenge) => {
         </Box>
 
         <Box direction="row" align="center" justify="between">
-          <Text>{nVoted !== undefined ? t('votedNofMEligible', { nVoted, totalVoters }) : ''}</Text>
+          <Text>
+            {nVoted !== undefined ? t('votedNofMEligible', { nVoted, totalVoters }) : ''}
+          </Text>
         </Box>
 
         <Box>
@@ -128,7 +140,12 @@ export const AccountChallenge = (props: IAccountChallenge) => {
   /** Voting management */
   const vote = (() => {
     if (!isConnected) {
-      return <AppConnectButton label="Connect and vote" style={{ margin: '16px 0 8px 0' }}></AppConnectButton>
+      return (
+        <AppConnectButton
+          label="Connect and vote"
+          style={{ margin: '16px 0 8px 0' }}
+        ></AppConnectButton>
+      )
     }
 
     /** loading canVote information */
@@ -160,8 +177,16 @@ export const AccountChallenge = (props: IAccountChallenge) => {
             <WaitingTransaction></WaitingTransaction>
           ) : (
             <Box direction="row" style={{ margin: '8px 0' }} gap="16px">
-              <AppButton style={{ width: '50%' }} label="Remove" onClick={() => sendVote(-1)}></AppButton>
-              <AppButton style={{ width: '50%' }} label="Keep" onClick={() => sendVote(1)}></AppButton>
+              <AppButton
+                style={{ width: '50%' }}
+                label="Remove"
+                onClick={() => sendVote(-1)}
+              ></AppButton>
+              <AppButton
+                style={{ width: '50%' }}
+                label="Keep"
+                onClick={() => sendVote(1)}
+              ></AppButton>
             </Box>
           )
         ) : (
@@ -186,7 +211,9 @@ export const AccountChallenge = (props: IAccountChallenge) => {
 
   const notChallengedContent = (
     <Box>
-      <Text>{accountRead?.valid ? t('accountValidatedNotChallenged') : t('accountInvalidated')}.</Text>
+      <Text>
+        {accountRead?.valid ? t('accountValidatedNotChallenged') : t('accountInvalidated')}.
+      </Text>
       {error ? (
         <AppCard style={{ marginBottom: '16px', overflow: 'hidden' }}>
           <Text>{error}</Text>

@@ -1,12 +1,14 @@
 import React, { CSSProperties } from 'react'
+
 import { Box, BoxExtendedProps, Spinner, Text } from 'grommet'
 
 import { HexStr, PAP } from '../../types'
-import { PlatformUrl } from './PlatformUrl'
-import { platforms } from '../../utils/platforms'
-import { useTranslation } from 'react-i18next'
 import { cap } from '../../utils/general'
+import { platforms } from '../../utils/platforms'
 import { AccountAddress } from './AccountAddress'
+import { PlatformUrl } from './PlatformUrl'
+
+import { useTranslation } from 'react-i18next'
 
 interface IAccountPerson extends BoxExtendedProps {
   pap?: PAP
@@ -58,7 +60,10 @@ export const AccountPerson = (props: IAccountPerson) => {
         ></DetailField>
         <DetailField
           boxStyle={fieldStyle}
-          field={{ label: 'Place of Birth', value: props.pap.person?.personal?.placeOfBirth }}
+          field={{
+            label: 'Place of Birth',
+            value: props.pap.person?.personal?.placeOfBirth,
+          }}
         ></DetailField>
         <DetailField
           boxStyle={fieldStyle}
@@ -70,7 +75,10 @@ export const AccountPerson = (props: IAccountPerson) => {
         ></DetailField>
         <DetailField
           boxStyle={fieldStyle}
-          field={{ label: t('IDNumberLong'), value: props.pap.person?.personal?.nationalID }}
+          field={{
+            label: t('IDNumberLong'),
+            value: props.pap.person?.personal?.nationalID,
+          }}
         ></DetailField>
         <DetailField
           boxStyle={fieldStyle}
@@ -88,7 +96,10 @@ export const AccountPerson = (props: IAccountPerson) => {
       </Box>
       <Box style={fieldStyle}>
         <Text style={{ fontWeight: 'bold' }}>{cap(t('account'))}:</Text>
-        <AccountAddress showAccount={props.showAccount} account={props.pap.account as HexStr}></AccountAddress>
+        <AccountAddress
+          showAccount={props.showAccount}
+          account={props.pap.account as HexStr}
+        ></AccountAddress>
       </Box>
     </Box>
   ) : (

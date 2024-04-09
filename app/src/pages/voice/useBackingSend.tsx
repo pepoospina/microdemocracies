@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react'
 
-import { postBacking } from '../../utils/statements'
-import { AppBackingCreate, StatmentReactions as StatementReactions } from '../../types'
-import { useSemaphoreContext } from '../../contexts/SemaphoreContext'
-import { getSupportNullifier } from '../../utils/identity.utils'
 import { hashMessage } from 'viem'
+
+import { useSemaphoreContext } from '../../contexts/SemaphoreContext'
+import { AppBackingCreate, StatmentReactions as StatementReactions } from '../../types'
+import { getSupportNullifier } from '../../utils/identity.utils'
+import { postBacking } from '../../utils/statements'
 
 export type VoiceSendContextType = {
   backStatement?: (statementId: string, treeId: string) => Promise<any>

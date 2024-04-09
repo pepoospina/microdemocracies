@@ -1,5 +1,6 @@
-import { Duration } from 'date-fns'
 import { Box, Text } from 'grommet'
+
+import { Duration } from 'date-fns'
 
 export interface IAppRemainingTime {
   compactFormat?: boolean

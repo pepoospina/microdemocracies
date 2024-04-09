@@ -15,7 +15,9 @@ export type ConnectedMemberContextType = {
   myChallenge: AppChallenge | undefined | null
 }
 
-const ConnectedMemberContextValue = createContext<ConnectedMemberContextType | undefined>(undefined)
+const ConnectedMemberContextValue = createContext<ConnectedMemberContextType | undefined>(
+  undefined,
+)
 
 export interface ConnectedMemberContextProps {
   children: ReactNode
@@ -84,7 +86,11 @@ export const ConnectedMemberContext = (props: ConnectedMemberContextProps) => {
   ])
 
   const myChallenge: AppChallenge | undefined | null = ((_challengeRead) => {
-    if (isErrorChallengeRead && errorChallengeRead && errorChallengeRead.message.includes('')) {
+    if (
+      isErrorChallengeRead &&
+      errorChallengeRead &&
+      errorChallengeRead.message.includes('')
+    ) {
       return null
     }
     if (_challengeRead === undefined) {

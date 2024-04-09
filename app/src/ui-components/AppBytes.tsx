@@ -1,10 +1,11 @@
-import { BoxExtendedProps, Box } from 'grommet'
-import { Clone } from 'grommet-icons'
 import { ReactNode } from 'react'
 
+import { BoxExtendedProps, Box } from 'grommet'
+import { Clone } from 'grommet-icons'
+
+import { useThemeContext } from '../components/app'
 import { AppLabel } from './AppLabel'
 import { HelpTip } from './HelpTip'
-import { useThemeContext } from '../components/app'
 
 export interface IBytesInfo extends BoxExtendedProps {
   label: ReactNode

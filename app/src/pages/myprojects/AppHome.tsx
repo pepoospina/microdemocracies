@@ -40,7 +40,8 @@ export const AppHome = (props: {}) => {
       return (
         <Box pad="large">
           <AppCard margin={{ bottom: 'large' }}>
-            <Text>Please sign in to see your microdemocracies</Text>
+            {/* <Text>Please sign in to see your microdemocracies</Text> */}
+            <Text>{t('pleaseSignIn')}</Text>
           </AppCard>
           <AppConnectButton></AppConnectButton>
         </Box>

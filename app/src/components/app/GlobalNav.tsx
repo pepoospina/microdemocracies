@@ -1,5 +1,6 @@
-import { Box, Text } from 'grommet'
 import { useNavigate } from 'react-router-dom'
+
+import { Box, Text } from 'grommet'
 
 import { AbsoluteRoutes } from '../../route.names'
 import { AppButton } from '../../ui-components'

@@ -1,12 +1,15 @@
+import { useEffect, useState } from 'react'
+
 import { Box, Text } from 'grommet'
 import { StatusGood } from 'grommet-icons'
-import { AppButton, AppHeading } from '../../ui-components'
+
 import { useResponsive, useThemeContext } from '../../components/app'
-import { useEffect, useState } from 'react'
-import { PlatformDetails, platforms } from '../../utils/platforms'
 import { PlatformId, SelectedDetails } from '../../types'
+import { AppButton, AppHeading } from '../../ui-components'
+import { cap } from '../../utils/general'
+import { PlatformDetails, platforms } from '../../utils/platforms'
+
 import { t } from 'i18next'
-import { cap as cap } from '../../utils/general'
 
 const detailsInit: SelectedDetails = {
   personal: {
@@ -37,7 +40,9 @@ enum Options {
   IDNumber = 'IDNumber',
 }
 
-export const DetailsSelector = (props: { onChanged: (seleted: SelectedDetails) => void }) => {
+export const DetailsSelector = (props: {
+  onChanged: (seleted: SelectedDetails) => void
+}) => {
   const { constants } = useThemeContext()
   const { mobile } = useResponsive()
 
@@ -45,17 +50,25 @@ export const DetailsSelector = (props: { onChanged: (seleted: SelectedDetails) =
   const [showSelectPlatform, setShowSelectPlatform] = useState<boolean>(false)
 
   const nameAndLastname = details.personal.firstName && details.personal.lastName
-  const platformSelected = Object.keys(details.platform).reduce((selected: boolean, platformId) => {
-    return details.platform[platformId as PlatformId] || selected
-  }, false)
+  const platformSelected = Object.keys(details.platform).reduce(
+    (selected: boolean, platformId) => {
+      return details.platform[platformId as PlatformId] || selected
+    },
+    false,
+  )
 
-  const platformsSelected = Object.keys(details.platform).reduce((selected: string[], platformId) => {
-    if (details.platform[platformId as PlatformId]) {
-      selected.push((platforms[platformId as PlatformId] as PlatformDetails).name)
-    }
-    return selected
-  }, [])
-  const platformsSelectedText = platformsSelected.length ? platformsSelected.join(` ${t('and')} `) : t('social')
+  const platformsSelected = Object.keys(details.platform).reduce(
+    (selected: string[], platformId) => {
+      if (details.platform[platformId as PlatformId]) {
+        selected.push((platforms[platformId as PlatformId] as PlatformDetails).name)
+      }
+      return selected
+    },
+    [],
+  )
+  const platformsSelectedText = platformsSelected.length
+    ? platformsSelected.join(` ${t('and')} `)
+    : t('social')
 
   useEffect(() => {
     if (props.onChanged) {
@@ -110,7 +123,11 @@ export const DetailsSelector = (props: { onChanged: (seleted: SelectedDetails) =
           ></AppButton>
         </Box>
         <Box justify="center" style={{ marginLeft: '12px', width: '40px', height: '40px' }}>
-          {nameAndLastname ? <StatusGood color={constants.colors.primary} size={'40px'}></StatusGood> : <></>}
+          {nameAndLastname ? (
+            <StatusGood color={constants.colors.primary} size={'40px'}></StatusGood>
+          ) : (
+            <></>
+          )}
         </Box>
       </Box>
 
@@ -123,13 +140,19 @@ export const DetailsSelector = (props: { onChanged: (seleted: SelectedDetails) =
           ></AppButton>
         </Box>
         <Box justify="center" style={{ marginLeft: '12px', width: '40px', height: '40px' }}>
-          {platformSelected ? <StatusGood color={constants.colors.primary} size={'40px'}></StatusGood> : <></>}
+          {platformSelected ? (
+            <StatusGood color={constants.colors.primary} size={'40px'}></StatusGood>
+          ) : (
+            <></>
+          )}
         </Box>
       </Box>
       <Box>
         {showSelectPlatform ? (
           <>
-            <Box style={{ margin: '22px 0px 8px 0px', fontSize: '10px', fontWeight: '300' }}>
+            <Box
+              style={{ margin: '22px 0px 8px 0px', fontSize: '10px', fontWeight: '300' }}
+            >
               <Text>{t('choosePlatformsMsg')}.</Text>
             </Box>
             <Box style={{ marginBottom: '32px' }}>

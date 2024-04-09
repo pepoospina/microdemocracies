@@ -1,5 +1,7 @@
-import { TextAreaExtendedProps, TextArea } from 'grommet'
 import { useRef } from 'react'
+
+import { TextAreaExtendedProps, TextArea } from 'grommet'
+
 import { useThemeContext } from '../components/app'
 
 interface IAppTextArea extends TextAreaExtendedProps {

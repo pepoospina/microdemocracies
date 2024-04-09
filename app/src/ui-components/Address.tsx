@@ -1,5 +1,6 @@
-import { Box, BoxExtendedProps } from 'grommet'
 import { CSSProperties } from 'react'
+
+import { Box, BoxExtendedProps } from 'grommet'
 
 import { useThemeContext } from '../components/app'
 import { CHAIN_EXPLORER_BASE } from '../config/appConfig'
@@ -19,17 +20,26 @@ export const Address = (props: IAddress): JSX.Element => {
   const digits = props.digits || 5
   const addressType = props.addressType || 'address'
 
-  if (props.address === null || props.address === undefined || props.chainId === null || props.chainId === undefined) {
+  if (
+    props.address === null ||
+    props.address === undefined ||
+    props.chainId === null ||
+    props.chainId === undefined
+  ) {
     return <></>
   }
 
   const disableClick = props.disableClick !== undefined ? props.disableClick : false
 
-  const exploreAddress = (address: `0x${string}` | undefined) => `${CHAIN_EXPLORER_BASE}/${addressType}/${address}`
+  const exploreAddress = (address: `0x${string}` | undefined) =>
+    `${CHAIN_EXPLORER_BASE}/${addressType}/${address}`
 
   const address = getAddress(props.address)
   const text = address
-    ? `0x${address.slice(2, 2 + digits)}...${address.slice(address.length - digits, address.length)}`
+    ? `0x${address.slice(2, 2 + digits)}...${address.slice(
+        address.length - digits,
+        address.length,
+      )}`
     : ''
 
   const url = exploreAddress !== undefined ? exploreAddress(props.address) : undefined

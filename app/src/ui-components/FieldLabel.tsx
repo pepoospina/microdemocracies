@@ -1,5 +1,7 @@
-import { Box, BoxExtendedProps } from 'grommet'
 import { ReactElement } from 'react'
+
+import { Box, BoxExtendedProps } from 'grommet'
+
 import { HelpTip } from './HelpTip'
 
 export interface IFieldLabel extends BoxExtendedProps {

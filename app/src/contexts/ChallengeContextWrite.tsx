@@ -57,16 +57,28 @@ export const useChallengeWrite = (tokenId?: number): ChallengeContextWriteType =
     address: projectAddress,
     abi: registryABI,
     functionName: 'canVote',
-    args: tokenIdOfAddress && tokenIdInternal ? [tokenIdOfAddress, tokenIdInternal] : undefined,
-    query: { enabled: tokenIdOfAddress !== undefined && tokenIdInternal !== undefined && projectAddress !== undefined },
+    args:
+      tokenIdOfAddress && tokenIdInternal ? [tokenIdOfAddress, tokenIdInternal] : undefined,
+    query: {
+      enabled:
+        tokenIdOfAddress !== undefined &&
+        tokenIdInternal !== undefined &&
+        projectAddress !== undefined,
+    },
   })
 
   const { data: _myVote, refetch: refetchMyVote } = useReadContract({
     address: projectAddress,
     abi: registryABI,
     functionName: 'getChallengeVote',
-    args: tokenIdOfAddress && tokenIdInternal ? [tokenIdInternal, tokenIdOfAddress] : undefined,
-    query: { enabled: tokenIdOfAddress !== undefined && tokenIdInternal !== undefined && projectAddress !== undefined },
+    args:
+      tokenIdOfAddress && tokenIdInternal ? [tokenIdInternal, tokenIdOfAddress] : undefined,
+    query: {
+      enabled:
+        tokenIdOfAddress !== undefined &&
+        tokenIdInternal !== undefined &&
+        projectAddress !== undefined,
+    },
   })
 
   const myVote = _myVote !== undefined && _myVote !== 0 ? _myVote : undefined

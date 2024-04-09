@@ -1,6 +1,8 @@
+import React, { ReactNode } from 'react'
+
 import { Box, BoxExtendedProps, ResponsiveContext } from 'grommet'
 import { DirectionType } from 'grommet/utils'
-import React, { ReactNode } from 'react'
+
 import { parseCssUnits } from '../utils/general'
 
 interface ITwoColumns extends BoxExtendedProps {

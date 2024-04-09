@@ -1,7 +1,8 @@
+import { ReactNode } from 'react'
+
 import { Box, BoxExtendedProps, DropButton } from 'grommet'
 import { CircleQuestion } from 'grommet-icons'
 
-import { ReactNode } from 'react'
 import { parseCssUnits } from '../utils/general'
 
 export const HelpDrop = (props: BoxExtendedProps) => {

@@ -1,12 +1,14 @@
+import { useNavigate, useParams } from 'react-router-dom'
+
 import { Anchor, AnchorExtendedProps } from 'grommet'
-import { useTranslation } from 'react-i18next'
 
 import { useConnectedMember } from '../../contexts/ConnectedAccountContext'
 import { useMember } from '../../contexts/MemberContext'
+import { AbsoluteRoutes } from '../../route.names'
 import { LoadingDiv } from '../../ui-components/LoadingDiv'
 import { getPapShortname } from '../../utils/pap'
-import { useNavigate, useParams } from 'react-router-dom'
-import { AbsoluteRoutes } from '../../route.names'
+
+import { useTranslation } from 'react-i18next'
 
 export const MemberAnchor = (props: { tokenId: number } & AnchorExtendedProps) => {
   const { projectId } = useParams()

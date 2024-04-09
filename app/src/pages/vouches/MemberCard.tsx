@@ -1,6 +1,6 @@
-import { Box, Text } from 'grommet'
-import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
+
+import { Box, Text } from 'grommet'
 
 import { useThemeContext } from '../../components/app'
 import { useMember } from '../../contexts/MemberContext'
@@ -9,6 +9,8 @@ import { AppProjectMember } from '../../types'
 import { AppButton } from '../../ui-components'
 import { LoadingDiv } from '../../ui-components/LoadingDiv'
 import { getPapShortname } from '../../utils/pap'
+
+import { useTranslation } from 'react-i18next'
 
 export const MemberCard = (props: { member?: AppProjectMember }): JSX.Element => {
   const { constants } = useThemeContext()

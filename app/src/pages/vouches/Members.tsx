@@ -1,8 +1,9 @@
+import { useEffect } from 'react'
+
+import { useNavigate } from 'react-router-dom'
+
 import { Box } from 'grommet'
 import { Add, FormPrevious } from 'grommet-icons'
-import { useEffect } from 'react'
-import { useTranslation } from 'react-i18next'
-import { useNavigate } from 'react-router-dom'
 
 import { useAppContainer } from '../../components/app/AppContainer'
 import { ViewportPage } from '../../components/app/Viewport'
@@ -12,6 +13,8 @@ import { AppButton } from '../../ui-components'
 import { AppBottomButton } from '../common/BottomButtons'
 import { ApplicationCard } from './ApplicationCard'
 import { MemberCard } from './MemberCard'
+
+import { useTranslation } from 'react-i18next'
 
 export const MembersPage = (): JSX.Element => {
   const { t, i18n } = useTranslation()
@@ -56,7 +59,9 @@ export const MembersPage = (): JSX.Element => {
         <AppBottomButton
           icon={<FormPrevious />}
           label={t('back')}
-          onClick={() => navigate(AbsoluteRoutes.ProjectHome(projectId?.toString() as string))}
+          onClick={() =>
+            navigate(AbsoluteRoutes.ProjectHome(projectId?.toString() as string))
+          }
         ></AppBottomButton>
       }
     ></ViewportPage>

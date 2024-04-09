@@ -1,27 +1,32 @@
-import { Box, Text } from 'grommet'
-import { Camera, FormPrevious, Send, Square, StatusGood } from 'grommet-icons'
 import { QrScanner } from '@yudiel/react-qr-scanner'
+
 import { useEffect, useState } from 'react'
-import { useTranslation } from 'react-i18next'
+
 import { useNavigate } from 'react-router-dom'
 
-import { AppButton, AppCard, AppHeading } from '../../ui-components'
-import { RouteNames } from '../../route.names'
-import { useProjectContext } from '../../contexts/ProjectContext'
-import { useAccountContext } from '../../wallet/AccountContext'
+import { Box, Text } from 'grommet'
+import { Camera, FormPrevious, Send, Square, StatusGood } from 'grommet-icons'
+
 import { AppQRCode } from '../../components/AppQRCode'
 import { AppConnectButton } from '../../components/app/AppConnectButton'
+import { useAppContainer } from '../../components/app/AppContainer'
 import { ViewportPage } from '../../components/app/Viewport'
+import { useProjectContext } from '../../contexts/ProjectContext'
+import { RouteNames } from '../../route.names'
+import { AppButton, AppCard, AppHeading } from '../../ui-components'
+import { useCopyToClipboard } from '../../utils/copy.clipboard'
+import { cap } from '../../utils/general'
+import { useAccountContext } from '../../wallet/AccountContext'
 import { AppBottomButton } from '../common/BottomButtons'
 import { StatementEditable } from '../voice/StatementEditable'
 import { ApplicationCard } from '../vouches/ApplicationCard'
-import { useCopyToClipboard } from '../../utils/copy.clipboard'
-import { useAppContainer } from '../../components/app/AppContainer'
-import { cap } from '../../utils/general'
+
+import { useTranslation } from 'react-i18next'
 
 export const InvitePage = (): JSX.Element => {
   const { t, i18n } = useTranslation()
-  const { project, projectId, inviteId, resetLink, applications, resettingLink } = useProjectContext()
+  const { project, projectId, inviteId, resetLink, applications, resettingLink } =
+    useProjectContext()
   const { aaAddress } = useAccountContext()
   const { copy, copied } = useCopyToClipboard()
 
@@ -78,7 +83,10 @@ export const InvitePage = (): JSX.Element => {
           <Box pad={{ vertical: 'large' }}>
             <AppButton onClick={() => setScan(false)} label="close"></AppButton>
           </Box>
-          <QrScanner onDecode={(result) => setResult(result)} onError={(error) => console.log(error?.message)} />
+          <QrScanner
+            onDecode={(result) => setResult(result)}
+            onError={(error) => console.log(error?.message)}
+          />
         </Box>
       )
     }
@@ -156,7 +164,13 @@ export const InvitePage = (): JSX.Element => {
           {content}
         </Box>
       }
-      nav={<AppBottomButton icon={<FormPrevious />} label={t('back')} onClick={() => navigate(-1)}></AppBottomButton>}
+      nav={
+        <AppBottomButton
+          icon={<FormPrevious />}
+          label={t('back')}
+          onClick={() => navigate(-1)}
+        ></AppBottomButton>
+      }
     ></ViewportPage>
   )
 }

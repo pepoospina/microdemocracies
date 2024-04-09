@@ -14,7 +14,9 @@ export interface ToastNotificationsContextProps {
   children: ReactNode
 }
 
-const ToastNotificationsContextValue = createContext<ToastNotificationsContextType | undefined>(undefined)
+const ToastNotificationsContextValue = createContext<
+  ToastNotificationsContextType | undefined
+>(undefined)
 
 export const ToastNotificationsContext = ({ children }: ToastNotificationsContextProps) => {
   const [visible, setVisible] = useState<boolean>(false)
@@ -33,9 +35,20 @@ export const ToastNotificationsContext = ({ children }: ToastNotificationsContex
   }
 
   return (
-    <ToastNotificationsContextValue.Provider value={{ setVisible, setTitle, setMessage, setStatus, setTime }}>
+    <ToastNotificationsContextValue.Provider
+      value={{ setVisible, setTitle, setMessage, setStatus, setTime }}
+    >
       {children}
-      {visible && <Notification toast title={title} message={message} onClose={clear} time={time} status={status} />}
+      {visible && (
+        <Notification
+          toast
+          title={title}
+          message={message}
+          onClose={clear}
+          time={time}
+          status={status}
+        />
+      )}
     </ToastNotificationsContextValue.Provider>
   )
 }

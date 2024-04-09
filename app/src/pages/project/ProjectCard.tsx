@@ -1,8 +1,10 @@
 import { Box, Text } from 'grommet'
+
 import { AppProject } from '../../types'
-import { StatementEditable } from '../voice/StatementEditable'
-import { Trans } from 'react-i18next'
 import { Bold } from '../../ui-components/Bold'
+import { StatementEditable } from '../voice/StatementEditable'
+
+import { Trans } from 'react-i18next'
 
 export const ProjectCard = (props: {
   project: AppProject

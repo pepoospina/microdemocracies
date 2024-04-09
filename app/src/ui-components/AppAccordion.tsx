@@ -1,8 +1,15 @@
-import { AccordionExtendedProps, Accordion, AccordionPanelExtendedProps, AccordionPanel, Box } from 'grommet'
 import React, { useState, ReactElement, CSSProperties } from 'react'
 
-import { HorizontalLine } from './HorizontalLine'
+import {
+  AccordionExtendedProps,
+  Accordion,
+  AccordionPanelExtendedProps,
+  AccordionPanel,
+  Box,
+} from 'grommet'
+
 import { useThemeContext } from '../components/app'
+import { HorizontalLine } from './HorizontalLine'
 
 /** forward an active property to know if panel is expanded (active is Context in grommet and we don't have
  * access to it here.) */
