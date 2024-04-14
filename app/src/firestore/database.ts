@@ -24,7 +24,8 @@ export const db = initializeFirestore(app, {
   localCache: persistentLocalCache({ tabManager: persistentMultipleTabManager() }),
 })
 
-const isProd = process.env.NODE_ENV === 'production' || (process as any).env.NODE_ENV === 'test-prod'
+const isProd =
+  process.env.NODE_ENV === 'production' || (process as any).env.NODE_ENV === 'test-prod'
 
 if (!isProd) {
   console.log('RUNNING ON DEVELOPMENT NODE - CONNECTING TO LOCALSTORE FIRESTORE')
@@ -47,6 +48,7 @@ export const collections = {
   members: collectionGroup(db, CollectionNames.ProjectMembers),
   identities: collection(db, CollectionNames.Projects),
   projects: collection(db, CollectionNames.Projects),
+  users: collection(db, CollectionNames.Users),
   statements: collection(db, CollectionNames.Statements),
   statement: (statementId: string) => doc(db, CollectionNames.Statements, statementId),
   statementsBackers: (statementId: string) => {

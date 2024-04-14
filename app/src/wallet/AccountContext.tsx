@@ -6,6 +6,7 @@ import { BatchUserOperationCallData, WalletClientSigner } from '@alchemy/aa-core
 import {
   PropsWithChildren,
   createContext,
+  useCallback,
   useContext,
   useEffect,
   useMemo,
@@ -29,6 +30,8 @@ import { useAppSigner } from './SignerContext'
 
 import { useTranslation } from 'react-i18next'
 import { getAccountAddress } from '../utils/aa-sdk'
+import { postUser } from '../utils/users'
+import { useQuery } from '@tanstack/react-query'
 
 const DEBUG = true
 
@@ -55,7 +58,6 @@ export const AccountContext = (props: PropsWithChildren) => {
 
   /** ALCHEMY provider to send transactions using AA */
   const [alchemyClientAA, setAlchemyClientAA] = useState<AlchemySmartAccountClient>()
-  const [aaAddress, setAaAddress] = useState<HexStr>()
   const [isSuccess, setIsSuccess] = useState<boolean>(false)
   const [isSending, setIsSending] = useState<boolean>(false)
   const [error, setError] = useState<Error>()
@@ -78,17 +80,47 @@ export const AccountContext = (props: PropsWithChildren) => {
         setAlchemyClientAA(client)
       })
     } else {
+      localStorage.removeItem('lastAaAddress')
       setAlchemyClientAA(undefined)
     }
   }, [signer])
 
+  const { data: aaAddress } = useQuery({
+    queryKey: ['aaAddress', address],
+    queryFn: async () => {
+      if (address && publicClient) {
+        const _aaAddress = await getAccountAddress(address, publicClient, chain)
+
+        if (!_aaAddress) {
+          throw new Error('AA address not found')
+        }
+
+        const current = localStorage.getItem('lastAaAddress')
+
+        if (current == null) {
+          /** update address maping in the backend */
+          const res = await postUser({
+            owner: address,
+            aaAddress: _aaAddress,
+          })
+
+          localStorage.setItem('lastAaAddress', _aaAddress)
+
+          if (!res) {
+            throw new Error('Error while storing user')
+          }
+        }
+
+        return _aaAddress
+      }
+    },
+  })
+
+  const _getAccountAddress = useCallback(async () => {}, [address, publicClient])
+
   useEffect(() => {
-    if (address && publicClient) {
-      getAccountAddress(address, publicClient).then((_aaAddress) =>
-        setAaAddress(_aaAddress),
-      )
-    }
-  }, [address, publicClient])
+    _getAccountAddress()
+  }, [_getAccountAddress])
 
   const isConnected = alchemyClientAA !== undefined
 
