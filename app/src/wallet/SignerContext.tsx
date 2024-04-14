@@ -54,19 +54,24 @@ export const SignerContext = (props: PropsWithChildren) => {
      * show loading when first loading a page
      * (to cover the time where the connected account is checked)
      * */
-    setLoading(true)
-    setUserCanClose(false)
-    setTitle(cap(t('loading')))
-    setSubtitle(t('pleaseWait'))
+    const hadMagic = localStorage.getItem('hadMagic')
 
-    magic.user.isLoggedIn().then((res) => {
-      if (res && !magicSigner) {
-        console.log('Autoconnecting Magic')
-        connectMagic()
-      } else {
-        setLoading(false)
-      }
-    })
+    /** try to restate magic*/
+    if (hadMagic !== null && hadMagic === 'true') {
+      setLoading(true)
+      setUserCanClose(false)
+      setTitle(cap(t('loadingProfile')))
+      setSubtitle(t('justAMoment'))
+
+      magic.user.isLoggedIn().then((res) => {
+        if (res && !magicSigner) {
+          console.log('Autoconnecting Magic')
+          connectMagic()
+        } else {
+          setLoading(false)
+        }
+      })
+    }
   }, [])
 
   useEffect(() => {
