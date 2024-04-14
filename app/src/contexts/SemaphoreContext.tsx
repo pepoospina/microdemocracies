@@ -28,8 +28,8 @@ export const SemaphoreContext = (props: PropsWithChildren) => {
   const { t } = useTranslation()
   const { setLoading, setTitle, setSubtitle, setUserCanClose } = useLoadingContext()
 
-  const { signMessage, disconnect: disconnectSigner } = useAppSigner()
-  const { owner, aaAddress, isConnected: isAccountConnected } = useAccountContext()
+  const { signMessage, disconnect: disconnectSigner, address } = useAppSigner()
+  const { aaAddress, isConnected: isAccountConnected } = useAccountContext()
 
   const [isCreatingPublicId, setIsCreatingPublicId] = useState<boolean>(false)
   const [errorCreating, setErrorCreating] = useState<Error>()
@@ -51,7 +51,7 @@ export const SemaphoreContext = (props: PropsWithChildren) => {
   // keep identity inline with aaAddress
   useEffect(() => {
     checkStoredIdentity()
-  }, [aaAddress, owner])
+  }, [aaAddress, address])
 
   const checkStoredIdentity = async () => {
     try {
@@ -76,13 +76,13 @@ export const SemaphoreContext = (props: PropsWithChildren) => {
       }
 
       if (create) {
-        if (!owner) return
+        if (!address) return
         if (!aaAddress) return
         if (!signMessage) return
 
         setSubtitle(t('waitingIdentitySignature'))
 
-        console.log('creating publiId', { owner, aaAddress })
+        console.log('creating publiId', { address, aaAddress })
 
         setIsCreatingPublicId(true)
 
@@ -101,7 +101,7 @@ export const SemaphoreContext = (props: PropsWithChildren) => {
 
           const signature = await signMessage(getControlMessage(_publicId))
           const details: AppPublicIdentity = {
-            owner,
+            owner: address,
             publicId: _publicId,
             aaAddress,
             signature,

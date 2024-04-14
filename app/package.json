@@ -67,7 +67,7 @@
     "stream": "^0.0.2",
     "styled-components": "^5.3.5",
     "use-debounce": "^8.0.1",
-    "viem": "2.x",
+    "viem": "2.8.6",
     "wagmi": "^2.5.7",
     "web-vitals": "^2.1.4",
     "workbox-background-sync": "^6.6.0",

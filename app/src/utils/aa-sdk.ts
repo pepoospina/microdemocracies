@@ -1,36 +1,51 @@
 import { getDefaultLightAccountFactoryAddress } from '@alchemy/aa-accounts'
-import { LightAccountFactoryAbi } from '@alchemy/aa-accounts/src/light-account/abis/LightAccountFactoryAbi'
-import { getAccountAddress as getAccountAddressAACore } from '@alchemy/aa-core'
-import { getVersion060EntryPoint } from '@alchemy/aa-core/src/entrypoint/0.6'
+import { EntryPointAbi, getDefaultEntryPointAddress } from '@alchemy/aa-core'
 
-import { PublicClient, concatHex, encodeFunctionData } from 'viem'
+import {
+  Address,
+  PublicClient,
+  concatHex,
+  encodeFunctionData,
+  getContract,
+  zeroAddress,
+} from 'viem'
 
 import { HexStr } from '../types'
 import { chain } from '../wallet/ConnectedWalletContext'
+import { LightAccountFactoryAbi } from './aa-sdk.abis'
 
 /**  */
-export const getAccountAddress = async (signer: HexStr, client: PublicClient) => {
-  const entryPoint = getVersion060EntryPoint(chain as any)
-  const factoryAddress = getDefaultLightAccountFactoryAddress(chain as any, 'v1.1.0')
-
-  const getAccountInitCode = async () => {
-    const salt = BigInt(0)
-
-    return concatHex([
-      factoryAddress,
-      encodeFunctionData({
-        abi: LightAccountFactoryAbi,
-        functionName: 'createAccount',
-        args: [signer, salt],
-      }),
-    ])
-  }
-
-  const address = await getAccountAddressAACore({
-    client: client as any,
-    entryPointAddress: entryPoint.address,
-    getAccountInitCode,
+export const getAccountAddress = async (
+  signer: HexStr,
+  client: PublicClient,
+): Promise<HexStr | undefined> => {
+  const salt = BigInt(0)
+  const entryPointAddress = getDefaultEntryPointAddress(chain as any)
+  const entryPoint = getContract({
+    address: entryPointAddress,
+    abi: EntryPointAbi,
+    client: client as PublicClient,
   })
 
-  return address
+  const initCode = concatHex([
+    getDefaultLightAccountFactoryAddress(chain as any),
+    encodeFunctionData({
+      abi: LightAccountFactoryAbi,
+      functionName: 'createAccount',
+      args: [signer, salt],
+    }),
+  ])
+
+  try {
+    /** account address comes in an error... */
+    await entryPoint.simulate.getSenderAddress([initCode])
+  } catch (err: any) {
+    if (err.cause?.data?.errorName === 'SenderAddressResult') {
+      return err.cause.data.args[0] as Address
+    }
+
+    if (err.details === 'Invalid URL') {
+      throw new Error('Invalid URL')
+    }
+  }
 }
