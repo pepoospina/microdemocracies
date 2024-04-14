@@ -213,3 +213,8 @@ export interface AppApplication {
   invitationId: string
   projectId: number
 }
+
+export interface AaOwnerPayload {
+  aaAddress: HexStr;
+  owner: HexStr;
+}

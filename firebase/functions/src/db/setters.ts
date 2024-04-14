@@ -1,5 +1,6 @@
 import { getAddress } from 'viem';
 import {
+  AaOwnerPayload,
   AppApplication,
   AppBackingCreate,
   AppInvite,
@@ -176,4 +177,16 @@ export const deleteApplications = async (address: HexStr): Promise<void> => {
       await doc.ref.delete();
     })
   );
+};
+
+
+export const setUser = async (
+  user: AaOwnerPayload
+): Promise<string> => {
+  const id = user.aaAddress;
+  const docRef = collections
+    .users
+    .doc(id);
+  await docRef.set({ owner: user.owner });
+  return docRef.id;
 };

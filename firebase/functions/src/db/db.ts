@@ -8,6 +8,7 @@ initializeApp();
 export const db = getFirestore();
 
 export const collections = {
+  users: db.collection(CollectionNames.Users),
   projects: db.collection(CollectionNames.Projects),
   projectInvitations: (projectId: string) =>
     db

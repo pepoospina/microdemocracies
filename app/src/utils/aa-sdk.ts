@@ -3,21 +3,22 @@ import { EntryPointAbi, getDefaultEntryPointAddress } from '@alchemy/aa-core'
 
 import {
   Address,
+  Chain,
   PublicClient,
   concatHex,
   encodeFunctionData,
   getContract,
-  zeroAddress,
 } from 'viem'
 
 import { HexStr } from '../types'
-import { chain } from '../wallet/ConnectedWalletContext'
+
 import { LightAccountFactoryAbi } from './aa-sdk.abis'
 
 /**  */
 export const getAccountAddress = async (
   signer: HexStr,
   client: PublicClient,
+  chain: Chain
 ): Promise<HexStr | undefined> => {
   const salt = BigInt(0)
   const entryPointAddress = getDefaultEntryPointAddress(chain as any)
@@ -48,4 +49,6 @@ export const getAccountAddress = async (
       throw new Error('Invalid URL')
     }
   }
+
+  return undefined
 }
