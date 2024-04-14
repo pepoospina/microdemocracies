@@ -117,6 +117,7 @@ export interface AppStatement {
   statement: string
   treeId: string
   proof: SemaphoreProofStrings
+  creationDate: Date
   nBackers?: number
 }
 

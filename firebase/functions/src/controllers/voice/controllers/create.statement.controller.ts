@@ -40,6 +40,7 @@ export const createStatementController: RequestHandler = async (
   }
 
   try {
+    console.log('statement from firebase', statement)
     const id = await setStatement(statement);
     response.status(200).send({ success: true, id });
   } catch (error: any) {

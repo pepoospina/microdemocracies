@@ -14,6 +14,7 @@ export const getStatement = async (statementId: string) => {
   const doc = await ref.get();
   if (!doc.exists) throw new Error(`Statement ${statementId} not found`);
   const statement = doc.data();
+  console.log('getter statement', statement)
   if (!statement) throw new Error(`Statement not found`);
 
   return doc.data() as unknown as AppStatement;

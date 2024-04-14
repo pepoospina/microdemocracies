@@ -1,10 +1,11 @@
+import { useQuery } from '@tanstack/react-query'
+
 import { createContext, useContext, useEffect, useState } from 'react'
 
-import { StatementRead } from '../types'
-import { useConnectedMember } from './ConnectedAccountContext'
 import { countStatementBackings, getStatement } from '../firestore/getters'
 import { useBackingSend } from '../pages/voice/useBackingSend'
-import { useQuery } from '@tanstack/react-query'
+import { StatementRead } from '../types'
+import { useConnectedMember } from './ConnectedAccountContext'
 
 export type StatementContextType = {
   statement?: StatementRead
@@ -13,6 +14,7 @@ export type StatementContextType = {
   back: () => void
   isBacking: boolean
   alreadyBacked?: boolean
+  refetchCount: () => void
 }
 
 interface IStatementContext {
@@ -104,6 +106,7 @@ export const StatementContext = (props: IStatementContext) => {
         back,
         isBacking,
         alreadyBacked,
+        refetchCount,
       }}
     >
       {props.children}

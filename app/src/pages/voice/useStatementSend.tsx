@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react'
 
-import { postStatement } from '../../utils/statements'
-import { AppStatementCreate } from '../../types'
+import { hashMessage } from 'viem'
+
 import { useProjectContext } from '../../contexts/ProjectContext'
 import { useSemaphoreContext } from '../../contexts/SemaphoreContext'
-import { hashMessage } from 'viem'
+import { AppStatementCreate } from '../../types'
+import { postStatement } from '../../utils/statements'
 
 export type VoiceSendContextType = {
   proposeStatement?: (statement: string) => Promise<boolean>
@@ -39,6 +40,7 @@ export const useStatementSend = (): VoiceSendContextType => {
               proof: proofAndTree.proof,
               treeId: proofAndTree.treeId,
               statement: _statement,
+              creationDate: new Date(),
             }
             const id = await postStatement(statement)
             if (id !== undefined) {

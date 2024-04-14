@@ -1,4 +1,4 @@
-import { object, string, number } from 'yup';
+import { object, string, number, date } from 'yup';
 import { MAX_STATEMETN_LENGTH as MAX_STATEMENT_LENGTH } from '../../../config/constants';
 
 export const statementValidationScheme = object({
@@ -6,6 +6,7 @@ export const statementValidationScheme = object({
   proof: object().shape({}).required(),
   treeId: string().required(),
   statement: string().max(MAX_STATEMENT_LENGTH).required(),
+  creationDate: date().required(),
 }).noUnknown(true);
 
 export const backStatementValidationScheme = object({

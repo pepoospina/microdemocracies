@@ -51,6 +51,7 @@ export const setStatementBacker = async (
 export const setStatement = async (
   statement: AppStatementCreate
 ): Promise<string> => {
+  console.log('statement from setStatement', statement)
   const id = getStatementId(statement);
   const docRef = collections.statements.doc(id);
   await docRef.set(statement);

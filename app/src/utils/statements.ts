@@ -1,5 +1,3 @@
-import stringify from 'canonical-json'
-
 import { FUNCTIONS_BASE } from '../config/appConfig'
 import {
   AppStatementCreate,
@@ -8,8 +6,9 @@ import {
   AppReturnMerklePass,
   AppBackingCreate,
 } from '../types'
-
 import { MessageSigner } from './identity'
+
+import stringify from 'canonical-json'
 
 export const signObject = async <T>(object: T, signMessage: MessageSigner) => {
   const message = stringify(object)
@@ -51,7 +50,9 @@ export const postIdentity = async (publicIdentity: AppPublicIdentity) => {
   return body.success
 }
 
-export const getMerklePass = async (details: AppGetMerklePass): Promise<AppReturnMerklePass> => {
+export const getMerklePass = async (
+  details: AppGetMerklePass,
+): Promise<AppReturnMerklePass> => {
   const res = await fetch(FUNCTIONS_BASE + '/voice/merklepass/get', {
     method: 'post',
     headers: { 'Content-Type': 'application/json' },

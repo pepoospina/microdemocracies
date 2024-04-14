@@ -27,7 +27,8 @@ export const VoiceStatementPage = (): JSX.Element => {
   const { statementId } = useParams()
   const { project, projectId } = useProjectContext()
   const { setTitle } = useAppContainer()
-  const { nBacking } = useStatementContext()
+  const { statement, nBacking, back, refetchCount } = useStatementContext()
+  console.log({ statement })
 
   const { copy, copied } = useCopyToClipboard()
 
@@ -47,13 +48,19 @@ export const VoiceStatementPage = (): JSX.Element => {
     setTitle({ prefix: t('project'), main: t('statement') })
   }, [])
 
+  useEffect(() => {
+    if (statement) {
+      back()
+      refetchCount()
+    }
+  }, [statement])
+
   if (!project || !statementId) {
     return <Loading></Loading>
   }
 
   const nBackingDef = nBacking !== undefined ? nBacking : 0
   const isShown = nBackingDef !== undefined && nBackingDef >= 2
-  console.log({ nBackingDef, isShown })
 
   return (
     <ViewportPage
