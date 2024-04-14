@@ -3,12 +3,13 @@ import { createWeb3Modal } from '@web3modal/wagmi/react'
 import { defaultWagmiConfig } from '@web3modal/wagmi/react/config'
 
 import { WagmiProvider, http } from 'wagmi'
-import { baseSepolia } from 'wagmi/chains'
+import { baseSepolia, mainnet } from 'wagmi/chains'
 
-import { WALLETCONNECT_PROJECT_ID } from '../config/appConfig'
+import { ALCHEMY_RPC_URL_ENS, WALLETCONNECT_PROJECT_ID } from '../config/appConfig'
 import { ALCHEMY_RPC_URL } from '../config/appConfig'
 
 export const chain = baseSepolia
+export const ensChain = mainnet
 
 const projectId = WALLETCONNECT_PROJECT_ID
 
@@ -20,11 +21,12 @@ const metadata = {
 }
 
 const config = defaultWagmiConfig({
-  chains: [chain],
+  chains: [chain, ensChain],
   projectId,
   metadata,
   transports: {
     [chain.id]: http(ALCHEMY_RPC_URL),
+    [ensChain.id]: http(ALCHEMY_RPC_URL_ENS),
   },
 })
 

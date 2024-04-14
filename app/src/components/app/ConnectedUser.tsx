@@ -14,10 +14,12 @@ import { AppConnectButton } from './AppConnectButton'
 import { useThemeContext } from './ThemedApp'
 
 import { useTranslation } from 'react-i18next'
+import { useAppSigner } from '../../wallet/SignerContext'
 
 export const ConnectedUser = (props: {}) => {
   const { t } = useTranslation()
-  const { aaAddress, owner } = useAccountContext()
+  const { address } = useAppSigner()
+  const { aaAddress } = useAccountContext()
   const { isCreatingPublicId, disconnect, isConnected } = useSemaphoreContext()
   const { constants } = useThemeContext()
 
@@ -52,7 +54,7 @@ export const ConnectedUser = (props: {}) => {
           <Box pad="20px" gap="small">
             <Box margin={{ bottom: 'small' }}>
               <Text>{cap(t('connectedAs'))}</Text>
-              <Address address={owner} chainId={CHAIN_ID}></Address>
+              <Address address={address} chainId={CHAIN_ID}></Address>
             </Box>
             <Box margin={{ bottom: 'small' }}>
               <Text margin={{ bottom: '3px' }}>{cap(t('language'))}</Text>

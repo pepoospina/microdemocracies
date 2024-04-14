@@ -7,8 +7,10 @@ import { HexStr } from '../@app/types';
 
 // const getFactoryAddress = () => _factoryAddress(env.CHAIN_ID);
 
+export const chain = baseSepolia;
+
 const publicClient = createPublicClient({
-  chain: baseSepolia,
+  chain,
   transport: http(
     `https://${env.ALCHEMY_SUBDOMAIN}.g.alchemy.com/v2/${env.ALCHEMY_KEY}`
   ),
@@ -18,7 +20,7 @@ const getRegistry = (address: HexStr) => {
   return getContract({
     address,
     abi: registryABI,
-    publicClient,
+    client: publicClient,
   });
 };
 

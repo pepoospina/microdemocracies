@@ -11,4 +11,5 @@ export enum CollectionNames {
   Statements = 'statements',
   StatementsBackers = 'statements_backers',
   Entities = 'entities',
+  Users = 'users',
 }
