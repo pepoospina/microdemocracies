@@ -6,14 +6,14 @@
     "node": "18.16.0"
   },
   "scripts": {
+    "prettier": "prettier --write .",
     "start": "craco start",
     "start-remote": "NODE_ENV=test-prod craco start --config craco.config.prod.js",
     "start-test": "craco start --config craco.config.test.js",
     "build": "craco build --config craco.config.prod.js",
     "eject": "react-scripts eject",
     "test-prod": "craco build --config craco.config.prod.js && cd build && http-server --proxy http://localhost:8080?",
-    "deploy": "sh ./deploy.sh ",
-    "prettier": "prettier -w \"src/**/*.{ts,tsx,css,js}\""
+    "deploy": "sh ./deploy.sh "
   },
   "dependencies": {
     "@alchemy/aa-accounts": "^3.8.1",
