@@ -1,10 +1,9 @@
 import { useEffect, useState } from 'react'
 
 import { postBacking } from '../../utils/statements'
-import { AppBackingCreate, StatmentReactions as StatementReactions } from '../../types'
+import { AppBackingCreate, StatementReactions } from '../../types'
+import { generateReactionProof } from './statement.utils'
 import { useSemaphoreContext } from '../../contexts/SemaphoreContext'
-import { getSupportNullifier } from '../../utils/identity.utils'
-import { hashMessage } from 'viem'
 
 export type VoiceSendContextType = {
   backStatement?: (statementId: string, treeId: string) => Promise<any>
@@ -14,29 +13,22 @@ export type VoiceSendContextType = {
 }
 
 export const useBackingSend = (): VoiceSendContextType => {
-  const { generateProof } = useSemaphoreContext()
-
+  const { identity } = useSemaphoreContext()
   const [isSuccessBacking, setIsSuccessBacking] = useState<boolean>(false)
   const [isErrorBacking, setIsErrorBacking] = useState<boolean>(false)
   const [errorBacking, setErrorBacking] = useState<string>()
 
-  const generateBackingProof =
-    generateProof !== undefined
-      ? async (statementId: string, treeId: string) => {
-          return generateProof({
-            signal: hashMessage(StatementReactions.Back),
-            nullifier: getSupportNullifier(statementId),
-            treeId,
-          })
-        }
-      : undefined
-
-  const backStatement = generateBackingProof
+  const backStatement = identity
     ? async (statementId: string, treeId: string) => {
         setIsSuccessBacking(false)
         setErrorBacking(undefined)
 
-        const proofAndTree = await generateBackingProof(statementId, treeId)
+        const proofAndTree = await generateReactionProof(
+          statementId,
+          treeId,
+          identity,
+          StatementReactions.Back,
+        )
 
         const backing: AppBackingCreate = {
           statementId,

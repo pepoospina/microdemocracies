@@ -4,7 +4,7 @@ import { RUNTIME_OPTIONS } from '../../config/RUNTIME_OPTIONS';
 
 import { createIdentityController } from './controllers/create.identity.controller';
 import { createStatementController } from './controllers/create.statement.controller';
-import { backStatementController } from './controllers/back.statement.controller';
+import { reactToStatementController } from './controllers/react.statement.controller';
 import { getMerklePassController } from './controllers/get.merkle.pass.controller';
 
 import { app } from '../../instances/app';
@@ -14,7 +14,7 @@ const voiceRouter = express.Router();
 voiceRouter.post('/merklepass/get', getMerklePassController);
 voiceRouter.post('/identity', createIdentityController);
 voiceRouter.post('/statement', createStatementController);
-voiceRouter.post('/statement/back', backStatementController);
+voiceRouter.post('/statement/back', reactToStatementController);
 
 export const voiceApp = functions
   .region('europe-west1')

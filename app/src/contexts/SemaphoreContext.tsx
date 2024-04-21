@@ -3,8 +3,7 @@ import { Identity } from '@semaphore-protocol/identity'
 import { PropsWithChildren, createContext, useContext, useEffect, useState } from 'react'
 
 import { getPublicIdentity } from '../firestore/getters'
-import { AppGetProof, AppPublicIdentity } from '../types'
-import { ProofAndTree, generateProof as _generateProof } from '../utils/identity'
+import { AppPublicIdentity } from '../types'
 import { getControlMessage } from '../utils/identity.utils'
 import { postIdentity } from '../utils/statements'
 import { useAccountContext } from '../wallet/AccountContext'
@@ -15,7 +14,7 @@ import { useTranslation } from 'react-i18next'
 
 export type SemaphoreContextType = {
   publicId?: string
-  generateProof?: (input: AppGetProof) => Promise<ProofAndTree>
+  identity?: Identity
   isCreatingPublicId: boolean
   errorCreating?: Error
   disconnect: () => void
@@ -129,18 +128,6 @@ export const SemaphoreContext = (props: PropsWithChildren) => {
     setIsCreatingPublicId(false)
   }
 
-  // exposes a call to the generateProof function using the connected identity
-  const generateProof = identity
-    ? async (input: {
-        signal: string
-        nullifier: string
-        projectId?: number
-        treeId?: string
-      }) => {
-        return _generateProof({ identity, ...input })
-      }
-    : undefined
-
   const disconnect = () => {
     localStorage.removeItem('identity')
     setIdentity(undefined)
@@ -153,7 +140,7 @@ export const SemaphoreContext = (props: PropsWithChildren) => {
     <SemaphoreContextValue.Provider
       value={{
         publicId,
-        generateProof,
+        identity,
         isCreatingPublicId,
         errorCreating,
         disconnect,

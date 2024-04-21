@@ -2,7 +2,7 @@ import { getAddress } from 'viem';
 import {
   AaOwnerPayload,
   AppApplication,
-  AppBackingCreate,
+  AppReactionCreate,
   AppInvite,
   AppProjectCreate,
   AppProjectMember,
@@ -24,7 +24,7 @@ import {
 import { collections, db } from './db';
 
 export const setStatementBacker = async (
-  backing: AppBackingCreate
+  backing: AppReactionCreate
 ): Promise<string> => {
   const docRef = collections
     .statementsBackers(backing.statementId)
@@ -52,7 +52,7 @@ export const setStatementBacker = async (
 export const setStatement = async (
   statement: AppStatementCreate
 ): Promise<string> => {
-  const id = getStatementId(statement);
+  const id = getStatementId(statement.statementProof.proof);
   const docRef = collections.statements.doc(id);
   await docRef.set(statement);
   return docRef.id;

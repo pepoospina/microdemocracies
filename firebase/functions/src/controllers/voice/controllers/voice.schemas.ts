@@ -3,9 +3,15 @@ import { MAX_STATEMETN_LENGTH as MAX_STATEMENT_LENGTH } from '../../../config/co
 
 export const statementValidationScheme = object({
   projectId: number().required(),
-  proof: object().shape({}).required(),
-  treeId: string().required(),
   statement: string().max(MAX_STATEMENT_LENGTH).required(),
+  statementProof: object({
+    treeId: string().required(),
+    proof: object().shape({}).required(),  
+  }).required(),
+  reactionProof: object({
+    treeId: string().required(),
+    proof: object().shape({}).required(),  
+  }).required()
 }).noUnknown(true);
 
 export const backStatementValidationScheme = object({
