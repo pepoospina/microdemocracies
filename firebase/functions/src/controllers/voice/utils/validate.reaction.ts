@@ -1,12 +1,10 @@
 import { BigNumber } from '@ethersproject/bignumber';
-import {
-    hasBackingWithNullifierHash,
-  } from '../../../db/getters';
+import { hasBackingWithNullifierHash } from '../../../db/getters';
 
 import { getReactionNullifier } from '../../../@app/utils/identity.utils';
 import { verifyProof } from '@semaphore-protocol/proof';
 import { TREE_DEPTH } from '../../../utils/groups';
-import { ProofAndTree } from 'src/@app/types';
+import { ProofAndTree } from '../../../@app/types';
 
 /** the reaction must have
  * - a proof of the same tree as the statement
@@ -17,39 +15,45 @@ import { ProofAndTree } from 'src/@app/types';
  *
  * also check the tree is stored (this should always be the case)
  */
-export const isValidReaction = async (proofAndTree: ProofAndTree, statementId: string, expectedTreeId: string) => {
-    if (proofAndTree.treeId !== expectedTreeId) {
-        throw new Error(
-          `Tree id of the statment ${expectedTreeId} is not the same as the treeId of that of the proof ${proofAndTree.treeId}`
-        );
-      }
-       
-      /** a nullifier that is the statementId */
-      const expectedExternalNullifier = BigNumber.from(getReactionNullifier(statementId)).toString();
+export const isValidReaction = async (
+  proofAndTree: ProofAndTree,
+  statementId: string,
+  expectedTreeId: string
+) => {
+  if (proofAndTree.treeId !== expectedTreeId) {
+    throw new Error(
+      `Tree id of the statment ${expectedTreeId} is not the same as the treeId of that of the proof ${proofAndTree.treeId}`
+    );
+  }
 
-      if (proofAndTree.proof.externalNullifier !== expectedExternalNullifier) {
-        throw new Error(
-          `Backing signal nullifier ${proofAndTree.proof.externalNullifier} must be the statement id ${statementId}`
-        );
-      }
-  
-      /** no previous backing with the same nullifierHash */
-      const preExist = await hasBackingWithNullifierHash(
-        statementId,
-        proofAndTree.proof.nullifierHash
-      );
-      if (preExist) {
-        throw new Error(
-          `Backing with this nullifierHash ${proofAndTree.proof.nullifierHash} already posted`
-        );
-      }
-  
-      /** a valid proof */
-      const result = await verifyProof(proofAndTree.proof, TREE_DEPTH);
-  
-      if (!result) {
-        throw new Error('Invalid proof');
-      }
+  /** a nullifier that is the statementId */
+  const expectedExternalNullifier = BigNumber.from(
+    getReactionNullifier(statementId)
+  ).toString();
 
-      return true;
-}
+  if (proofAndTree.proof.externalNullifier !== expectedExternalNullifier) {
+    throw new Error(
+      `Backing signal nullifier ${proofAndTree.proof.externalNullifier} must be the statement id ${statementId}`
+    );
+  }
+
+  /** no previous backing with the same nullifierHash */
+  const preExist = await hasBackingWithNullifierHash(
+    statementId,
+    proofAndTree.proof.nullifierHash
+  );
+  if (preExist) {
+    throw new Error(
+      `Backing with this nullifierHash ${proofAndTree.proof.nullifierHash} already posted`
+    );
+  }
+
+  /** a valid proof */
+  const result = await verifyProof(proofAndTree.proof, TREE_DEPTH);
+
+  if (!result) {
+    throw new Error('Invalid proof');
+  }
+
+  return true;
+};
