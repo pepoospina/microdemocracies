@@ -49,8 +49,7 @@ export const VoiceStatementPage = (): JSX.Element => {
   }
 
   const nBackingDef = nBacking !== undefined ? nBacking : 0
-  const isShown = nBackingDef !== undefined && nBackingDef >= 2
-  console.log({ nBackingDef, isShown })
+  const isShown = nBackingDef !== undefined && nBackingDef >= MIN_LIKES_PUBLIC
 
   return (
     <ViewportPage

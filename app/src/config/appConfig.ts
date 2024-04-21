@@ -15,7 +15,7 @@ export const CHAIN_ID = 84532
 export const CHAIN_NAME = 'basesepolia'
 export const CHAIN_EXPLORER_BASE = 'https://base-sepolia.blockscout.com/'
 
-export const MIN_MEMBERS = 3
+export const MIN_MEMBERS = 1
 export const MIN_LIKES_PUBLIC = 2
 
 export const SECONDS_IN_DAY = 86400

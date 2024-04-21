@@ -139,8 +139,7 @@ i18n.use(initReactI18next).init({
         canBackN:
           'Only the existing {{nMembers}} members will be able to back this statement',
         aStatementNeeds:
-          'A statement needs {{nLikes}} likes to appear on the microdemocracy home page',
-        youNeedToLike: 'You also need to like your statement after publishing it',
+          'A statement needs {{nLikes}} like more to appear on the microdemocracy home page',
         ownedBy: 'Owned by',
         send: 'Send',
         likesNeeded: '{{nLikes}} more likes needed to be public!',
@@ -168,8 +167,7 @@ i18n.use(initReactI18next).init({
         waitingTransaction: 'Sending operation to the network...',
         operationSuccessful: 'Onchain opperation successful!',
         registeringProject: 'Registering your microdemocracy...',
-        noLikesNeeded:
-          'Congratulations! this statement is already public in the microdemocracy homepage',
+        noLikesNeeded: 'This statement is already public in the microdemocracy homepage',
         pleaseSignIn: 'Please sign in to see your microdemocracies',
         loadingProfile: 'Loading you profile',
       },
@@ -311,8 +309,7 @@ i18n.use(initReactI18next).init({
         canBackN:
           'Únicamente los {{nMembers}} miembros actuales podrán apoyar esta declaración',
         aStatementNeeds:
-          'Una declaración necesita {{nLikes}} likes para aparecer en la página de la microdemocracia',
-        youNeedToLike: 'Tú también debes darle like a tu declaración después de publicarla',
+          'Una declaración necesita {{nLikes}} like más para aparecer en la página de la microdemocracia',
         ownedBy: 'Controlada por',
         send: 'Enviar',
         likesNeeded: 'Hacen falta {{nLikes}} apoyos más para que sea público!',
@@ -474,9 +471,7 @@ i18n.use(initReactI18next).init({
         canBackN:
           'Únicament els {{nMembers}} membres actuals podran donar suport a aquesta declaració',
         aStatementNeeds:
-          'Una declaració necessita {{Likes}} likes per aparèixer a la pàgina de la microdemocràcia',
-        youNeedToLike:
-          'Tu també has de donar-li like a la teva declaració després de publicar-la',
+          'Una declaració necessita {{Likes}} like més per aparèixer a la pàgina de la microdemocràcia',
         ownedBy: 'Controlat per',
         send: 'Enviar',
         likesNeeded: 'Calen {{nLikes}} suports més per ser public!',

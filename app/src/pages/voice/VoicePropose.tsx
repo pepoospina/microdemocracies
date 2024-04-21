@@ -78,7 +78,7 @@ export const VoicePropose = (): JSX.Element => {
     if (nMembers === undefined) {
       return <Loading></Loading>
     }
-    if (nMembers < 3) {
+    if (nMembers < MIN_MEMBERS) {
       return (
         <BoxCentered pad={{ horizontal: 'medium' }}>
           <AppCard margin={{ vertical: 'medium' }}>
@@ -116,8 +116,7 @@ export const VoicePropose = (): JSX.Element => {
               <BulletList
                 elements={[
                   <Text>{t('canBackN', { nMembers })}.</Text>,
-                  <Text>{t('aStatementNeeds', { nLikes: MIN_LIKES_PUBLIC })}.</Text>,
-                  <Text>{t('youNeedToLike')}.</Text>,
+                  <Text>{t('aStatementNeeds', { nLikes: MIN_LIKES_PUBLIC - 1 })}.</Text>,
                 ]}
               ></BulletList>
             </AppCard>

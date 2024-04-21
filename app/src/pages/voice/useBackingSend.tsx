@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 
 import { useSemaphoreContext } from '../../contexts/SemaphoreContext'
-import { AppBackingCreate, StatementReactions } from '../../types'
+import { AppReactionCreate, StatementReactions } from '../../types'
 import { postBacking } from '../../utils/statements'
 import { generateReactionProof } from './statement.utils'
 
@@ -30,7 +30,7 @@ export const useBackingSend = (): VoiceSendContextType => {
           StatementReactions.Back,
         )
 
-        const backing: AppBackingCreate = {
+        const backing: AppReactionCreate = {
           statementId,
           proof: proofAndTree.proof,
         }

@@ -9,7 +9,7 @@ import {
   AppProjectMemberId,
   AppPublicIdentity,
   AppReactionCreate,
-  AppStatementCreate,
+  AppStatement,
   AppStatementRead,
   AppTree,
   Entity,
@@ -18,7 +18,7 @@ import {
 import { getBackingId, getStatementId, getTreeId } from '../@app/utils/identity.utils'
 import { collections, db } from './db'
 
-export const setStatementBacker = async (backing: AppReactionCreate): Promise<string> => {
+export const setStatementReaction = async (backing: AppReactionCreate): Promise<string> => {
   const docRef = collections
     .statementsBackers(backing.statementId)
     .doc(getBackingId(backing))
@@ -41,8 +41,10 @@ export const setStatementBacker = async (backing: AppReactionCreate): Promise<st
   return docRef.id
 }
 
-export const setStatement = async (statement: AppStatementCreate): Promise<string> => {
-  const id = getStatementId(statement.statementProof.proof)
+export const setStatement = async (
+  statement: Omit<AppStatement, 'id'>,
+): Promise<string> => {
+  const id = getStatementId(statement.proof)
   const docRef = collections.statements.doc(id)
   await docRef.set(statement)
   return docRef.id
