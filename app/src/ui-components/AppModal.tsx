@@ -1,4 +1,10 @@
-import { LayerExtendedProps, LayerPositionType, ResponsiveContext, Box, Layer } from 'grommet'
+import {
+  Box,
+  Layer,
+  LayerExtendedProps,
+  LayerPositionType,
+  ResponsiveContext,
+} from 'grommet'
 import { Close } from 'grommet-icons'
 import React from 'react'
 

@@ -1,9 +1,8 @@
-import { ReactNode, useEffect, useState } from 'react'
-
-import { useNavigate } from 'react-router-dom'
-
 import { Box, Spinner, Text } from 'grommet'
 import { FormNext, FormPrevious } from 'grommet-icons'
+import { ReactNode, useEffect, useState } from 'react'
+import { Trans, useTranslation } from 'react-i18next'
+import { useNavigate } from 'react-router-dom'
 
 import { AppConnectWidget } from '../../components/app/AppConnectButton'
 import { useAppContainer } from '../../components/app/AppContainer'
@@ -21,8 +20,6 @@ import { StatementEditable } from '../voice/StatementEditable'
 import { DetailsSelector } from './DetailsSelector'
 import { ProjectSummary } from './ProjectSummary'
 import { useCreateProject } from './useCreateProject'
-
-import { Trans, useTranslation } from 'react-i18next'
 
 const NPAGES = 5
 

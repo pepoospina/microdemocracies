@@ -1,8 +1,7 @@
-import { useEffect, useState } from 'react'
-
-import { useNavigate, useParams } from 'react-router-dom'
-
 import { Anchor, Box, Text } from 'grommet'
+import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { useNavigate, useParams } from 'react-router-dom'
 
 import { AppConnectButton } from '../../components/app/AppConnectButton'
 import { useConnectedMember } from '../../contexts/ConnectedAccountContext'
@@ -18,8 +17,6 @@ import { AppButton, AppCard } from '../../ui-components'
 import { postDeleteApplication } from '../../utils/project'
 import { useAccountContext } from '../../wallet/AccountContext'
 import { WaitingTransaction } from '../common/Loading'
-
-import { useTranslation } from 'react-i18next'
 
 export const VouchMemberWidget = (props: { pap: Entity<PAP> }) => {
   const { projectId } = useParams()

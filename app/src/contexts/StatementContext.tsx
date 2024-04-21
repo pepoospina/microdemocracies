@@ -1,10 +1,10 @@
+import { useQuery } from '@tanstack/react-query'
 import { createContext, useContext, useEffect, useState } from 'react'
 
-import { StatementRead } from '../types'
-import { useConnectedMember } from './ConnectedAccountContext'
 import { countStatementBackings, getStatement } from '../firestore/getters'
 import { useBackingSend } from '../pages/voice/useBackingSend'
-import { useQuery } from '@tanstack/react-query'
+import { StatementRead } from '../types'
+import { useConnectedMember } from './ConnectedAccountContext'
 
 export type StatementContextType = {
   statement?: StatementRead

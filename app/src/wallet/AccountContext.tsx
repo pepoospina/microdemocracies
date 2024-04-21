@@ -3,6 +3,7 @@ import {
   createLightAccountAlchemyClient,
 } from '@alchemy/aa-alchemy'
 import { BatchUserOperationCallData, WalletClientSigner } from '@alchemy/aa-core'
+import { useQuery } from '@tanstack/react-query'
 import {
   PropsWithChildren,
   createContext,
@@ -12,26 +13,24 @@ import {
   useMemo,
   useState,
 } from 'react'
+import { useTranslation } from 'react-i18next'
 import { DecodeEventLogReturnType, PublicClient, decodeEventLog, getAddress } from 'viem'
 import { usePublicClient, useReadContract } from 'wagmi'
 
 import { ALCHEMY_GAS_POLICY_ID, ALCHEMY_RPC_URL } from '../config/appConfig'
 import { useLoadingContext } from '../contexts/LoadingContext'
 import { HexStr } from '../types'
+import { getAccountAddress } from '../utils/aa-sdk'
 import {
   aaWalletAbi,
   getFactoryAddress,
   registryABI,
   registryFactoryABI,
 } from '../utils/contracts.json'
+import { postUser } from '../utils/users'
 import { AccountDataContext } from './AccountDataContext'
 import { chain } from './ConnectedWalletContext'
 import { useAppSigner } from './SignerContext'
-
-import { useTranslation } from 'react-i18next'
-import { getAccountAddress } from '../utils/aa-sdk'
-import { postUser } from '../utils/users'
-import { useQuery } from '@tanstack/react-query'
 
 const DEBUG = true
 

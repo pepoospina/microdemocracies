@@ -1,8 +1,15 @@
 import { ResponsiveContext } from 'grommet'
-import { createContext, CSSProperties, useCallback, useContext, useEffect, useState } from 'react'
+import {
+  CSSProperties,
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from 'react'
 
-import { IElement } from './IElement'
 import { parseCssUnits } from '../../utils/general'
+import { IElement } from './IElement'
 
 export type ResponsiveContextType = {
   size: string
@@ -83,6 +90,7 @@ export const ResponsiveApp = (props: IElement): JSX.Element => {
 
 export function useResponsive(): ResponsiveContextType {
   const context = useContext(AppResponsiveContext)
-  if (!context) throw Error('useResponsive can only be used within the Web3ReactProvider component')
+  if (!context)
+    throw Error('useResponsive can only be used within the Web3ReactProvider component')
   return context
 }

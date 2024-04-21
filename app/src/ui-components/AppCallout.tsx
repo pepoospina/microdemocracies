@@ -1,4 +1,4 @@
-import { BoxExtendedProps, Box } from 'grommet'
+import { Box, BoxExtendedProps } from 'grommet'
 import { CircleQuestion, Validate } from 'grommet-icons'
 
 import { useThemeContext } from '../components/app'
@@ -14,7 +14,8 @@ export const AppCallout = (props: IAppCallout): JSX.Element => {
   const type = props._type ? props._type : 'normal'
   const showIcon = props.noIcon !== undefined ? !props.noIcon : true
 
-  const color = type === 'normal' ? constants.colors.backgroundLight : constants.colors.primaryLight
+  const color =
+    type === 'normal' ? constants.colors.backgroundLight : constants.colors.primaryLight
   return (
     <Box
       direction="row"

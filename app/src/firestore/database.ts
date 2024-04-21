@@ -8,6 +8,7 @@ import {
   persistentLocalCache,
   persistentMultipleTabManager,
 } from 'firebase/firestore'
+
 import { CollectionNames } from './collectionNames'
 
 const firebaseConfig = {

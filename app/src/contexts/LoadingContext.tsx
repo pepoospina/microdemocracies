@@ -1,10 +1,8 @@
+import { Box, Heading, Layer, Meter, Spinner, Text } from 'grommet'
 import { ReactNode, createContext, useContext, useEffect, useRef, useState } from 'react'
-
-import { Box, Heading, Layer, Meter, Text, Spinner } from 'grommet'
+import styled from 'styled-components'
 
 import { useThemeContext } from '../components/app'
-
-import styled from 'styled-components'
 
 export type LoadingContextType = {
   loading: boolean

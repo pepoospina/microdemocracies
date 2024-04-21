@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react'
+import { hashMessage } from 'viem'
 
-import { postStatement } from '../../utils/statements'
-import { AppStatementCreate } from '../../types'
 import { useProjectContext } from '../../contexts/ProjectContext'
 import { useSemaphoreContext } from '../../contexts/SemaphoreContext'
-import { hashMessage } from 'viem'
+import { AppStatementCreate } from '../../types'
+import { postStatement } from '../../utils/statements'
 import { generateReactionProof, generateStatementProof } from './statement.utils'
 
 export type VoiceSendContextType = {

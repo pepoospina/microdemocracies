@@ -1,5 +1,5 @@
 import { useWeb3Modal } from '@web3modal/wagmi/react'
-
+import { use } from 'i18next'
 import {
   PropsWithChildren,
   createContext,
@@ -9,9 +9,8 @@ import {
   useMemo,
   useState,
 } from 'react'
-
+import { useTranslation } from 'react-i18next'
 import { WalletClient } from 'viem'
-
 import { useDisconnect, useWalletClient } from 'wagmi'
 
 import { useLoadingContext } from '../contexts/LoadingContext'
@@ -19,14 +18,11 @@ import { HexStr } from '../types'
 import { cap } from '../utils/general'
 import { createMagicSigner, magic } from './magic.signer'
 
-import { useTranslation } from 'react-i18next'
-import { use } from 'i18next'
-
 export type SignerContextType = {
   connect: () => void
   hasInjected: boolean
-  signer?: WalletClient,
-  
+  signer?: WalletClient
+
   address?: HexStr
   signMessage?: (message: string) => Promise<HexStr>
   isConnecting: boolean
@@ -76,8 +72,6 @@ export const SignerContext = (props: PropsWithChildren) => {
       })
     }
   }, [])
-
-  
 
   useEffect(() => {
     if (signer) {

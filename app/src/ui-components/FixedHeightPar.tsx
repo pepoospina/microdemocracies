@@ -1,5 +1,5 @@
-import { BoxExtendedProps, Box } from 'grommet'
-import { ReactElement, useState, useRef, useEffect } from 'react'
+import { Box, BoxExtendedProps } from 'grommet'
+import { ReactElement, useEffect, useRef, useState } from 'react'
 
 export interface IFixedHeightPar extends BoxExtendedProps {
   _content: ReactElement
@@ -10,7 +10,12 @@ export const FixedHeightPar = (props: IFixedHeightPar) => {
   const container = useRef<HTMLDivElement>(null)
   const paragraph = useRef<HTMLDivElement>(null)
   useEffect(() => {
-    if (container !== null && paragraph !== null && container.current !== null && paragraph.current !== null) {
+    if (
+      container !== null &&
+      paragraph !== null &&
+      container.current !== null &&
+      paragraph.current !== null
+    ) {
       if (container.current.clientHeight < paragraph.current.scrollHeight) {
         setShowGradient(true)
       }

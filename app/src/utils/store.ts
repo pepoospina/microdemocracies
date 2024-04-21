@@ -32,7 +32,8 @@ export const getEntity = async <T>(cid: string): Promise<Entity<T>> => {
     throw new Error(`Entity ${cid} not found`)
   }
 
-  if (entity.cid !== cid) throw new Error(`Unexpected getInviteLinkCID ${entity.cid}. Expected ${cid}`)
+  if (entity.cid !== cid)
+    throw new Error(`Unexpected getInviteLinkCID ${entity.cid}. Expected ${cid}`)
 
   return entity
 }

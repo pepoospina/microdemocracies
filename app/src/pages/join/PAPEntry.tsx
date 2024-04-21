@@ -1,4 +1,5 @@
 import { Box } from 'grommet'
+
 import { PAP } from '../../types'
 import { AccountPerson } from '../account/AccountPerson'
 

@@ -56,7 +56,9 @@ export const MembersPage = (): JSX.Element => {
         <AppBottomButton
           icon={<FormPrevious />}
           label={t('back')}
-          onClick={() => navigate(AbsoluteRoutes.ProjectHome(projectId?.toString() as string))}
+          onClick={() =>
+            navigate(AbsoluteRoutes.ProjectHome(projectId?.toString() as string))
+          }
         ></AppBottomButton>
       }
     ></ViewportPage>

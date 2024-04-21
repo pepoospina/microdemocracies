@@ -1,7 +1,15 @@
 import { Box } from 'grommet'
-import { AppButton, AppFormField, AppInput, AppSelect, FieldLabel, TwoColumns } from '../../ui-components'
 import { useState } from 'react'
+
 import { PlatformAccount, PlatformId } from '../../types'
+import {
+  AppButton,
+  AppFormField,
+  AppInput,
+  AppSelect,
+  FieldLabel,
+  TwoColumns,
+} from '../../ui-components'
 import { platforms } from '../../utils/platforms'
 
 export interface INetworkSelector {
@@ -38,7 +46,9 @@ export const NetworkSelector = (props: INetworkSelector) => {
             <AppSelect
               value={
                 platform ? (
-                  <Box style={{ height: '50px', justifyContent: 'center' }}>{platforms[platform]?.name}</Box>
+                  <Box style={{ height: '50px', justifyContent: 'center' }}>
+                    {platforms[platform]?.name}
+                  </Box>
                 ) : (
                   <Box>Select</Box>
                 )
@@ -54,7 +64,10 @@ export const NetworkSelector = (props: INetworkSelector) => {
         </Box>
         <Box>
           <AppFormField label={<FieldLabel label="Username"></FieldLabel>}>
-            <AppInput value={username} onChange={(event) => setUsername(event.target.value)}></AppInput>
+            <AppInput
+              value={username}
+              onChange={(event) => setUsername(event.target.value)}
+            ></AppInput>
           </AppFormField>
         </Box>
       </TwoColumns>

@@ -1,10 +1,10 @@
 import { Box } from 'grommet'
-import { NetworkSelector } from './NetworkSelector'
 import { useEffect, useState } from 'react'
-import { AppHeading } from '../../ui-components'
 
 import { PlatformAccount } from '../../types'
+import { AppHeading } from '../../ui-components'
 import { AccountPlatforms } from '../account/AccountPlatforms'
+import { NetworkSelector } from './NetworkSelector'
 
 export interface IPlatformsSelector {
   onChange: (platforms: PlatformAccount[]) => any
@@ -23,7 +23,9 @@ export const AppPlatformsSelector = (props: IPlatformsSelector) => {
   }
 
   const remove = (user: PlatformAccount) => {
-    const index = users.findIndex((u) => u.platform === user.platform && u.username === user.username)
+    const index = users.findIndex(
+      (u) => u.platform === user.platform && u.username === user.username,
+    )
     if (index !== -1) {
       users.splice(index, 1)
       setUsers([...users])
@@ -34,7 +36,10 @@ export const AppPlatformsSelector = (props: IPlatformsSelector) => {
     <Box style={{ height: '100%' }}>
       <NetworkSelector onSelected={(user) => selected(user)}></NetworkSelector>
 
-      <Box style={{ overflowY: 'auto', minHeight: '100px', marginTop: '36px' }} align="center">
+      <Box
+        style={{ overflowY: 'auto', minHeight: '100px', marginTop: '36px' }}
+        align="center"
+      >
         <AppHeading level="2" style={{ marginBottom: '12px' }}>
           {users.length ? 'Accounts: ' : 'No account added yet'}
         </AppHeading>

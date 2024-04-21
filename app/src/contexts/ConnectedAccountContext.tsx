@@ -1,5 +1,4 @@
 import { ReactNode, createContext, useContext, useEffect } from 'react'
-
 import { useReadContract } from 'wagmi'
 
 import { AppAccount, AppChallenge } from '../types'
@@ -15,7 +14,9 @@ export type ConnectedMemberContextType = {
   myChallenge: AppChallenge | undefined | null
 }
 
-const ConnectedMemberContextValue = createContext<ConnectedMemberContextType | undefined>(undefined)
+const ConnectedMemberContextValue = createContext<ConnectedMemberContextType | undefined>(
+  undefined,
+)
 
 export interface ConnectedMemberContextProps {
   children: ReactNode
@@ -84,7 +85,11 @@ export const ConnectedMemberContext = (props: ConnectedMemberContextProps) => {
   ])
 
   const myChallenge: AppChallenge | undefined | null = ((_challengeRead) => {
-    if (isErrorChallengeRead && errorChallengeRead && errorChallengeRead.message.includes('')) {
+    if (
+      isErrorChallengeRead &&
+      errorChallengeRead &&
+      errorChallengeRead.message.includes('')
+    ) {
       return null
     }
     if (_challengeRead === undefined) {

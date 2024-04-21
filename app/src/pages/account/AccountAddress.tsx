@@ -4,11 +4,11 @@ import { useTranslation } from 'react-i18next'
 import { useReadContract } from 'wagmi'
 
 import { CHAIN_ID } from '../../config/appConfig'
+import { getAccountOwner } from '../../firestore/getters'
 import { HexStr } from '../../types'
 import { Address } from '../../ui-components'
 import { LoadingDiv } from '../../ui-components/LoadingDiv'
 import { aaWalletAbi } from '../../utils/contracts.json'
-import { getAccountOwner } from '../../firestore/getters'
 
 export const AccountAddress = (props: { account?: HexStr; showAccount?: boolean }) => {
   const { t } = useTranslation()

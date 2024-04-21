@@ -1,4 +1,5 @@
-import { BoxExtendedProps, Box, Text } from 'grommet'
+import { Box, BoxExtendedProps, Text } from 'grommet'
+
 import { useThemeContext } from '../components/app'
 
 interface INumberedRow extends BoxExtendedProps {
@@ -20,7 +21,9 @@ export const NumberedRow = (props: INumberedRow): JSX.Element => {
             width: '24px',
             height: '24px',
             borderRadius: '12px',
-            backgroundColor: props.disabled ? constants.colors.primaryLight : constants.colors.backgroundLight,
+            backgroundColor: props.disabled
+              ? constants.colors.primaryLight
+              : constants.colors.backgroundLight,
             color: props.disabled ? '#6D6D6D' : constants.colors.primary,
             textAlign: 'center',
           }}

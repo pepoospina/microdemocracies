@@ -154,7 +154,8 @@ export const JoinPage = () => {
           left={{
             label: 'home',
             primary: false,
-            action: () => navigate(AbsoluteRoutes.ProjectHome(projectId?.toString() as string)),
+            action: () =>
+              navigate(AbsoluteRoutes.ProjectHome(projectId?.toString() as string)),
           }}
           right={{
             label: 'next',
@@ -169,7 +170,10 @@ export const JoinPage = () => {
       key="3"
       content={
         <Box pad="large">
-          <DetailsForm selected={project?.selectedDetails} onChange={(d) => setPersonal(d)}></DetailsForm>
+          <DetailsForm
+            selected={project?.selectedDetails}
+            onChange={(d) => setPersonal(d)}
+          ></DetailsForm>
         </Box>
       }
       nav={
@@ -229,7 +233,8 @@ export const JoinPage = () => {
           right={{
             label: t('done'),
             primary: true,
-            action: () => navigate(AbsoluteRoutes.ProjectHome(projectId?.toString() as string)),
+            action: () =>
+              navigate(AbsoluteRoutes.ProjectHome(projectId?.toString() as string)),
           }}
         ></AppBottomButtons>
       }

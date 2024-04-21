@@ -1,7 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-
 import { DecodeEventLogReturnType, encodeFunctionData, zeroAddress } from 'viem'
-
 import { usePublicClient } from 'wagmi'
 
 import { HexStr } from '../types'
@@ -34,7 +32,10 @@ export const useVouch = (): VouchHookType => {
     setVouchParamsInternal([account, personCid])
   }, [])
 
-  const checkAndPostMember = async (_events: DecodeEventLogReturnType[], _projectId: number) => {
+  const checkAndPostMember = async (
+    _events: DecodeEventLogReturnType[],
+    _projectId: number,
+  ) => {
     if (!vouchParamsInternal) throw Error('Unexpected vouchParamsInternal undefined')
     if (!address) throw Error('Unexpected address undefined')
 

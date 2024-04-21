@@ -2,13 +2,12 @@ import stringify from 'canonical-json'
 
 import { FUNCTIONS_BASE } from '../config/appConfig'
 import {
-  AppStatementCreate,
-  AppPublicIdentity,
   AppGetMerklePass,
-  AppReturnMerklePass,
+  AppPublicIdentity,
   AppReactionCreate,
+  AppReturnMerklePass,
+  AppStatementCreate,
 } from '../types'
-
 import { MessageSigner } from './identity'
 
 // TODO: replace inmemory cache with a proper cache using indexedDb

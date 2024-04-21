@@ -1,9 +1,9 @@
-import { BoxExtendedProps, Box, Spinner } from 'grommet'
+import { Box, BoxExtendedProps, Spinner } from 'grommet'
 import { FormNext, FormPrevious } from 'grommet-icons'
 import { ReactNode, useCallback } from 'react'
 
-import { Page } from '../types'
 import { useThemeContext } from '../components/app'
+import { Page } from '../types'
 
 export interface IPageNumber extends BoxExtendedProps {
   number: number
@@ -91,8 +91,12 @@ export const PagedTable = (props: PagedTableI): JSX.Element => {
   )
 
   const invert = props.invert !== undefined ? props.invert : false
-  const rowColor = invert ? constants.colors.backgroundLight : constants.colors.backgroundLight
-  const backgroundColor = invert ? constants.colors.backgroundLight : constants.colors.backgroundLight
+  const rowColor = invert
+    ? constants.colors.backgroundLight
+    : constants.colors.backgroundLight
+  const backgroundColor = invert
+    ? constants.colors.backgroundLight
+    : constants.colors.backgroundLight
 
   const perPage = page ? page.perPage : props.perPage
 
@@ -218,7 +222,10 @@ export const PagedTable = (props: PagedTableI): JSX.Element => {
       <Box direction="row" justify="center" align="center" style={{ height: '60px' }}>
         {page && page.totalPages && page.totalPages > 1 ? (
           <>
-            <Box style={{ marginRight: '12px', cursor: 'pointer' }} onClick={() => prevPage()}>
+            <Box
+              style={{ marginRight: '12px', cursor: 'pointer' }}
+              onClick={() => prevPage()}
+            >
               <FormPrevious></FormPrevious>
             </Box>
 
@@ -233,7 +240,10 @@ export const PagedTable = (props: PagedTableI): JSX.Element => {
                 ></PageNumber>
               )
             })}
-            <Box style={{ marginLeft: '12px', cursor: 'pointer' }} onClick={() => nextPage()}>
+            <Box
+              style={{ marginLeft: '12px', cursor: 'pointer' }}
+              onClick={() => nextPage()}
+            >
               <FormNext></FormNext>
             </Box>
           </>

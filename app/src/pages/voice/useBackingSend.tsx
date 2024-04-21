@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
 
-import { postBacking } from '../../utils/statements'
-import { AppBackingCreate, StatementReactions } from '../../types'
-import { generateReactionProof } from './statement.utils'
 import { useSemaphoreContext } from '../../contexts/SemaphoreContext'
+import { AppBackingCreate, StatementReactions } from '../../types'
+import { postBacking } from '../../utils/statements'
+import { generateReactionProof } from './statement.utils'
 
 export type VoiceSendContextType = {
   backStatement?: (statementId: string, treeId: string) => Promise<any>

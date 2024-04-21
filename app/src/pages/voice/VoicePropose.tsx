@@ -1,9 +1,8 @@
-import { useEffect, useState } from 'react'
-
-import { useNavigate } from 'react-router-dom'
-
 import { Box, Text } from 'grommet'
 import { Add, FormPrevious } from 'grommet-icons'
+import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { useNavigate } from 'react-router-dom'
 
 import { AppConnectButton } from '../../components/app/AppConnectButton'
 import { useAppContainer } from '../../components/app/AppContainer'
@@ -22,8 +21,6 @@ import { AppBottomButtons } from '../common/BottomButtons'
 import { Loading } from '../common/Loading'
 import { StatementEditable } from './StatementEditable'
 import { useStatementSend } from './useStatementSend'
-
-import { useTranslation } from 'react-i18next'
 
 export const VoicePropose = (): JSX.Element => {
   const { t } = useTranslation()

@@ -1,4 +1,5 @@
-import { ImageExtendedProps, Box, Image } from 'grommet'
+import { Box, Image, ImageExtendedProps } from 'grommet'
+
 import { useThemeContext } from '../components/app'
 
 export interface ICampaignIcon extends ImageExtendedProps {

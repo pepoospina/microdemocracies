@@ -1,7 +1,8 @@
 import QRCodeSVG from 'qrcode.react'
 import { useRef } from 'react'
-import { useResponsive } from './app'
+
 import { BoxCentered } from '../ui-components/BoxCentered'
+import { useResponsive } from './app'
 
 export interface IQRCode {
   input: string

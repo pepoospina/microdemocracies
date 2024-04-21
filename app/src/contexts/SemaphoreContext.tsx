@@ -1,6 +1,6 @@
 import { Identity } from '@semaphore-protocol/identity'
-
 import { PropsWithChildren, createContext, useContext, useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { getPublicIdentity } from '../firestore/getters'
 import { AppPublicIdentity } from '../types'
@@ -9,8 +9,6 @@ import { postIdentity } from '../utils/statements'
 import { useAccountContext } from '../wallet/AccountContext'
 import { useAppSigner } from '../wallet/SignerContext'
 import { useLoadingContext } from './LoadingContext'
-
-import { useTranslation } from 'react-i18next'
 
 export type SemaphoreContextType = {
   publicId?: string

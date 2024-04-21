@@ -1,8 +1,8 @@
-import multihashing from 'multihashing-async'
+import { Buffer } from 'buffer'
+import stringify from 'canonical-json'
 import CBOR from 'cbor-js'
 import CID from 'cids'
-import stringify from 'canonical-json'
-import { Buffer } from 'buffer'
+import multihashing from 'multihashing-async'
 
 import { Entity, EntityCreate } from '../types'
 
@@ -42,7 +42,10 @@ export function hash2cid(data: Uint8Array, config: CidConfig) {
   return cid.toString()
 }
 
-export async function hashObject(object: object, config: CidConfig = defaultCidConfig): Promise<string> {
+export async function hashObject(
+  object: object,
+  config: CidConfig = defaultCidConfig,
+): Promise<string> {
   const buffer = objectToBytes(object)
   const encoded = await bufferToHash(buffer, config.type)
   return hash2cid(encoded, config)
@@ -151,8 +154,12 @@ export function validateEntities(entities: Entity[], references: EntityCreate[])
       const entity = entities.find((e) => e.cid === ref.hash)
       if (!entity) {
         /** append stringified object */
-        entities.forEach((entity) => ((entity as any).objectStr = JSON.stringify(entity.object)))
-        references.forEach((entity) => ((entity as any).objectStr = JSON.stringify(entity.object)))
+        entities.forEach(
+          (entity) => ((entity as any).objectStr = JSON.stringify(entity.object)),
+        )
+        references.forEach(
+          (entity) => ((entity as any).objectStr = JSON.stringify(entity.object)),
+        )
 
         console.error(`Entity ${ref.hash} not correctly created`, { entities, references })
         throw new Error(`Entity ${JSON.stringify(ref)} not found in entity set`)

@@ -1,8 +1,9 @@
-import { generateProof } from '../../utils/identity'
-import { getReactionNullifier, getStatementId } from '../../utils/identity.utils'
-import { StatementCreateProofs, StatementReactions } from '../../types'
 import { Identity } from '@semaphore-protocol/identity'
 import { hashMessage } from 'viem'
+
+import { StatementCreateProofs, StatementReactions } from '../../types'
+import { generateProof } from '../../utils/identity'
+import { getReactionNullifier, getStatementId } from '../../utils/identity.utils'
 
 export const generateReactionProof = async (
   statementId: string,

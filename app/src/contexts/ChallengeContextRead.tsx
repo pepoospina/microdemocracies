@@ -1,5 +1,4 @@
 import { useEffect } from 'react'
-
 import { useReadContract } from 'wagmi'
 
 import { AppChallenge, VoteOption } from '../types'
