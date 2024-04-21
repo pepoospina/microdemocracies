@@ -4,7 +4,7 @@ import { RUNTIME_OPTIONS } from '../../config/RUNTIME_OPTIONS';
 
 import { createIdentityController } from './controllers/create.identity.controller';
 import { createStatementController } from './controllers/create.statement.controller';
-import { reactToStatementController } from './controllers/react.statement.controller';
+import { reactToStatementController } from './controllers/react.to.statement.controller';
 import { getMerklePassController } from './controllers/get.merkle.pass.controller';
 
 import { app } from '../../instances/app';

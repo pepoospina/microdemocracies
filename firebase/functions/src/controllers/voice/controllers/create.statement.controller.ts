@@ -7,9 +7,10 @@ import { AppStatementCreate } from '../../../@app/types';
 import { TREE_DEPTH } from '../../../utils/groups';
 import { setStatement } from '../../../db/setters';
 import { getTree } from '../../../db/getters';
-import { getTreeId } from '../../../@app/utils/identity.utils';
+import { getStatementId, getTreeId } from '../../../@app/utils/identity.utils';
 
 import { statementValidationScheme } from './voice.schemas';
+import { isValidReaction } from '../utils/validate.reaction';
 
 export const createStatementController: RequestHandler = async (
   request,
@@ -40,7 +41,8 @@ export const createStatementController: RequestHandler = async (
   }
 
   // verify reaction proof
-  const validReaction = await verifyProof(statement.statementProof.proof, TREE_DEPTH);
+  const statementId = getStatementId(statement.statementProof.proof);
+  const validReaction = await isValidReaction(statement.reactionProof,statementId, statement.statementProof.treeId);
 
   if (!validReaction) {
     throw new Error('Invalid reaction proof');

@@ -46,7 +46,7 @@ export const reactToStatementController: RequestHandler = async (
       throw new Error(`Three with id ${proofTreeId} not found`);
     }
 
-    const isValid = await isValidReaction(backing.proof, backing.statementId,proofTreeId);
+    const isValid = await isValidReaction({proof: backing.proof, treeId: tree.id}, backing.statementId,proofTreeId);
     if (!isValid) { throw new Error('Invalid backing');}
 
     await setStatementBacker(backing);

@@ -2,7 +2,10 @@ import { BigNumber } from '@ethersproject/bignumber';
 import {
     hasBackingWithNullifierHash,
   } from '../../../db/getters';
-import { SemaphoreProofStrings } from 'src/@app/types';
+import { ProofAndTree } from '../../../@app/utils/identity';
+import { getReactionNullifier } from '../../../@app/utils/identity.utils';
+import { verifyProof } from '@semaphore-protocol/proof';
+import { TREE_DEPTH } from '../../../utils/groups';
 
 /** the reaction must have
  * - a proof of the same tree as the statement
@@ -13,37 +16,39 @@ import { SemaphoreProofStrings } from 'src/@app/types';
  *
  * also check the tree is stored (this should always be the case)
  */
-export const isValidReaction = async (proof: SemaphoreProofStrings, statementId: string, expectedTreeId: string) => {
-    if (proof.treeId !== expectedTreeId) {
+export const isValidReaction = async (proofAndTree: ProofAndTree, statementId: string, expectedTreeId: string) => {
+    if (proofAndTree.treeId !== expectedTreeId) {
         throw new Error(
-          `Tree id of the statment ${expectedTreeId} is not the same as the treeId of that of the proof ${proof.treeId}`
+          `Tree id of the statment ${expectedTreeId} is not the same as the treeId of that of the proof ${proofAndTree.treeId}`
         );
       }
        
       /** a nullifier that is the statementId */
-      const expectedNullifier = BigNumber.from(backing.statementId).toString();
+      const expectedExternalNullifier = BigNumber.from(getReactionNullifier(statementId)).toString();
 
-      if (proofAndTree.proof.externalNullifier !== expectedNullifier) {
+      if (proofAndTree.proof.externalNullifier !== expectedExternalNullifier) {
         throw new Error(
-          `Backing signal nullifier ${backing.proof.nullifierHash} must be the statement id ${backing.statementId}`
+          `Backing signal nullifier ${proofAndTree.proof.externalNullifier} must be the statement id ${statementId}`
         );
       }
   
       /** no previous backing with the same nullifierHash */
       const preExist = await hasBackingWithNullifierHash(
-        backing.statementId,
-        backing.proof.nullifierHash
+        statementId,
+        proofAndTree.proof.nullifierHash
       );
       if (preExist) {
         throw new Error(
-          `Backing with this nullifierHash ${backing.proof.nullifierHash} already posted`
+          `Backing with this nullifierHash ${proofAndTree.proof.nullifierHash} already posted`
         );
       }
   
       /** a valid proof */
-      const result = await verifyProof(backing.proof, TREE_DEPTH);
+      const result = await verifyProof(proofAndTree.proof, TREE_DEPTH);
   
       if (!result) {
         throw new Error('Invalid proof');
       }
+
+      return true;
 }
