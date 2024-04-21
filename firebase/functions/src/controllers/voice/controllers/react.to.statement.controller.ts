@@ -1,14 +1,9 @@
 import { RequestHandler } from 'express';
 import { logger } from 'firebase-functions/v1';
 
-
 import { AppReactionCreate } from '../../../@app/types';
 import { getTreeId } from '../../../@app/utils/identity.utils';
-import {
-  getStatement,
-  getTree,
-  
-} from '../../../db/getters';
+import { getStatement, getTree } from '../../../db/getters';
 import { setStatementBacker } from '../../../db/setters';
 
 import { backStatementValidationScheme } from './voice.schemas';
@@ -42,12 +37,18 @@ export const reactToStatementController: RequestHandler = async (
     );
 
     const tree = await getTree(proofTreeId);
-      if (!tree) {
+    if (!tree) {
       throw new Error(`Three with id ${proofTreeId} not found`);
     }
 
-    const isValid = await isValidReaction({proof: backing.proof, treeId: tree.id}, backing.statementId,proofTreeId);
-    if (!isValid) { throw new Error('Invalid backing');}
+    const isValid = await isValidReaction(
+      { proof: backing.proof, treeId: tree.id },
+      backing.statementId,
+      proofTreeId
+    );
+    if (!isValid) {
+      throw new Error('Invalid backing');
+    }
 
     await setStatementBacker(backing);
     response.status(200).send({ success: true });

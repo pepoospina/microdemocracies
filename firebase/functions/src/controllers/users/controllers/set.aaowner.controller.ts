@@ -3,7 +3,6 @@ import { logger } from 'firebase-functions/v1';
 
 import { AaOwnerPayload } from '../../../@app/types';
 
-
 import { setAaOwnerValidationScheme } from './users.schemas';
 import { getAccountAddress } from '../../../@app/utils/aa-sdk';
 import { chain, publicClient } from '../../../utils/contracts';
@@ -19,9 +18,16 @@ export const setAaOwnerController: RequestHandler = async (
 
   /** derive the aaAddress from the owner as validation
    */
-  const aaAddressVer = await getAccountAddress(payload.owner, publicClient as any, chain);
+  const aaAddressVer = await getAccountAddress(
+    payload.owner,
+    publicClient as any,
+    chain
+  );
 
-  if (!aaAddressVer || aaAddressVer.toLowerCase() !== payload.aaAddress.toLowerCase()) {
+  if (
+    !aaAddressVer ||
+    aaAddressVer.toLowerCase() !== payload.aaAddress.toLowerCase()
+  ) {
     throw new Error(`Unexpected aaAddress for owner ${payload.owner}`);
   }
 

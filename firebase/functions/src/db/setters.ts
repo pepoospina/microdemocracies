@@ -179,14 +179,9 @@ export const deleteApplications = async (address: HexStr): Promise<void> => {
   );
 };
 
-
-export const setUser = async (
-  user: AaOwnerPayload
-): Promise<string> => {
+export const setUser = async (user: AaOwnerPayload): Promise<string> => {
   const id = user.aaAddress;
-  const docRef = collections
-    .users
-    .doc(id);
+  const docRef = collections.users.doc(id);
   await docRef.set({ owner: user.owner });
   return docRef.id;
 };

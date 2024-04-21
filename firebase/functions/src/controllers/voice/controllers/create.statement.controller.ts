@@ -24,7 +24,10 @@ export const createStatementController: RequestHandler = async (
    * - of a tree that is a tree of the project (can be an old one)
    * - valid proof
    */
-  const treeId = getTreeId(statement.projectId, statement.statementProof.proof.merkleTreeRoot)
+  const treeId = getTreeId(
+    statement.projectId,
+    statement.statementProof.proof.merkleTreeRoot
+  );
   const tree = await getTree(treeId);
 
   if (!tree) {
@@ -34,7 +37,10 @@ export const createStatementController: RequestHandler = async (
   }
 
   // verify statement proof
-  const validStatement = await verifyProof(statement.statementProof.proof, TREE_DEPTH);
+  const validStatement = await verifyProof(
+    statement.statementProof.proof,
+    TREE_DEPTH
+  );
 
   if (!validStatement) {
     throw new Error('Invalid statement proof');
@@ -42,7 +48,11 @@ export const createStatementController: RequestHandler = async (
 
   // verify reaction proof
   const statementId = getStatementId(statement.statementProof.proof);
-  const validReaction = await isValidReaction(statement.reactionProof,statementId, statement.statementProof.treeId);
+  const validReaction = await isValidReaction(
+    statement.reactionProof,
+    statementId,
+    statement.statementProof.treeId
+  );
 
   if (!validReaction) {
     throw new Error('Invalid reaction proof');

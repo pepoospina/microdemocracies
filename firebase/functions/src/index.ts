@@ -11,4 +11,3 @@ export const entities = entityApp;
 export const voice = voiceApp;
 export const project = projectApp;
 export const user = usersApp;
-

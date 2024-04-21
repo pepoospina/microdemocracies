@@ -6,12 +6,12 @@ export const statementValidationScheme = object({
   statement: string().max(MAX_STATEMENT_LENGTH).required(),
   statementProof: object({
     treeId: string().required(),
-    proof: object().shape({}).required(),  
+    proof: object().shape({}).required(),
   }).required(),
   reactionProof: object({
     treeId: string().required(),
-    proof: object().shape({}).required(),  
-  }).required()
+    proof: object().shape({}).required(),
+  }).required(),
 }).noUnknown(true);
 
 export const backStatementValidationScheme = object({
