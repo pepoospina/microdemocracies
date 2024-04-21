@@ -1,1 +1,1 @@
-declare module 'base58-js';
+declare module 'base58-js'

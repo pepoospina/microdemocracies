@@ -1,5 +1,6 @@
-import pino from 'pino';
-import { ENVIRONMENTS } from '../config/ENVIRONMENTS';
+import pino from 'pino'
+
+import { ENVIRONMENTS } from '../config/ENVIRONMENTS'
 
 /**
   https://cloud.google.com/logging/docs/reference/v2/rest/v2/LogEntry#logseverity
@@ -25,7 +26,7 @@ const customLevels = {
   critical: 600,
   alert: 700,
   emergency: 800,
-};
+}
 
 const pinoLevelToSeverityLookup: Record<string, string> = {
   default: 'DEFAULT',
@@ -37,7 +38,7 @@ const pinoLevelToSeverityLookup: Record<string, string> = {
   critical: 'CRITICAL',
   alert: 'ALERT',
   emergency: 'EMERGENCY',
-};
+}
 
 export const logger = pino({
   messageKey: 'message',
@@ -45,13 +46,12 @@ export const logger = pino({
   formatters: {
     level(label, number) {
       return {
-        severity:
-          pinoLevelToSeverityLookup[label] || pinoLevelToSeverityLookup['info'],
+        severity: pinoLevelToSeverityLookup[label] || pinoLevelToSeverityLookup['info'],
         level: number,
-      };
+      }
     },
     log(message) {
-      return { ...message };
+      return { ...message }
     },
   },
   ...(process.env.NODE_ENV === ENVIRONMENTS.LOCAL && {
@@ -66,30 +66,30 @@ export const logger = pino({
       },
     },
   }),
-});
+})
 
-(global as any).logger = {
+;(global as any).logger = {
   debug: (message: any, context: any, args: any) => {
-    logger.debug({ message, context, args });
+    logger.debug({ message, context, args })
   },
 
   info: (message: any, context: any, args: any) => {
-    logger.info({ message, context, args });
+    logger.info({ message, context, args })
   },
 
   notice: (message: any, context: any, args: any) => {
-    logger.notice({ message, context, args });
+    logger.notice({ message, context, args })
   },
 
   warn: (message: any, context: any, args: any) => {
-    logger.warn({ message, context, args });
+    logger.warn({ message, context, args })
   },
 
   error: (message: any, context: any, args: any) => {
-    logger.error({ message, context, args });
+    logger.error({ message, context, args })
   },
 
   critical: (message: any, context: any, args: any) => {
-    logger.critical({ message, context, args });
+    logger.critical({ message, context, args })
   },
-};
+}

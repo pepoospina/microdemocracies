@@ -1,38 +1,34 @@
-import { RequestHandler } from 'express';
-import { logger } from 'firebase-functions/v1';
+import { RequestHandler } from 'express'
+import { logger } from 'firebase-functions/v1'
 
-import { AppPublicIdentity } from '../../../@app/types';
-import { getControlMessage } from '../../../@app/utils/identity.utils';
-import { setIdentity } from '../../../db/setters';
-import { publicClient } from '../../../utils/contracts';
+import { AppPublicIdentity } from '../../../@app/types'
+import { getControlMessage } from '../../../@app/utils/identity.utils'
+import { setIdentity } from '../../../db/setters'
+import { publicClient } from '../../../utils/contracts'
+import { identityValidationScheme } from './voice.schemas'
 
-import { identityValidationScheme } from './voice.schemas';
-
-export const createIdentityController: RequestHandler = async (
-  request,
-  response
-) => {
+export const createIdentityController: RequestHandler = async (request, response) => {
   // console.log('validate', request.body);
   const identity = (await identityValidationScheme.validate(
-    request.body
-  )) as AppPublicIdentity;
+    request.body,
+  )) as AppPublicIdentity
 
   // only store identities confirmed by eth addresseses
   const valid = await publicClient.verifyMessage({
     address: identity.owner,
     message: getControlMessage(identity.publicId),
     signature: identity.signature,
-  });
+  })
 
   if (!valid) {
-    throw new Error('Signature not valid');
+    throw new Error('Signature not valid')
   }
 
   try {
-    const id = await setIdentity(identity);
-    response.status(200).send({ success: true, id });
+    const id = await setIdentity(identity)
+    response.status(200).send({ success: true, id })
   } catch (error: any) {
-    logger.error('error', error);
-    response.status(500).send({ success: false, error: error.message });
+    logger.error('error', error)
+    response.status(500).send({ success: false, error: error.message })
   }
-};
+}

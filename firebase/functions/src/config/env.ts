@@ -1,5 +1,5 @@
-import { ENVIRONMENTS } from './ENVIRONMENTS';
-import { Env } from './types';
+import { ENVIRONMENTS } from './ENVIRONMENTS'
+import { Env } from './types'
 
 export const env: Env = {
   environment: ENVIRONMENTS.PRODUCTION,
@@ -7,4 +7,4 @@ export const env: Env = {
   CHAIN_NAME: 'baseSepolia',
   ALCHEMY_KEY: 'lGUBeOhnguEVW2l5uSTRKQWs5xfts0dz',
   ALCHEMY_SUBDOMAIN: 'base-sepolia',
-};
+}

@@ -1,23 +1,18 @@
-import { RequestHandler } from 'express';
-import { logger } from 'firebase-functions/v1';
+import { RequestHandler } from 'express'
+import { logger } from 'firebase-functions/v1'
 
-import { AppReactionCreate } from '../../../@app/types';
-import { getTreeId } from '../../../@app/utils/identity.utils';
-import { getStatement, getTree } from '../../../db/getters';
-import { setStatementBacker } from '../../../db/setters';
+import { AppReactionCreate } from '../../../@app/types'
+import { getTreeId } from '../../../@app/utils/identity.utils'
+import { getStatement, getTree } from '../../../db/getters'
+import { setStatementBacker } from '../../../db/setters'
+import { isValidReaction } from '../utils/validate.reaction'
+import { backStatementValidationScheme } from './voice.schemas'
 
-import { backStatementValidationScheme } from './voice.schemas';
-
-import { isValidReaction } from '../utils/validate.reaction';
-
-export const reactToStatementController: RequestHandler = async (
-  request,
-  response
-) => {
+export const reactToStatementController: RequestHandler = async (request, response) => {
   try {
     const backing = (await backStatementValidationScheme.validate(
-      request.body
-    )) as AppReactionCreate;
+      request.body,
+    )) as AppReactionCreate
 
     /** the backing must have
      * - a proof of the same tree as the statement
@@ -30,30 +25,27 @@ export const reactToStatementController: RequestHandler = async (
      */
 
     /** a proof of the same tree as the statement */
-    const statement = await getStatement(backing.statementId);
-    const proofTreeId = getTreeId(
-      statement.projectId,
-      statement.proof.merkleTreeRoot
-    );
+    const statement = await getStatement(backing.statementId)
+    const proofTreeId = getTreeId(statement.projectId, statement.proof.merkleTreeRoot)
 
-    const tree = await getTree(proofTreeId);
+    const tree = await getTree(proofTreeId)
     if (!tree) {
-      throw new Error(`Three with id ${proofTreeId} not found`);
+      throw new Error(`Three with id ${proofTreeId} not found`)
     }
 
     const isValid = await isValidReaction(
       { proof: backing.proof, treeId: tree.id },
       backing.statementId,
-      proofTreeId
-    );
+      proofTreeId,
+    )
     if (!isValid) {
-      throw new Error('Invalid backing');
+      throw new Error('Invalid backing')
     }
 
-    await setStatementBacker(backing);
-    response.status(200).send({ success: true });
+    await setStatementBacker(backing)
+    response.status(200).send({ success: true })
   } catch (error: any) {
-    logger.error('error', error);
-    response.status(500).send({ success: false, error: error.message });
+    logger.error('error', error)
+    response.status(500).send({ success: false, error: error.message })
   }
-};
+}

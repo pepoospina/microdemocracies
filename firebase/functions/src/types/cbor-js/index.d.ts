@@ -1,1 +1,1 @@
-declare module 'cbor-js';
+declare module 'cbor-js'

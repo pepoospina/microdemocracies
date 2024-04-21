@@ -10,7 +10,7 @@ export const ierc165ABI = [
     name: 'supportsInterface',
     outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
   },
-] as const;
+] as const
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // IERC20
@@ -112,7 +112,7 @@ export const ierc20ABI = [
     name: 'transferFrom',
     outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
   },
-] as const;
+] as const
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // IERC721
@@ -271,7 +271,7 @@ export const ierc721ABI = [
     name: 'transferFrom',
     outputs: [],
   },
-] as const;
+] as const
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // IERC721Enumerable
@@ -454,7 +454,7 @@ export const ierc721EnumerableABI = [
     name: 'transferFrom',
     outputs: [],
   },
-] as const;
+] as const
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // IERC721Metadata
@@ -634,7 +634,7 @@ export const ierc721MetadataABI = [
     name: 'transferFrom',
     outputs: [],
   },
-] as const;
+] as const
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Initializable
@@ -644,12 +644,10 @@ export const initializableABI = [
   {
     type: 'event',
     anonymous: false,
-    inputs: [
-      { name: 'version', internalType: 'uint8', type: 'uint8', indexed: false },
-    ],
+    inputs: [{ name: 'version', internalType: 'uint8', type: 'uint8', indexed: false }],
     name: 'Initialized',
   },
-] as const;
+] as const
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Registry
@@ -780,9 +778,7 @@ export const registryABI = [
   {
     type: 'event',
     anonymous: false,
-    inputs: [
-      { name: 'version', internalType: 'uint8', type: 'uint8', indexed: false },
-    ],
+    inputs: [{ name: 'version', internalType: 'uint8', type: 'uint8', indexed: false }],
     name: 'Initialized',
   },
   {
@@ -1094,9 +1090,7 @@ export const registryABI = [
   {
     stateMutability: 'view',
     type: 'function',
-    inputs: [
-      { name: 'voucherTokenId', internalType: 'uint256', type: 'uint256' },
-    ],
+    inputs: [{ name: 'voucherTokenId', internalType: 'uint256', type: 'uint256' }],
     name: 'getVoucherVouchesNumber',
     outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
   },
@@ -1281,7 +1275,7 @@ export const registryABI = [
     name: 'vouch',
     outputs: [],
   },
-] as const;
+] as const
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // RegistryFactory
@@ -1291,9 +1285,7 @@ export const registryFactoryABI = [
   {
     stateMutability: 'nonpayable',
     type: 'constructor',
-    inputs: [
-      { name: '_master', internalType: 'address payable', type: 'address' },
-    ],
+    inputs: [{ name: '_master', internalType: 'address payable', type: 'address' }],
   },
   {
     type: 'event',
@@ -1346,9 +1338,7 @@ export const registryFactoryABI = [
       { name: 'salt', internalType: 'bytes32', type: 'bytes32' },
     ],
     name: 'create',
-    outputs: [
-      { name: 'proxy', internalType: 'address payable', type: 'address' },
-    ],
+    outputs: [{ name: 'proxy', internalType: 'address payable', type: 'address' }],
   },
   {
     stateMutability: 'view',
@@ -1357,4 +1347,4 @@ export const registryFactoryABI = [
     name: 'mrCounter',
     outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
   },
-] as const;
+] as const
