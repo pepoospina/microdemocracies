@@ -1,18 +1,14 @@
 import { Identity } from '@semaphore-protocol/identity'
-import { SemaphoreProof, generateProof as _generateProof } from '@semaphore-protocol/proof'
+import { generateProof as _generateProof } from '@semaphore-protocol/proof'
 import { getPublicIdentity } from '../firestore/getters'
 
-import { AppGetProof, AppPublicIdentity, HexStr } from '../types'
+import { AppGetProof, AppPublicIdentity, HexStr, ProofAndTree } from '../types'
 
 import { getMerklePass, postIdentity } from './statements'
 import { getControlMessage } from './identity.utils'
 
 export type MessageSigner = (message: string) => Promise<HexStr>
 
-export interface ProofAndTree {
-  proof: SemaphoreProof
-  treeId: string
-}
 
 export const checkOrStoreId = async (
   publicId: string,

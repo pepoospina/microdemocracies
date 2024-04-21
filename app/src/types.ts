@@ -1,5 +1,5 @@
 import { Identity } from '@semaphore-protocol/identity'
-import { ProofAndTree } from './utils/identity'
+import { SemaphoreProof } from '@semaphore-protocol/proof'
 
 export interface PersonDetails {
   firstName?: string
@@ -133,6 +133,11 @@ export interface AppStatement {
 }
 
 export type AppStatementRead = AppStatement & { id: string }
+
+export interface ProofAndTree {
+  proof: SemaphoreProof
+  treeId: string
+}
 
 export type StatementCreateProofs = {
   statementProof: ProofAndTree

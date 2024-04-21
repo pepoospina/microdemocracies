@@ -2,10 +2,11 @@ import { BigNumber } from '@ethersproject/bignumber';
 import {
     hasBackingWithNullifierHash,
   } from '../../../db/getters';
-import { ProofAndTree } from '../../../@app/utils/identity';
+
 import { getReactionNullifier } from '../../../@app/utils/identity.utils';
 import { verifyProof } from '@semaphore-protocol/proof';
 import { TREE_DEPTH } from '../../../utils/groups';
+import { ProofAndTree } from 'src/@app/types';
 
 /** the reaction must have
  * - a proof of the same tree as the statement
