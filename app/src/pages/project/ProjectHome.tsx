@@ -94,9 +94,7 @@ export const ProjectHomePage = (props: IProjectHome) => {
           <StatementContext statement={statement}>
             <StatementCard
               key={statement.id}
-              statmentCardProps={{
-                onClick: () => goToStatement(statement.id),
-              }}
+              onClick={() => goToStatement(statement.id)}
             ></StatementCard>
           </StatementContext>
         </Box>

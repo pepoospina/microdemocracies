@@ -86,17 +86,6 @@ export const LoadingContext = ({ children }: LoadingContextProps) => {
     }
   }
 
-  const layerBreakpoints = {
-    xsmall: '200px',
-    small: '380px',
-    medium: '600px',
-    large: '780px',
-  }
-
-  const BoxWrapper = styled.div`
-    width: 100%;
-  `
-
   return (
     <LoadingContextValue.Provider
       value={{
