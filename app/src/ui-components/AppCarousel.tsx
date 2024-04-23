@@ -1,16 +1,16 @@
 import React, {
-  useState,
-  useRef,
-  useEffect,
-  useCallback,
+  ButtonHTMLAttributes,
   Children,
   HTMLAttributes,
-  ButtonHTMLAttributes,
-  ReactElement,
   MouseEvent,
-  TouchEvent,
+  ReactElement,
   ReactNode,
+  TouchEvent,
   TransitionEvent,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
 } from 'react'
 
 type NavDirection = 'forward' | 'backward'
@@ -111,16 +111,19 @@ export function AppCarousel({ responsiveProps = [], ...props }: ReactSimplyCarou
   const renderedSlidesCountRef = useRef(0)
   const firstRenderSlideIndexRef = useRef(positionIndex)
 
-  const propsByWindowWidth = responsiveProps.reduce((result, { minWidth = 0, maxWidth = null, ...item } = {}) => {
-    if (windowWidth > minWidth && (!maxWidth || windowWidth <= maxWidth)) {
-      return {
-        ...result,
-        ...item,
+  const propsByWindowWidth = responsiveProps.reduce(
+    (result, { minWidth = 0, maxWidth = null, ...item } = {}) => {
+      if (windowWidth > minWidth && (!maxWidth || windowWidth <= maxWidth)) {
+        return {
+          ...result,
+          ...item,
+        }
       }
-    }
 
-    return result
-  }, props)
+      return result
+    },
+    props,
+  )
 
   const slidesItems = Children.toArray(propsByWindowWidth.children) as ReactElement<any>[]
 
@@ -133,9 +136,21 @@ export function AppCarousel({ responsiveProps = [], ...props }: ReactSimplyCarou
       onTransitionEnd: onItemsListTransitionEnd = undefined,
       ...itemsListProps
     } = {},
-    backwardBtnProps: { children: backwardBtnChildren = null, show: showBackwardBtn = true, ...backwardBtnProps } = {},
-    forwardBtnProps: { children: forwardBtnChildren = null, show: showForwardBtn = true, ...forwardBtnProps } = {},
-    activeSlideProps: { className: activeSlideClassName = '', style: activeSlideStyle = {}, ...activeSlideProps } = {},
+    backwardBtnProps: {
+      children: backwardBtnChildren = null,
+      show: showBackwardBtn = true,
+      ...backwardBtnProps
+    } = {},
+    forwardBtnProps: {
+      children: forwardBtnChildren = null,
+      show: showForwardBtn = true,
+      ...forwardBtnProps
+    } = {},
+    activeSlideProps: {
+      className: activeSlideClassName = '',
+      style: activeSlideStyle = {},
+      ...activeSlideProps
+    } = {},
     visibleSlideProps: {
       className: visibleSlideClassName = '',
       style: visibleSlideStyle = {},
@@ -175,7 +190,10 @@ export function AppCarousel({ responsiveProps = [], ...props }: ReactSimplyCarou
   } = windowWidth
     ? {
         ...propsByWindowWidth,
-        activeSlideIndex: Math.max(0, Math.min(propsByWindowWidth.activeSlideIndex, slidesItems.length - 1)),
+        activeSlideIndex: Math.max(
+          0,
+          Math.min(propsByWindowWidth.activeSlideIndex, slidesItems.length - 1),
+        ),
         itemsToShow: Math.min(slidesItems.length, propsByWindowWidth.itemsToShow || 0),
         itemsToScroll: Math.min(slidesItems.length, propsByWindowWidth.itemsToScroll || 1),
       }
@@ -189,11 +207,14 @@ export function AppCarousel({ responsiveProps = [], ...props }: ReactSimplyCarou
   } = (dotsNav as DotsNav) || {}
 
   const lastSlideIndex = Children.count(children) - 1
-  const isAllSlidesVisible = !!windowWidth && innerRef.current?.offsetWidth! >= itemsListRef.current?.offsetWidth!
+  const isAllSlidesVisible =
+    !!windowWidth && innerRef.current?.offsetWidth! >= itemsListRef.current?.offsetWidth!
   const hideNav = hideNavIfAllVisible && isAllSlidesVisible
   const _disableNav = disableNav || (disableNavIfAllVisible && isAllSlidesVisible)
   const itemsListTransition =
-    activeSlideIndex - positionIndex === 0 || !(speed || delay) ? 'none' : `transform ${speed}ms ${easing} ${delay}ms`
+    activeSlideIndex - positionIndex === 0 || !(speed || delay)
+      ? 'none'
+      : `transform ${speed}ms ${easing} ${delay}ms`
 
   const getRenderParams = useCallback(
     ({
@@ -212,7 +233,9 @@ export function AppCarousel({ responsiveProps = [], ...props }: ReactSimplyCarou
       const slidesHTMLElements = infinite
         ? ([...itemsListChildren].slice(
             itemsListChildrenCount / 3 - prevCorrectionSlideIndex,
-            itemsListChildrenCount / 3 - prevCorrectionSlideIndex + itemsListChildrenCount / 3,
+            itemsListChildrenCount / 3 -
+              prevCorrectionSlideIndex +
+              itemsListChildrenCount / 3,
           ) as HTMLElement[])
         : ([...itemsListChildren] as HTMLElement[])
 
@@ -222,7 +245,8 @@ export function AppCarousel({ responsiveProps = [], ...props }: ReactSimplyCarou
         ? slidesHTMLElements.reduce((result, item, index) => {
             const isItemVisible =
               (index >= curActiveSlideIndex && index < curActiveSlideIndex + itemsToShow) ||
-              (index < curActiveSlideIndex && index < curActiveSlideIndex + itemsToShow - slidesHTMLElements.length)
+              (index < curActiveSlideIndex &&
+                index < curActiveSlideIndex + itemsToShow - slidesHTMLElements.length)
 
             if (!isItemVisible) {
               return result
@@ -236,7 +260,8 @@ export function AppCarousel({ responsiveProps = [], ...props }: ReactSimplyCarou
 
       const itemsListMaxTranslateX = itemsListWidth - innerWidth
 
-      const offsetCorrectionForCenterMode = centerMode && infinite ? -(innerWidth - activeSlideWidth) / 2 : 0
+      const offsetCorrectionForCenterMode =
+        centerMode && infinite ? -(innerWidth - activeSlideWidth) / 2 : 0
 
       const offsetCorrectionForInfiniteMode = infinite ? itemsListWidth / 3 : 0
 
@@ -247,7 +272,8 @@ export function AppCarousel({ responsiveProps = [], ...props }: ReactSimplyCarou
           : // eslint-disable-next-line no-nested-ternary
             directionRef.current === 'forward' && curActiveSlideIndex < correctionSlideIndex
             ? offsetCorrectionForInfiniteMode
-            : directionRef.current === 'backward' && curActiveSlideIndex > correctionSlideIndex
+            : directionRef.current === 'backward' &&
+                curActiveSlideIndex > correctionSlideIndex
               ? -offsetCorrectionForInfiniteMode
               : 0
 
@@ -269,9 +295,14 @@ export function AppCarousel({ responsiveProps = [], ...props }: ReactSimplyCarou
         return Math.min(itemsListMaxTranslateX, offsetByIndex)
       }
 
-      const positionIndexOffset = isNewSlideIndex && infinite ? getItemsListOffsetBySlideIndex(correctionSlideIndex) : 0
+      const positionIndexOffset =
+        isNewSlideIndex && infinite
+          ? getItemsListOffsetBySlideIndex(correctionSlideIndex)
+          : 0
       const activeSlideIndexOffset =
-        isNewSlideIndex || !infinite ? getItemsListOffsetBySlideIndex(curActiveSlideIndex) : 0
+        isNewSlideIndex || !infinite
+          ? getItemsListOffsetBySlideIndex(curActiveSlideIndex)
+          : 0
 
       const itemsListTranslateX = _disableNav
         ? 0
@@ -309,10 +340,12 @@ export function AppCarousel({ responsiveProps = [], ...props }: ReactSimplyCarou
             })),
             ...slidesHTMLElementsDefault,
             ...slidesHTMLElementsDefault,
-            ...slidesHTMLElements.slice(0, curActiveSlideIndex).map((htmlElement, index) => ({
-              slideIndex: index,
-              htmlElement,
-            })),
+            ...slidesHTMLElements
+              .slice(0, curActiveSlideIndex)
+              .map((htmlElement, index) => ({
+                slideIndex: index,
+                htmlElement,
+              })),
           ]
         : slidesHTMLElementsDefault
 
@@ -322,7 +355,8 @@ export function AppCarousel({ responsiveProps = [], ...props }: ReactSimplyCarou
 
           if (
             (result.summ >= start && result.summ < end) ||
-            (result.summ + htmlElementWidth > start && result.summ + htmlElementWidth <= end)
+            (result.summ + htmlElementWidth > start &&
+              result.summ + htmlElementWidth <= end)
           ) {
             result.items.push({
               slideIndex,
@@ -341,7 +375,9 @@ export function AppCarousel({ responsiveProps = [], ...props }: ReactSimplyCarou
         },
       )
 
-      const isFirstSlideVisible = !!visibilityItemsState.items.find((item) => item.slideIndex === 0)
+      const isFirstSlideVisible = !!visibilityItemsState.items.find(
+        (item) => item.slideIndex === 0,
+      )
 
       const isLastSlideVisible = !!visibilityItemsState.items.find(
         (item) => item.slideIndex === slidesHTMLElements.length - 1,
@@ -400,7 +436,11 @@ export function AppCarousel({ responsiveProps = [], ...props }: ReactSimplyCarou
         const nextSlideIndex = activeSlideIndex - itemsToScroll
         const isOnStart = nextSlideIndex < 0
         // eslint-disable-next-line no-nested-ternary
-        const newSlideIndex = isOnStart ? (infinite ? lastSlideIndex + 1 + nextSlideIndex : 0) : nextSlideIndex
+        const newSlideIndex = isOnStart
+          ? infinite
+            ? lastSlideIndex + 1 + nextSlideIndex
+            : 0
+          : nextSlideIndex
 
         return newSlideIndex
       }
@@ -413,7 +453,8 @@ export function AppCarousel({ responsiveProps = [], ...props }: ReactSimplyCarou
   const updateActiveSlideIndex = useCallback(
     (newActiveSlideIndex: number, direction: NavDirection) => {
       directionRef.current = direction
-      itemsListRef.current!.style.transition = speed || delay ? `transform ${speed}ms ${easing} ${delay}ms` : 'none'
+      itemsListRef.current!.style.transition =
+        speed || delay ? `transform ${speed}ms ${easing} ${delay}ms` : 'none'
 
       if (newActiveSlideIndex !== activeSlideIndex || persistentChangeCallbacks) {
         clearTimeout(autoplayTimerRef.current)
@@ -445,7 +486,9 @@ export function AppCarousel({ responsiveProps = [], ...props }: ReactSimplyCarou
         })
       } else {
         itemsListRef.current!.style.transform = `translateX(-${
-          offsetCorrectionForCenterMode + offsetCorrectionForInfiniteMode + (infinite ? 0 : itemsListTranslateX)
+          offsetCorrectionForCenterMode +
+          offsetCorrectionForInfiniteMode +
+          (infinite ? 0 : itemsListTranslateX)
         }px)`
       }
     },
@@ -473,7 +516,14 @@ export function AppCarousel({ responsiveProps = [], ...props }: ReactSimplyCarou
         updateActiveSlideIndex(getNextSlideIndex(autoplayDirection), autoplayDirection)
       }, autoplayDelay || delay)
     }
-  }, [autoplay, autoplayDirection, autoplayDelay, updateActiveSlideIndex, getNextSlideIndex, delay])
+  }, [
+    autoplay,
+    autoplayDirection,
+    autoplayDelay,
+    updateActiveSlideIndex,
+    getNextSlideIndex,
+    delay,
+  ])
 
   const handleBackwardBtnClick = useCallback(() => {
     updateActiveSlideIndex(getNextSlideIndex('backward'), 'backward')
@@ -507,7 +557,10 @@ export function AppCarousel({ responsiveProps = [], ...props }: ReactSimplyCarou
       const forwardDirectionValue = activeSlideIndex < index ? 'forward' : ''
       const backwardDirectionValue = activeSlideIndex > index ? 'backward' : ''
 
-      updateActiveSlideIndex(index, direction || forwardDirectionValue || backwardDirectionValue)
+      updateActiveSlideIndex(
+        index,
+        direction || forwardDirectionValue || backwardDirectionValue,
+      )
 
       if (onClick) {
         onClick(event)
@@ -517,7 +570,11 @@ export function AppCarousel({ responsiveProps = [], ...props }: ReactSimplyCarou
     return slideItemOnClick
   }
 
-  const renderSlidesItems = (items: ReactElement<any>[], startIndex: number, isDisableNav?: boolean) =>
+  const renderSlidesItems = (
+    items: ReactElement<any>[],
+    startIndex: number,
+    isDisableNav?: boolean,
+  ) =>
     items.map((item, index) => {
       const {
         props: {
@@ -539,7 +596,9 @@ export function AppCarousel({ responsiveProps = [], ...props }: ReactSimplyCarou
           : 'backward'
 
       const isActive: boolean = index + startIndex === activeSlideIndex
-      const isVisible = visibleSlides.find((slide) => slide.slideIndex === index + startIndex)
+      const isVisible = visibleSlides.find(
+        (slide) => slide.slideIndex === index + startIndex,
+      )
 
       const className =
         `${itemClassName} ${isActive ? activeSlideClassName : ''} ${isVisible ? visibleSlideClassName : ''}`.trim() ||
@@ -590,10 +649,13 @@ export function AppCarousel({ responsiveProps = [], ...props }: ReactSimplyCarou
 
       const isTouch = !!(event as TouchEvent).touches?.[0]
 
-      const dragPos = isTouch ? (event as TouchEvent).touches?.[0].clientX : (event as MouseEvent).clientX
+      const dragPos = isTouch
+        ? (event as TouchEvent).touches?.[0].clientX
+        : (event as MouseEvent).clientX
 
       const dragPosDiff =
-        (itemsListDragStartPosRef.current - dragPos) * ((isTouch ? touchSwipeRatio : mouseSwipeRatio) || swipeRatio) +
+        (itemsListDragStartPosRef.current - dragPos) *
+          ((isTouch ? touchSwipeRatio : mouseSwipeRatio) || swipeRatio) +
         offsetCorrectionForCenterMode +
         offsetCorrectionForInfiniteMode +
         (infinite ? 0 : itemsListTranslateX)
@@ -615,11 +677,14 @@ export function AppCarousel({ responsiveProps = [], ...props }: ReactSimplyCarou
         const isTouch = !!(event as TouchEvent).changedTouches?.[0]
 
         const dragPos = isTouch
-          ? (event as TouchEvent).changedTouches[(event as TouchEvent).changedTouches.length - 1].clientX
+          ? (event as TouchEvent).changedTouches[
+              (event as TouchEvent).changedTouches.length - 1
+            ].clientX
           : (event as MouseEvent).clientX
 
         const mousePosDiff =
-          (itemsListDragStartPosRef.current - dragPos) * ((isTouch ? touchSwipeRatio : mouseSwipeRatio) || swipeRatio)
+          (itemsListDragStartPosRef.current - dragPos) *
+          ((isTouch ? touchSwipeRatio : mouseSwipeRatio) || swipeRatio)
 
         const treshold = (() => {
           if (isTouch && touchSwipeTreshold) return touchSwipeTreshold
@@ -644,7 +709,10 @@ export function AppCarousel({ responsiveProps = [], ...props }: ReactSimplyCarou
                   direction: 'forward',
                 }
 
-        updateActiveSlideIndex(nextActiveSlide.index, nextActiveSlide.direction as NavDirection)
+        updateActiveSlideIndex(
+          nextActiveSlide.index,
+          nextActiveSlide.direction as NavDirection,
+        )
       } else {
         event.target?.removeEventListener('click', preventClick as () => {})
       }
@@ -859,15 +927,19 @@ export function AppCarousel({ responsiveProps = [], ...props }: ReactSimplyCarou
             transform: itemsListTransform,
             touchAction: preventScrollOnSwipe ? 'none' : 'auto',
           }}
-          onTransitionEnd={speed || delay ? handleItemsListTransitionEnd : onItemsListTransitionEnd}
+          onTransitionEnd={
+            speed || delay ? handleItemsListTransitionEnd : onItemsListTransitionEnd
+          }
           tabIndex={-1}
           role="presentation"
           ref={itemsListRef}
         >
-          {infinite && renderSlidesItems(slidesItems.slice(positionIndex), positionIndex, disableNav)}
+          {infinite &&
+            renderSlidesItems(slidesItems.slice(positionIndex), positionIndex, disableNav)}
           {renderSlidesItems(slidesItems, 0, disableNav)}
           {infinite && renderSlidesItems(slidesItems, 0, disableNav)}
-          {infinite && renderSlidesItems(slidesItems.slice(0, positionIndex), 0, disableNav)}
+          {infinite &&
+            renderSlidesItems(slidesItems.slice(0, positionIndex), 0, disableNav)}
         </div>
       </div>
 
@@ -886,7 +958,8 @@ export function AppCarousel({ responsiveProps = [], ...props }: ReactSimplyCarou
             typeof forwardBtnProps.disabled === 'boolean'
               ? forwardBtnProps.disabled
               : !!(
-                  ((itemsListTranslateX === itemsListMaxTranslateX && disableNavIfEdgeVisible) ||
+                  ((itemsListTranslateX === itemsListMaxTranslateX &&
+                    disableNavIfEdgeVisible) ||
                     (activeSlideIndex === lastSlideIndex && disableNavIfEdgeActive)) &&
                   !infinite
                 )
@@ -897,7 +970,10 @@ export function AppCarousel({ responsiveProps = [], ...props }: ReactSimplyCarou
       )}
 
       {!!showDotsNav && (
-        <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }} {...dotsNavContainerProps}>
+        <div
+          style={{ width: '100%', display: 'flex', justifyContent: 'center' }}
+          {...dotsNavContainerProps}
+        >
           {Array.from({
             length: Math.ceil(slidesItems.length / itemsToScroll),
           }).map((_item, index) => (
@@ -914,7 +990,9 @@ export function AppCarousel({ responsiveProps = [], ...props }: ReactSimplyCarou
               onClick={() => {
                 updateActiveSlideIndex(
                   Math.min(index * itemsToScroll, slidesItems.length - 1),
-                  Math.min(index * itemsToScroll, slidesItems.length - 1) > activeSlideIndex ? 'forward' : 'backward',
+                  Math.min(index * itemsToScroll, slidesItems.length - 1) > activeSlideIndex
+                    ? 'forward'
+                    : 'backward',
                 )
               }}
             />

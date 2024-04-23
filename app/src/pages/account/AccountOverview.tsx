@@ -1,14 +1,18 @@
 import { Anchor, Box, Spinner, Text } from 'grommet'
+import { useTranslation } from 'react-i18next'
 
-import { AccountPerson } from './AccountPerson'
+import { AppAccount, Entity, PAP } from '../../types'
 import { AppCard } from '../../ui-components'
 import { BoxCentered } from '../../ui-components/BoxCentered'
-import { useTranslation } from 'react-i18next'
 import { cap } from '../../utils/general'
-import { AppAccount, Entity, PAP } from '../../types'
 import { MemberAnchor } from '../vouches/MemberAnchor'
+import { AccountPerson } from './AccountPerson'
 
-export const AccountOverview = (props: { account?: AppAccount; pap?: Entity<PAP>; showAccount?: boolean }) => {
+export const AccountOverview = (props: {
+  account?: AppAccount
+  pap?: Entity<PAP>
+  showAccount?: boolean
+}) => {
   const { t } = useTranslation()
   const { account: accountRead, pap: accountPapRead } = props
   const isFounder = accountRead && accountRead.voucher > 10e70
@@ -32,14 +36,22 @@ export const AccountOverview = (props: { account?: AppAccount; pap?: Entity<PAP>
       ) : (
         <></>
       )}
-      <AccountPerson showAccount={props.showAccount} pap={accountPapRead.object}></AccountPerson>
+      <AccountPerson
+        showAccount={props.showAccount}
+        pap={accountPapRead.object}
+      ></AccountPerson>
       {accountRead ? (
         <Box style={{ marginTop: '8px' }}>
-          <Text style={{ fontWeight: 'bold' }}>{isFounder ? cap(t('founder')) : cap(t('invitedBy'))}</Text>
+          <Text style={{ fontWeight: 'bold' }}>
+            {isFounder ? cap(t('founder')) : cap(t('invitedBy'))}
+          </Text>
           {isFounder ? (
             <></>
           ) : (
-            <MemberAnchor style={{ fontSize: '18px' }} tokenId={accountRead?.voucher}></MemberAnchor>
+            <MemberAnchor
+              style={{ fontSize: '18px' }}
+              tokenId={accountRead?.voucher}
+            ></MemberAnchor>
           )}
         </Box>
       ) : (

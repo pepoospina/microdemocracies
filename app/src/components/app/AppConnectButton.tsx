@@ -1,13 +1,12 @@
 import { BoxExtendedProps } from 'grommet'
 import { StatusGood } from 'grommet-icons'
+import { useTranslation } from 'react-i18next'
 
 import { useSemaphoreContext } from '../../contexts/SemaphoreContext'
 import { Loading } from '../../pages/common/Loading'
 import { AppButton, AppHeading } from '../../ui-components'
 import { useAccountContext } from '../../wallet/AccountContext'
 import { useAppSigner } from '../../wallet/SignerContext'
-
-import { useTranslation } from 'react-i18next'
 
 export const AppConnectButton = (props: { label?: string } & BoxExtendedProps) => {
   const { t } = useTranslation()

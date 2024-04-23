@@ -1,4 +1,5 @@
-import { Select, SelectExtendedProps, BoxExtendedProps, Box } from 'grommet'
+import { Box, BoxExtendedProps, Select, SelectExtendedProps } from 'grommet'
+
 import { useThemeContext } from '../components/app'
 
 export const AppSelect = (props: SelectExtendedProps): JSX.Element => {
@@ -7,7 +8,11 @@ export const AppSelect = (props: SelectExtendedProps): JSX.Element => {
 
 export const SelectRow = (props: BoxExtendedProps): JSX.Element => {
   return (
-    <Box direction="row" align="center" style={{ width: '100%', padding: '6px 12px', ...props.style }}>
+    <Box
+      direction="row"
+      align="center"
+      style={{ width: '100%', padding: '6px 12px', ...props.style }}
+    >
       {props.children}
     </Box>
   )

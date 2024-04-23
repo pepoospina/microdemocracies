@@ -1,7 +1,7 @@
-import { useState } from 'react'
-
 import { Box, Text } from 'grommet'
 import { UserExpert } from 'grommet-icons'
+import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { CHAIN_ID } from '../../config/appConfig'
 import { useSemaphoreContext } from '../../contexts/SemaphoreContext'
@@ -10,11 +10,9 @@ import { Loading } from '../../pages/common/Loading'
 import { Address, AppButton, AppCircleDropButton } from '../../ui-components'
 import { cap } from '../../utils/general'
 import { useAccountContext } from '../../wallet/AccountContext'
+import { useAppSigner } from '../../wallet/SignerContext'
 import { AppConnectButton } from './AppConnectButton'
 import { useThemeContext } from './ThemedApp'
-
-import { useTranslation } from 'react-i18next'
-import { useAppSigner } from '../../wallet/SignerContext'
 
 export const ConnectedUser = (props: {}) => {
   const { t } = useTranslation()

@@ -1,9 +1,9 @@
+import { useQuery } from '@tanstack/react-query'
 import { PropsWithChildren, createContext, useContext } from 'react'
 
+import { getAccountProjects } from '../firestore/getters'
 import { AppProject } from '../types'
 import { useAccountContext } from './AccountContext'
-import { getAccountProjects } from '../firestore/getters'
-import { useQuery } from '@tanstack/react-query'
 
 export type AccountDataContextType = {
   projects?: AppProject[]

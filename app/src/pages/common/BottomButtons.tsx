@@ -1,7 +1,6 @@
-import { ReactElement } from 'react'
-
 import { Box } from 'grommet'
-import { FormPrevious, FormNext } from 'grommet-icons'
+import { FormNext, FormPrevious } from 'grommet-icons'
+import { ReactElement } from 'react'
 
 import { AppButton, AppCard, IButton } from '../../ui-components'
 
@@ -21,11 +20,21 @@ export interface IButtonWithAction {
   icon?: ReactElement
 }
 
-export const AppBottomButtons = (props: { left?: IButtonWithAction; right?: IButtonWithAction; popUp?: string }) => {
+export const AppBottomButtons = (props: {
+  left?: IButtonWithAction
+  right?: IButtonWithAction
+  popUp?: string
+}) => {
   const { left, right } = props
   const style = { flexGrow: '1', maxWidth: '300px', width: '50%' }
   return (
-    <Box direction="row" justify="evenly" style={{ position: 'relative' }} gap="small" pad="small">
+    <Box
+      direction="row"
+      justify="evenly"
+      style={{ position: 'relative' }}
+      gap="small"
+      pad="small"
+    >
       {left ? (
         <AppButton
           icon={!left.icon ? <FormPrevious /> : left.icon}

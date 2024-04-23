@@ -1,18 +1,12 @@
 import { Identity } from '@semaphore-protocol/identity'
-import { SemaphoreProof, generateProof as _generateProof } from '@semaphore-protocol/proof'
+import { generateProof as _generateProof } from '@semaphore-protocol/proof'
+
 import { getPublicIdentity } from '../firestore/getters'
-
-import { AppGetProof, AppPublicIdentity, HexStr } from '../types'
-
-import { getMerklePass, postIdentity } from './statements'
+import { AppGetProof, AppPublicIdentity, HexStr, ProofAndTree } from '../types'
 import { getControlMessage } from './identity.utils'
+import { getMerklePass, postIdentity } from './statements'
 
 export type MessageSigner = (message: string) => Promise<HexStr>
-
-export interface ProofAndTree {
-  proof: SemaphoreProof
-  treeId: string
-}
 
 export const checkOrStoreId = async (
   publicId: string,
@@ -37,7 +31,11 @@ export const checkOrStoreId = async (
   }
 }
 
-export const connectIdentity = async (owner: HexStr, aaAddress: HexStr, signMessage: MessageSigner) => {
+export const connectIdentity = async (
+  owner: HexStr,
+  aaAddress: HexStr,
+  signMessage: MessageSigner,
+) => {
   const secret = await signMessage('Prepare anonymous identity')
   const identity = new Identity(secret)
   const _publicId = identity.getCommitment().toString()
@@ -48,7 +46,9 @@ export const connectIdentity = async (owner: HexStr, aaAddress: HexStr, signMess
   return identity
 }
 
-export const generateProof = async (input: AppGetProof & { identity: Identity }): Promise<ProofAndTree> => {
+export const generateProof = async (
+  input: AppGetProof,
+): Promise<ProofAndTree | undefined> => {
   const { projectId, treeId, identity, signal, nullifier } = input
 
   /**
@@ -61,6 +61,10 @@ export const generateProof = async (input: AppGetProof & { identity: Identity })
     treeId,
     publicId: identity.getCommitment().toString(),
   })
+
+  if (treePass === undefined) {
+    return undefined
+  }
 
   /** Based on this tree, a proof is generated here in the frontend */
   const generated = await _generateProof(identity, treePass.merklePass, nullifier, signal)

@@ -1,10 +1,10 @@
 import { Box, BoxExtendedProps } from 'grommet'
 import { CSSProperties } from 'react'
+import { useEnsName } from 'wagmi'
 
 import { useThemeContext } from '../components/app'
 import { CHAIN_EXPLORER_BASE } from '../config/appConfig'
 import { getAddress } from '../utils/addresses'
-import { useEnsName } from 'wagmi'
 import { ensChain } from '../wallet/ConnectedWalletContext'
 
 interface IAddress extends BoxExtendedProps {

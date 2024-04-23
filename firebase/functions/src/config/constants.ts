@@ -1,1 +1,1 @@
-export const MAX_STATEMETN_LENGTH = 560;
+export const MAX_STATEMETN_LENGTH = 560

@@ -1,9 +1,8 @@
-import { useEffect } from 'react'
-
-import { useNavigate } from 'react-router-dom'
-
 import { Box, DropButton, Spinner, Text } from 'grommet'
 import { Add, FormPrevious, Group, Menu, UserAdd } from 'grommet-icons'
+import { useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
+import { useNavigate } from 'react-router-dom'
 
 import { useResponsive, useThemeContext } from '../../components/app'
 import { useAppContainer } from '../../components/app/AppContainer'
@@ -23,15 +22,13 @@ import { Loading } from '../common/Loading'
 import { StatementCard } from '../voice/StatementCard'
 import { ProjectCard } from './ProjectCard'
 
-import { useTranslation } from 'react-i18next'
-
 export interface IProjectHome {
   dum?: any
 }
 
 export const ProjectHomePage = (props: IProjectHome) => {
   const { t, i18n } = useTranslation()
-  const { setSubtitle, setLoading, setExpectedLoadingTime } = useLoadingContext()
+  const { setSubtitle, setLoading } = useLoadingContext()
   const navigate = useNavigate()
   const { project, nMembers, statements } = useProjectContext()
   const { tokenId } = useConnectedMember()
@@ -97,9 +94,7 @@ export const ProjectHomePage = (props: IProjectHome) => {
           <StatementContext statement={statement}>
             <StatementCard
               key={statement.id}
-              statmentCardProps={{
-                onClick: () => goToStatement(statement.id),
-              }}
+              onClick={() => goToStatement(statement.id)}
             ></StatementCard>
           </StatementContext>
         </Box>
@@ -237,7 +232,7 @@ export const ProjectHomePage = (props: IProjectHome) => {
         <AppBottomButtons
           left={{
             action: () => navigate(AbsoluteRoutes.Projects),
-            label: t('back'),
+            label: t('appHome'),
             icon: <FormPrevious />,
           }}
           right={{

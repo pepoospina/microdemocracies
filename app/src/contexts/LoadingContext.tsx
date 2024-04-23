@@ -1,13 +1,20 @@
+import { set } from 'date-fns'
+import { Box, Heading, Layer, Meter, Spinner, Text } from 'grommet'
 import { ReactNode, createContext, useContext, useEffect, useRef, useState } from 'react'
-
-import { Box, Heading, Layer, Meter, Text, Spinner } from 'grommet'
+import styled from 'styled-components'
 
 import { useThemeContext } from '../components/app'
 
-import styled from 'styled-components'
+export interface LoadingOptions {
+  title?: string
+  subtitle?: string
+  time?: number
+}
 
 export type LoadingContextType = {
   loading: boolean
+  openLoading: (options: LoadingOptions) => void
+  closeLoading: () => void
   setLoading: (loading: boolean) => void
   setExpectedLoadingTime: (loadingTimeout: number) => void
   setTitle: (title: string) => void
@@ -46,6 +53,20 @@ export const LoadingContext = ({ children }: LoadingContextProps) => {
   useEffect(() => {
     pauseRef.current = pause
   }, [pause])
+
+  const open = (options: LoadingOptions) => {
+    setTitle(options.title || '')
+    setSubtitle(options.subtitle || '')
+    setExpectedLoadingTime(options.time || 0)
+    setLoading(true)
+  }
+
+  const close = () => {
+    setTitle('')
+    setSubtitle('')
+    setExpectedLoadingTime(0)
+    setLoading(false)
+  }
 
   /** an always-running periodic call */
   const updateTime = () => {
@@ -88,21 +109,12 @@ export const LoadingContext = ({ children }: LoadingContextProps) => {
     }
   }
 
-  const layerBreakpoints = {
-    xsmall: '200px',
-    small: '380px',
-    medium: '600px',
-    large: '780px',
-  }
-
-  const BoxWrapper = styled.div`
-    width: 100%;
-  `
-
   return (
     <LoadingContextValue.Provider
       value={{
         loading,
+        closeLoading: close,
+        openLoading: open,
         setLoading,
         setExpectedLoadingTime,
         setTitle,
@@ -135,7 +147,7 @@ export const LoadingContext = ({ children }: LoadingContextProps) => {
                 <Text>{subtitle}</Text>
               </Box>
 
-              <Box margin={{ vertical: 'large' }}>
+              <Box margin={{ vertical: 'large' }} align="center">
                 {expectedLoadingTime ? (
                   <Meter
                     value={timeElapsed}

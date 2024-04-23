@@ -1,3 +1,6 @@
+import { Identity } from '@semaphore-protocol/identity'
+import { SemaphoreProof } from '@semaphore-protocol/proof'
+
 export interface PersonDetails {
   firstName?: string
   lastName?: string
@@ -131,15 +134,28 @@ export interface AppStatement {
 
 export type AppStatementRead = AppStatement & { id: string }
 
-export type AppStatementCreate = AppStatement
+export interface ProofAndTree {
+  proof: SemaphoreProof
+  treeId: string
+}
 
-export enum StatmentReactions {
+export type StatementCreateProofs = {
+  statementProof: ProofAndTree
+  reactionProof: ProofAndTree
+}
+
+export type AppStatementCreate = {
+  projectId: number
+  statement: string
+} & StatementCreateProofs
+
+export enum StatementReactions {
   Back = 'back',
   DontBack = 'dontBack',
   Flag = 'flag',
 }
 
-export interface AppBackingCreate {
+export interface AppReactionCreate {
   statementId: string
   proof: SemaphoreProofStrings
 }
@@ -163,6 +179,7 @@ export interface AppGetProof {
   treeId?: string
   signal: string
   nullifier: string
+  identity: Identity
 }
 
 export interface AppGetMerklePass {

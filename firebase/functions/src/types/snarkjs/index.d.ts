@@ -1,2 +1,2 @@
-declare module 'snarkjs';
-declare type NumericString = any;
+declare module 'snarkjs'
+declare type NumericString = any

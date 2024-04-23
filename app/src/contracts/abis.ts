@@ -674,7 +674,9 @@ export const registryABI = [
   {
     type: 'event',
     anonymous: false,
-    inputs: [{ name: 'newEndDate', internalType: 'uint256', type: 'uint256', indexed: false }],
+    inputs: [
+      { name: 'newEndDate', internalType: 'uint256', type: 'uint256', indexed: false },
+    ],
     name: 'VotingPeriodExtendedEvent',
   },
   {
@@ -929,7 +931,13 @@ export const registryABI = [
     name: 'isSolidified',
     outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
   },
-  { stateMutability: 'nonpayable', type: 'function', inputs: [], name: 'leave', outputs: [] },
+  {
+    stateMutability: 'nonpayable',
+    type: 'function',
+    inputs: [],
+    name: 'leave',
+    outputs: [],
+  },
   {
     stateMutability: 'view',
     type: 'function',

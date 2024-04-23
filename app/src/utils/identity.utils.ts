@@ -1,5 +1,6 @@
 import { hashMessage } from 'viem'
-import { AppBackingCreate, AppStatementCreate, SemaphoreProofStrings } from '../types'
+
+import { AppReactionCreate, SemaphoreProofStrings } from '../types'
 
 export const getIdentityId = (publicId: string) => {
   return publicId.slice(0, 16)
@@ -30,20 +31,16 @@ export const getTreeId = (projectId: number, root: string) => {
   return `${projectId}-${root.slice(0, 16)}`
 }
 
-export const getStatementId = (statement: AppStatementCreate) => {
-  const hash = hashMessage(JSON.stringify(statement.proof))
+export const getStatementId = (proof: SemaphoreProofStrings) => {
+  const hash = hashMessage(JSON.stringify(proof))
   return hash.slice(0, 18)
 }
 
-export const getBackingId = (backing: AppBackingCreate) => {
+export const getBackingId = (backing: AppReactionCreate) => {
   const hash = hashMessage(JSON.stringify(backing.proof))
   return hash.slice(0, 18)
 }
 
-export const getSupportNullifier = (statementId: string) => {
-  return `${statementId}`
-}
-
-export const getFlagNullifier = (statementId: string) => {
+export const getReactionNullifier = (statementId: string) => {
   return `${statementId}`
 }

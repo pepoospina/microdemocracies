@@ -1,7 +1,6 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { createWeb3Modal } from '@web3modal/wagmi/react'
 import { defaultWagmiConfig } from '@web3modal/wagmi/react/config'
-
 import { WagmiProvider, http } from 'wagmi'
 import { baseSepolia, mainnet } from 'wagmi/chains'
 
@@ -34,6 +33,7 @@ createWeb3Modal({
   wagmiConfig: config,
   projectId,
   enableAnalytics: false,
+  allowUnsupportedChain: true,
 })
 
 const queryClient = new QueryClient()

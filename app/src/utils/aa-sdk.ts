@@ -1,6 +1,5 @@
 import { getDefaultLightAccountFactoryAddress } from '@alchemy/aa-accounts'
 import { EntryPointAbi, getDefaultEntryPointAddress } from '@alchemy/aa-core'
-
 import {
   Address,
   Chain,
@@ -11,14 +10,13 @@ import {
 } from 'viem'
 
 import { HexStr } from '../types'
-
 import { LightAccountFactoryAbi } from './aa-sdk.abis'
 
 /**  */
 export const getAccountAddress = async (
   signer: HexStr,
   client: PublicClient,
-  chain: Chain
+  chain: Chain,
 ): Promise<HexStr | undefined> => {
   const salt = BigInt(0)
   const entryPointAddress = getDefaultEntryPointAddress(chain as any)

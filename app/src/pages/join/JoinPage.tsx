@@ -1,5 +1,6 @@
 import { isAddress } from 'ethers/lib/utils'
 import { Box, Text } from 'grommet'
+import { FormPrevious } from 'grommet-icons'
 import { useEffect, useState } from 'react'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
@@ -17,7 +18,7 @@ import { postApply } from '../../utils/project'
 import { SelectedDetailsHelper } from '../../utils/select.details'
 import { putObject } from '../../utils/store'
 import { useAccountContext } from '../../wallet/AccountContext'
-import { AppBottomButtons } from '../common/BottomButtons'
+import { AppBottomButton, AppBottomButtons } from '../common/BottomButtons'
 import { Loading } from '../common/Loading'
 import { StatementEditable } from '../voice/StatementEditable'
 import { DetailsForm } from './DetailsForm'
@@ -152,12 +153,13 @@ export const JoinPage = () => {
       nav={
         <AppBottomButtons
           left={{
-            label: 'home',
+            label: t('exit'),
             primary: false,
-            action: () => navigate(AbsoluteRoutes.ProjectHome(projectId?.toString() as string)),
+            action: () =>
+              navigate(AbsoluteRoutes.ProjectHome(projectId?.toString() as string)),
           }}
           right={{
-            label: 'next',
+            label: t('next'),
             primary: true,
             action: nextPage,
           }}
@@ -169,7 +171,10 @@ export const JoinPage = () => {
       key="3"
       content={
         <Box pad="large">
-          <DetailsForm selected={project?.selectedDetails} onChange={(d) => setPersonal(d)}></DetailsForm>
+          <DetailsForm
+            selected={project?.selectedDetails}
+            onChange={(d) => setPersonal(d)}
+          ></DetailsForm>
         </Box>
       }
       nav={
@@ -224,14 +229,13 @@ export const JoinPage = () => {
         </Box>
       }
       nav={
-        <AppBottomButtons
-          left={{ label: t('back'), primary: false, action: prevPage }}
-          right={{
-            label: t('done'),
-            primary: true,
-            action: () => navigate(AbsoluteRoutes.ProjectHome(projectId?.toString() as string)),
-          }}
-        ></AppBottomButtons>
+        <AppBottomButton
+          label={t('done')}
+          icon={<FormPrevious></FormPrevious>}
+          onClick={() =>
+            navigate(AbsoluteRoutes.ProjectHome(projectId?.toString() as string))
+          }
+        ></AppBottomButton>
       }
     ></ViewportPage>,
   ]

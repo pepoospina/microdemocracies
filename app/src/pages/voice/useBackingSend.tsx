@@ -1,10 +1,9 @@
 import { useEffect, useState } from 'react'
 
-import { postBacking } from '../../utils/statements'
-import { AppBackingCreate, StatmentReactions as StatementReactions } from '../../types'
 import { useSemaphoreContext } from '../../contexts/SemaphoreContext'
-import { getSupportNullifier } from '../../utils/identity.utils'
-import { hashMessage } from 'viem'
+import { AppReactionCreate, StatementReactions } from '../../types'
+import { postBacking } from '../../utils/statements'
+import { generateReactionProof } from './statement.utils'
 
 export type VoiceSendContextType = {
   backStatement?: (statementId: string, treeId: string) => Promise<any>
@@ -14,44 +13,42 @@ export type VoiceSendContextType = {
 }
 
 export const useBackingSend = (): VoiceSendContextType => {
-  const { generateProof } = useSemaphoreContext()
-
+  const { identity } = useSemaphoreContext()
   const [isSuccessBacking, setIsSuccessBacking] = useState<boolean>(false)
   const [isErrorBacking, setIsErrorBacking] = useState<boolean>(false)
   const [errorBacking, setErrorBacking] = useState<string>()
 
-  const generateBackingProof =
-    generateProof !== undefined
-      ? async (statementId: string, treeId: string) => {
-          return generateProof({
-            signal: hashMessage(StatementReactions.Back),
-            nullifier: getSupportNullifier(statementId),
-            treeId,
-          })
-        }
-      : undefined
-
-  const backStatement = generateBackingProof
+  const backStatement = identity
     ? async (statementId: string, treeId: string) => {
         setIsSuccessBacking(false)
         setErrorBacking(undefined)
 
-        const proofAndTree = await generateBackingProof(statementId, treeId)
-
-        const backing: AppBackingCreate = {
+        const proofAndTree = await generateReactionProof(
           statementId,
-          proof: proofAndTree.proof,
-        }
+          treeId,
+          identity,
+          StatementReactions.Back,
+        )
 
-        const res = await postBacking(backing)
+        if (proofAndTree !== undefined) {
+          const backing: AppReactionCreate = {
+            statementId,
+            proof: proofAndTree.proof,
+          }
 
-        if (res.success) {
-          setIsSuccessBacking(true)
+          const res = await postBacking(backing)
+
+          if (res.success) {
+            setIsSuccessBacking(true)
+          } else {
+            setIsErrorBacking(true)
+            setErrorBacking(res.error)
+          }
+          return res
         } else {
           setIsErrorBacking(true)
-          setErrorBacking(res.error)
+          setErrorBacking('Only members at the time of the proposal can back it.')
         }
-        return res
       }
     : undefined
 

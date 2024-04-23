@@ -2,6 +2,7 @@
   "name": "functions",
   "scripts": {
     "lint": "eslint --ext .js,.ts .",
+    "prettier": "prettier --write .",
     "build": "tsc",
     "build:watch": "tsc --watch",
     "test-e2e": "NODE_ENV=local FIRESTORE_EMULATOR_HOST=localhost:8080 mocha --config ./.mocharc.e2e.js src/__e2e_tests__/**/*.test.ts",
@@ -22,6 +23,7 @@
     "@semaphore-protocol/group": "^3.15.0",
     "@semaphore-protocol/identity": "^3.15.0",
     "@semaphore-protocol/proof": "^3.15.0",
+    "@trivago/prettier-plugin-sort-imports": "^4.3.0",
     "@types/express": "^4.17.20",
     "base58-js": "1.0.5",
     "canonical-json": "^0.0.4",
@@ -35,6 +37,7 @@
     "multihashing-async": "^2.1.4",
     "pino": "^8.16.1",
     "pino-pretty": "^10.2.3",
+    "prettier": "^3.2.5",
     "ts-node": "^10.9.1",
     "typescript": "^5.2.2",
     "viem": "2.8.6",

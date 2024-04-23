@@ -1,13 +1,14 @@
 import {
-  getDocs,
-  where,
-  query,
-  getDoc,
   doc as docRef,
   getCountFromServer,
+  getDoc,
+  getDocs,
   orderBy,
+  query,
+  where,
 } from 'firebase/firestore'
-import { collections } from './database'
+import { getAddress } from 'viem'
+
 import {
   AppApplication,
   AppProject,
@@ -17,7 +18,7 @@ import {
   StatementRead,
 } from '../types'
 import { postInvite } from '../utils/project'
-import { getAddress } from 'viem'
+import { collections } from './database'
 
 export const getProject = async (projectId: number) => {
   const ref = collections.project(projectId)

@@ -1,9 +1,8 @@
-import { useEffect, useState } from 'react'
-
-import { useNavigate } from 'react-router-dom'
-
 import { Box, Text } from 'grommet'
 import { Add, FormPrevious } from 'grommet-icons'
+import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { useNavigate } from 'react-router-dom'
 
 import { AppConnectButton } from '../../components/app/AppConnectButton'
 import { useAppContainer } from '../../components/app/AppContainer'
@@ -23,8 +22,6 @@ import { Loading } from '../common/Loading'
 import { StatementEditable } from './StatementEditable'
 import { useStatementSend } from './useStatementSend'
 
-import { useTranslation } from 'react-i18next'
-
 export const VoicePropose = (): JSX.Element => {
   const { t } = useTranslation()
 
@@ -40,12 +37,7 @@ export const VoicePropose = (): JSX.Element => {
 
   const { setTitle } = useAppContainer()
 
-  const {
-    setLoading,
-    setTitle: setTitleToLoading,
-    setSubtitle,
-    setExpectedLoadingTime,
-  } = useLoadingContext()
+  const { openLoading, closeLoading } = useLoadingContext()
 
   useEffect(() => {
     setTitle({ prefix: cap(t('proposeNew')), main: t('statement') })
@@ -55,13 +47,11 @@ export const VoicePropose = (): JSX.Element => {
 
   const _proposeStatement = async (input: string) => {
     if (proposeStatement) {
-      setLoading(true)
-      setTitleToLoading(t('sendingProposal'))
-      setSubtitle(t('preparingData'))
+      openLoading({ title: t('sendingProposal'), subtitle: t('preparingData') })
       setIsProposing(true)
+
       proposeStatement(input).then(() => {
-        setLoading(false)
-        setExpectedLoadingTime(15)
+        closeLoading()
       })
     }
   }
@@ -81,7 +71,7 @@ export const VoicePropose = (): JSX.Element => {
     if (nMembers === undefined) {
       return <Loading></Loading>
     }
-    if (nMembers < 3) {
+    if (nMembers < MIN_MEMBERS) {
       return (
         <BoxCentered pad={{ horizontal: 'medium' }}>
           <AppCard margin={{ vertical: 'medium' }}>
@@ -119,8 +109,7 @@ export const VoicePropose = (): JSX.Element => {
               <BulletList
                 elements={[
                   <Text>{t('canBackN', { nMembers })}.</Text>,
-                  <Text>{t('aStatementNeeds', { nLikes: MIN_LIKES_PUBLIC })}.</Text>,
-                  <Text>{t('youNeedToLike')}.</Text>,
+                  <Text>{t('aStatementNeeds', { nLikes: MIN_LIKES_PUBLIC - 1 })}.</Text>,
                 ]}
               ></BulletList>
             </AppCard>

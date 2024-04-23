@@ -1,4 +1,5 @@
 import { Box, BoxExtendedProps, Text } from 'grommet'
+
 import { AppCard } from '../../ui-components'
 
 export const Intro = (props: BoxExtendedProps) => {
@@ -9,13 +10,16 @@ export const Intro = (props: BoxExtendedProps) => {
       </AppCard>
 
       <AppCard margin={{ bottom: 'medium' }}>
-        <Text>You will be asked to provide the account you want to register and some personal details.</Text>
+        <Text>
+          You will be asked to provide the account you want to register and some personal
+          details.
+        </Text>
       </AppCard>
 
       <AppCard margin={{ bottom: 'medium' }}>
         <Text>
-          <b>All personal details are optional.</b> It's up to you to decide ones you provide. These should be
-          considered enough for your voucher to vouch for you.
+          <b>All personal details are optional.</b> It's up to you to decide ones you
+          provide. These should be considered enough for your voucher to vouch for you.
         </Text>
       </AppCard>
     </Box>

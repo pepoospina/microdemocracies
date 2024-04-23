@@ -1,9 +1,10 @@
 import { Box } from 'grommet'
 import { SubtractCircle } from 'grommet-icons'
-import { AppButton } from '../../ui-components'
+
 import { PlatformAccount } from '../../types'
-import { PlatformUrl } from './PlatformUrl'
+import { AppButton } from '../../ui-components'
 import { platforms } from '../../utils/platforms'
+import { PlatformUrl } from './PlatformUrl'
 
 export interface IAccountPlatforms {
   users?: PlatformAccount[]
@@ -20,12 +21,20 @@ export const AccountPlatforms = (props: IAccountPlatforms) => {
         const platformName = platform ? platform.name : 'custom'
 
         return (
-          <Box key={JSON.stringify(user)} direction="row" style={{ height: '50px', flexShrink: 0 }}>
+          <Box
+            key={JSON.stringify(user)}
+            direction="row"
+            style={{ height: '50px', flexShrink: 0 }}
+          >
             <Box margin={{ right: 'small' }}>{platformName}: </Box>
             <PlatformUrl user={user}></PlatformUrl>
             {props.remove !== undefined ? (
               <Box margin={{ left: 'small' }}>
-                <AppButton plain onClick={() => (props.remove ? props.remove(user) : '')} icon={<SubtractCircle />} />
+                <AppButton
+                  plain
+                  onClick={() => (props.remove ? props.remove(user) : '')}
+                  icon={<SubtractCircle />}
+                />
               </Box>
             ) : (
               <></>

@@ -1,4 +1,4 @@
-import { BoxExtendedProps, Box } from 'grommet'
+import { Box, BoxExtendedProps } from 'grommet'
 import React, { ReactElement } from 'react'
 
 import { useThemeContext } from '../components/app'
