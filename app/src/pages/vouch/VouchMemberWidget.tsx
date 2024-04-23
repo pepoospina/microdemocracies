@@ -1,8 +1,7 @@
-import { useEffect, useState } from 'react'
-
-import { useNavigate, useParams } from 'react-router-dom'
-
 import { Anchor, Box, Text } from 'grommet'
+import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { useNavigate, useParams } from 'react-router-dom'
 
 import { AppConnectButton } from '../../components/app/AppConnectButton'
 import { useConnectedMember } from '../../contexts/ConnectedAccountContext'
@@ -10,7 +9,7 @@ import { useLoadingContext } from '../../contexts/LoadingContext'
 import { useMember } from '../../contexts/MemberContext'
 import { useProjectContext } from '../../contexts/ProjectContext'
 import { useSemaphoreContext } from '../../contexts/SemaphoreContext'
-import { useToastNotificationContext } from '../../contexts/ToastNotificationsContext'
+import { useToast } from '../../contexts/ToastsContext'
 import { useVouch } from '../../contexts/VouchContext'
 import { AbsoluteRoutes } from '../../route.names'
 import { Entity, PAP } from '../../types'
@@ -18,8 +17,6 @@ import { AppButton, AppCard } from '../../ui-components'
 import { postDeleteApplication } from '../../utils/project'
 import { useAccountContext } from '../../wallet/AccountContext'
 import { WaitingTransaction } from '../common/Loading'
-
-import { useTranslation } from 'react-i18next'
 
 export const VouchMemberWidget = (props: { pap: Entity<PAP> }) => {
   const { projectId } = useParams()
@@ -44,12 +41,7 @@ export const VouchMemberWidget = (props: { pap: Entity<PAP> }) => {
     setSubtitle,
   } = useLoadingContext()
 
-  const {
-    setVisible,
-    setTitle: setNotificationTitle,
-    setMessage: setNotificationMessage,
-    setStatus: setNotificationType,
-  } = useToastNotificationContext()
+  const { show } = useToast()
 
   const {
     account: vouchedAccount,
@@ -81,28 +73,16 @@ export const VouchMemberWidget = (props: { pap: Entity<PAP> }) => {
   }, [isSuccess])
 
   useEffect(() => {
-    if (isErrorSending || errorWithAccount) {
-      setSending(false)
-      setVisible(true)
-      setNotificationTitle('Error')
-      setNotificationType('critical')
-
-      if (isErrorSending) {
-        setError((errorSending as any).shortMessage)
-        setNotificationMessage((errorSending as any).message)
-      }
-
-      if (!!errorWithAccount) setNotificationMessage(errorWithAccount.message)
+    if (errorSending) {
+      show({ title: 'Error', message: errorSending.message })
     }
-  }, [
-    isErrorSending,
-    errorSending,
-    errorWithAccount,
-    setVisible,
-    setNotificationTitle,
-    setNotificationType,
-    setNotificationMessage,
-  ])
+  }, [errorSending, isErrorSending])
+
+  useEffect(() => {
+    if (errorWithAccount) {
+      show({ title: 'Error', message: errorWithAccount.message })
+    }
+  }, [errorWithAccount])
 
   const vouch = () => {
     if (sendVouch) {

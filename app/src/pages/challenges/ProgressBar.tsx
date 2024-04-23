@@ -1,5 +1,6 @@
-import React from 'react'
 import { Box, Text } from 'grommet'
+import React from 'react'
+
 import { useThemeContext } from '../../components/app'
 
 export const ProgressBar = (props: { ratio: number; label?: string }) => {
@@ -7,7 +8,10 @@ export const ProgressBar = (props: { ratio: number; label?: string }) => {
   const widthPercentage = Math.min(Math.max(props.ratio, 0), 1) * 100
   const widthPercentageStr = `${widthPercentage}%` // Ensure ratio is between 0 and 1
 
-  const numberLeft = widthPercentage < 80 ? `calc(${widthPercentageStr} + 5px)` : `calc(${widthPercentageStr} - 65px)`
+  const numberLeft =
+    widthPercentage < 80
+      ? `calc(${widthPercentageStr} + 5px)`
+      : `calc(${widthPercentageStr} - 65px)`
   const textAlign = widthPercentage < 80 ? 'left' : 'right'
 
   return (

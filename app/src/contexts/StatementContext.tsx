@@ -1,10 +1,13 @@
+import { useQuery } from '@tanstack/react-query'
+import { t } from 'i18next'
 import { createContext, useContext, useEffect, useState } from 'react'
 
-import { StatementRead } from '../types'
-import { useConnectedMember } from './ConnectedAccountContext'
 import { countStatementBackings, getStatement } from '../firestore/getters'
 import { useBackingSend } from '../pages/voice/useBackingSend'
-import { useQuery } from '@tanstack/react-query'
+import { StatementRead } from '../types'
+import { useConnectedMember } from './ConnectedAccountContext'
+import { useProjectContext } from './ProjectContext'
+import { useToast } from './ToastsContext'
 
 export type StatementContextType = {
   statement?: StatementRead
@@ -24,6 +27,7 @@ interface IStatementContext {
 const StatementContextValue = createContext<StatementContextType | undefined>(undefined)
 
 export const StatementContext = (props: IStatementContext) => {
+  const { show } = useToast()
   const { statement: propsStatement, statementId: propsStatementId } = props
 
   if (!propsStatement && !propsStatementId) {
@@ -34,7 +38,7 @@ export const StatementContext = (props: IStatementContext) => {
 
   const { tokenId } = useConnectedMember()
   const [isBacking, setIsBacking] = useState<boolean>(false)
-  const [alreadyBacked, setAlreadyBacked] = useState<boolean>()
+  const { refetchStatements } = useProjectContext()
 
   const { data: statementRead } = useQuery({
     queryKey: [`${propsStatementId}`],
@@ -75,25 +79,19 @@ export const StatementContext = (props: IStatementContext) => {
     if (isSuccessBacking) {
       setIsBacking(false)
       refetchCount()
+      refetchStatements()
     }
   }, [isSuccessBacking])
 
   useEffect(() => {
     if (errorBacking) {
       setIsBacking(false)
-      if (errorBacking.toLocaleLowerCase().includes('already posted')) {
-        setAlreadyBacked(true)
-      }
+      const message = errorBacking.includes('already posted')
+        ? t('alreadyBacked')
+        : errorBacking
+      show({ title: 'Error', message })
     }
   }, [errorBacking])
-
-  useEffect(() => {
-    if (alreadyBacked) {
-      setTimeout(() => {
-        setAlreadyBacked(false)
-      }, 3000)
-    }
-  }, [alreadyBacked])
 
   return (
     <StatementContextValue.Provider
@@ -103,7 +101,6 @@ export const StatementContext = (props: IStatementContext) => {
         nBacking,
         back,
         isBacking,
-        alreadyBacked,
       }}
     >
       {props.children}

@@ -1,5 +1,6 @@
 import { Box, Spinner, Text } from 'grommet'
 import { useTranslation } from 'react-i18next'
+
 import { cap } from '../../utils/general'
 
 export const Loading = (props: { label?: string }) => {

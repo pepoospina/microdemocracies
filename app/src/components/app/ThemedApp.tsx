@@ -1,8 +1,7 @@
+import { BoxExtendedProps, Grommet } from 'grommet'
 import { createContext, useContext, useState } from 'react'
 
-import { Grommet, BoxExtendedProps } from 'grommet'
-
-import { darkTheme, ExtendedThemeType, lightTheme, StyleConstants } from './themes'
+import { ExtendedThemeType, StyleConstants, darkTheme, lightTheme } from './themes'
 
 export type ThemeContextType = {
   theme: ExtendedThemeType
@@ -33,6 +32,7 @@ export const ThemedApp = (props: ThemeContextProps): JSX.Element => {
 
 export const useThemeContext = (): ThemeContextType => {
   const context = useContext(ThemeContextValue)
-  if (!context) throw Error('useThemeContext can only be used within the ThemedApp component')
+  if (!context)
+    throw Error('useThemeContext can only be used within the ThemedApp component')
   return context
 }

@@ -1,4 +1,5 @@
 import { Box, BoxExtendedProps, Image } from 'grommet'
+
 import { useThemeContext } from './app'
 
 interface ILogo extends BoxExtendedProps {

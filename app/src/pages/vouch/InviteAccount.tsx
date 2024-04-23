@@ -1,3 +1,9 @@
+import { Box, Spinner, Text } from 'grommet'
+import { FormPrevious } from 'grommet-icons'
+import { useEffect, useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { useNavigate, useParams } from 'react-router-dom'
+
 import { useAppContainer } from '../../components/app/AppContainer'
 import { ViewportPage } from '../../components/app/Viewport'
 import { useMember } from '../../contexts/MemberContext'
@@ -8,11 +14,6 @@ import { getEntity } from '../../utils/store'
 import { AccountPerson } from '../account/AccountPerson'
 import { AppBottomButtons } from '../common/BottomButtons'
 import { VouchMemberWidget } from './VouchMemberWidget'
-import { Box, Spinner, Text } from 'grommet'
-import { FormPrevious } from 'grommet-icons'
-import { useEffect, useState, useMemo } from 'react'
-import { useTranslation } from 'react-i18next'
-import { useNavigate, useParams } from 'react-router-dom'
 
 export const InviteAccountPage = () => {
   const { t, i18n } = useTranslation()
@@ -49,7 +50,10 @@ export const InviteAccountPage = () => {
       <>
         <Box pad="large" fill>
           <Box>
-            <AccountPerson pap={pap.object} cardStyle={{ marginBottom: '32px' }}></AccountPerson>
+            <AccountPerson
+              pap={pap.object}
+              cardStyle={{ marginBottom: '32px' }}
+            ></AccountPerson>
             <VouchMemberWidget pap={pap}></VouchMemberWidget>
           </Box>
         </Box>
@@ -79,7 +83,8 @@ export const InviteAccountPage = () => {
           }}
           right={{
             primary: true,
-            action: () => navigate(`${AbsoluteRoutes.ProjectHome(projectId?.toString() as string)}`),
+            action: () =>
+              navigate(`${AbsoluteRoutes.ProjectHome(projectId?.toString() as string)}`),
             label: t('finish'),
           }}
         ></AppBottomButtons>

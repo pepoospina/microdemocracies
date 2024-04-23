@@ -1,7 +1,7 @@
+import { utils } from 'ethers'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-
+import { useTranslation } from 'react-i18next'
 import { encodeFunctionData } from 'viem'
-
 import { usePublicClient } from 'wagmi'
 
 import { PENDING_PERIOD, QUIET_ENDING_PERIOD, VOTING_PERIOD } from '../../config/appConfig'
@@ -13,9 +13,6 @@ import { postMember, postProject } from '../../utils/project'
 import { putObject } from '../../utils/store'
 import { RegistryCreatedEvent } from '../../utils/viem.types'
 import { useAccountContext } from '../../wallet/AccountContext'
-
-import { utils } from 'ethers'
-import { useTranslation } from 'react-i18next'
 
 export interface CreateProjectStatus {
   founderPap?: PAP

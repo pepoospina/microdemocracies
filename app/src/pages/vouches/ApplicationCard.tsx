@@ -1,13 +1,14 @@
 import { Box, Spinner, Text } from 'grommet'
+import { Trash } from 'grommet-icons'
+import { useTranslation } from 'react-i18next'
+import { useNavigate, useParams } from 'react-router-dom'
+
+import { useProjectContext } from '../../contexts/ProjectContext'
+import { RouteNames } from '../../route.names'
 import { AppApplication } from '../../types'
 import { AppButton, AppCard, AppCircleButton } from '../../ui-components'
-import { useNavigate, useParams } from 'react-router-dom'
-import { RouteNames } from '../../route.names'
 import { getPapShortname } from '../../utils/pap'
-import { Trash } from 'grommet-icons'
 import { postDeleteApplication } from '../../utils/project'
-import { useProjectContext } from '../../contexts/ProjectContext'
-import { useTranslation } from 'react-i18next'
 
 export const ApplicationCard = (props: { application?: AppApplication }): JSX.Element => {
   const { t } = useTranslation()

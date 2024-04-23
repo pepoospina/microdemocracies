@@ -1,4 +1,4 @@
-import { DateInputExtendedProps, DateInput } from 'grommet'
+import { DateInput, DateInputExtendedProps } from 'grommet'
 
 export const AppDateInput = (props: DateInputExtendedProps) => {
   return (

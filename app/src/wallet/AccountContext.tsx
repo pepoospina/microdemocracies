@@ -3,27 +3,34 @@ import {
   createLightAccountAlchemyClient,
 } from '@alchemy/aa-alchemy'
 import { BatchUserOperationCallData, WalletClientSigner } from '@alchemy/aa-core'
-
-import { PropsWithChildren, createContext, useContext, useEffect, useState } from 'react'
-
-import { DecodeEventLogReturnType, decodeEventLog, getAddress } from 'viem'
-
+import { useQuery } from '@tanstack/react-query'
+import {
+  PropsWithChildren,
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react'
+import { useTranslation } from 'react-i18next'
+import { DecodeEventLogReturnType, PublicClient, decodeEventLog, getAddress } from 'viem'
 import { usePublicClient, useReadContract } from 'wagmi'
 
 import { ALCHEMY_GAS_POLICY_ID, ALCHEMY_RPC_URL } from '../config/appConfig'
 import { useLoadingContext } from '../contexts/LoadingContext'
 import { HexStr } from '../types'
+import { getAccountAddress } from '../utils/aa-sdk'
 import {
   aaWalletAbi,
   getFactoryAddress,
   registryABI,
   registryFactoryABI,
 } from '../utils/contracts.json'
+import { postUser } from '../utils/users'
 import { AccountDataContext } from './AccountDataContext'
 import { chain } from './ConnectedWalletContext'
 import { useAppSigner } from './SignerContext'
-
-import { useTranslation } from 'react-i18next'
 
 const DEBUG = true
 
@@ -31,7 +38,6 @@ const DEBUG = true
 export type AccountContextType = {
   isConnected: boolean
   aaAddress?: HexStr
-  owner?: HexStr
   sendUserOps?: (userOps: BatchUserOperationCallData) => void
   reset: () => void
   isSending: boolean
@@ -51,7 +57,6 @@ export const AccountContext = (props: PropsWithChildren) => {
 
   /** ALCHEMY provider to send transactions using AA */
   const [alchemyClientAA, setAlchemyClientAA] = useState<AlchemySmartAccountClient>()
-  const [aaAddress, setAaAddress] = useState<HexStr>()
   const [isSuccess, setIsSuccess] = useState<boolean>(false)
   const [isSending, setIsSending] = useState<boolean>(false)
   const [error, setError] = useState<Error>()
@@ -74,10 +79,47 @@ export const AccountContext = (props: PropsWithChildren) => {
         setAlchemyClientAA(client)
       })
     } else {
+      localStorage.removeItem('lastAaAddress')
       setAlchemyClientAA(undefined)
-      setAaAddress(undefined)
     }
   }, [signer])
+
+  const { data: aaAddress } = useQuery({
+    queryKey: ['aaAddress', address],
+    queryFn: async () => {
+      if (address && publicClient) {
+        const _aaAddress = await getAccountAddress(address, publicClient, chain)
+
+        if (!_aaAddress) {
+          throw new Error('AA address not found')
+        }
+
+        const current = localStorage.getItem('lastAaAddress')
+
+        if (current == null) {
+          /** update address maping in the backend */
+          const res = await postUser({
+            owner: address,
+            aaAddress: _aaAddress,
+          })
+
+          localStorage.setItem('lastAaAddress', _aaAddress)
+
+          if (!res) {
+            throw new Error('Error while storing user')
+          }
+        }
+
+        return _aaAddress
+      }
+    },
+  })
+
+  const _getAccountAddress = useCallback(async () => {}, [address, publicClient])
+
+  useEffect(() => {
+    _getAccountAddress()
+  }, [_getAccountAddress])
 
   const isConnected = alchemyClientAA !== undefined
 
@@ -88,41 +130,6 @@ export const AccountContext = (props: PropsWithChildren) => {
     setError(undefined)
     setEvents(undefined)
   }
-
-  const {
-    data: _owner,
-    error: ownerError,
-    status: statusOwner,
-  } = useReadContract({
-    abi: aaWalletAbi,
-    address: aaAddress,
-    functionName: 'owner',
-    query: { enabled: aaAddress !== undefined },
-  })
-
-  const owner = (() => {
-    if (!aaAddress) return undefined
-    if (!address) return undefined
-    if (
-      ownerError &&
-      (ownerError as any).shortMessage ===
-        'The contract function "owner" returned no data ("0x").' &&
-      address
-    )
-      return address
-    return _owner
-  })()
-
-  useEffect(() => {
-    if (alchemyClientAA) {
-      // TODO: what?
-      const address = (alchemyClientAA as any).getAddress()
-      if (DEBUG) console.log({ aaAddress: address })
-      setAaAddress(getAddress(address))
-    } else {
-      setAaAddress(undefined)
-    }
-  }, [alchemyClientAA])
 
   const sendUserOps = async (_userOps: BatchUserOperationCallData) => {
     setIsSending(true)
@@ -220,7 +227,6 @@ export const AccountContext = (props: PropsWithChildren) => {
       value={{
         isConnected,
         aaAddress,
-        owner,
         sendUserOps,
         reset,
         isSuccess,

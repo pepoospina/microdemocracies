@@ -1,25 +1,25 @@
-import { createPublicClient, getContract, http } from 'viem';
-import { baseSepolia } from 'viem/chains';
+import { createPublicClient, getContract, http } from 'viem'
+import { baseSepolia } from 'viem/chains'
 
-import { env } from '../config/env';
-import { registryABI, registryFactoryABI } from '../contracts/abis';
-import { HexStr } from '../@app/types';
+import { HexStr } from '../@app/types'
+import { env } from '../config/env'
+import { registryABI, registryFactoryABI } from '../contracts/abis'
 
 // const getFactoryAddress = () => _factoryAddress(env.CHAIN_ID);
 
+export const chain = baseSepolia
+
 const publicClient = createPublicClient({
-  chain: baseSepolia,
-  transport: http(
-    `https://${env.ALCHEMY_SUBDOMAIN}.g.alchemy.com/v2/${env.ALCHEMY_KEY}`
-  ),
-});
+  chain,
+  transport: http(`https://${env.ALCHEMY_SUBDOMAIN}.g.alchemy.com/v2/${env.ALCHEMY_KEY}`),
+})
 
 const getRegistry = (address: HexStr) => {
   return getContract({
     address,
     abi: registryABI,
-    publicClient,
-  });
-};
+    client: publicClient,
+  })
+}
 
-export { registryABI, registryFactoryABI, getRegistry, publicClient };
+export { registryABI, registryFactoryABI, getRegistry, publicClient }

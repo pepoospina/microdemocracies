@@ -1,24 +1,26 @@
+import { Box, Text } from 'grommet'
+import { FormPrevious, Send, StatusGood } from 'grommet-icons'
+import { useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
+
 import { useAppContainer } from '../../components/app/AppContainer'
 import { ViewportPage } from '../../components/app/Viewport'
+import { useNavigateHelpers } from '../../components/app/navigate.helpers'
 import { MIN_LIKES_PUBLIC } from '../../config/appConfig'
 import { useProjectContext } from '../../contexts/ProjectContext'
 import { useStatementContext } from '../../contexts/StatementContext'
 import { AbsoluteRoutes } from '../../route.names'
 import { AppButton, AppCard, AppHeading } from '../../ui-components'
 import { useCopyToClipboard } from '../../utils/copy.clipboard'
-import { AppBottomButtons } from '../common/BottomButtons'
+import { AppBottomButton, AppBottomButtons } from '../common/BottomButtons'
 import { Loading } from '../common/Loading'
 import { ProjectCard } from '../project/ProjectCard'
 import { StatementCard } from './StatementCard'
-import { Box, Text } from 'grommet'
-import { FormPrevious, Send, StatusGood } from 'grommet-icons'
-import { useEffect } from 'react'
-import { useTranslation } from 'react-i18next'
-import { useNavigate, useParams } from 'react-router-dom'
 
 export const VoiceStatementPage = (): JSX.Element => {
   const { t } = useTranslation()
-  const navigate = useNavigate()
+  const { backToProject, navigate } = useNavigateHelpers()
 
   const { statementId } = useParams()
   const { project, projectId } = useProjectContext()
@@ -48,23 +50,36 @@ export const VoiceStatementPage = (): JSX.Element => {
   }
 
   const nBackingDef = nBacking !== undefined ? nBacking : 0
-  const isShown = nBackingDef !== undefined && nBackingDef >= 2
-  console.log({ nBackingDef, isShown })
+  const isShown = nBackingDef !== undefined && nBackingDef >= MIN_LIKES_PUBLIC
 
   return (
     <ViewportPage
       content={
         <Box pad="medium">
           <Box>
-            {!isShown ? (
-              <Box margin={{ top: 'large', bottom: '48px' }}>
-                <AppHeading level="3" style={{ textAlign: 'center' }}>
-                  {t('likesNeeded', { nLikes: MIN_LIKES_PUBLIC - nBackingDef })}
-                </AppHeading>
+            <Text margin={{ vertical: 'small' }}>The following statement was proposed</Text>
+            <StatementCard></StatementCard>
+          </Box>
+          <Box margin={{ vertical: 'medium' }}>
+            <Text margin={{ vertical: 'small' }}>For the microdemocracy:</Text>
+            <ProjectCard project={project}></ProjectCard>
+          </Box>
 
+          <Box>
+            <Box margin={{ top: 'large' }}>
+              <AppHeading level="3" style={{ textAlign: 'center' }}>
+                {!isShown
+                  ? t('likesNeeded', { nLikes: MIN_LIKES_PUBLIC - nBackingDef })
+                  : t('noLikesNeeded')}
+              </AppHeading>
+              {!isShown ? (
                 <Box>
                   <AppCard margin={{ vertical: 'large' }}>
-                    <Text>{t('likesNeededDetailed', { nLikes: MIN_LIKES_PUBLIC - (nBacking ? nBacking : 0) })}</Text>
+                    <Text>
+                      {t('likesNeededDetailed', {
+                        nLikes: MIN_LIKES_PUBLIC - (nBacking ? nBacking : 0),
+                      })}
+                    </Text>
                   </AppCard>
                   <Box>
                     <AppButton
@@ -77,34 +92,19 @@ export const VoiceStatementPage = (): JSX.Element => {
                     ></AppButton>
                   </Box>
                 </Box>
-              </Box>
-            ) : (
-              <></>
-            )}
-          </Box>
-          <Box>
-            <Text margin={{ vertical: 'small' }}>The following statement was proposed</Text>
-            <StatementCard></StatementCard>
-          </Box>
-          <Box margin={{ vertical: 'medium', bottom: '64px' }}>
-            <Text margin={{ vertical: 'small' }}>For the microdemocracy:</Text>
-            <ProjectCard project={project}></ProjectCard>
+              ) : (
+                <></>
+              )}
+            </Box>
           </Box>
         </Box>
       }
       nav={
-        <AppBottomButtons
-          left={{
-            action: () => navigate(-1),
-            label: t('back'),
-            icon: <FormPrevious />,
-          }}
-          right={{
-            primary: true,
-            action: () => navigate(`${AbsoluteRoutes.ProjectHome(projectId?.toString() as string)}`),
-            label: t('finish'),
-          }}
-        ></AppBottomButtons>
+        <AppBottomButton
+          onClick={() => backToProject(projectId)}
+          label={t('projectHome')}
+          icon={<FormPrevious></FormPrevious>}
+        ></AppBottomButton>
       }
     ></ViewportPage>
   )

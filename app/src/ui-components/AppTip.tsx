@@ -1,5 +1,5 @@
-import { DropButtonExtendedProps, DropButton, Box } from 'grommet'
-import { useState, useEffect } from 'react'
+import { Box, DropButton, DropButtonExtendedProps } from 'grommet'
+import { useEffect, useState } from 'react'
 
 export const AppTip = (props: DropButtonExtendedProps) => {
   const [hovering, setHovering] = useState<boolean>(false)
@@ -45,7 +45,10 @@ export const AppTip = (props: DropButtonExtendedProps) => {
       onMouseEnter={(): void => setHovering(true)}
       onMouseLeave={(): void => setHovering(false)}
       dropContent={
-        <Box onMouseEnter={(): void => setHoveringDrop(true)} onMouseLeave={(): void => setHoveringDrop(false)}>
+        <Box
+          onMouseEnter={(): void => setHoveringDrop(true)}
+          onMouseLeave={(): void => setHoveringDrop(false)}
+        >
           {props.dropContent}
         </Box>
       }

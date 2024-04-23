@@ -1,16 +1,16 @@
 import { useWeb3Modal } from '@web3modal/wagmi/react'
-
+import { use } from 'i18next'
 import {
   PropsWithChildren,
   createContext,
   useCallback,
   useContext,
   useEffect,
+  useMemo,
   useState,
 } from 'react'
-
+import { useTranslation } from 'react-i18next'
 import { WalletClient } from 'viem'
-
 import { useDisconnect, useWalletClient } from 'wagmi'
 
 import { useLoadingContext } from '../contexts/LoadingContext'
@@ -18,12 +18,11 @@ import { HexStr } from '../types'
 import { cap } from '../utils/general'
 import { createMagicSigner, magic } from './magic.signer'
 
-import { useTranslation } from 'react-i18next'
-
 export type SignerContextType = {
   connect: () => void
   hasInjected: boolean
   signer?: WalletClient
+
   address?: HexStr
   signMessage?: (message: string) => Promise<HexStr>
   isConnecting: boolean
@@ -54,19 +53,24 @@ export const SignerContext = (props: PropsWithChildren) => {
      * show loading when first loading a page
      * (to cover the time where the connected account is checked)
      * */
-    setLoading(true)
-    setUserCanClose(false)
-    setTitle(cap(t('loading')))
-    setSubtitle(t('pleaseWait'))
+    const hadMagic = localStorage.getItem('hadMagic')
 
-    magic.user.isLoggedIn().then((res) => {
-      if (res && !magicSigner) {
-        console.log('Autoconnecting Magic')
-        connectMagic()
-      } else {
-        setLoading(false)
-      }
-    })
+    /** try to restate magic*/
+    if (hadMagic !== null && hadMagic === 'true') {
+      setLoading(true)
+      setUserCanClose(false)
+      setTitle(cap(t('loadingProfile')))
+      setSubtitle(t('justAMoment'))
+
+      magic.user.isLoggedIn().then((res) => {
+        if (res && !magicSigner) {
+          console.log('Autoconnecting Magic')
+          connectMagic()
+        } else {
+          setLoading(false)
+        }
+      })
+    }
   }, [])
 
   useEffect(() => {

@@ -1,7 +1,9 @@
 import { ethers } from 'ethers'
 
 export const getAddress = (address?: string): string | undefined => {
-  return address !== undefined && address !== '' && address.length === ethers.constants.AddressZero.length
+  return address !== undefined &&
+    address !== '' &&
+    address.length === ethers.constants.AddressZero.length
     ? ethers.utils.getAddress(address)
     : undefined
 }

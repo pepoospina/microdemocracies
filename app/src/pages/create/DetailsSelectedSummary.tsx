@@ -1,9 +1,10 @@
 import { Box, Text } from 'grommet'
-import { PlatformDetails, platforms } from '../../utils/platforms'
-import { PlatformId, SelectedDetails } from '../../types'
-import { AppTag } from '../../ui-components'
 import { CSSProperties } from 'react'
 import { useTranslation } from 'react-i18next'
+
+import { PlatformId, SelectedDetails } from '../../types'
+import { AppTag } from '../../ui-components'
+import { PlatformDetails, platforms } from '../../utils/platforms'
 
 export const DetailsSelectedSummary = (props: { selected?: SelectedDetails }) => {
   const { t } = useTranslation()
@@ -46,7 +47,9 @@ export const DetailsSelectedSummary = (props: { selected?: SelectedDetails }) =>
         if (props.selected?.platform[platformId as PlatformId]) {
           return (
             <AppTag style={tagStyle}>
-              <Text style={textStyle}>{(platforms[platformId as PlatformId] as PlatformDetails).name}</Text>
+              <Text style={textStyle}>
+                {(platforms[platformId as PlatformId] as PlatformDetails).name}
+              </Text>
             </AppTag>
           )
         }

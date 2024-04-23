@@ -1,5 +1,4 @@
 import { ReactNode, createContext, useContext, useEffect } from 'react'
-
 import { useReadContract } from 'wagmi'
 
 import { AppAccount, AppChallenge } from '../types'
@@ -7,7 +6,7 @@ import { registryABI } from '../utils/contracts.json'
 import { useAccountContext } from '../wallet/AccountContext'
 import { useMember } from './MemberContext'
 import { useProjectContext } from './ProjectContext'
-import { useToastNotificationContext } from './ToastNotificationsContext'
+import { useToast } from './ToastsContext'
 
 export type ConnectedMemberContextType = {
   tokenId?: number | null
@@ -15,7 +14,9 @@ export type ConnectedMemberContextType = {
   myChallenge: AppChallenge | undefined | null
 }
 
-const ConnectedMemberContextValue = createContext<ConnectedMemberContextType | undefined>(undefined)
+const ConnectedMemberContextValue = createContext<ConnectedMemberContextType | undefined>(
+  undefined,
+)
 
 export interface ConnectedMemberContextProps {
   children: ReactNode
@@ -54,37 +55,26 @@ export const ConnectedMemberContext = (props: ConnectedMemberContextProps) => {
     query: { enabled: tokenId !== undefined && projectAddress !== undefined },
   })
 
-  const {
-    setVisible,
-    setTitle: setNotificationTitle,
-    setMessage: setNotificationMessage,
-    setStatus: setNotificationType,
-  } = useToastNotificationContext()
+  const { show } = useToast()
+
+  // useEffect(() => {
+  //   if (errorChallengeRead) {
+  //     show({ title: 'Error', message: errorChallengeRead.message })
+  //   }
+  // }, [errorChallengeRead])
 
   useEffect(() => {
-    if (!isErrorChallengeRead || !isErrorWithTokenId) return
-
-    setVisible(true)
-    setNotificationTitle('Error with challenge writing')
-
-    if (errorChallengeRead || errorWithTokenId) {
-      setNotificationType('critical')
-      if (errorChallengeRead) setNotificationMessage(errorChallengeRead.message)
-      if (errorWithTokenId) setNotificationMessage(errorWithTokenId.message)
+    if (errorWithTokenId) {
+      show({ title: 'Error', message: errorWithTokenId.message })
     }
-  }, [
-    errorChallengeRead,
-    errorWithTokenId,
-    isErrorChallengeRead,
-    isErrorWithTokenId,
-    setNotificationMessage,
-    setNotificationTitle,
-    setNotificationType,
-    setVisible,
-  ])
+  }, [errorWithTokenId])
 
   const myChallenge: AppChallenge | undefined | null = ((_challengeRead) => {
-    if (isErrorChallengeRead && errorChallengeRead && errorChallengeRead.message.includes('')) {
+    if (
+      isErrorChallengeRead &&
+      errorChallengeRead &&
+      errorChallengeRead.message.includes('')
+    ) {
       return null
     }
     if (_challengeRead === undefined) {

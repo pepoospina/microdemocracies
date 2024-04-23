@@ -1,9 +1,8 @@
-import { useEffect } from 'react'
-
-import { useNavigate } from 'react-router-dom'
-
 import { Box, Button, Text } from 'grommet'
 import { Add } from 'grommet-icons'
+import { useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
+import { useNavigate } from 'react-router-dom'
 
 import { AppConnectButton } from '../../components/app/AppConnectButton'
 import { useAppContainer } from '../../components/app/AppContainer'
@@ -15,8 +14,6 @@ import { useAccountDataContext } from '../../wallet/AccountDataContext'
 import { AppBottomButton } from '../common/BottomButtons'
 import { Loading } from '../common/Loading'
 import { ProjectCard } from '../project/ProjectCard'
-
-import { useTranslation } from 'react-i18next'
 
 export const AppHome = (props: {}) => {
   const { aaAddress } = useAccountContext()

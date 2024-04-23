@@ -1,4 +1,4 @@
-import { BoxExtendedProps, Box } from 'grommet'
+import { Box, BoxExtendedProps } from 'grommet'
 import { FormDown, FormUp, Refresh } from 'grommet-icons'
 import React, { useState } from 'react'
 
@@ -55,7 +55,10 @@ export const AppCard = React.forwardRef<HTMLDivElement, AppCardProps>((props, re
             }
           }}
         >
-          <Refresh color={constants.colors.primaryLight} style={{ height: '20px', width: '20px' }}></Refresh>
+          <Refresh
+            color={constants.colors.primaryLight}
+            style={{ height: '20px', width: '20px' }}
+          ></Refresh>
         </Box>
       ) : (
         <></>

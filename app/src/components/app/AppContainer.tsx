@@ -1,12 +1,12 @@
 import { Box } from 'grommet'
 import { createContext, useContext, useState } from 'react'
-import { Route, Routes } from 'react-router-dom'
+import { Route, Routes, useLocation, useNavigate } from 'react-router-dom'
 
 import { ConnectedMemberContext } from '../../contexts/ConnectedAccountContext'
 import { ProjectContext } from '../../contexts/ProjectContext'
 import { AccountPage } from '../../pages/account/AccountPage'
 import { CreateProject } from '../../pages/create/CreateProject'
-import { JoinPage } from '../../pages/join/Join'
+import { JoinPage } from '../../pages/join/JoinPage'
 import { AppLog } from '../../pages/log/Log'
 import { AppHome } from '../../pages/myprojects/AppHome'
 import { ProjectBase } from '../../pages/project/ProjectBase'
@@ -32,15 +32,26 @@ export type AppContainerContextType = {
   setTitle: (title: SetPageTitleType) => void
 }
 
-const AppContainerContextValue = createContext<AppContainerContextType | undefined>(undefined)
+const AppContainerContextValue = createContext<AppContainerContextType | undefined>(
+  undefined,
+)
 
 export const AppContainer = (props: React.PropsWithChildren) => {
+  const location = useLocation()
+  const navigate = useNavigate()
+
+  console.log('location', location.key)
+
   const [title, setTitle] = useState<SetPageTitleType>()
 
   return (
     <AppContainerContextValue.Provider value={{ setTitle }}>
       <ViewportContainer style={{ maxWidth: MAX_WIDTH_APP }}>
-        <Box pad={{ horizontal: 'medium' }} style={{ height: '80px', flexShrink: 0 }} justify="center">
+        <Box
+          pad={{ horizontal: 'medium' }}
+          style={{ height: '80px', flexShrink: 0 }}
+          justify="center"
+        >
           <GlobalNav title={title} />
         </Box>
         <Box style={{ height: 'calc(100% - 80px)' }}>
@@ -61,14 +72,23 @@ export const AppContainer = (props: React.PropsWithChildren) => {
               }
             >
               <Route path={''} element={<ProjectHomePage />}></Route>
-              <Route path={`member/:tokenId/*`} element={<AccountPage />}></Route>
-              <Route path={`${RouteNames.Invite}/:hash`} element={<InviteAccountPage />}></Route>
+              <Route
+                path={`${RouteNames.Member}/:tokenId/*`}
+                element={<AccountPage />}
+              ></Route>
+              <Route
+                path={`${RouteNames.Invite}/:hash`}
+                element={<InviteAccountPage />}
+              ></Route>
               <Route path={RouteNames.Join} element={<JoinPage />}></Route>
               <Route path={RouteNames.Invite} element={<InvitePage />}></Route>
               <Route path={RouteNames.Members} element={<MembersPage />}></Route>
               <Route path={RouteNames.VoiceBase} element={<VoiceBasePage />}>
                 <Route path={RouteNames.VoicePropose} element={<VoicePropose />}></Route>
-                <Route path={`${RouteNames.VoiceStatement}/:statementId`} element={<VoiceStatementPageBase />}></Route>
+                <Route
+                  path={`${RouteNames.VoiceStatement}/:statementId`}
+                  element={<VoiceStatementPageBase />}
+                ></Route>
               </Route>
 
               <Route path={'test'} element={<TestProject />}></Route>

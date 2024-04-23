@@ -1,8 +1,24 @@
-import { getDocs, where, query, getDoc, doc as docRef, getCountFromServer, orderBy } from 'firebase/firestore'
-import { collections } from './database'
-import { AppApplication, AppProject, AppPublicIdentity, Entity, HexStr, StatementRead } from '../types'
-import { postInvite } from '../utils/project'
+import {
+  doc as docRef,
+  getCountFromServer,
+  getDoc,
+  getDocs,
+  orderBy,
+  query,
+  where,
+} from 'firebase/firestore'
 import { getAddress } from 'viem'
+
+import {
+  AppApplication,
+  AppProject,
+  AppPublicIdentity,
+  Entity,
+  HexStr,
+  StatementRead,
+} from '../types'
+import { postInvite } from '../utils/project'
+import { collections } from './database'
 
 export const getProject = async (projectId: number) => {
   const ref = collections.project(projectId)
@@ -15,7 +31,11 @@ export const getProject = async (projectId: number) => {
 }
 
 export const getAccountProjects = async (aaAddress: HexStr) => {
-  const q = query(collections.members, where('aaAddress', '==', aaAddress), orderBy('projectId', 'desc'))
+  const q = query(
+    collections.members,
+    where('aaAddress', '==', aaAddress),
+    orderBy('projectId', 'desc'),
+  )
   const snap = await getDocs(q)
 
   const projectIds = snap.docs.map((doc) => {
@@ -34,7 +54,11 @@ export const getAccountProjects = async (aaAddress: HexStr) => {
 }
 
 export const getTopStatements = async (projectId: number) => {
-  const q = query(collections.statements, where('projectId', '==', projectId), where('nBackers', '>=', 2))
+  const q = query(
+    collections.statements,
+    where('projectId', '==', projectId),
+    where('nBackers', '>=', 2),
+  )
   const snap = await getDocs(q)
 
   return snap.docs.map((doc) => {
@@ -111,4 +135,12 @@ export const getEntityFirestore = async <T>(cid: string) => {
   return {
     ...doc.data(),
   } as unknown as Entity<T>
+}
+
+export const getAccountOwner = async (aaAddress: HexStr) => {
+  const ref = docRef(collections.users, aaAddress)
+  const doc = await getDoc(ref)
+
+  const user = doc.data() as { owner: HexStr }
+  return user.owner
 }

@@ -1,4 +1,5 @@
 import { Anchor, Text } from 'grommet'
+
 import { PlatformAccount } from '../../types'
 import { platforms } from '../../utils/platforms'
 
@@ -12,7 +13,8 @@ export const PlatformUrl = (props: IPlatformUrl) => {
     return <></>
   }
   const platform = platforms[user.platform]
-  const url = platform && platform.usernameUrl ? platform && platform.usernameUrl(user.username) : ''
+  const url =
+    platform && platform.usernameUrl ? platform && platform.usernameUrl(user.username) : ''
   return url ? (
     <Anchor href={url} target="_black">
       {user.username}
