@@ -34,6 +34,10 @@ export const generateStatementProof = async (
     identity,
   })
 
+  if (!statementProof) {
+    throw new Error('Could not generate statement proof')
+  }
+
   /** automatically like the statement (statementId is deterministic from proof) */
   const statementId = getStatementId(statementProof.proof)
 
@@ -43,6 +47,11 @@ export const generateStatementProof = async (
     identity,
     StatementReactions.Back,
   )
+
+  if (!reactionProof) {
+    /** statement is brand new, it should not have a reaction already */
+    throw new Error('Could not generate reaction proof')
+  }
 
   return {
     statementProof,

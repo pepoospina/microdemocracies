@@ -7,7 +7,7 @@ import { AppLanguage } from './components/app/AppLanguage'
 import { GlobalStyles } from './components/styles/GlobalStyles'
 import { LoadingContext } from './contexts/LoadingContext'
 import { SemaphoreContext } from './contexts/SemaphoreContext'
-import { ToastNotificationsContext } from './contexts/ToastNotificationsContext'
+import { ToastsContext } from './contexts/ToastsContext'
 import { i18n } from './i18n/i18n'
 import { AccountContext } from './wallet/AccountContext'
 import { ConnectedWallet } from './wallet/ConnectedWalletContext'
@@ -20,7 +20,7 @@ function App() {
       <I18nextProvider i18n={i18n}>
         <AppLanguage>
           <ThemedApp>
-            <ToastNotificationsContext>
+            <ToastsContext>
               <LoadingContext>
                 <ConnectedWallet>
                   <SignerContext>
@@ -37,7 +37,7 @@ function App() {
                   </SignerContext>
                 </ConnectedWallet>
               </LoadingContext>
-            </ToastNotificationsContext>
+            </ToastsContext>
           </ThemedApp>
         </AppLanguage>
       </I18nextProvider>

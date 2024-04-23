@@ -55,7 +55,7 @@ export const postIdentity = async (publicIdentity: AppPublicIdentity) => {
 
 export const getMerklePass = async (
   details: AppGetMerklePass,
-): Promise<AppReturnMerklePass> => {
+): Promise<AppReturnMerklePass | undefined> => {
   if (details.treeId) {
     const cached = cachedTreesMap.get(details.treeId)
     if (cached) {
@@ -70,6 +70,16 @@ export const getMerklePass = async (
   })
 
   const body = await res.json()
+
+  /** if leaf does not exist, return undefined */
+  if (body.error) {
+    if (body.error.includes('leaf does not exist')) {
+      return undefined
+    } else {
+      throw new Error(body.error)
+    }
+  }
+
   const merklePass = JSON.parse(body.merklePassStr)
   const parsed = { merklePass, treeId: body.treeId }
 

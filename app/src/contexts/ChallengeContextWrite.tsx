@@ -6,7 +6,7 @@ import { VoteOption } from '../types'
 import { registryABI } from '../utils/contracts.json'
 import { useAccountContext } from '../wallet/AccountContext'
 import { useProjectContext } from './ProjectContext'
-import { useToastNotificationContext } from './ToastNotificationsContext'
+import { useToast } from './ToastsContext'
 
 export type ChallengeContextWriteType = {
   sendChallenge?: () => void
@@ -87,33 +87,19 @@ export const useChallengeWrite = (tokenId?: number): ChallengeContextWriteType =
     }
   }, [isSuccess, refetchMyVote])
 
-  const {
-    setVisible,
-    setTitle: setNotificationTitle,
-    setMessage: setNotificationMessage,
-    setStatus: setNotificationType,
-  } = useToastNotificationContext()
+  const { show } = useToast()
+
+  // useEffect(() => {
+  //   if (errorChallenging) {
+  //     show({ title: 'Error', message: errorChallenging.message })
+  //   }
+  // }, [errorChallenging])
 
   useEffect(() => {
-    if (!errorChallenging || !isErrorVoting) return
-
-    setVisible(true)
-    setNotificationTitle('Error with challenge writing')
-
-    if (errorVoting || errorChallenging) {
-      setNotificationType('critical')
-      if (errorVoting) setNotificationMessage(errorVoting.message)
-      if (errorChallenging) setNotificationMessage(errorChallenging.message)
+    if (errorVoting) {
+      show({ title: 'Error', message: errorVoting.message })
     }
-  }, [
-    errorChallenging,
-    errorVoting,
-    isErrorVoting,
-    setNotificationMessage,
-    setNotificationTitle,
-    setNotificationType,
-    setVisible,
-  ])
+  }, [errorChallenging])
 
   /** Challenge */
   const sendChallenge = useCallback(async () => {

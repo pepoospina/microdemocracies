@@ -7,6 +7,8 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { useAppContainer } from '../../components/app/AppContainer'
 import { ViewportPage } from '../../components/app/Viewport'
 import { useMember } from '../../contexts/MemberContext'
+import { useProjectContext } from '../../contexts/ProjectContext'
+import { AbsoluteRoutes } from '../../route.names'
 import { cap } from '../../utils/general'
 import { AccountChallenge } from '../challenges/AccountChallenge'
 import { AppBottomButton } from '../common/BottomButtons'
@@ -20,6 +22,7 @@ export const AccountPage = () => {
     tokenId: tokenId ? +tokenId : undefined,
   })
   const { setTitle } = useAppContainer()
+  const { projectId } = useProjectContext()
 
   useEffect(() => {
     setTitle({ prefix: t('project'), main: cap(t('member')) })
@@ -47,8 +50,10 @@ export const AccountPage = () => {
       nav={
         <AppBottomButton
           icon={<FormPrevious />}
-          label="back"
-          onClick={() => navigate(-1)}
+          label={t('projectMembers')}
+          onClick={() =>
+            navigate(AbsoluteRoutes.ProjectMembers((projectId as number).toString()))
+          }
         ></AppBottomButton>
       }
     ></ViewportPage>

@@ -6,7 +6,7 @@ import { ConnectedMemberContext } from '../../contexts/ConnectedAccountContext'
 import { ProjectContext } from '../../contexts/ProjectContext'
 import { AccountPage } from '../../pages/account/AccountPage'
 import { CreateProject } from '../../pages/create/CreateProject'
-import { JoinPage } from '../../pages/join/Join'
+import { JoinPage } from '../../pages/join/JoinPage'
 import { AppLog } from '../../pages/log/Log'
 import { AppHome } from '../../pages/myprojects/AppHome'
 import { ProjectBase } from '../../pages/project/ProjectBase'
@@ -72,7 +72,10 @@ export const AppContainer = (props: React.PropsWithChildren) => {
               }
             >
               <Route path={''} element={<ProjectHomePage />}></Route>
-              <Route path={`member/:tokenId/*`} element={<AccountPage />}></Route>
+              <Route
+                path={`${RouteNames.Member}/:tokenId/*`}
+                element={<AccountPage />}
+              ></Route>
               <Route
                 path={`${RouteNames.Invite}/:hash`}
                 element={<InviteAccountPage />}

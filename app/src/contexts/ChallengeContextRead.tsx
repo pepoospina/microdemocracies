@@ -4,7 +4,6 @@ import { useReadContract } from 'wagmi'
 import { AppChallenge, VoteOption } from '../types'
 import { registryABI } from '../utils/contracts.json'
 import { useProjectContext } from './ProjectContext'
-import { useToastNotificationContext } from './ToastNotificationsContext'
 
 export type ChallengeContextReadType = {
   tokenId?: number

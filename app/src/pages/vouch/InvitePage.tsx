@@ -10,7 +10,7 @@ import { AppConnectButton } from '../../components/app/AppConnectButton'
 import { useAppContainer } from '../../components/app/AppContainer'
 import { ViewportPage } from '../../components/app/Viewport'
 import { useProjectContext } from '../../contexts/ProjectContext'
-import { RouteNames } from '../../route.names'
+import { AbsoluteRoutes, RouteNames } from '../../route.names'
 import { AppButton, AppCard, AppHeading } from '../../ui-components'
 import { useCopyToClipboard } from '../../utils/copy.clipboard'
 import { cap } from '../../utils/general'
@@ -163,8 +163,10 @@ export const InvitePage = (): JSX.Element => {
       nav={
         <AppBottomButton
           icon={<FormPrevious />}
-          label={t('back')}
-          onClick={() => navigate(-1)}
+          label={t('projectMembers')}
+          onClick={() =>
+            navigate(AbsoluteRoutes.ProjectMembers((projectId as number).toString()))
+          }
         ></AppBottomButton>
       }
     ></ViewportPage>

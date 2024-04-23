@@ -232,7 +232,7 @@ export const ProjectHomePage = (props: IProjectHome) => {
         <AppBottomButtons
           left={{
             action: () => navigate(AbsoluteRoutes.Projects),
-            label: t('back'),
+            label: t('appHome'),
             icon: <FormPrevious />,
           }}
           right={{

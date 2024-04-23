@@ -46,7 +46,9 @@ export const connectIdentity = async (
   return identity
 }
 
-export const generateProof = async (input: AppGetProof): Promise<ProofAndTree> => {
+export const generateProof = async (
+  input: AppGetProof,
+): Promise<ProofAndTree | undefined> => {
   const { projectId, treeId, identity, signal, nullifier } = input
 
   /**
@@ -59,6 +61,10 @@ export const generateProof = async (input: AppGetProof): Promise<ProofAndTree> =
     treeId,
     publicId: identity.getCommitment().toString(),
   })
+
+  if (treePass === undefined) {
+    return undefined
+  }
 
   /** Based on this tree, a proof is generated here in the frontend */
   const generated = await _generateProof(identity, treePass.merklePass, nullifier, signal)

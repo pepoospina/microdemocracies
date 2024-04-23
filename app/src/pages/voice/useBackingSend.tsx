@@ -30,20 +30,25 @@ export const useBackingSend = (): VoiceSendContextType => {
           StatementReactions.Back,
         )
 
-        const backing: AppReactionCreate = {
-          statementId,
-          proof: proofAndTree.proof,
-        }
+        if (proofAndTree !== undefined) {
+          const backing: AppReactionCreate = {
+            statementId,
+            proof: proofAndTree.proof,
+          }
 
-        const res = await postBacking(backing)
+          const res = await postBacking(backing)
 
-        if (res.success) {
-          setIsSuccessBacking(true)
+          if (res.success) {
+            setIsSuccessBacking(true)
+          } else {
+            setIsErrorBacking(true)
+            setErrorBacking(res.error)
+          }
+          return res
         } else {
           setIsErrorBacking(true)
-          setErrorBacking(res.error)
+          setErrorBacking('Only members at the time of the proposal can back it.')
         }
-        return res
       }
     : undefined
 

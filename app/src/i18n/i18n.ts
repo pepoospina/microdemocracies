@@ -171,6 +171,10 @@ i18n.use(initReactI18next).init({
         pleaseSignIn: 'Please sign in to see your microdemocracies',
         loadingProfile: 'Loading you profile',
         projectHome: 'Back to Microdemocracy',
+        appHome: 'Home',
+        projectMembers: 'Back to Members',
+        exit: 'exit',
+        alreadyBacked: 'Member already backed this post',
       },
     },
     SPA: {

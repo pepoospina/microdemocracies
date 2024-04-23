@@ -8,7 +8,7 @@ import { AppConnectWidget } from '../../components/app/AppConnectButton'
 import { useAppContainer } from '../../components/app/AppContainer'
 import { ViewportPage } from '../../components/app/Viewport'
 import { useLoadingContext } from '../../contexts/LoadingContext'
-import { useToastNotificationContext } from '../../contexts/ToastNotificationsContext'
+import { useToast } from '../../contexts/ToastsContext'
 import { AbsoluteRoutes } from '../../route.names'
 import { AppCard, AppHeading } from '../../ui-components'
 import { Bold } from '../../ui-components/Bold'
@@ -50,12 +50,8 @@ export const CreateProject = () => {
     setSubtitle,
     setExpectedLoadingTime,
   } = useLoadingContext()
-  const {
-    setVisible,
-    setTitle: setNotificationTitle,
-    setMessage: setNotificationMessage,
-    setStatus: setNotificationType,
-  } = useToastNotificationContext()
+
+  const { show } = useToast()
 
   useEffect(() => {
     if (projectId) {
@@ -69,23 +65,10 @@ export const CreateProject = () => {
   }, [setTitle, i18n.language])
 
   useEffect(() => {
-    if (!isError) return
-
-    setVisible(true)
-    setNotificationTitle(t('errorCreatingProject'))
-
     if (error) {
-      setNotificationType('critical')
-      setNotificationMessage(error.message)
+      show({ title: t('errorCreatingProject'), message: error.message, status: 'critical' })
     }
-  }, [
-    error,
-    isError,
-    setNotificationMessage,
-    setNotificationTitle,
-    setNotificationType,
-    setVisible,
-  ])
+  }, [error])
 
   const boxStyle: React.CSSProperties = {
     flexGrow: '1',
