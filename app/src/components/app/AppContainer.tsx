@@ -1,6 +1,6 @@
 import { Box } from 'grommet'
 import { createContext, useContext, useState } from 'react'
-import { Route, Routes } from 'react-router-dom'
+import { Route, Routes, useLocation, useNavigate } from 'react-router-dom'
 
 import { ConnectedMemberContext } from '../../contexts/ConnectedAccountContext'
 import { ProjectContext } from '../../contexts/ProjectContext'
@@ -37,6 +37,11 @@ const AppContainerContextValue = createContext<AppContainerContextType | undefin
 )
 
 export const AppContainer = (props: React.PropsWithChildren) => {
+  const location = useLocation()
+  const navigate = useNavigate()
+
+  console.log('location', location.key)
+
   const [title, setTitle] = useState<SetPageTitleType>()
 
   return (

@@ -4,6 +4,7 @@ import { createContext, useContext, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { useReadContract } from 'wagmi'
 
+import { subscribeToStatements } from '../components/app/realtime.listeners'
 import { collections } from '../firestore/database'
 import {
   getApplications,
@@ -158,6 +159,13 @@ export const ProjectContext = (props: IProjectContext) => {
       return unsub
     }
   }, [aaAddress, refetchApplications])
+
+  /** subscribe to statements collection */
+  useEffect(() => {
+    return subscribeToStatements(() => {
+      refetchStatements()
+    })
+  }, [])
 
   return (
     <ProjectContextValue.Provider

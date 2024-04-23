@@ -37,12 +37,7 @@ export const VoicePropose = (): JSX.Element => {
 
   const { setTitle } = useAppContainer()
 
-  const {
-    setLoading,
-    setTitle: setTitleToLoading,
-    setSubtitle,
-    setExpectedLoadingTime,
-  } = useLoadingContext()
+  const { openLoading, closeLoading } = useLoadingContext()
 
   useEffect(() => {
     setTitle({ prefix: cap(t('proposeNew')), main: t('statement') })
@@ -52,13 +47,11 @@ export const VoicePropose = (): JSX.Element => {
 
   const _proposeStatement = async (input: string) => {
     if (proposeStatement) {
-      setLoading(true)
-      setTitleToLoading(t('sendingProposal'))
-      setSubtitle(t('preparingData'))
+      openLoading({ title: t('sendingProposal'), subtitle: t('preparingData') })
       setIsProposing(true)
+
       proposeStatement(input).then(() => {
-        setLoading(false)
-        setExpectedLoadingTime(15)
+        closeLoading()
       })
     }
   }

@@ -170,6 +170,7 @@ i18n.use(initReactI18next).init({
         noLikesNeeded: 'This statement is already public in the microdemocracy homepage',
         pleaseSignIn: 'Please sign in to see your microdemocracies',
         loadingProfile: 'Loading you profile',
+        projectHome: 'Back to Microdemocracy',
       },
     },
     SPA: {

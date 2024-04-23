@@ -11,18 +11,19 @@ export const StatementCard = (props: {
   onClick?: (e: React.MouseEvent) => void
   statmentCardProps?: IStatementEditable
 }) => {
-  const { statement, nBacking, canBack, back, alreadyBacked } = useStatementContext()
+  const { statement, nBacking, canBack, back, alreadyBacked, isBacking } =
+    useStatementContext()
 
   return (
     <Box style={{ position: 'relative', flexShrink: 0, ...props.containerStyle }}>
       <Box onClick={props.onClick}>
-        <StatementEditable
-          {...props.statmentCardProps}
-          value={statement?.statement}
-          containerStyle={{ paddingBottom: '22px' }}
-        ></StatementEditable>
-
-        {REVIEW THIS}
+        <Box>
+          <StatementEditable
+            {...props.statmentCardProps}
+            value={statement?.statement}
+            containerStyle={{ paddingBottom: '22px' }}
+          ></StatementEditable>
+        </Box>
 
         <Box
           direction="row"
@@ -62,7 +63,7 @@ export const StatementCard = (props: {
             <CircleIndicator
               size={48}
               icon={
-                nBacking === undefined ? (
+                isBacking ? (
                   <Spinner color="white"></Spinner>
                 ) : (
                   <Favorite color="white" style={{ height: '20px' }} />

@@ -5,6 +5,7 @@ import { countStatementBackings, getStatement } from '../firestore/getters'
 import { useBackingSend } from '../pages/voice/useBackingSend'
 import { StatementRead } from '../types'
 import { useConnectedMember } from './ConnectedAccountContext'
+import { useProjectContext } from './ProjectContext'
 
 export type StatementContextType = {
   statement?: StatementRead
@@ -35,6 +36,7 @@ export const StatementContext = (props: IStatementContext) => {
   const { tokenId } = useConnectedMember()
   const [isBacking, setIsBacking] = useState<boolean>(false)
   const [alreadyBacked, setAlreadyBacked] = useState<boolean>()
+  const { refetchStatements } = useProjectContext()
 
   const { data: statementRead } = useQuery({
     queryKey: [`${propsStatementId}`],
@@ -75,6 +77,7 @@ export const StatementContext = (props: IStatementContext) => {
     if (isSuccessBacking) {
       setIsBacking(false)
       refetchCount()
+      refetchStatements()
     }
   }, [isSuccessBacking])
 

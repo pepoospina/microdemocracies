@@ -14,6 +14,7 @@ import { ConnectedWallet } from './wallet/ConnectedWalletContext'
 import { SignerContext } from './wallet/SignerContext'
 
 function App() {
+  console.log('window.history', window.history)
   return (
     <div className="App">
       <I18nextProvider i18n={i18n}>

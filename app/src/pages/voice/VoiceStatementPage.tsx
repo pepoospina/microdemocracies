@@ -2,24 +2,25 @@ import { Box, Text } from 'grommet'
 import { FormPrevious, Send, StatusGood } from 'grommet-icons'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 
 import { useAppContainer } from '../../components/app/AppContainer'
 import { ViewportPage } from '../../components/app/Viewport'
+import { useNavigateHelpers } from '../../components/app/navigate.helpers'
 import { MIN_LIKES_PUBLIC } from '../../config/appConfig'
 import { useProjectContext } from '../../contexts/ProjectContext'
 import { useStatementContext } from '../../contexts/StatementContext'
 import { AbsoluteRoutes } from '../../route.names'
 import { AppButton, AppCard, AppHeading } from '../../ui-components'
 import { useCopyToClipboard } from '../../utils/copy.clipboard'
-import { AppBottomButtons } from '../common/BottomButtons'
+import { AppBottomButton, AppBottomButtons } from '../common/BottomButtons'
 import { Loading } from '../common/Loading'
 import { ProjectCard } from '../project/ProjectCard'
 import { StatementCard } from './StatementCard'
 
 export const VoiceStatementPage = (): JSX.Element => {
   const { t } = useTranslation()
-  const navigate = useNavigate()
+  const { backToProject, navigate } = useNavigateHelpers()
 
   const { statementId } = useParams()
   const { project, projectId } = useProjectContext()
@@ -99,19 +100,11 @@ export const VoiceStatementPage = (): JSX.Element => {
         </Box>
       }
       nav={
-        <AppBottomButtons
-          left={{
-            action: () => navigate(-1),
-            label: t('back'),
-            icon: <FormPrevious />,
-          }}
-          right={{
-            primary: true,
-            action: () =>
-              navigate(`${AbsoluteRoutes.ProjectHome(projectId?.toString() as string)}`),
-            label: t('finish'),
-          }}
-        ></AppBottomButtons>
+        <AppBottomButton
+          onClick={() => backToProject(projectId)}
+          label={t('projectHome')}
+          icon={<FormPrevious></FormPrevious>}
+        ></AppBottomButton>
       }
     ></ViewportPage>
   )

@@ -28,7 +28,7 @@ export interface IProjectHome {
 
 export const ProjectHomePage = (props: IProjectHome) => {
   const { t, i18n } = useTranslation()
-  const { setSubtitle, setLoading, setExpectedLoadingTime } = useLoadingContext()
+  const { setSubtitle, setLoading } = useLoadingContext()
   const navigate = useNavigate()
   const { project, nMembers, statements } = useProjectContext()
   const { tokenId } = useConnectedMember()
