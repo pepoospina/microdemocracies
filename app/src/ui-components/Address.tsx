@@ -22,8 +22,6 @@ export const Address = (props: IAddress): JSX.Element => {
     chainId: ensChain.id,
   })
 
-  console.log({ ens, address: props.address, error })
-
   const digits = props.digits || 5
   const addressType = props.addressType || 'address'
 

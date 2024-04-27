@@ -1,7 +1,7 @@
 import { FUNCTIONS_BASE } from '../config/appConfig'
 import { getEntityFirestore } from '../firestore/getters'
-import { Entity } from '../types'
-import { deriveEntity } from './cid-hash'
+import { Entity } from '../shared/types'
+import { deriveEntity } from '../shared/utils/cid-hash'
 
 export const putObject = async <T extends object>(object: T): Promise<Entity<T>> => {
   const entity = await deriveEntity<T>(object)

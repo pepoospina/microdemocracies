@@ -19,8 +19,8 @@ import { usePublicClient, useReadContract } from 'wagmi'
 
 import { ALCHEMY_GAS_POLICY_ID, ALCHEMY_RPC_URL } from '../config/appConfig'
 import { useLoadingContext } from '../contexts/LoadingContext'
-import { HexStr } from '../types'
-import { getAccountAddress } from '../utils/aa-sdk'
+import { HexStr } from '../shared/types'
+import { getAccountAddress } from '../shared/utils/aa-sdk'
 import {
   aaWalletAbi,
   getFactoryAddress,

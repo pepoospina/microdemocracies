@@ -6,7 +6,7 @@ import { AppConnectButton, AppConnectWidget } from '../../components/app/AppConn
 import { useChallengeRead } from '../../contexts/ChallengeContextRead'
 import { useChallengeWrite } from '../../contexts/ChallengeContextWrite'
 import { useConnectedMember } from '../../contexts/ConnectedAccountContext'
-import { AppAccount } from '../../types'
+import { AppAccount } from '../../shared/types'
 import { AppButton, AppCard, AppHeading, AppRemainingTime } from '../../ui-components'
 import { BoxCentered } from '../../ui-components/BoxCentered'
 import { LoadingDiv } from '../../ui-components/LoadingDiv'

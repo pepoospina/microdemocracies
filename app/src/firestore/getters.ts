@@ -9,6 +9,7 @@ import {
 } from 'firebase/firestore'
 import { getAddress } from 'viem'
 
+import { MIN_LIKES_PUBLIC } from '../config/appConfig'
 import {
   AppApplication,
   AppProject,
@@ -16,7 +17,7 @@ import {
   Entity,
   HexStr,
   StatementRead,
-} from '../types'
+} from '../shared/types'
 import { postInvite } from '../utils/project'
 import { collections } from './database'
 
@@ -57,7 +58,7 @@ export const getTopStatements = async (projectId: number) => {
   const q = query(
     collections.statements,
     where('projectId', '==', projectId),
-    where('nBackers', '>=', 2),
+    where('nBackers', '>=', MIN_LIKES_PUBLIC),
   )
   const snap = await getDocs(q)
 

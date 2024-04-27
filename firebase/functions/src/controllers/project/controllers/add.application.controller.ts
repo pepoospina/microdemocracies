@@ -1,7 +1,7 @@
 import { RequestHandler } from 'express'
 import { logger } from 'firebase-functions/v1'
 
-import { AppApply } from '../../../@app/types'
+import { AppApply } from '../../../@shared/types'
 import { getInvite } from '../../../db/getters'
 import { setApplication } from '../../../db/setters'
 import { addApplicationValidationScheme } from './project.schemas'

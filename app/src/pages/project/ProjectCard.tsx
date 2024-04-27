@@ -1,7 +1,7 @@
 import { Box, Text } from 'grommet'
 import { Trans } from 'react-i18next'
 
-import { AppProject } from '../../types'
+import { AppProject } from '../../shared/types'
 import { Bold } from '../../ui-components/Bold'
 import { StatementEditable } from '../voice/StatementEditable'
 

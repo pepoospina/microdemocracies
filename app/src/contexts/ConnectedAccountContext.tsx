@@ -1,7 +1,7 @@
 import { ReactNode, createContext, useContext, useEffect } from 'react'
 import { useReadContract } from 'wagmi'
 
-import { AppAccount, AppChallenge } from '../types'
+import { AppAccount, AppChallenge } from '../shared/types'
 import { registryABI } from '../utils/contracts.json'
 import { useAccountContext } from '../wallet/AccountContext'
 import { useMember } from './MemberContext'

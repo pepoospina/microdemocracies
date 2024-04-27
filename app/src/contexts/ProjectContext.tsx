@@ -18,7 +18,7 @@ import {
   AppProjectMember,
   HexStr,
   StatementRead,
-} from '../types'
+} from '../shared/types'
 import { registryABI } from '../utils/contracts.json'
 import { getProjectMembers, postInvite } from '../utils/project'
 import { useAccountContext } from '../wallet/AccountContext'

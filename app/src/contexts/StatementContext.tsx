@@ -4,7 +4,7 @@ import { createContext, useContext, useEffect, useState } from 'react'
 
 import { countStatementBackings, getStatement } from '../firestore/getters'
 import { useBackingSend } from '../pages/voice/useBackingSend'
-import { StatementRead } from '../types'
+import { StatementRead } from '../shared/types'
 import { useConnectedMember } from './ConnectedAccountContext'
 import { useProjectContext } from './ProjectContext'
 import { useToast } from './ToastsContext'

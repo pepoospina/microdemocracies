@@ -5,7 +5,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 
 import { useProjectContext } from '../../contexts/ProjectContext'
 import { RouteNames } from '../../route.names'
-import { AppApplication } from '../../types'
+import { AppApplication } from '../../shared/types'
 import { AppButton, AppCard, AppCircleButton } from '../../ui-components'
 import { getPapShortname } from '../../utils/pap'
 import { postDeleteApplication } from '../../utils/project'

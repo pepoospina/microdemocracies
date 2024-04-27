@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { hashMessage } from 'viem'
 
 import { useProjectContext } from '../../contexts/ProjectContext'
 import { useSemaphoreContext } from '../../contexts/SemaphoreContext'
-import { AppStatementCreate } from '../../types'
+import { useToast } from '../../contexts/ToastsContext'
+import { AppStatementCreate } from '../../shared/types'
+import { generateReactionProof, generateStatementProof } from '../../utils/statement.utils'
 import { postStatement } from '../../utils/statements'
-import { generateReactionProof, generateStatementProof } from './statement.utils'
 
 export type VoiceSendContextType = {
   proposeStatement?: (statement: string) => Promise<boolean>
@@ -14,8 +16,10 @@ export type VoiceSendContextType = {
 }
 
 export const useStatementSend = (): VoiceSendContextType => {
+  const { t } = useTranslation()
   const { projectId, refetchStatements } = useProjectContext()
   const { identity } = useSemaphoreContext()
+  const { show } = useToast()
 
   const [isSuccessStatement, setIsSuccessStatement] = useState<boolean>(false)
   const [statementId, setStatementId] = useState<string>()
@@ -37,13 +41,23 @@ export const useStatementSend = (): VoiceSendContextType => {
               ...statementProofs,
             }
 
-            const id = await postStatement(statement)
+            const { id, error } = await postStatement(statement)
 
             if (id !== undefined) {
               refetchStatements()
               setIsSuccessStatement(true)
               setStatementId(id)
+            } else {
+              show({
+                title: t('cannotPublishStatement'),
+                message: error.includes('already posted')
+                  ? t('cannotPublishStatementPeriod')
+                  : error,
+                status: 'critical',
+                time: 5000,
+              })
             }
+
             return id
           }
         }

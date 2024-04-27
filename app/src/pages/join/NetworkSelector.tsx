@@ -1,7 +1,7 @@
 import { Box } from 'grommet'
 import { useState } from 'react'
 
-import { PlatformAccount, PlatformId } from '../../types'
+import { PlatformAccount, PlatformId } from '../../shared/types'
 import {
   AppButton,
   AppFormField,

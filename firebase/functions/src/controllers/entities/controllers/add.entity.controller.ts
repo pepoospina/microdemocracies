@@ -1,8 +1,8 @@
 import { RequestHandler } from 'express'
 import { logger } from 'firebase-functions/v1'
 
-import { Entity } from '../../../@app/types'
-import { deriveEntity } from '../../../@app/utils/cid-hash'
+import { Entity } from '../../../@shared/types'
+import { deriveEntity } from '../../../@shared/utils/cid-hash'
 import { setEntity } from '../../../db/setters'
 import { addEntityValidationScheme } from './entity.schemas'
 

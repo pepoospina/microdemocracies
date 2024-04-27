@@ -14,7 +14,7 @@ import { WalletClient } from 'viem'
 import { useDisconnect, useWalletClient } from 'wagmi'
 
 import { useLoadingContext } from '../contexts/LoadingContext'
-import { HexStr } from '../types'
+import { HexStr } from '../shared/types'
 import { cap } from '../utils/general'
 import { createMagicSigner, magic } from './magic.signer'
 

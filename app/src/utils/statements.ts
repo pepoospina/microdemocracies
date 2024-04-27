@@ -7,7 +7,7 @@ import {
   AppReactionCreate,
   AppReturnMerklePass,
   AppStatementCreate,
-} from '../types'
+} from '../shared/types'
 import { MessageSigner } from './identity'
 
 // TODO: replace inmemory cache with a proper cache using indexedDb
@@ -28,7 +28,7 @@ export const postStatement = async (statement: AppStatementCreate) => {
   })
 
   const body = await res.json()
-  return body.id
+  return body
 }
 
 export const postBacking = async (backing: AppReactionCreate) => {

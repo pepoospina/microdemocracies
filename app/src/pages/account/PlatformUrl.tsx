@@ -1,6 +1,6 @@
 import { Anchor, Text } from 'grommet'
 
-import { PlatformAccount } from '../../types'
+import { PlatformAccount } from '../../shared/types'
 import { platforms } from '../../utils/platforms'
 
 export interface IPlatformUrl {

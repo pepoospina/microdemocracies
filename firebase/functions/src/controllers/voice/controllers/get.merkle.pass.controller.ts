@@ -1,7 +1,7 @@
 import { RequestHandler } from 'express'
 import { logger } from 'firebase-functions/v1'
 
-import { AppGetMerklePass } from '../../../@app/types'
+import { AppGetMerklePass } from '../../../@shared/types'
 import { getGroupOfTree, getLatestGroup, storeTree } from '../../../utils/groups'
 import { getIdentitiesValidationScheme } from './voice.schemas'
 

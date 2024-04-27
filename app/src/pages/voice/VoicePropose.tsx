@@ -51,6 +51,7 @@ export const VoicePropose = (): JSX.Element => {
       setIsProposing(true)
 
       proposeStatement(input).then(() => {
+        setIsProposing(false)
         closeLoading()
       })
     }
@@ -58,7 +59,6 @@ export const VoicePropose = (): JSX.Element => {
 
   useEffect(() => {
     if (statementId) {
-      setIsProposing(false)
       setDone(true)
       navigate(`../${RouteNames.VoiceStatement}/${statementId}`)
     }
@@ -110,6 +110,7 @@ export const VoicePropose = (): JSX.Element => {
                 elements={[
                   <Text>{t('canBackN', { nMembers })}.</Text>,
                   <Text>{t('aStatementNeeds', { nLikes: MIN_LIKES_PUBLIC - 1 })}.</Text>,
+                  <Text>{t('maxStatementsPerPeriod')}.</Text>,
                 ]}
               ></BulletList>
             </AppCard>

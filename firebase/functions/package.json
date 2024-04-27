@@ -3,8 +3,8 @@
   "scripts": {
     "lint": "eslint --ext .js,.ts .",
     "prettier": "prettier --write .",
-    "build": "tsc",
-    "build:watch": "tsc --watch",
+    "build": "rm -rf ./lib & tsc",
+    "build:watch": "rm -rf ./lib & tsc --watch",
     "test-e2e": "NODE_ENV=local FIRESTORE_EMULATOR_HOST=localhost:8080 mocha --config ./.mocharc.e2e.js src/__e2e_tests__/**/*.test.ts",
     "serve": "npm run build && firebase emulators:start --only functions",
     "shell": "npm run build && firebase functions:shell",

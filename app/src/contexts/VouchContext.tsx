@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { DecodeEventLogReturnType, encodeFunctionData, zeroAddress } from 'viem'
 import { usePublicClient } from 'wagmi'
 
-import { HexStr } from '../types'
+import { HexStr } from '../shared/types'
 import { TransferEventType, VouchEventType, registryABI } from '../utils/contracts.json'
 import { postMember } from '../utils/project'
 import { useAccountContext } from '../wallet/AccountContext'

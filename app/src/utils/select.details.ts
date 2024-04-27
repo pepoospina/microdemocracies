@@ -1,4 +1,4 @@
-import { PersonalDetailId, PlatformId, SelectedDetails } from '../types'
+import { PersonalDetailId, PlatformId, SelectedDetails } from '../shared/types'
 
 export class SelectedDetailsHelper {
   static hasPlatforms = (details?: SelectedDetails) => {

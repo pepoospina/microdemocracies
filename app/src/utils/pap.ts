@@ -1,4 +1,4 @@
-import { PAP } from '../types'
+import { PAP } from '../shared/types'
 
 export const getPapShortname = (pap?: PAP) => {
   if (!pap) return ''
