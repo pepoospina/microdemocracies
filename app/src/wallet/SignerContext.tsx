@@ -22,7 +22,6 @@ export type SignerContextType = {
   connect: () => void
   hasInjected: boolean
   signer?: WalletClient
-
   address?: HexStr
   signMessage?: (message: string) => Promise<HexStr>
   isConnecting: boolean

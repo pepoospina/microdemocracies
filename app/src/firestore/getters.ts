@@ -159,3 +159,12 @@ export const getAccountOwner = async (aaAddress: HexStr) => {
   const user = doc.data() as { owner: HexStr }
   return user.owner
 }
+
+export const getTokenIdOfAddress = async (projectId: number, aaAddress: string) => {
+  const ref = docRef(collections.projectMembers(projectId), aaAddress)
+  const doc = await getDoc(ref)
+
+  if (!doc.exists()) return undefined
+  const member = doc.data() as { tokenId: number }
+  return member.tokenId
+}

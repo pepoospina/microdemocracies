@@ -231,8 +231,8 @@ export interface AppInvite {
 
 export interface AppApply {
   papEntity: Entity<PAP>
-  invitationId: string
   projectId: number
+  invitationId?: string
 }
 
 export interface AppApplication {

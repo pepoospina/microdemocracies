@@ -30,7 +30,7 @@ export const addInvitationValidationScheme = object({
 export const addApplicationValidationScheme = object({
   papEntity: object().shape({}).required(),
   projectId: number().required(),
-  invitationId: string().required(),
+  invitationId: string().optional(),
 }).noUnknown(true)
 
 export const getMembersValidationScheme = object({

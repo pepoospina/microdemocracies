@@ -41,6 +41,7 @@ export const collections = {
     const project = doc(db, CollectionNames.Projects, projectId.toString())
     return collection(project, CollectionNames.ProjectInvitations)
   },
+  TODO:  organize the applications....
   userApplications: (aaAddress: string) => {
     const user = doc(db, CollectionNames.Identities, aaAddress)
     return collection(user, CollectionNames.Applications)

@@ -16,7 +16,7 @@ import { VoicePropose } from '../../pages/voice/VoicePropose'
 import { VoiceStatementPageBase } from '../../pages/voice/VoiceStatementPageBase'
 import { InviteAccountPage } from '../../pages/vouch/InviteAccount'
 import { InvitePage } from '../../pages/vouch/InvitePage'
-import { MembersPage } from '../../pages/vouches/Members'
+import { MembersPage } from '../../pages/vouches/MembersPage'
 import { RouteNames } from '../../route.names'
 import { TestCreateProject } from '../../test/TestCreateProject'
 import { TestProject } from '../../test/TestProject'
@@ -37,11 +37,6 @@ const AppContainerContextValue = createContext<AppContainerContextType | undefin
 )
 
 export const AppContainer = (props: React.PropsWithChildren) => {
-  const location = useLocation()
-  const navigate = useNavigate()
-
-  console.log('location', location.key)
-
   const [title, setTitle] = useState<SetPageTitleType>()
 
   return (
