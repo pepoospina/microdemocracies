@@ -1,8 +1,8 @@
 import { BigNumber } from '@ethersproject/bignumber'
 import { verifyProof } from '@semaphore-protocol/proof'
 
-import { ProofAndTree } from '../../../@app/types'
-import { getReactionNullifier } from '../../../@app/utils/identity.utils'
+import { ProofAndTree } from '../../../@shared/types'
+import { getReactionNullifier } from '../../../@shared/utils/identity.utils'
 import { hasBackingWithNullifierHash } from '../../../db/getters'
 import { TREE_DEPTH } from '../../../utils/groups'
 

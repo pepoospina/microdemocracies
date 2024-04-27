@@ -1,7 +1,7 @@
 import { Anchor, Box, Spinner, Text } from 'grommet'
 import { useTranslation } from 'react-i18next'
 
-import { AppAccount, Entity, PAP } from '../../types'
+import { AppAccount, Entity, PAP } from '../../shared/types'
 import { AppCard } from '../../ui-components'
 import { BoxCentered } from '../../ui-components/BoxCentered'
 import { cap } from '../../utils/general'

@@ -1,7 +1,7 @@
 import { RequestHandler } from 'express'
 import { logger } from 'firebase-functions/v1'
 
-import { HexStr } from '../../../@app/types'
+import { HexStr } from '../../../@shared/types'
 import { deleteApplications } from '../../../db/setters'
 import { deleteApplicationValidationScheme } from './project.schemas'
 

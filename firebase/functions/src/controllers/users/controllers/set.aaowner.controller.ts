@@ -1,8 +1,8 @@
 import { RequestHandler } from 'express'
 import { logger } from 'firebase-functions/v1'
 
-import { AaOwnerPayload } from '../../../@app/types'
-import { getAccountAddress } from '../../../@app/utils/aa-sdk'
+import { AaOwnerPayload } from '../../../@shared/types'
+import { getAccountAddress } from '../../../@shared/utils/aa-sdk'
 import { setUser } from '../../../db/setters'
 import { chain, publicClient } from '../../../utils/contracts'
 import { setAaOwnerValidationScheme } from './users.schemas'

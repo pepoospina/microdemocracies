@@ -4,7 +4,7 @@ import {
   AppPublicIdentity,
   AppStatement,
   AppTree,
-} from '../@app/types'
+} from '../@shared/types'
 import { sortIdentities } from '../utils/groups'
 import { collections } from './db'
 
@@ -94,6 +94,13 @@ export const hasBackingWithNullifierHash = async (
   const q = collections
     .statementsBackers(statementId)
     .where('proof.nullifierHash', '==', nullifierHash)
+  const snap = await q.get()
+
+  return !snap.empty
+}
+
+export const existsStatementWithNullifierHash = async (nullifierHash: string) => {
+  const q = collections.statements.where('proof.nullifierHash', '==', nullifierHash)
   const snap = await q.get()
 
   return !snap.empty

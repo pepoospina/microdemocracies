@@ -5,7 +5,7 @@ import { useReadContract } from 'wagmi'
 
 import { CHAIN_ID } from '../../config/appConfig'
 import { getAccountOwner } from '../../firestore/getters'
-import { HexStr } from '../../types'
+import { HexStr } from '../../shared/types'
 import { Address } from '../../ui-components'
 import { LoadingDiv } from '../../ui-components/LoadingDiv'
 import { aaWalletAbi } from '../../utils/contracts.json'

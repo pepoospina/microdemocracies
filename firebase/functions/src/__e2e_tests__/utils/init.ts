@@ -1,4 +1,4 @@
-import { AppStatement } from '../@app/types'
+import { AppStatement } from '../../@shared/types'
 import { HttpConnector } from '../http.connector'
 
 export interface SendResult {}

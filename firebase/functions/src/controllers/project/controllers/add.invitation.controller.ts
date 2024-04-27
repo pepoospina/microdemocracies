@@ -1,7 +1,7 @@
 import { RequestHandler } from 'express'
 import { logger } from 'firebase-functions/v1'
 
-import { AppInvite } from '../../../@app/types'
+import { AppInvite } from '../../../@shared/types'
 import { setInvitation } from '../../../db/setters'
 import { addInvitationValidationScheme } from './project.schemas'
 

@@ -14,8 +14,8 @@ import {
   AppTree,
   Entity,
   HexStr,
-} from '../@app/types'
-import { getBackingId, getStatementId, getTreeId } from '../@app/utils/identity.utils'
+} from '../@shared/types'
+import { getBackingId, getStatementId, getTreeId } from '../@shared/utils/identity.utils'
 import { collections, db } from './db'
 
 export const setStatementReaction = async (backing: AppReactionCreate): Promise<string> => {

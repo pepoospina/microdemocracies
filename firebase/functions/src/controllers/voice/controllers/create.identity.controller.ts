@@ -1,8 +1,8 @@
 import { RequestHandler } from 'express'
 import { logger } from 'firebase-functions/v1'
 
-import { AppPublicIdentity } from '../../../@app/types'
-import { getControlMessage } from '../../../@app/utils/identity.utils'
+import { AppPublicIdentity } from '../../../@shared/types'
+import { getControlMessage } from '../../../@shared/utils/identity.utils'
 import { setIdentity } from '../../../db/setters'
 import { publicClient } from '../../../utils/contracts'
 import { identityValidationScheme } from './voice.schemas'

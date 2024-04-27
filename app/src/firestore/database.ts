@@ -9,7 +9,7 @@ import {
   persistentMultipleTabManager,
 } from 'firebase/firestore'
 
-import { CollectionNames } from './collectionNames'
+import { CollectionNames } from '../shared/collectionNames'
 
 const firebaseConfig = {
   apiKey: 'AIzaSyD0Mg8hk5cQAfNc-ZNM-pM_76kZY4IXxM4',

@@ -2,8 +2,8 @@ import { Identity } from '@semaphore-protocol/identity'
 import { generateProof as _generateProof } from '@semaphore-protocol/proof'
 
 import { getPublicIdentity } from '../firestore/getters'
-import { AppGetProof, AppPublicIdentity, HexStr, ProofAndTree } from '../types'
-import { getControlMessage } from './identity.utils'
+import { AppGetProof, AppPublicIdentity, HexStr, ProofAndTree } from '../shared/types'
+import { getControlMessage } from '../shared/utils/identity.utils'
 import { getMerklePass, postIdentity } from './statements'
 
 export type MessageSigner = (message: string) => Promise<HexStr>

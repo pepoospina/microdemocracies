@@ -1,5 +1,11 @@
 import { FUNCTIONS_BASE } from '../config/appConfig'
-import { AppApply, AppInvite, AppProjectCreate, AppProjectMember, HexStr } from '../types'
+import {
+  AppApply,
+  AppInvite,
+  AppProjectCreate,
+  AppProjectMember,
+  HexStr,
+} from '../shared/types'
 
 export const postProject = async (create: AppProjectCreate) => {
   const res = await fetch(FUNCTIONS_BASE + '/project/create', {

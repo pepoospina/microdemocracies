@@ -1,6 +1,6 @@
 import { Box } from 'grommet'
 
-import { PAP } from '../../types'
+import { PAP } from '../../shared/types'
 import { AccountPerson } from '../account/AccountPerson'
 
 export interface IPAPEntry {

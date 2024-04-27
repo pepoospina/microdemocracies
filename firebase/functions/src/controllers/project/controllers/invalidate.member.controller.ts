@@ -2,7 +2,7 @@ import { RequestHandler } from 'express'
 import { logger } from 'firebase-functions/v1'
 import { zeroAddress } from 'viem'
 
-import { AppProjectMemberToken } from '../../../@app/types'
+import { AppProjectMemberToken } from '../../../@shared/types'
 import { getProject } from '../../../db/getters'
 import { deleteProjectMember } from '../../../db/setters'
 import { getRegistry } from '../../../utils/contracts'

@@ -1,10 +1,12 @@
+import { BigNumber } from '@ethersproject/bignumber'
 import { verifyProof } from '@semaphore-protocol/proof'
 import { RequestHandler } from 'express'
 import { logger } from 'firebase-functions/v1'
 
-import { AppStatementCreate } from '../../../@app/types'
-import { getStatementId, getTreeId } from '../../../@app/utils/identity.utils'
-import { getTree } from '../../../db/getters'
+import { AppStatementCreate } from '../../../@shared/types'
+import { getStatementId, getTreeId } from '../../../@shared/utils/identity.utils'
+import { getWeek } from '../../../@shared/utils/statements.shared.utils'
+import { existsStatementWithNullifierHash, getTree } from '../../../db/getters'
 import { setStatement, setStatementReaction } from '../../../db/setters'
 import { TREE_DEPTH } from '../../../utils/groups'
 import { isValidReaction } from '../utils/validate.reaction'
@@ -32,6 +34,19 @@ export const createStatementController: RequestHandler = async (request, respons
       )
     }
 
+    const week = getWeek(Date.now()).toString()
+
+    /** Check period nullifier */
+    const expectedExternalNullifier = BigNumber.from(week).toString()
+
+    if (
+      statementCreate.statementProof.proof.externalNullifier !== expectedExternalNullifier
+    ) {
+      throw new Error(
+        `A statement nullifier in this period ${statementCreate.statementProof.proof.externalNullifier} must be ${expectedExternalNullifier}`,
+      )
+    }
+
     // verify statement proof
     const validStatement = await verifyProof(
       statementCreate.statementProof.proof,
@@ -40,6 +55,16 @@ export const createStatementController: RequestHandler = async (request, respons
 
     if (!validStatement) {
       throw new Error('Invalid statement proof')
+    }
+
+    /** no previous statement with the same nullifierHash */
+    const preExist = await existsStatementWithNullifierHash(
+      statementCreate.statementProof.proof.nullifierHash,
+    )
+    if (preExist) {
+      throw new Error(
+        `Statement with this nullifierHash ${statementCreate.statementProof.proof.nullifierHash} already posted`,
+      )
     }
 
     // verify reaction proof

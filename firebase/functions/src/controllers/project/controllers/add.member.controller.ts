@@ -1,7 +1,7 @@
 import { RequestHandler } from 'express'
 import { logger } from 'firebase-functions/v1'
 
-import { AppProjectMember } from '../../../@app/types'
+import { AppProjectMember } from '../../../@shared/types'
 import { getProject } from '../../../db/getters'
 import { setProjectMember } from '../../../db/setters'
 import { getRegistry } from '../../../utils/contracts'

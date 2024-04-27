@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
 import { useReadContract } from 'wagmi'
 
-import { AppAccount, AppVouch, Entity, HexStr, PAP } from '../types'
+import { AppAccount, AppVouch, Entity, HexStr, PAP } from '../shared/types'
 import { registryABI } from '../utils/contracts.json'
 import { getEntity } from '../utils/store'
 import { useAccountContext } from '../wallet/AccountContext'

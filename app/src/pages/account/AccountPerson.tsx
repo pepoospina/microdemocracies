@@ -2,7 +2,7 @@ import { Box, BoxExtendedProps, Spinner, Text } from 'grommet'
 import React, { CSSProperties } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { HexStr, PAP } from '../../types'
+import { HexStr, PAP } from '../../shared/types'
 import { cap } from '../../utils/general'
 import { platforms } from '../../utils/platforms'
 import { AccountAddress } from './AccountAddress'

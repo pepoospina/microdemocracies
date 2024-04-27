@@ -3,7 +3,7 @@ import { FormNext, FormPrevious } from 'grommet-icons'
 import { ReactNode, useCallback } from 'react'
 
 import { useThemeContext } from '../components/app'
-import { Page } from '../types'
+import { Page } from '../shared/types'
 
 export interface IPageNumber extends BoxExtendedProps {
   number: number
