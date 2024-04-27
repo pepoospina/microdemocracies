@@ -47,6 +47,10 @@ export const collections = {
   },
   entities: collection(db, CollectionNames.Entities),
   members: collectionGroup(db, CollectionNames.ProjectMembers),
+  projectMembers: (projectId: number) => {
+    const project = doc(db, CollectionNames.Projects, projectId.toString())
+    return collection(project, CollectionNames.ProjectMembers)
+  },
   identities: collection(db, CollectionNames.Projects),
   projects: collection(db, CollectionNames.Projects),
   users: collection(db, CollectionNames.Users),

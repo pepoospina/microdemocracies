@@ -10,6 +10,7 @@ import {
   getApplications,
   getInviteId,
   getProject,
+  getProjectMembers,
   getTopStatements,
 } from '../firestore/getters'
 import {
@@ -20,7 +21,7 @@ import {
   StatementRead,
 } from '../shared/types'
 import { registryABI } from '../utils/contracts.json'
-import { getProjectMembers, postInvite } from '../utils/project'
+import { postInvite } from '../utils/project'
 import { useAccountContext } from '../wallet/AccountContext'
 
 export type ProjectContextType = {

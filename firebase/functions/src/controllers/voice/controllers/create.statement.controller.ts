@@ -84,6 +84,7 @@ export const createStatementController: RequestHandler = async (request, respons
       proof: statementCreate.statementProof.proof,
       statement: statementCreate.statement,
       treeId: treeId,
+      createdAt: Date.now(),
     })
 
     await setStatementReaction({
