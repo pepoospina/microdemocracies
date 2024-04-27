@@ -13,6 +13,7 @@ import { MIN_LIKES_PUBLIC } from '../config/appConfig'
 import {
   AppApplication,
   AppProject,
+  AppProjectMember,
   AppPublicIdentity,
   Entity,
   HexStr,
@@ -59,6 +60,7 @@ export const getTopStatements = async (projectId: number) => {
     collections.statements,
     where('projectId', '==', projectId),
     where('nBackers', '>=', MIN_LIKES_PUBLIC),
+    orderBy('createdAt', 'desc'),
   )
   const snap = await getDocs(q)
 
@@ -67,6 +69,18 @@ export const getTopStatements = async (projectId: number) => {
       ...doc.data(),
       id: doc.id,
     } as unknown as StatementRead
+  })
+}
+
+export const getProjectMembers = async (projectId: number) => {
+  const q = query(collections.projectMembers(projectId), orderBy('joinedAt', 'desc'))
+  const snap = await getDocs(q)
+
+  return snap.docs.map((doc) => {
+    return {
+      ...doc.data(),
+      id: doc.id,
+    } as unknown as AppProjectMember & { id: string }
   })
 }
 

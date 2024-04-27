@@ -130,6 +130,7 @@ export interface AppStatement {
   treeId: string
   proof: SemaphoreProofStrings
   nBackers?: number
+  createdAt: number
 }
 
 export type AppStatementRead = AppStatement & { id: string }
@@ -203,6 +204,7 @@ export interface AppProjectMember {
   aaAddress: HexStr
   tokenId: number
   voucherTokenId: number
+  joinedAt: number
 }
 
 export interface AppProjectMemberToken {

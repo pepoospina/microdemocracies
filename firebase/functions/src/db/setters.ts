@@ -82,16 +82,6 @@ export const deleteProjectMember = async (member: AppProjectMemberId): Promise<v
   await docRef.delete()
 }
 
-export const getProjectMembers = async (projectId: number): Promise<AppProjectMember[]> => {
-  const membersCollection = collections.projectMembers(projectId.toString())
-  const membersFull = await membersCollection.get()
-  const members = membersFull.docs.map((member) => {
-    return member.data() as AppProjectMember
-  })
-
-  return members
-}
-
 export const setTree = async (tree: AppTree): Promise<string> => {
   const treeRef = collections.trees.doc(getTreeId(tree.projectId, tree.root))
   await treeRef.set({ root: tree.root, projectId: tree.projectId })
