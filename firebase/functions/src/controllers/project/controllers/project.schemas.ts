@@ -38,5 +38,6 @@ export const getMembersValidationScheme = object({
 }).noUnknown(true)
 
 export const deleteApplicationValidationScheme = object({
-  address: string().required(),
+  applicantAddress: string().required(),
+  projectId: number().required(),
 }).noUnknown(true)

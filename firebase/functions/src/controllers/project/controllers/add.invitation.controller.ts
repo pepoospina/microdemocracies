@@ -8,9 +8,6 @@ import { addInvitationValidationScheme } from './project.schemas'
 export const addInvitationController: RequestHandler = async (request, response) => {
   const payload = (await addInvitationValidationScheme.validate(request.body)) as AppInvite
 
-  // use server date
-  payload.creationDate = Math.round(Date.now() / 1000)
-
   try {
     const id = await setInvitation(payload)
     response.status(200).send({ success: true, id })
