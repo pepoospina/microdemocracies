@@ -4,7 +4,10 @@ import { createContext, useContext, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { useReadContract } from 'wagmi'
 
-import { subscribeToStatements } from '../components/app/realtime.listeners'
+import {
+  subscribeToApplications,
+  subscribeToStatements,
+} from '../components/app/realtime.listeners'
 import { collections } from '../firestore/database'
 import {
   getInviteId,
@@ -154,12 +157,9 @@ export const ProjectContext = (props: IProjectContext) => {
   /** refetch applications when new application to this member is created */
   useEffect(() => {
     if (aaAddress && projectId) {
-      const unsub = onSnapshot(inviterApplicationsQuery(projectId, aaAddress), (doc) => {
-        refetchApplications()
-      })
-      return unsub
+      return subscribeToApplications(projectId, aaAddress, refetchApplications)
     }
-  }, [aaAddress, refetchApplications])
+  }, [aaAddress, projectId, refetchApplications])
 
   /** subscribe to statements collection */
   useEffect(() => {

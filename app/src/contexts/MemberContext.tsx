@@ -126,6 +126,7 @@ export const useMember = (props: AccountContextProps): AccountContextType => {
       if (accountVouch?.personCid) {
         return getEntity<PAP>(accountVouch?.personCid)
       }
+      return null
     },
   })
 
@@ -135,6 +136,7 @@ export const useMember = (props: AccountContextProps): AccountContextType => {
       if (voucherVouch?.personCid) {
         return getEntity<PAP>(voucherVouch?.personCid)
       }
+      return null
     },
   })
 
@@ -148,11 +150,11 @@ export const useMember = (props: AccountContextProps): AccountContextType => {
   return {
     refetch,
     account: accountRead,
-    accountPap: accountPapRead,
+    accountPap: accountPapRead !== null ? accountPapRead : undefined,
     isLoadingAccount: isLoadingAccount || isLoadingTokenId,
     tokenId: Number(tokenId),
     address,
     voucherTokenId: _accountRead !== undefined ? Number(_accountRead.voucher) : undefined,
-    voucherPapRead,
+    voucherPapRead: voucherPapRead !== null ? voucherPapRead : undefined,
   }
 }
