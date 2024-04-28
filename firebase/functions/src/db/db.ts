@@ -1,7 +1,7 @@
 import { initializeApp } from 'firebase-admin/app'
 import { getFirestore } from 'firebase-admin/firestore'
 
-import { CollectionNames } from '../@app/firestore/collectionNames'
+import { CollectionNames } from '../@shared/collectionNames'
 
 initializeApp()
 
@@ -15,12 +15,11 @@ export const collections = {
       .collection(CollectionNames.Projects)
       .doc(projectId)
       .collection(CollectionNames.ProjectInvitations),
-  userApplications: (aaAddress: string) =>
+  memberApplications: (projectId: string) =>
     db
-      .collection(CollectionNames.Identities)
-      .doc(aaAddress)
-      .collection(CollectionNames.UserApplications),
-  applications: db.collectionGroup(CollectionNames.Applications),
+      .collection(CollectionNames.Projects)
+      .doc(projectId)
+      .collection(CollectionNames.Applications),
   projectMembers: (projectId: string) =>
     db
       .collection(CollectionNames.Projects)

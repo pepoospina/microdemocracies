@@ -1,7 +1,7 @@
 import { RequestHandler } from 'express'
 import { logger } from 'firebase-functions/v1'
 
-import { AppProjectCreate } from '../../../@app/types'
+import { AppProjectCreate } from '../../../@shared/types'
 import { createProject } from '../../../db/setters'
 import { projectValidationScheme } from './project.schemas'
 

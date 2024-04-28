@@ -9,14 +9,16 @@ import {
 } from 'firebase/firestore'
 import { getAddress } from 'viem'
 
+import { MIN_LIKES_PUBLIC } from '../config/appConfig'
 import {
   AppApplication,
   AppProject,
+  AppProjectMember,
   AppPublicIdentity,
   Entity,
   HexStr,
   StatementRead,
-} from '../types'
+} from '../shared/types'
 import { postInvite } from '../utils/project'
 import { collections } from './database'
 
@@ -57,7 +59,8 @@ export const getTopStatements = async (projectId: number) => {
   const q = query(
     collections.statements,
     where('projectId', '==', projectId),
-    where('nBackers', '>=', 2),
+    where('nBackers', '>=', MIN_LIKES_PUBLIC),
+    orderBy('createdAt', 'desc'),
   )
   const snap = await getDocs(q)
 
@@ -66,6 +69,18 @@ export const getTopStatements = async (projectId: number) => {
       ...doc.data(),
       id: doc.id,
     } as unknown as StatementRead
+  })
+}
+
+export const getProjectMembers = async (projectId: number) => {
+  const q = query(collections.projectMembers(projectId), orderBy('joinedAt', 'desc'))
+  const snap = await getDocs(q)
+
+  return snap.docs.map((doc) => {
+    return {
+      ...doc.data(),
+      id: doc.id,
+    } as unknown as AppProjectMember & { id: string }
   })
 }
 
@@ -97,16 +112,21 @@ export const getInviteId = async (projectId: number, aaAddress: HexStr) => {
 
   if (querySnapshot.docs.length === 0) {
     console.log('user invite not found creating new one', { projectId, aaAddress })
-    return await postInvite({ projectId, memberAddress: aaAddress, creationDate: 0 })
+    return await postInvite({ projectId, memberAddress: aaAddress })
   }
 
   const doc = querySnapshot.docs[0]
   return doc.id
 }
 
-export const getApplications = async (aaAddress: HexStr) => {
-  const applications = collections.userApplications(aaAddress)
-  const querySnapshot = await getDocs(applications)
+export const inviterApplicationsQuery = (projectId: number, aaAddress: HexStr) => {
+  const applications = collections.memberApplications(projectId)
+  return query(applications, where('memberAddress', '==', getAddress(aaAddress)))
+}
+
+export const getInviterApplications = async (projectId: number, aaAddress: HexStr) => {
+  const q = inviterApplicationsQuery(projectId, aaAddress)
+  const querySnapshot = await getDocs(q)
 
   return querySnapshot.docs.map((app) => {
     return {
@@ -143,4 +163,13 @@ export const getAccountOwner = async (aaAddress: HexStr) => {
 
   const user = doc.data() as { owner: HexStr }
   return user.owner
+}
+
+export const getTokenIdOfAddress = async (projectId: number, aaAddress: string) => {
+  const ref = docRef(collections.projectMembers(projectId), aaAddress)
+  const doc = await getDoc(ref)
+
+  if (!doc.exists()) return undefined
+  const member = doc.data() as { tokenId: number }
+  return member.tokenId
 }

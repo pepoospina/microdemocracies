@@ -1,7 +1,7 @@
 import { Box } from 'grommet'
 import { SubtractCircle } from 'grommet-icons'
 
-import { PlatformAccount } from '../../types'
+import { PlatformAccount } from '../../shared/types'
 import { AppButton } from '../../ui-components'
 import { platforms } from '../../utils/platforms'
 import { PlatformUrl } from './PlatformUrl'

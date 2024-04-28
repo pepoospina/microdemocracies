@@ -1,7 +1,7 @@
 import { createPublicClient, getContract, http } from 'viem'
 import { baseSepolia } from 'viem/chains'
 
-import { HexStr } from '../@app/types'
+import { HexStr } from '../@shared/types'
 import { env } from '../config/env'
 import { registryABI, registryFactoryABI } from '../contracts/abis'
 

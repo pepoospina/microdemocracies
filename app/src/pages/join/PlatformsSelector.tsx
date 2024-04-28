@@ -1,7 +1,7 @@
 import { Box } from 'grommet'
 import { useEffect, useState } from 'react'
 
-import { PlatformAccount } from '../../types'
+import { PlatformAccount } from '../../shared/types'
 import { AppHeading } from '../../ui-components'
 import { AccountPlatforms } from '../account/AccountPlatforms'
 import { NetworkSelector } from './NetworkSelector'

@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { DecodeEventLogReturnType, encodeFunctionData } from 'viem'
 import { useReadContract } from 'wagmi'
 
-import { VoteOption } from '../types'
+import { VoteOption } from '../shared/types'
 import { registryABI } from '../utils/contracts.json'
 import { useAccountContext } from '../wallet/AccountContext'
 import { useProjectContext } from './ProjectContext'

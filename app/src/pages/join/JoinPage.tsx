@@ -11,7 +11,7 @@ import { useAppContainer } from '../../components/app/AppContainer'
 import { ViewportPage } from '../../components/app/Viewport'
 import { useProjectContext } from '../../contexts/ProjectContext'
 import { AbsoluteRoutes } from '../../route.names'
-import { DetailsAndPlatforms, PAP } from '../../types'
+import { DetailsAndPlatforms, PAP } from '../../shared/types'
 import { AppCard } from '../../ui-components'
 import { BoxCentered } from '../../ui-components/BoxCentered'
 import { postApply } from '../../utils/project'
@@ -120,10 +120,10 @@ export const JoinPage = () => {
 
       setCid(papEntity.cid)
 
-      if (invitation && projectId) {
+      if (projectId) {
         const application = {
           projectId,
-          invitationId: invitation,
+          invitationId: invitation !== null ? invitation : undefined,
           papEntity,
         }
         await postApply(application)

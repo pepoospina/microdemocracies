@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
 import { useReadContract } from 'wagmi'
 
-import { AppAccount, AppVouch, Entity, HexStr, PAP } from '../types'
+import { AppAccount, AppVouch, Entity, HexStr, PAP } from '../shared/types'
 import { registryABI } from '../utils/contracts.json'
 import { getEntity } from '../utils/store'
 import { useAccountContext } from '../wallet/AccountContext'
@@ -126,6 +126,7 @@ export const useMember = (props: AccountContextProps): AccountContextType => {
       if (accountVouch?.personCid) {
         return getEntity<PAP>(accountVouch?.personCid)
       }
+      return null
     },
   })
 
@@ -135,6 +136,7 @@ export const useMember = (props: AccountContextProps): AccountContextType => {
       if (voucherVouch?.personCid) {
         return getEntity<PAP>(voucherVouch?.personCid)
       }
+      return null
     },
   })
 
@@ -148,11 +150,11 @@ export const useMember = (props: AccountContextProps): AccountContextType => {
   return {
     refetch,
     account: accountRead,
-    accountPap: accountPapRead,
+    accountPap: accountPapRead !== null ? accountPapRead : undefined,
     isLoadingAccount: isLoadingAccount || isLoadingTokenId,
     tokenId: Number(tokenId),
     address,
     voucherTokenId: _accountRead !== undefined ? Number(_accountRead.voucher) : undefined,
-    voucherPapRead,
+    voucherPapRead: voucherPapRead !== null ? voucherPapRead : undefined,
   }
 }

@@ -2,7 +2,7 @@ import { binary_to_base58 } from 'base58-js'
 import stringify from 'canonical-json'
 import { sha256 } from 'js-sha256'
 
-import { HexStr, SignedObject } from '../@app/types'
+import { HexStr, SignedObject } from '../../@shared/types'
 import { getRegistry, publicClient } from './contracts'
 
 export const verifySignedObject = async <T>(

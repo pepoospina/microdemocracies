@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { useReadContract } from 'wagmi'
 
-import { AppChallenge, VoteOption } from '../types'
+import { AppChallenge, VoteOption } from '../shared/types'
 import { registryABI } from '../utils/contracts.json'
 import { useProjectContext } from './ProjectContext'
 

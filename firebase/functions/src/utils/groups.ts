@@ -1,7 +1,7 @@
 import { Group } from '@semaphore-protocol/group'
 
-import { AppTree } from '../@app/types'
-import { getTreeId } from '../@app/utils/identity.utils'
+import { AppTree } from '../@shared/types'
+import { getTreeId } from '../@shared/utils/identity.utils'
 import { getProjectIdentities, getTree, getTreeFull } from '../db/getters'
 import { setTree } from '../db/setters'
 

@@ -1,4 +1,4 @@
-import { PlatformId } from '../types'
+import { PlatformId } from '../shared/types'
 
 export interface PlatformDetails {
   name: string

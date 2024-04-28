@@ -2,7 +2,7 @@ import { Box, Text } from 'grommet'
 import { CSSProperties } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { PlatformId, SelectedDetails } from '../../types'
+import { PlatformId, SelectedDetails } from '../../shared/types'
 import { AppTag } from '../../ui-components'
 import { PlatformDetails, platforms } from '../../utils/platforms'
 

@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import { PropsWithChildren, createContext, useContext } from 'react'
 
 import { getAccountProjects } from '../firestore/getters'
-import { AppProject } from '../types'
+import { AppProject } from '../shared/types'
 import { useAccountContext } from './AccountContext'
 
 export type AccountDataContextType = {

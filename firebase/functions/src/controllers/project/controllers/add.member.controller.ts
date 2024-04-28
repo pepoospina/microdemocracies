@@ -1,16 +1,17 @@
 import { RequestHandler } from 'express'
 import { logger } from 'firebase-functions/v1'
 
-import { AppProjectMember } from '../../../@app/types'
+import { AppProjectMember } from '../../../@shared/types'
 import { getProject } from '../../../db/getters'
 import { setProjectMember } from '../../../db/setters'
 import { getRegistry } from '../../../utils/contracts'
 import { addMemberValidationScheme } from './project.schemas'
 
 export const addMemberController: RequestHandler = async (request, response) => {
-  const payload = (await addMemberValidationScheme.validate(
-    request.body,
-  )) as AppProjectMember
+  const payload = (await addMemberValidationScheme.validate(request.body)) as Omit<
+    AppProjectMember,
+    'joinedAt'
+  >
 
   /** check the project exist onChain */
   const project = await getProject(payload.projectId)
@@ -20,7 +21,7 @@ export const addMemberController: RequestHandler = async (request, response) => 
   if (balance === BigInt(0)) throw new Error(`Address ${payload.aaAddress} not a member`)
 
   try {
-    setProjectMember(payload)
+    setProjectMember({ ...payload, joinedAt: Date.now() })
     response.status(200).send({ success: true })
   } catch (error: any) {
     logger.error('error', error)

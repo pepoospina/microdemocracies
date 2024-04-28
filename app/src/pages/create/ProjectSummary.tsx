@@ -1,7 +1,7 @@
 import { Box, Text } from 'grommet'
 import { useTranslation } from 'react-i18next'
 
-import { PAP, SelectedDetails } from '../../types'
+import { PAP, SelectedDetails } from '../../shared/types'
 import { AppCard, AppHeading } from '../../ui-components'
 import { AccountPerson } from '../account/AccountPerson'
 import { StatementEditable } from '../voice/StatementEditable'

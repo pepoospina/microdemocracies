@@ -1,4 +1,5 @@
 import {
+  Anchor,
   AreasType,
   Box,
   BoxExtendedProps,
@@ -18,20 +19,48 @@ export const MAX_WIDTH_LANDING = 1600
 export const MAX_WIDTH_APP = 700
 
 export const ViewportContainer = (props: IElement) => {
+  const { constants } = useThemeContext()
   return (
-    <Box
-      id="viewport-container"
-      style={{
-        height: '100vh',
-        width: '100vw',
-        overflow: 'hidden',
-        maxWidth: `${MAX_WIDTH_LANDING}px`,
-        margin: '0 auto',
-        ...props.style,
-      }}
-    >
-      {props.children}
-    </Box>
+    <>
+      <Box
+        id="viewport-container"
+        style={{
+          height: 'calc(100vh - 70px)',
+          width: '100vw',
+          overflow: 'hidden',
+          maxWidth: `${MAX_WIDTH_LANDING}px`,
+          margin: '0 auto',
+          ...props.style,
+        }}
+      >
+        {props.children}
+      </Box>
+      <Box
+        id="footer"
+        style={{
+          height: '70px',
+          flexShrink: 0,
+          backgroundColor: constants.colors.primary,
+        }}
+        pad="medium"
+        justify="center"
+        align="center"
+      >
+        <Box direction="row" gap="small">
+          <Text size="small" color={constants.colors.textOnPrimary}>
+            Follow us
+          </Text>
+          <Anchor
+            color={constants.colors.textOnPrimary}
+            size="small"
+            target="_blank"
+            href="https://twitter.com/udemocracies"
+          >
+            @udemocracies
+          </Anchor>
+        </Box>
+      </Box>
+    </>
   )
 }
 
@@ -59,6 +88,7 @@ export const ViewportHeadingLarge = (props: { label: ReactNode }) => {
  */
 export const ViewportPage = (props: { content: ReactNode; nav: ReactNode }) => {
   const { mobile } = useResponsive()
+  const { constants } = useThemeContext()
   const pad = mobile ? 'none' : 'large'
 
   return (
@@ -76,7 +106,14 @@ export const ViewportPage = (props: { content: ReactNode; nav: ReactNode }) => {
       <Box id="header" style={{ flexGrow: 1, overflowY: 'auto' }}>
         <Box style={{ flexShrink: 0 }}>{props.content}</Box>
       </Box>
-      <Box id="nav" style={{ height: '90px', flexShrink: 0 }}>
+      <Box
+        id="nav"
+        style={{
+          height: '80px',
+          flexShrink: 0,
+        }}
+        justify="center"
+      >
         {props.nav}
       </Box>
     </Box>

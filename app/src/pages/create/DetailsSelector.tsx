@@ -4,7 +4,7 @@ import { t } from 'i18next'
 import { useEffect, useState } from 'react'
 
 import { useResponsive, useThemeContext } from '../../components/app'
-import { PlatformId, SelectedDetails } from '../../types'
+import { PlatformId, SelectedDetails } from '../../shared/types'
 import { AppButton, AppHeading } from '../../ui-components'
 import { cap } from '../../utils/general'
 import { PlatformDetails, platforms } from '../../utils/platforms'

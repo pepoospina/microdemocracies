@@ -5,7 +5,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 
 import { useProjectContext } from '../../contexts/ProjectContext'
 import { RouteNames } from '../../route.names'
-import { AppApplication } from '../../types'
+import { AppApplication } from '../../shared/types'
 import { AppButton, AppCard, AppCircleButton } from '../../ui-components'
 import { getPapShortname } from '../../utils/pap'
 import { postDeleteApplication } from '../../utils/project'
@@ -13,8 +13,7 @@ import { postDeleteApplication } from '../../utils/project'
 export const ApplicationCard = (props: { application?: AppApplication }): JSX.Element => {
   const { t } = useTranslation()
   const navigate = useNavigate()
-  const { projectId } = useParams()
-  const { refetchApplications } = useProjectContext()
+  const { projectId, refetchApplications } = useProjectContext()
 
   const { application } = props
 
@@ -25,8 +24,8 @@ export const ApplicationCard = (props: { application?: AppApplication }): JSX.El
   }
 
   const remove = () => {
-    if (application) {
-      postDeleteApplication(application.papEntity.object.account).then(() => {
+    if (application && projectId) {
+      postDeleteApplication(projectId, application.papEntity.object.account).then(() => {
         refetchApplications()
       })
     }

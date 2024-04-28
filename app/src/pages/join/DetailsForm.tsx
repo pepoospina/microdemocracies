@@ -7,7 +7,7 @@ import {
   PlatformAccount,
   PlatformId,
   SelectedDetails,
-} from '../../types'
+} from '../../shared/types'
 import { AppForm, AppFormField, AppInput, FieldLabel } from '../../ui-components'
 import { PlatformDetails, platforms } from '../../utils/platforms'
 

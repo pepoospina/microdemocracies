@@ -9,7 +9,7 @@ import {
   persistentMultipleTabManager,
 } from 'firebase/firestore'
 
-import { CollectionNames } from './collectionNames'
+import { CollectionNames } from '../shared/collectionNames'
 
 const firebaseConfig = {
   apiKey: 'AIzaSyD0Mg8hk5cQAfNc-ZNM-pM_76kZY4IXxM4',
@@ -41,12 +41,16 @@ export const collections = {
     const project = doc(db, CollectionNames.Projects, projectId.toString())
     return collection(project, CollectionNames.ProjectInvitations)
   },
-  userApplications: (aaAddress: string) => {
-    const user = doc(db, CollectionNames.Identities, aaAddress)
-    return collection(user, CollectionNames.Applications)
+  memberApplications: (projectId: number) => {
+    const project = doc(db, CollectionNames.Projects, projectId.toString())
+    return collection(project, CollectionNames.Applications)
   },
   entities: collection(db, CollectionNames.Entities),
   members: collectionGroup(db, CollectionNames.ProjectMembers),
+  projectMembers: (projectId: number) => {
+    const project = doc(db, CollectionNames.Projects, projectId.toString())
+    return collection(project, CollectionNames.ProjectMembers)
+  },
   identities: collection(db, CollectionNames.Projects),
   projects: collection(db, CollectionNames.Projects),
   users: collection(db, CollectionNames.Users),

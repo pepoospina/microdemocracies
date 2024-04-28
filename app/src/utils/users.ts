@@ -1,5 +1,5 @@
 import { FUNCTIONS_BASE } from '../config/appConfig'
-import { AaOwnerPayload } from '../types'
+import { AaOwnerPayload } from '../shared/types'
 
 export const postUser = async (user: AaOwnerPayload) => {
   const res = await fetch(FUNCTIONS_BASE + '/user/setAaOwner', {

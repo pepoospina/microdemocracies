@@ -14,8 +14,8 @@ import {
   AppTree,
   Entity,
   HexStr,
-} from '../@app/types'
-import { getBackingId, getStatementId, getTreeId } from '../@app/utils/identity.utils'
+} from '../@shared/types'
+import { getBackingId, getStatementId, getTreeId } from '../@shared/utils/identity.utils'
 import { collections, db } from './db'
 
 export const setStatementReaction = async (backing: AppReactionCreate): Promise<string> => {
@@ -82,16 +82,6 @@ export const deleteProjectMember = async (member: AppProjectMemberId): Promise<v
   await docRef.delete()
 }
 
-export const getProjectMembers = async (projectId: number): Promise<AppProjectMember[]> => {
-  const membersCollection = collections.projectMembers(projectId.toString())
-  const membersFull = await membersCollection.get()
-  const members = membersFull.docs.map((member) => {
-    return member.data() as AppProjectMember
-  })
-
-  return members
-}
-
 export const setTree = async (tree: AppTree): Promise<string> => {
   const treeRef = collections.trees.doc(getTreeId(tree.projectId, tree.root))
   await treeRef.set({ root: tree.root, projectId: tree.projectId })
@@ -134,14 +124,19 @@ export const setInvitation = async (invitation: AppInvite): Promise<string> => {
 }
 
 export const setApplication = async (application: AppApplication): Promise<string> => {
-  const docRef = collections.userApplications(application.memberAddress).doc()
+  const docRef = collections.memberApplications(application.projectId.toString()).doc()
+
   await docRef.set(application)
   return docRef.id
 }
 
-export const deleteApplications = async (address: HexStr): Promise<void> => {
-  const snap = await collections.applications
-    .where('papEntity.object.account', '==', address)
+export const deleteApplication = async (
+  projectId: number,
+  applicantAddress: HexStr,
+): Promise<void> => {
+  const snap = await collections
+    .memberApplications(projectId.toString())
+    .where('papEntity.object.account', '==', applicantAddress)
     .get()
 
   await Promise.all(

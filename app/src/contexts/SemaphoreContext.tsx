@@ -3,8 +3,8 @@ import { PropsWithChildren, createContext, useContext, useEffect, useState } fro
 import { useTranslation } from 'react-i18next'
 
 import { getPublicIdentity } from '../firestore/getters'
-import { AppPublicIdentity } from '../types'
-import { getControlMessage } from '../utils/identity.utils'
+import { AppPublicIdentity } from '../shared/types'
+import { getControlMessage } from '../shared/utils/identity.utils'
 import { postIdentity } from '../utils/statements'
 import { useAccountContext } from '../wallet/AccountContext'
 import { useAppSigner } from '../wallet/SignerContext'

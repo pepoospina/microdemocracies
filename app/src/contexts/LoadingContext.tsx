@@ -21,7 +21,6 @@ export type LoadingContextType = {
   setSubtitle: (subtitle: string) => void
   setPause: (loading: boolean) => void
   setUserCanClose: (canClose: boolean) => void
-  //   setIcon: (icon: any) => void;
 }
 
 export interface LoadingContextProps {
@@ -144,7 +143,7 @@ export const LoadingContext = ({ children }: LoadingContextProps) => {
               </Heading>
 
               <Box style={{ width: '100%' }} align="center" margin={{ top: 'large' }}>
-                <Text>{subtitle}</Text>
+                <Text textAlign="center">{subtitle}</Text>
               </Box>
 
               <Box margin={{ vertical: 'large' }} align="center">

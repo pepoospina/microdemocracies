@@ -1,9 +1,10 @@
 import { Identity } from '@semaphore-protocol/identity'
 import { hashMessage } from 'viem'
 
-import { StatementCreateProofs, StatementReactions } from '../../types'
-import { generateProof } from '../../utils/identity'
-import { getReactionNullifier, getStatementId } from '../../utils/identity.utils'
+import { StatementCreateProofs, StatementReactions } from '../shared/types'
+import { getReactionNullifier, getStatementId } from '../shared/utils/identity.utils'
+import { getWeek } from '../shared/utils/statements.shared.utils'
+import { generateProof } from './identity'
 
 export const generateReactionProof = async (
   statementId: string,
@@ -24,7 +25,9 @@ export const generateStatementProof = async (
   projectId: number,
   identity: Identity,
 ): Promise<StatementCreateProofs> => {
-  const nullifier = Date.now().toString()
+  /** one statement per person per week. */
+  const period = getWeek(Date.now()).toString()
+  const nullifier = period
   const statementHash = hashMessage(_statement)
 
   const statementProof = await generateProof({

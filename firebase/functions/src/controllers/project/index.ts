@@ -8,7 +8,6 @@ import { addInvitationController } from './controllers/add.invitation.controller
 import { addMemberController } from './controllers/add.member.controller'
 import { createProjectController } from './controllers/create.project.controller'
 import { deleteApplicationController } from './controllers/delete.application.controller'
-import { getProjectMembersController } from './controllers/get.members.controller'
 import { invalidateMemberController } from './controllers/invalidate.member.controller'
 
 const projectRouter = express.Router()
@@ -19,7 +18,6 @@ projectRouter.post('/newInvite', addInvitationController)
 projectRouter.post('/create', createProjectController)
 projectRouter.post('/member/invalidate', invalidateMemberController)
 projectRouter.post('/member', addMemberController)
-projectRouter.post('/getMembers', getProjectMembersController)
 
 export const projectApp = functions
   .region('europe-west1')

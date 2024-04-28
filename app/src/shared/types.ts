@@ -130,6 +130,7 @@ export interface AppStatement {
   treeId: string
   proof: SemaphoreProofStrings
   nBackers?: number
+  createdAt: number
 }
 
 export type AppStatementRead = AppStatement & { id: string }
@@ -203,6 +204,7 @@ export interface AppProjectMember {
   aaAddress: HexStr
   tokenId: number
   voucherTokenId: number
+  joinedAt: number
 }
 
 export interface AppProjectMemberToken {
@@ -222,22 +224,25 @@ export interface AppTree {
 }
 
 export interface AppInvite {
-  creationDate: number
   projectId: number
   memberAddress: HexStr
 }
 
 export interface AppApply {
   papEntity: Entity<PAP>
-  invitationId: string
   projectId: number
+  invitationId?: string
+}
+
+export interface DeleteApplication {
+  projectId: number
+  applicantAddress: HexStr
 }
 
 export interface AppApplication {
   papEntity: Entity<PAP>
-  memberAddress: string
-  invitationId: string
   projectId: number
+  memberAddress?: string
 }
 
 export interface AaOwnerPayload {

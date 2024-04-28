@@ -1,8 +1,8 @@
 import { RequestHandler } from 'express'
 import { logger } from 'firebase-functions/v1'
 
-import { AppReactionCreate } from '../../../@app/types'
-import { getTreeId } from '../../../@app/utils/identity.utils'
+import { AppReactionCreate } from '../../../@shared/types'
+import { getTreeId } from '../../../@shared/utils/identity.utils'
 import { getStatement, getTree } from '../../../db/getters'
 import { setStatementReaction } from '../../../db/setters'
 import { isValidReaction } from '../utils/validate.reaction'

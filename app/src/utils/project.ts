@@ -1,5 +1,12 @@
 import { FUNCTIONS_BASE } from '../config/appConfig'
-import { AppApply, AppInvite, AppProjectCreate, AppProjectMember, HexStr } from '../types'
+import {
+  AppApply,
+  AppInvite,
+  AppProjectCreate,
+  AppProjectMember,
+  DeleteApplication,
+  HexStr,
+} from '../shared/types'
 
 export const postProject = async (create: AppProjectCreate) => {
   const res = await fetch(FUNCTIONS_BASE + '/project/create', {
@@ -12,7 +19,7 @@ export const postProject = async (create: AppProjectCreate) => {
   return body.success
 }
 
-export const postMember = async (create: AppProjectMember) => {
+export const postMember = async (create: Omit<AppProjectMember, 'joinedAt'>) => {
   const res = await fetch(FUNCTIONS_BASE + '/project/member', {
     method: 'post',
     headers: { 'Content-Type': 'application/json' },
@@ -45,11 +52,15 @@ export const postApply = async (application: AppApply) => {
   return body.id
 }
 
-export const postDeleteApplication = async (address: HexStr) => {
+export const postDeleteApplication = async (
+  projectId: number,
+  applicantAddress: HexStr,
+) => {
+  const payload: DeleteApplication = { projectId, applicantAddress }
   const res = await fetch(FUNCTIONS_BASE + '/project/deleteApplication', {
     method: 'post',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ address }),
+    body: JSON.stringify(payload),
   })
 
   const body = await res.json()
@@ -65,15 +76,4 @@ export const postAccountInvalidated = async (tokenId: number) => {
 
   const body = await res.json()
   return body.id
-}
-
-export const getProjectMembers = async (projectId: number): Promise<AppProjectMember[]> => {
-  const res = await fetch(FUNCTIONS_BASE + '/project/getMembers', {
-    method: 'post',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ projectId }),
-  })
-
-  const body = await res.json()
-  return body.members
 }

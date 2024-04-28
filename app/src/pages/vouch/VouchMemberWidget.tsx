@@ -12,14 +12,14 @@ import { useSemaphoreContext } from '../../contexts/SemaphoreContext'
 import { useToast } from '../../contexts/ToastsContext'
 import { useVouch } from '../../contexts/VouchContext'
 import { AbsoluteRoutes } from '../../route.names'
-import { Entity, PAP } from '../../types'
+import { Entity, PAP } from '../../shared/types'
 import { AppButton, AppCard } from '../../ui-components'
 import { postDeleteApplication } from '../../utils/project'
 import { useAccountContext } from '../../wallet/AccountContext'
 import { WaitingTransaction } from '../common/Loading'
 
 export const VouchMemberWidget = (props: { pap: Entity<PAP> }) => {
-  const { projectId } = useParams()
+  const { projectId } = useProjectContext()
   const { t } = useTranslation()
   const { pap } = props
 
@@ -55,10 +55,12 @@ export const VouchMemberWidget = (props: { pap: Entity<PAP> }) => {
 
   const deleteApplication = () => {
     /** delete applications and update */
-    postDeleteApplication(pap.object.account).then(() => {
-      refetchApplications()
-      refetchRegistry()
-    })
+    if (projectId) {
+      postDeleteApplication(projectId, pap.object.account).then(() => {
+        refetchApplications()
+        refetchRegistry()
+      })
+    }
   }
 
   useEffect(() => {
@@ -142,7 +144,12 @@ export const VouchMemberWidget = (props: { pap: Entity<PAP> }) => {
           <Anchor
             onClick={() => {
               if (vouchedTokenId && projectId) {
-                navigate(AbsoluteRoutes.ProjectMember(projectId, vouchedTokenId.toString()))
+                navigate(
+                  AbsoluteRoutes.ProjectMember(
+                    projectId.toString(),
+                    vouchedTokenId.toString(),
+                  ),
+                )
               }
             }}
           >

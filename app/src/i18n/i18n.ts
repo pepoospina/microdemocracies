@@ -30,7 +30,7 @@ i18n.use(initReactI18next).init({
         carousel04: 'Raise and spend funds <Bold>transparently</Bold>',
         carousel04sub:
           '<Bold>Collectively</Bold> control the community funds, no banks need. (coming soon)',
-        connectWallet: 'Connect your Web3 Wallet',
+        connectWallet: 'Connecting your identity',
         connectWalletBtn: 'Sign in',
         notFound: 'not found',
         connectWithEmail: 'Connect with your email',
@@ -140,6 +140,7 @@ i18n.use(initReactI18next).init({
           'Only the existing {{nMembers}} members will be able to back this statement',
         aStatementNeeds:
           'A statement needs {{nLikes}} like more to appear on the microdemocracy home page',
+        maxStatementsPerPeriod: 'Each member can only publish one statement per week',
         ownedBy: 'Owned by',
         send: 'Send',
         likesNeeded: '{{nLikes}} more likes needed to be public!',
@@ -148,7 +149,7 @@ i18n.use(initReactI18next).init({
         joinA: 'Join a',
         projectAddress: 'Project address',
         leave: 'Leave project',
-        accountValidatedNotChallenged: 'This account is valid and not currenlty challenged',
+        accountValidatedNotChallenged: 'This account is valid and not currently challenged',
         challenge: 'challenge',
         cantChallenge: "Can't challenge",
         pendingApplicationBy: 'Pending application by {{by}}',
@@ -175,6 +176,8 @@ i18n.use(initReactI18next).init({
         projectMembers: 'Back to Members',
         exit: 'exit',
         alreadyBacked: 'Member already backed this post',
+        cannotPublishStatement: 'Cannot propose a statement',
+        cannotPublishStatementPeriod: 'Each member can only propose one statement per week',
       },
     },
     SPA: {
@@ -205,7 +208,7 @@ i18n.use(initReactI18next).init({
         carousel04: 'Recauda y gasta fondos de manera <Bold>transparente</Bold>',
         carousel04sub:
           'Controla <Bold>colectivamente</Bold> los fondos de la comunidad, no se necesitan bancos. (próximamente)',
-        connectWallet: 'Conecta tu Billetera Web3',
+        connectWallet: 'Conectate',
         connectWalletBtn: 'Entrar',
         notFound: 'no encontrado',
         connectWithEmail: 'Conéctate con tu correo electrónico',
@@ -366,7 +369,7 @@ i18n.use(initReactI18next).init({
         carousel04: 'Recaptar i gastar fons de manera <Bold>transparent</Bold>',
         carousel04sub:
           'Controla <Bold>col·lectivament</Bold> els fons de la comunitat, no es necessiten bancs. (properament)',
-        connectWallet: 'Connecta la teva Cartera Web3',
+        connectWallet: 'Connectant',
         connectWalletBtn: 'Entrar',
         notFound: 'no trobat',
         connectWithEmail: 'Connecta amb el teu correu electrònic',
