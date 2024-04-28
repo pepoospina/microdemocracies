@@ -19,20 +19,48 @@ export const MAX_WIDTH_LANDING = 1600
 export const MAX_WIDTH_APP = 700
 
 export const ViewportContainer = (props: IElement) => {
+  const { constants } = useThemeContext()
   return (
-    <Box
-      id="viewport-container"
-      style={{
-        height: '100vh',
-        width: '100vw',
-        overflow: 'hidden',
-        maxWidth: `${MAX_WIDTH_LANDING}px`,
-        margin: '0 auto',
-        ...props.style,
-      }}
-    >
-      {props.children}
-    </Box>
+    <>
+      <Box
+        id="viewport-container"
+        style={{
+          height: 'calc(100vh - 70px)',
+          width: '100vw',
+          overflow: 'hidden',
+          maxWidth: `${MAX_WIDTH_LANDING}px`,
+          margin: '0 auto',
+          ...props.style,
+        }}
+      >
+        {props.children}
+      </Box>
+      <Box
+        id="footer"
+        style={{
+          height: '70px',
+          flexShrink: 0,
+          backgroundColor: constants.colors.primary,
+        }}
+        pad="medium"
+        justify="center"
+        align="center"
+      >
+        <Box direction="row" gap="small">
+          <Text size="small" color={constants.colors.textOnPrimary}>
+            Follow us
+          </Text>
+          <Anchor
+            color={constants.colors.textOnPrimary}
+            size="small"
+            target="_blank"
+            href="https://twitter.com/udemocracies"
+          >
+            @udemocracies
+          </Anchor>
+        </Box>
+      </Box>
+    </>
   )
 }
 
@@ -87,27 +115,6 @@ export const ViewportPage = (props: { content: ReactNode; nav: ReactNode }) => {
         justify="center"
       >
         {props.nav}
-      </Box>
-      <Box
-        id="footer"
-        style={{
-          height: '70px',
-          flexShrink: 0,
-          backgroundColor: constants.colors.primaryLight,
-        }}
-        pad="medium"
-        justify="center"
-        align="center"
-      >
-        <Anchor
-          size="small"
-          color={constants.colors.primary}
-          target="_blank"
-          href="https://twitter.com/udemocracies"
-        >
-          @udemocracies
-        </Anchor>
-        <Text size="small">2024</Text>
       </Box>
     </Box>
   )
