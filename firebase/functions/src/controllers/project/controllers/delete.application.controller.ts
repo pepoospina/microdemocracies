@@ -1,17 +1,17 @@
 import { RequestHandler } from 'express'
 import { logger } from 'firebase-functions/v1'
 
-import { HexStr } from '../../../@shared/types'
-import { deleteApplications } from '../../../db/setters'
+import { DeleteApplication } from '../../../@shared/types'
+import { deleteApplication } from '../../../db/setters'
 import { deleteApplicationValidationScheme } from './project.schemas'
 
 export const deleteApplicationController: RequestHandler = async (request, response) => {
-  const payload = (await deleteApplicationValidationScheme.validate(request.body)) as {
-    address: HexStr
-  }
+  const payload = (await deleteApplicationValidationScheme.validate(
+    request.body,
+  )) as DeleteApplication
 
   try {
-    await deleteApplications(payload.address)
+    await deleteApplication(payload.projectId, payload.applicantAddress)
     response.status(200).send({ success: true })
   } catch (error: any) {
     logger.error('error', error)

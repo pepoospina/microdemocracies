@@ -124,14 +124,19 @@ export const setInvitation = async (invitation: AppInvite): Promise<string> => {
 }
 
 export const setApplication = async (application: AppApplication): Promise<string> => {
-  const docRef = collections.userApplications(application.memberAddress).doc()
+  const docRef = collections.memberApplications(application.projectId.toString()).doc()
+
   await docRef.set(application)
   return docRef.id
 }
 
-export const deleteApplications = async (address: HexStr): Promise<void> => {
-  const snap = await collections.applications
-    .where('papEntity.object.account', '==', address)
+export const deleteApplication = async (
+  projectId: number,
+  applicantAddress: HexStr,
+): Promise<void> => {
+  const snap = await collections
+    .memberApplications(projectId.toString())
+    .where('papEntity.object.account', '==', applicantAddress)
     .get()
 
   await Promise.all(

@@ -1,6 +1,8 @@
+import { useQuery } from '@tanstack/react-query'
 import { ReactNode, createContext, useContext, useEffect } from 'react'
 import { useReadContract } from 'wagmi'
 
+import { getTokenIdOfAddress } from '../firestore/getters'
 import { AppAccount, AppChallenge } from '../shared/types'
 import { registryABI } from '../utils/contracts.json'
 import { useAccountContext } from '../wallet/AccountContext'
@@ -10,6 +12,7 @@ import { useToast } from './ToastsContext'
 
 export type ConnectedMemberContextType = {
   tokenId?: number | null
+  hasApplied?: boolean
   account?: AppAccount
   myChallenge: AppChallenge | undefined | null
 }
@@ -25,18 +28,20 @@ export interface ConnectedMemberContextProps {
 export const ConnectedMemberContext = (props: ConnectedMemberContextProps) => {
   const { address: projectAddress } = useProjectContext()
   const { aaAddress } = useAccountContext()
+  const { projectId } = useProjectContext()
 
   const {
     data: tokenId,
     isSuccess,
-    isError: isErrorWithTokenId,
     error: errorWithTokenId,
-  } = useReadContract({
-    address: projectAddress,
-    abi: registryABI,
-    functionName: 'tokenIdOf',
-    args: aaAddress ? [aaAddress] : undefined,
-    query: { enabled: aaAddress !== undefined && projectAddress !== undefined },
+  } = useQuery({
+    queryKey: ['tokenId', projectId, aaAddress],
+    queryFn: () => {
+      if (projectId && aaAddress) {
+        return getTokenIdOfAddress(projectId, aaAddress)
+      }
+      return null
+    },
   })
 
   const { account: accountRead } = useMember({
@@ -51,7 +56,7 @@ export const ConnectedMemberContext = (props: ConnectedMemberContextProps) => {
     address: projectAddress,
     abi: registryABI,
     functionName: 'getChallenge',
-    args: tokenId ? [tokenId] : undefined,
+    args: tokenId ? [BigInt(tokenId)] : undefined,
     query: { enabled: tokenId !== undefined && projectAddress !== undefined },
   })
 
@@ -100,6 +105,7 @@ export const ConnectedMemberContext = (props: ConnectedMemberContextProps) => {
         tokenId: _tokenId,
         account: accountRead,
         myChallenge,
+        hasApplied: false,
       }}
     >
       {props.children}

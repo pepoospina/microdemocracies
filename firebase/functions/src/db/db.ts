@@ -15,12 +15,11 @@ export const collections = {
       .collection(CollectionNames.Projects)
       .doc(projectId)
       .collection(CollectionNames.ProjectInvitations),
-  userApplications: (aaAddress: string) =>
+  memberApplications: (projectId: string) =>
     db
-      .collection(CollectionNames.Identities)
-      .doc(aaAddress)
-      .collection(CollectionNames.UserApplications),
-  applications: db.collectionGroup(CollectionNames.Applications),
+      .collection(CollectionNames.Projects)
+      .doc(projectId)
+      .collection(CollectionNames.Applications),
   projectMembers: (projectId: string) =>
     db
       .collection(CollectionNames.Projects)

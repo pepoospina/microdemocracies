@@ -22,7 +22,6 @@ export type SignerContextType = {
   connect: () => void
   hasInjected: boolean
   signer?: WalletClient
-
   address?: HexStr
   signMessage?: (message: string) => Promise<HexStr>
   isConnecting: boolean
@@ -31,6 +30,8 @@ export type SignerContextType = {
 }
 
 const ProviderContextValue = createContext<SignerContextType | undefined>(undefined)
+
+const HAD_MAGIC_KEY = 'hadMagic'
 
 export const SignerContext = (props: PropsWithChildren) => {
   const { t } = useTranslation()
@@ -53,7 +54,7 @@ export const SignerContext = (props: PropsWithChildren) => {
      * show loading when first loading a page
      * (to cover the time where the connected account is checked)
      * */
-    const hadMagic = localStorage.getItem('hadMagic')
+    const hadMagic = localStorage.getItem(HAD_MAGIC_KEY)
 
     /** try to restate magic*/
     if (hadMagic !== null && hadMagic === 'true') {
@@ -97,6 +98,7 @@ export const SignerContext = (props: PropsWithChildren) => {
       console.log('connected magic signer', { signer })
       setIsConnecting(false)
       setMagicSigner(signer)
+      localStorage.setItem(HAD_MAGIC_KEY, 'true')
     })
   }
 

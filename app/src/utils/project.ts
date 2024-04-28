@@ -4,6 +4,7 @@ import {
   AppInvite,
   AppProjectCreate,
   AppProjectMember,
+  DeleteApplication,
   HexStr,
 } from '../shared/types'
 
@@ -51,11 +52,15 @@ export const postApply = async (application: AppApply) => {
   return body.id
 }
 
-export const postDeleteApplication = async (address: HexStr) => {
+export const postDeleteApplication = async (
+  projectId: number,
+  applicantAddress: HexStr,
+) => {
+  const payload: DeleteApplication = { projectId, applicantAddress }
   const res = await fetch(FUNCTIONS_BASE + '/project/deleteApplication', {
     method: 'post',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ address }),
+    body: JSON.stringify(payload),
   })
 
   const body = await res.json()

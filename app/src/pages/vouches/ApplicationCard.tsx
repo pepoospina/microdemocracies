@@ -13,8 +13,7 @@ import { postDeleteApplication } from '../../utils/project'
 export const ApplicationCard = (props: { application?: AppApplication }): JSX.Element => {
   const { t } = useTranslation()
   const navigate = useNavigate()
-  const { projectId } = useParams()
-  const { refetchApplications } = useProjectContext()
+  const { projectId, refetchApplications } = useProjectContext()
 
   const { application } = props
 
@@ -25,8 +24,8 @@ export const ApplicationCard = (props: { application?: AppApplication }): JSX.El
   }
 
   const remove = () => {
-    if (application) {
-      postDeleteApplication(application.papEntity.object.account).then(() => {
+    if (application && projectId) {
+      postDeleteApplication(projectId, application.papEntity.object.account).then(() => {
         refetchApplications()
       })
     }

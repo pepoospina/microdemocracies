@@ -149,7 +149,7 @@ i18n.use(initReactI18next).init({
         joinA: 'Join a',
         projectAddress: 'Project address',
         leave: 'Leave project',
-        accountValidatedNotChallenged: 'This account is valid and not currenlty challenged',
+        accountValidatedNotChallenged: 'This account is valid and not currently challenged',
         challenge: 'challenge',
         cantChallenge: "Can't challenge",
         pendingApplicationBy: 'Pending application by {{by}}',

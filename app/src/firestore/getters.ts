@@ -112,16 +112,21 @@ export const getInviteId = async (projectId: number, aaAddress: HexStr) => {
 
   if (querySnapshot.docs.length === 0) {
     console.log('user invite not found creating new one', { projectId, aaAddress })
-    return await postInvite({ projectId, memberAddress: aaAddress, creationDate: 0 })
+    return await postInvite({ projectId, memberAddress: aaAddress })
   }
 
   const doc = querySnapshot.docs[0]
   return doc.id
 }
 
-export const getApplications = async (aaAddress: HexStr) => {
-  const applications = collections.userApplications(aaAddress)
-  const querySnapshot = await getDocs(applications)
+export const inviterApplicationsQuery = (projectId: number, aaAddress: HexStr) => {
+  const applications = collections.memberApplications(projectId)
+  return query(applications, where('memberAddress', '==', getAddress(aaAddress)))
+}
+
+export const getInviterApplications = async (projectId: number, aaAddress: HexStr) => {
+  const q = inviterApplicationsQuery(projectId, aaAddress)
+  const querySnapshot = await getDocs(q)
 
   return querySnapshot.docs.map((app) => {
     return {
@@ -158,4 +163,13 @@ export const getAccountOwner = async (aaAddress: HexStr) => {
 
   const user = doc.data() as { owner: HexStr }
   return user.owner
+}
+
+export const getTokenIdOfAddress = async (projectId: number, aaAddress: string) => {
+  const ref = docRef(collections.projectMembers(projectId), aaAddress)
+  const doc = await getDoc(ref)
+
+  if (!doc.exists()) return undefined
+  const member = doc.data() as { tokenId: number }
+  return member.tokenId
 }

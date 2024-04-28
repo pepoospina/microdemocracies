@@ -17,6 +17,7 @@ import { AbsoluteRoutes, RouteNames } from '../../route.names'
 import { Address, AppButton, AppCard, AppHeading } from '../../ui-components'
 import { BoxCentered } from '../../ui-components/BoxCentered'
 import { cap } from '../../utils/general'
+import { useAccountContext } from '../../wallet/AccountContext'
 import { AppBottomButtons } from '../common/BottomButtons'
 import { Loading } from '../common/Loading'
 import { StatementCard } from '../voice/StatementCard'
@@ -31,10 +32,11 @@ export const ProjectHomePage = (props: IProjectHome) => {
   const { setSubtitle, setLoading } = useLoadingContext()
   const navigate = useNavigate()
   const { project, nMembers, statements } = useProjectContext()
-  const { tokenId } = useConnectedMember()
+  const { tokenId, hasApplied } = useConnectedMember()
   const { mobile } = useResponsive()
   const { setTitle } = useAppContainer()
   const { constants } = useThemeContext()
+  const { isConnected } = useAccountContext()
 
   const leave = () => {
     console.log('soon')
@@ -117,6 +119,29 @@ export const ProjectHomePage = (props: IProjectHome) => {
         <Box style={{ flexShrink: 0 }} pad={{ right: 'medium' }}>
           {statementsContent}
         </Box>
+      </Box>
+    )
+  })()
+
+  const applyStatus = (() => {
+    if (!isConnected) {
+      return <></>
+    }
+    if (tokenId) {
+      // already a member
+      return <></>
+    }
+
+    if (hasApplied) {
+      // return
+      ;<AppCard>
+        <Text></Text>
+      </AppCard>
+    }
+
+    return (
+      <Box pad="medium">
+        <AppButton onClick={() => navigate(RouteNames.Join)} label={'join'}></AppButton>
       </Box>
     )
   })()
@@ -213,16 +238,7 @@ export const ProjectHomePage = (props: IProjectHome) => {
           </Box>
 
           <Box>
-            {tokenId === null ? (
-              <Box pad={{ horizontal: 'medium' }} margin={{ top: 'medium' }}>
-                <AppButton
-                  onClick={() => navigate(RouteNames.Join)}
-                  label={'join'}
-                ></AppButton>
-              </Box>
-            ) : (
-              <></>
-            )}
+            {applyStatus}
 
             {content}
           </Box>

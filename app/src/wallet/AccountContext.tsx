@@ -51,7 +51,7 @@ const AccountContextValue = createContext<AccountContextType | undefined>(undefi
 /** Manages the AA user ops and their execution */
 export const AccountContext = (props: PropsWithChildren) => {
   const { t } = useTranslation()
-  const { signer, address } = useAppSigner()
+  const { signer, address, hasInjected } = useAppSigner()
   const publicClient = usePublicClient()
   const { setLoading, setPause, setTitle, setSubtitle } = useLoadingContext()
 
@@ -145,7 +145,9 @@ export const AccountContext = (props: PropsWithChildren) => {
 
       if (DEBUG) console.log('sendUserOps', { userOps: _userOps })
 
-      setPause(true)
+      if (hasInjected) {
+        setPause(true)
+      }
       setSubtitle(t('waitingSignature'))
 
       const res = await (alchemyClientAA as any).sendUserOperation({

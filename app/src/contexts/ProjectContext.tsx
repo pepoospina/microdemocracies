@@ -4,14 +4,18 @@ import { createContext, useContext, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { useReadContract } from 'wagmi'
 
-import { subscribeToStatements } from '../components/app/realtime.listeners'
+import {
+  subscribeToApplications,
+  subscribeToStatements,
+} from '../components/app/realtime.listeners'
 import { collections } from '../firestore/database'
 import {
-  getApplications,
   getInviteId,
+  getInviterApplications,
   getProject,
   getProjectMembers,
   getTopStatements,
+  inviterApplicationsQuery,
 } from '../firestore/getters'
 import {
   AppApplication,
@@ -132,7 +136,6 @@ export const ProjectContext = (props: IProjectContext) => {
       postInvite({
         projectId,
         memberAddress: aaAddress,
-        creationDate: 0, //ignored
       }).then((id) => {
         refetchInvite()
         setResettingLink(false)
@@ -142,24 +145,21 @@ export const ProjectContext = (props: IProjectContext) => {
 
   /** get applications created for this member */
   const { data: applications, refetch: refetchApplications } = useQuery({
-    queryKey: ['getApplications', aaAddress],
+    queryKey: ['getApplications', aaAddress, projectId],
     queryFn: () => {
-      if (aaAddress) {
-        return getApplications(aaAddress)
+      if (aaAddress && projectId) {
+        return getInviterApplications(projectId, aaAddress)
       }
       return null
     },
   })
 
-  /** autorefetch on applications changes */
+  /** refetch applications when new application to this member is created */
   useEffect(() => {
-    if (aaAddress) {
-      const unsub = onSnapshot(collections.userApplications(aaAddress), (doc) => {
-        refetchApplications()
-      })
-      return unsub
+    if (aaAddress && projectId) {
+      return subscribeToApplications(projectId, aaAddress, refetchApplications)
     }
-  }, [aaAddress, refetchApplications])
+  }, [aaAddress, projectId, refetchApplications])
 
   /** subscribe to statements collection */
   useEffect(() => {

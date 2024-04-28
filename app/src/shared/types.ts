@@ -224,22 +224,25 @@ export interface AppTree {
 }
 
 export interface AppInvite {
-  creationDate: number
   projectId: number
   memberAddress: HexStr
 }
 
 export interface AppApply {
   papEntity: Entity<PAP>
-  invitationId: string
   projectId: number
+  invitationId?: string
+}
+
+export interface DeleteApplication {
+  projectId: number
+  applicantAddress: HexStr
 }
 
 export interface AppApplication {
   papEntity: Entity<PAP>
-  memberAddress: string
-  invitationId: string
   projectId: number
+  memberAddress?: string
 }
 
 export interface AaOwnerPayload {

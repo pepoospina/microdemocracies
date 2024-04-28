@@ -120,10 +120,10 @@ export const JoinPage = () => {
 
       setCid(papEntity.cid)
 
-      if (invitation && projectId) {
+      if (projectId) {
         const application = {
           projectId,
-          invitationId: invitation,
+          invitationId: invitation !== null ? invitation : undefined,
           papEntity,
         }
         await postApply(application)
