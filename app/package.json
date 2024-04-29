@@ -7,10 +7,10 @@
   },
   "scripts": {
     "prettier": "prettier --write .",
-    "start": "craco start",
-    "start-remote": "NODE_ENV=test-prod craco start --config craco.config.prod.js",
+    "start": "export REACT_APP_VERSION=$(git rev-parse HEAD) && craco start",
+    "start-remote": "export REACT_APP_VERSION=$(git rev-parse HEAD) && NODE_ENV=test-prod craco start --config craco.config.prod.js",
     "start-test": "craco start --config craco.config.test.js",
-    "build": "craco build --config craco.config.prod.js",
+    "build": "export REACT_APP_VERSION=$(git rev-parse HEAD) && craco build --config craco.config.prod.js",
     "eject": "react-scripts eject",
     "test-prod": "craco build --config craco.config.prod.js && cd build && http-server --proxy http://localhost:8080?",
     "deploy": "sh ./deploy.sh "

@@ -9,6 +9,8 @@ export const ALCHEMY_GAS_POLICY_ID = process.env.ALCHEMY_GAS_POLICY_ID
 export const ALCHEMY_RPC_URL = `https://base-sepolia.g.alchemy.com/v2/${ALCHEMY_KEY}`
 export const ALCHEMY_RPC_URL_ENS = `https://eth-mainnet.g.alchemy.com/v2/${ALCHEMY_KEY_ENS}`
 
+export const BUILD_ID = process.env.REACT_APP_VERSION
+
 export const FUNCTIONS_BASE = process.env.FUNCTIONS_BASE
 
 export const CHAIN_ID = 84532

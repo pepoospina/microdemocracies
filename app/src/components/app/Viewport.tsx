@@ -13,6 +13,7 @@ import {
 import { ReactNode } from 'react'
 
 import { IElement, useResponsive, useThemeContext } from '.'
+import { BUILD_ID } from '../../config/appConfig'
 import { AppHeading } from '../../ui-components/AppHeading'
 
 export const MAX_WIDTH_LANDING = 1600
@@ -46,19 +47,22 @@ export const ViewportContainer = (props: IElement) => {
         justify="center"
         align="center"
       >
-        <Box direction="row" gap="6px">
-          <Text size="small" color={constants.colors.textOnPrimary}>
-            Follow us
+        <Box direction="row" justify="between" fill align="center">
+          <Text size="xsmall" color={constants.colors.backgroundLightDarker}>
+            Build: {BUILD_ID?.substring(0, 7)}
           </Text>
-          <Anchor
-            color={constants.colors.textOnPrimary}
-            size="small"
-            target="_blank"
-            href="https://twitter.com/udemocracies"
-            style={{ textDecoration: 'none' }}
-          >
-            @udemocracies
-          </Anchor>
+          <Text size="small" color={constants.colors.backgroundLightDarker}>
+            Follow us{' '}
+            <Anchor
+              color={constants.colors.backgroundLightDarker}
+              size="small"
+              target="_blank"
+              href="https://twitter.com/udemocracies"
+              style={{ textDecoration: 'none' }}
+            >
+              @udemocracies
+            </Anchor>
+          </Text>
         </Box>
       </Box>
     </>
