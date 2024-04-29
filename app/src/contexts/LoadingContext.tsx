@@ -33,7 +33,7 @@ const RATE_CHANGE_AT = 0.6
 
 export const LoadingContext = ({ children }: LoadingContextProps) => {
   const { constants } = useThemeContext()
-  const [loading, setLoading] = useState<boolean>(false)
+  const [loading, _setLoading] = useState<boolean>(false)
   const [expectedLoadingTime, _setExpectedLoadingTime] = useState<number>()
   const [timeElapsed, setTimeElapsed] = useState<number>()
   const [pause, setPause] = useState<boolean>(false)
@@ -52,6 +52,10 @@ export const LoadingContext = ({ children }: LoadingContextProps) => {
   useEffect(() => {
     pauseRef.current = pause
   }, [pause])
+
+  const setLoading = (loading: boolean) => {
+    _setLoading(loading)
+  }
 
   const open = (options: LoadingOptions) => {
     setTitle(options.title || '')

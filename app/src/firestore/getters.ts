@@ -7,6 +7,7 @@ import {
   query,
   where,
 } from 'firebase/firestore'
+import { CaretRightFill } from 'grommet-icons'
 import { getAddress } from 'viem'
 
 import { MIN_LIKES_PUBLIC } from '../config/appConfig'
@@ -56,46 +57,61 @@ export const getAccountProjects = async (aaAddress: HexStr) => {
 }
 
 export const getTopStatements = async (projectId: number) => {
-  const q = query(
-    collections.statements,
-    where('projectId', '==', projectId),
-    where('nBackers', '>=', MIN_LIKES_PUBLIC),
-    orderBy('createdAt', 'desc'),
-  )
-  const snap = await getDocs(q)
+  try {
+    const q = query(
+      collections.statements,
+      where('projectId', '==', projectId),
+      where('nBackers', '>=', MIN_LIKES_PUBLIC),
+      orderBy('createdAt', 'desc'),
+    )
 
-  return snap.docs.map((doc) => {
+    const snap = await getDocs(q)
+    return snap.docs.map((doc) => {
+      return {
+        ...doc.data(),
+        id: doc.id,
+      } as unknown as StatementRead
+    })
+  } catch (e) {
+    console.error('getTopStatements', e)
+    throw new Error('getTopStatements error')
+  }
+}
+
+export const getProjectMembers = async (projectId: number) => {
+  try {
+    const q = query(collections.projectMembers(projectId), orderBy('joinedAt', 'desc'))
+    const snap = await getDocs(q)
+
+    return snap.docs.map((doc) => {
+      return {
+        ...doc.data(),
+        id: doc.id,
+      } as unknown as AppProjectMember & { id: string }
+    })
+  } catch (e) {
+    console.error('getProjectMembers', e)
+    throw new Error('getProjectMembers error')
+  }
+}
+
+export const getStatement = async (statementId: string) => {
+  try {
+    const ref = collections.statement(statementId)
+    const doc = await getDoc(ref)
+
+    if (!doc.exists) {
+      return undefined
+    }
+
     return {
       ...doc.data(),
       id: doc.id,
     } as unknown as StatementRead
-  })
-}
-
-export const getProjectMembers = async (projectId: number) => {
-  const q = query(collections.projectMembers(projectId), orderBy('joinedAt', 'desc'))
-  const snap = await getDocs(q)
-
-  return snap.docs.map((doc) => {
-    return {
-      ...doc.data(),
-      id: doc.id,
-    } as unknown as AppProjectMember & { id: string }
-  })
-}
-
-export const getStatement = async (statementId: string) => {
-  const ref = collections.statement(statementId)
-  const doc = await getDoc(ref)
-
-  if (!doc.exists) {
-    return undefined
+  } catch (e) {
+    console.error('getStatement', e)
+    throw new Error('getStatement error')
   }
-
-  return {
-    ...doc.data(),
-    id: doc.id,
-  } as unknown as StatementRead
 }
 
 export const countStatementBackings = async (statementId: string) => {

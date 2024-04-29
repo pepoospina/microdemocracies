@@ -143,7 +143,7 @@ export const InvitePage = (): JSX.Element => {
       content={
         <Box fill pad={{ horizontal: 'large' }}>
           <Box style={{ flexShrink: 0 }}>
-            <Box style={{ margin: '36px 0px' }}>
+            <Box>
               <Text style={{ marginBottom: '16px' }}>{t('rememberInviteMsg')}:</Text>
               <StatementEditable value={project?.whoStatement}></StatementEditable>
             </Box>
