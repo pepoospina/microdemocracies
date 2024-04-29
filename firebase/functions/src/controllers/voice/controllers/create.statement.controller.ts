@@ -5,7 +5,7 @@ import { logger } from 'firebase-functions/v1'
 
 import { AppStatementCreate } from '../../../@shared/types'
 import { getStatementId, getTreeId } from '../../../@shared/utils/identity.utils'
-import { getWeek } from '../../../@shared/utils/statements.shared.utils'
+import { getStatementNullifier } from '../../../@shared/utils/statements.shared.utils'
 import { existsStatementWithNullifierHash, getTree } from '../../../db/getters'
 import { setStatement, setStatementReaction } from '../../../db/setters'
 import { TREE_DEPTH } from '../../../utils/groups'
@@ -34,10 +34,10 @@ export const createStatementController: RequestHandler = async (request, respons
       )
     }
 
-    const week = getWeek(Date.now()).toString()
-
     /** Check period nullifier */
-    const expectedExternalNullifier = BigNumber.from(week).toString()
+    const expectedExternalNullifier = BigNumber.from(
+      getStatementNullifier(statementCreate.projectId, Date.now()),
+    ).toString()
 
     if (
       statementCreate.statementProof.proof.externalNullifier !== expectedExternalNullifier

@@ -1,3 +1,5 @@
+import { keccak256, stringToBytes } from 'viem'
+
 export const getWeek = function (dateMs: number) {
   var date = new Date(dateMs)
   date.setHours(0, 0, 0, 0)
@@ -12,4 +14,9 @@ export const getWeek = function (dateMs: number) {
       ((date.getTime() - week1.getTime()) / 86400000 - 3 + ((week1.getDay() + 6) % 7)) / 7,
     )
   )
+}
+
+export const getStatementNullifier = (projectId: number, now: number) => {
+  const period = getWeek(now)
+  return keccak256(stringToBytes(`${projectId}-${period}`))
 }

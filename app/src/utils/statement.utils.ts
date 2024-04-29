@@ -3,7 +3,7 @@ import { hashMessage } from 'viem'
 
 import { StatementCreateProofs, StatementReactions } from '../shared/types'
 import { getReactionNullifier, getStatementId } from '../shared/utils/identity.utils'
-import { getWeek } from '../shared/utils/statements.shared.utils'
+import { getStatementNullifier } from '../shared/utils/statements.shared.utils'
 import { generateProof } from './identity'
 
 export const generateReactionProof = async (
@@ -26,8 +26,7 @@ export const generateStatementProof = async (
   identity: Identity,
 ): Promise<StatementCreateProofs> => {
   /** one statement per person per week. */
-  const period = getWeek(Date.now()).toString()
-  const nullifier = period
+  const nullifier = getStatementNullifier(projectId, Date.now())
   const statementHash = hashMessage(_statement)
 
   const statementProof = await generateProof({
