@@ -46,7 +46,7 @@ export const ViewportContainer = (props: IElement) => {
         justify="center"
         align="center"
       >
-        <Box direction="row" gap="small">
+        <Box direction="row" gap="6px">
           <Text size="small" color={constants.colors.textOnPrimary}>
             Follow us
           </Text>
@@ -55,6 +55,7 @@ export const ViewportContainer = (props: IElement) => {
             size="small"
             target="_blank"
             href="https://twitter.com/udemocracies"
+            style={{ textDecoration: 'none' }}
           >
             @udemocracies
           </Anchor>
