@@ -89,7 +89,7 @@ export const InvitePage = (): JSX.Element => {
 
     return (
       <Box style={{ flexShrink: 0 }}>
-        <AppCard margin={{ vertical: 'medium' }}>
+        <AppCard margin={{ bottom: 'medium' }}>
           <Text>{t('shareLinkMsg')}</Text>
         </AppCard>
         <AppButton
@@ -100,6 +100,16 @@ export const InvitePage = (): JSX.Element => {
           primary
           onClick={() => share()}
         ></AppButton>
+
+        <Box pad={{ vertical: 'medium' }} gap="small">
+          {applications?.map((application) => {
+            return (
+              <Box>
+                <ApplicationCard application={application}></ApplicationCard>
+              </Box>
+            )
+          })}
+        </Box>
 
         <AppHeading level="3" style={{ marginTop: '64px' }}>
           {t('orUseQR')}
@@ -142,19 +152,11 @@ export const InvitePage = (): JSX.Element => {
     <ViewportPage
       content={
         <Box fill pad={{ horizontal: 'large' }}>
-          <Box style={{ flexShrink: 0 }}>
+          <Box style={{ flexShrink: 0 }} margin={{ bottom: 'large' }}>
             <Box>
               <Text style={{ marginBottom: '16px' }}>{t('rememberInviteMsg')}:</Text>
               <StatementEditable value={project?.whoStatement}></StatementEditable>
             </Box>
-
-            {applications?.map((application) => {
-              return (
-                <Box style={{ marginBottom: '16px' }}>
-                  <ApplicationCard application={application}></ApplicationCard>
-                </Box>
-              )
-            })}
           </Box>
 
           {content}

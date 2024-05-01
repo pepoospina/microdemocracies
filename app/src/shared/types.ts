@@ -105,13 +105,7 @@ export interface AppChallenge {
 
 export type VoteOption = 1 | -1
 
-export interface SemaphoreProofStrings {
-  merkleTreeRoot: string
-  signal: string
-  nullifierHash: string
-  externalNullifier: string
-  proof: PackedProofString
-}
+export type SemaphoreProofStrings = SemaphoreProof
 
 export type PackedProofString = [
   string,
@@ -179,7 +173,7 @@ export interface AppGetProof {
   projectId?: number
   treeId?: string
   signal: string
-  nullifier: string
+  scope: string
   identity: Identity
 }
 
@@ -192,6 +186,7 @@ export interface AppGetMerklePass {
 export interface AppReturnMerklePass {
   merklePass: any
   treeId: string
+  depth: number
 }
 
 export interface AppProjectMemberId {

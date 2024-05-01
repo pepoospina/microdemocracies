@@ -34,7 +34,7 @@ export const getMerklePassController: RequestHandler = async (request, response)
       return typeof value === 'bigint' ? value.toString() : value
     })
 
-    response.status(200).send({ merklePassStr, treeId })
+    response.status(200).send({ merklePassStr, treeId, depth: group.depth })
   } catch (error: any) {
     if (error)
       if (error.message.toLowerCase().includes('leaf does not exist')) {

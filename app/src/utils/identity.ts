@@ -38,7 +38,7 @@ export const connectIdentity = async (
 ) => {
   const secret = await signMessage('Prepare anonymous identity')
   const identity = new Identity(secret)
-  const _publicId = identity.getCommitment().toString()
+  const _publicId = identity.commitment.toString()
 
   // make sure the identity is stored in the DB
   await checkOrStoreId(_publicId, owner, aaAddress, signMessage)
@@ -49,7 +49,7 @@ export const connectIdentity = async (
 export const generateProof = async (
   input: AppGetProof,
 ): Promise<ProofAndTree | undefined> => {
-  const { projectId, treeId, identity, signal, nullifier } = input
+  const { projectId, treeId, identity, signal, scope } = input
 
   /**
    * Get the merkle pass as computed by the backend. It builds a tree
@@ -59,7 +59,7 @@ export const generateProof = async (
   const treePass = await getMerklePass({
     projectId,
     treeId,
-    publicId: identity.getCommitment().toString(),
+    publicId: identity.commitment.toString(),
   })
 
   if (treePass === undefined) {
@@ -67,7 +67,13 @@ export const generateProof = async (
   }
 
   /** Based on this tree, a proof is generated here in the frontend */
-  const generated = await _generateProof(identity, treePass.merklePass, nullifier, signal)
+  const generated = await _generateProof(
+    identity,
+    treePass.merklePass,
+    signal,
+    scope,
+    treePass.depth,
+  )
 
   /** Return the generated proof and the associated tree root */
   return { proof: generated, treeId: treePass.treeId }

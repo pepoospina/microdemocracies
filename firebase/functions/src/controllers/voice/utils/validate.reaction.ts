@@ -2,14 +2,13 @@ import { BigNumber } from '@ethersproject/bignumber'
 import { verifyProof } from '@semaphore-protocol/proof'
 
 import { ProofAndTree } from '../../../@shared/types'
-import { getReactionNullifier } from '../../../@shared/utils/identity.utils'
+import { getReactionScope } from '../../../@shared/utils/identity.utils'
 import { hasBackingWithNullifierHash } from '../../../db/getters'
-import { TREE_DEPTH } from '../../../utils/groups'
 
 /** the reaction must have
  * - a proof of the same tree as the statement
  * - a nullifier that is the statementId
- * - no previous backing with the same nullifierHash
+ * - no previous backing with the same nullifier
  * - a valid proof
  * - a signal that is the statementId
  *
@@ -27,29 +26,27 @@ export const isValidReaction = async (
   }
 
   /** a nullifier that is the statementId */
-  const expectedExternalNullifier = BigNumber.from(
-    getReactionNullifier(statementId),
-  ).toString()
+  const expectedScope = BigNumber.from(getReactionScope(statementId)).toString()
 
-  if (proofAndTree.proof.externalNullifier !== expectedExternalNullifier) {
+  if (proofAndTree.proof.scope !== expectedScope) {
     throw new Error(
-      `Backing signal nullifier ${proofAndTree.proof.externalNullifier} must be the statement id ${statementId}`,
+      `Backing signal nullifier ${proofAndTree.proof.scope} must be the statement id ${statementId}`,
     )
   }
 
   /** no previous backing with the same nullifierHash */
   const preExist = await hasBackingWithNullifierHash(
     statementId,
-    proofAndTree.proof.nullifierHash,
+    proofAndTree.proof.nullifier,
   )
   if (preExist) {
     throw new Error(
-      `Backing with this nullifierHash ${proofAndTree.proof.nullifierHash} already posted`,
+      `Backing with this nullifier ${proofAndTree.proof.nullifier} already posted`,
     )
   }
 
   /** a valid proof */
-  const result = await verifyProof(proofAndTree.proof, TREE_DEPTH)
+  const result = await verifyProof(proofAndTree.proof)
 
   if (!result) {
     throw new Error('Invalid proof')

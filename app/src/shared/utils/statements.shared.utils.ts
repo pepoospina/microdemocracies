@@ -16,7 +16,7 @@ export const getWeek = function (dateMs: number) {
   )
 }
 
-export const getStatementNullifier = (projectId: number, now: number) => {
+export const getStatementScope = (projectId: number, now: number) => {
   const period = getWeek(now)
   return keccak256(stringToBytes(`${projectId}-${period}`))
 }

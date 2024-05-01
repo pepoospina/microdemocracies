@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { hashMessage } from 'viem'
 
+import { useLoadingContext } from '../../contexts/LoadingContext'
 import { useProjectContext } from '../../contexts/ProjectContext'
 import { useSemaphoreContext } from '../../contexts/SemaphoreContext'
 import { useToast } from '../../contexts/ToastsContext'
@@ -20,6 +21,7 @@ export const useStatementSend = (): VoiceSendContextType => {
   const { projectId, refetchStatements } = useProjectContext()
   const { identity } = useSemaphoreContext()
   const { show } = useToast()
+  const { close } = useLoadingContext()
 
   const [isSuccessStatement, setIsSuccessStatement] = useState<boolean>(false)
   const [statementId, setStatementId] = useState<string>()

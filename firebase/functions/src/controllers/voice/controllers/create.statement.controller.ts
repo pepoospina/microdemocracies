@@ -5,10 +5,9 @@ import { logger } from 'firebase-functions/v1'
 
 import { AppStatementCreate } from '../../../@shared/types'
 import { getStatementId, getTreeId } from '../../../@shared/utils/identity.utils'
-import { getStatementNullifier } from '../../../@shared/utils/statements.shared.utils'
+import { getStatementScope } from '../../../@shared/utils/statements.shared.utils'
 import { existsStatementWithNullifierHash, getTree } from '../../../db/getters'
 import { setStatement, setStatementReaction } from '../../../db/setters'
-import { TREE_DEPTH } from '../../../utils/groups'
 import { isValidReaction } from '../utils/validate.reaction'
 import { statementValidationScheme } from './voice.schemas'
 
@@ -35,35 +34,30 @@ export const createStatementController: RequestHandler = async (request, respons
     }
 
     /** Check period nullifier */
-    const expectedExternalNullifier = BigNumber.from(
-      getStatementNullifier(statementCreate.projectId, Date.now()),
+    const expectedScope = BigNumber.from(
+      getStatementScope(statementCreate.projectId, Date.now()),
     ).toString()
 
-    if (
-      statementCreate.statementProof.proof.externalNullifier !== expectedExternalNullifier
-    ) {
+    if (statementCreate.statementProof.proof.scope !== expectedScope) {
       throw new Error(
-        `A statement nullifier in this period ${statementCreate.statementProof.proof.externalNullifier} must be ${expectedExternalNullifier}`,
+        `A statement nullifier in this period ${statementCreate.statementProof.proof.scope} must be ${expectedScope}`,
       )
     }
 
     // verify statement proof
-    const validStatement = await verifyProof(
-      statementCreate.statementProof.proof,
-      TREE_DEPTH,
-    )
+    const validStatement = await verifyProof(statementCreate.statementProof.proof)
 
     if (!validStatement) {
       throw new Error('Invalid statement proof')
     }
 
-    /** no previous statement with the same nullifierHash */
+    /** no previous statement with the same nullifier */
     const preExist = await existsStatementWithNullifierHash(
-      statementCreate.statementProof.proof.nullifierHash,
+      statementCreate.statementProof.proof.nullifier,
     )
     if (preExist) {
       throw new Error(
-        `Statement with this nullifierHash ${statementCreate.statementProof.proof.nullifierHash} already posted`,
+        `Statement with this nullifier ${statementCreate.statementProof.proof.nullifier} already posted`,
       )
     }
 

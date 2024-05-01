@@ -5,14 +5,13 @@ import { getTreeId } from '../@shared/utils/identity.utils'
 import { getProjectIdentities, getTree, getTreeFull } from '../db/getters'
 import { setTree } from '../db/setters'
 
-export const TREE_DEPTH = 18
+export const TREE_DEPTH = 22 // 4M members
 
 export interface SerializedSemaphoreGroup {
   id: string
   name: string
   members: string[]
   depth: number
-  zeroValue: string
   merkleRoot: string
 }
 
@@ -29,9 +28,8 @@ export const getLatestGroup = async (projectId: number) => {
   const serializedGroup: Omit<SerializedSemaphoreGroup, 'merkleRoot'> = {
     name: `microdemocracies-${projectId}`,
     id: `${projectId}`,
-    depth: TREE_DEPTH, // 262,144 members
+    depth: TREE_DEPTH,
     members: identitiesSorted.map((id) => id.publicId),
-    zeroValue: '0',
   }
 
   return deserializeSemaphoreGroup(serializedGroup)
@@ -45,7 +43,6 @@ export const getGroupOfTree = async (treeId: string) => {
     id: `${tree.projectId}`,
     depth: TREE_DEPTH, // 262,144 members
     members: tree.publicIds,
-    zeroValue: '0',
   }
 
   return deserializeSemaphoreGroup(serializedGroup)
@@ -56,23 +53,18 @@ export function serializeSemaphoreGroup(
   name: string,
 ): SerializedSemaphoreGroup {
   return {
-    id: group.id.toString(),
+    id: group.root.toString(),
     name,
     members: group.members.map((m) => m.toString()),
     depth: group.depth,
-    zeroValue: group.zeroValue.toString(),
-    merkleRoot: group.merkleTree.root.toString(),
+    merkleRoot: group.root.toString(),
   }
 }
 
 export function deserializeSemaphoreGroup(
   serializedGroup: Omit<SerializedSemaphoreGroup, 'merkleRoot'>,
 ) {
-  const group = new Group(
-    BigInt(serializedGroup.id),
-    serializedGroup.depth,
-    serializedGroup.members.map((m) => BigInt(m)),
-  )
+  const group = new Group(serializedGroup.members.map((m) => BigInt(m)))
   return group
 }
 

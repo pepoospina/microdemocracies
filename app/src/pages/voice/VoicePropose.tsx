@@ -7,10 +7,12 @@ import { useNavigate } from 'react-router-dom'
 import { AppConnectButton } from '../../components/app/AppConnectButton'
 import { useAppContainer } from '../../components/app/AppContainer'
 import { ViewportPage } from '../../components/app/Viewport'
+import { useNavigateHelpers } from '../../components/app/navigate.helpers'
 import { MIN_LIKES_PUBLIC, MIN_MEMBERS } from '../../config/appConfig'
 import { useLoadingContext } from '../../contexts/LoadingContext'
 import { useProjectContext } from '../../contexts/ProjectContext'
 import { useSemaphoreContext } from '../../contexts/SemaphoreContext'
+import { useToast } from '../../contexts/ToastsContext'
 import { i18n } from '../../i18n/i18n'
 import { RouteNames } from '../../route.names'
 import { AppButton, AppCard, AppHeading } from '../../ui-components'
@@ -27,17 +29,18 @@ export const VoicePropose = (): JSX.Element => {
 
   const { isConnected } = useSemaphoreContext()
   const { proposeStatement, statementId } = useStatementSend()
-  const { nMembers } = useProjectContext()
+  const { nMembers, projectId } = useProjectContext()
 
   const { publicId } = useSemaphoreContext()
 
   const [done, setDone] = useState<boolean>(false)
   const [isProposing, setIsProposing] = useState<boolean>(false)
-  const navigate = useNavigate()
+  const { navigate, backToProject } = useNavigateHelpers()
 
   const { setTitle } = useAppContainer()
 
-  const { openLoading, closeLoading } = useLoadingContext()
+  const { show } = useToast()
+  const { open, close } = useLoadingContext()
 
   useEffect(() => {
     setTitle({ prefix: cap(t('proposeNew')), main: t('statement') })
@@ -47,13 +50,23 @@ export const VoicePropose = (): JSX.Element => {
 
   const _proposeStatement = async (input: string) => {
     if (proposeStatement) {
-      openLoading({ title: t('sendingProposal'), subtitle: t('preparingData') })
+      open({ title: t('sendingProposal'), subtitle: t('preparingData') })
       setIsProposing(true)
 
-      proposeStatement(input).then(() => {
-        setIsProposing(false)
-        closeLoading()
-      })
+      proposeStatement(input)
+        .then(() => {
+          setIsProposing(false)
+          close()
+        })
+        .catch((e) => {
+          setIsProposing(false)
+          close()
+          show({
+            title: t('errorGeneratingProof'),
+            message: e.message,
+            status: 'critical',
+          })
+        })
     }
   }
 
@@ -136,9 +149,9 @@ export const VoicePropose = (): JSX.Element => {
       nav={
         <AppBottomButtons
           left={{
-            label: t('back'),
+            label: t('project'),
             icon: <FormPrevious></FormPrevious>,
-            action: () => navigate(-1),
+            action: () => backToProject(projectId),
           }}
           right={{
             label: t('propose'),

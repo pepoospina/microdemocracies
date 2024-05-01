@@ -13,8 +13,8 @@ export interface LoadingOptions {
 
 export type LoadingContextType = {
   loading: boolean
-  openLoading: (options: LoadingOptions) => void
-  closeLoading: () => void
+  open: (options: LoadingOptions) => void
+  close: () => void
   setLoading: (loading: boolean) => void
   setExpectedLoadingTime: (loadingTimeout: number) => void
   setTitle: (title: string) => void
@@ -65,10 +65,10 @@ export const LoadingContext = ({ children }: LoadingContextProps) => {
   }
 
   const close = () => {
+    setLoading(false)
     setTitle('')
     setSubtitle('')
     setExpectedLoadingTime(0)
-    setLoading(false)
   }
 
   /** an always-running periodic call */
@@ -116,8 +116,8 @@ export const LoadingContext = ({ children }: LoadingContextProps) => {
     <LoadingContextValue.Provider
       value={{
         loading,
-        closeLoading: close,
-        openLoading: open,
+        close: close,
+        open: open,
         setLoading,
         setExpectedLoadingTime,
         setTitle,

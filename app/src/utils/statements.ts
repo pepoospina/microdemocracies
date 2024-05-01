@@ -81,7 +81,7 @@ export const getMerklePass = async (
   }
 
   const merklePass = JSON.parse(body.merklePassStr)
-  const parsed = { merklePass, treeId: body.treeId }
+  const parsed = { merklePass, treeId: body.treeId, depth: body.depth }
 
   /** store in cache */
   cachedTreesMap.set(body.treeId, parsed)

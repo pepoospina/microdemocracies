@@ -82,7 +82,7 @@
     },
     {
       "collectionGroup": "statements_backers",
-      "fieldPath": "proof.nullifierHash",
+      "fieldPath": "proof.nullifier",
       "ttl": false,
       "indexes": [
         {

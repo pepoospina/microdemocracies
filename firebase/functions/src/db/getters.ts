@@ -89,18 +89,18 @@ export const getTree = async (treeId: string) => {
 
 export const hasBackingWithNullifierHash = async (
   statementId: string,
-  nullifierHash: string,
+  nullifier: string,
 ) => {
   const q = collections
     .statementsBackers(statementId)
-    .where('proof.nullifierHash', '==', nullifierHash)
+    .where('proof.nullifier', '==', nullifier)
   const snap = await q.get()
 
   return !snap.empty
 }
 
-export const existsStatementWithNullifierHash = async (nullifierHash: string) => {
-  const q = collections.statements.where('proof.nullifierHash', '==', nullifierHash)
+export const existsStatementWithNullifierHash = async (nullifier: string) => {
+  const q = collections.statements.where('proof.nullifier', '==', nullifier)
   const snap = await q.get()
 
   return !snap.empty

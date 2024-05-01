@@ -38,7 +38,7 @@ export const SemaphoreContext = (props: PropsWithChildren) => {
   // keep publicId aligned with identity
   useEffect(() => {
     if (isAccountConnected && identity) {
-      const _publicId = identity.getCommitment().toString()
+      const _publicId = identity.commitment.toString()
       setPublicId(_publicId)
       setIsConnected(true)
       setLoading(false)
@@ -87,7 +87,7 @@ export const SemaphoreContext = (props: PropsWithChildren) => {
 
         setSubtitle(t('preparingIdentity'))
         const _identity = new Identity(secret)
-        const _publicId = _identity.getCommitment().toString()
+        const _publicId = _identity.commitment.toString()
 
         // check identity on DB
         const identity = await getPublicIdentity(aaAddress)

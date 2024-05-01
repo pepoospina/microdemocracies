@@ -41,6 +41,6 @@ export const getBackingId = (backing: AppReactionCreate) => {
   return hash.slice(0, 18)
 }
 
-export const getReactionNullifier = (statementId: string) => {
+export const getReactionScope = (statementId: string) => {
   return `${statementId}`
 }
