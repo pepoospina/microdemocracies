@@ -28,6 +28,11 @@ export const getMerklePassController: RequestHandler = async (request, response)
     })()
 
     const leafIndex = group.indexOf(BigInt(payload.publicId))
+
+    if (leafIndex === -1) {
+      throw new Error('Leaf does not exist')
+    }
+
     const merklePass = group.generateMerkleProof(leafIndex)
 
     const merklePassStr = JSON.stringify(merklePass, (key, value) => {

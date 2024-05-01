@@ -64,7 +64,7 @@ export const SemaphoreContext = (props: PropsWithChildren) => {
         }
 
         if (identity.aaAddress === aaAddress) {
-          setIdentity(new Identity(identity.identity))
+          setIdentity(new Identity(identity.privateKey))
         } else {
           create = true
         }
@@ -92,6 +92,12 @@ export const SemaphoreContext = (props: PropsWithChildren) => {
         // check identity on DB
         const identity = await getPublicIdentity(aaAddress)
 
+        if (identity && identity.publicId !== _publicId) {
+          throw new Error(
+            `Unexpected identity for ${aaAddress}. New derived one is ${_publicId}, but stored is ${identity.publicId}`,
+          )
+        }
+
         // if not found, store the identity
         if (identity === undefined) {
           setSubtitle(t('waitingIdentityOwnership'))
@@ -111,7 +117,7 @@ export const SemaphoreContext = (props: PropsWithChildren) => {
         // store the secret identity on this device (so we dont have to ask for a signature with metamask from now on)
         localStorage.setItem(
           'identity',
-          JSON.stringify({ identity: _identity.toString(), aaAddress }),
+          JSON.stringify({ privatekey: _identity.privateKey, aaAddress }),
         )
         setIdentity(_identity)
       }
