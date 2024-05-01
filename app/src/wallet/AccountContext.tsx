@@ -134,25 +134,34 @@ export const AccountContext = (props: PropsWithChildren) => {
   const sendUserOps = async (_userOps: BatchUserOperationCallData) => {
     setIsSending(true)
     try {
-      if (_userOps.length === 0) return
+      if (_userOps.length === 0 || !aaAddress) return
       if (!alchemyClientAA) throw new Error('undefined alchemyClientAA')
 
-      const uoSimResult = await (alchemyClientAA as any).simulateUserOperation({
+      setSubtitle(t('waitingSignature1'))
+      if (hasInjected) {
+        setPause(true)
+      }
+      const uoSimResult = await alchemyClientAA.simulateUserOperation({
         uo: _userOps,
-      })
+      } as any)
 
       if (DEBUG) console.log('uoSimResult', { uoSimResult })
+
+      if (uoSimResult.error) {
+        console.error(uoSimResult.error.message)
+        throw new Error(uoSimResult.error.message)
+      }
 
       if (DEBUG) console.log('sendUserOps', { userOps: _userOps })
 
       if (hasInjected) {
         setPause(true)
       }
-      setSubtitle(t('waitingSignature'))
+      setSubtitle(t('waitingSignature2'))
 
-      const res = await (alchemyClientAA as any).sendUserOperation({
+      const res = await alchemyClientAA.sendUserOperation({
         uo: _userOps,
-      })
+      } as any)
 
       if (DEBUG) console.log('sendUserOps - res', { res })
       if (DEBUG) console.log('waiting')

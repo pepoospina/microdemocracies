@@ -6,6 +6,7 @@ import { usePublicClient } from 'wagmi'
 
 import { PENDING_PERIOD, QUIET_ENDING_PERIOD, VOTING_PERIOD } from '../../config/appConfig'
 import { useLoadingContext } from '../../contexts/LoadingContext'
+import { useToast } from '../../contexts/ToastsContext'
 import { registryABI, registryFactoryABI } from '../../contracts/abis'
 import { DetailsAndPlatforms, HexStr, PAP, SelectedDetails } from '../../shared/types'
 import { getFactoryAddress } from '../../utils/contracts.json'
@@ -31,6 +32,9 @@ export interface CreateProjectStatus {
 
 export const useCreateProject = (): CreateProjectStatus => {
   const { t } = useTranslation()
+  const { close } = useLoadingContext()
+  const { show } = useToast()
+
   const {
     sendUserOps,
     aaAddress,
@@ -106,6 +110,9 @@ export const useCreateProject = (): CreateProjectStatus => {
         },
       ])
     } catch (e: any) {
+      show({ title: t('errorCreatingProject'), message: e.message, status: 'critical' })
+      close()
+
       setIsCreating(false)
       setIsError(true)
       setError(e)

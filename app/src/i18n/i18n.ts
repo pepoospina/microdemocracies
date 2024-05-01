@@ -160,7 +160,8 @@ i18n.use(initReactI18next).init({
         justAMoment: 'Just a moment...',
         errorCreatingProject: 'Error creating project',
         connectingUser: 'Connecting user',
-        waitingSignature: 'Waiting for your signature...',
+        waitingSignature1: 'Waiting for your signature 1/2...',
+        waitingSignature2: 'Waiting for your signature 2/2...',
         waitingIdentitySignature: 'Waiting for anonymous identity signature...',
         waitingIdentityOwnership:
           'Waiting for anonymous identity confirmation signature...',
