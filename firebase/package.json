@@ -9,6 +9,7 @@
     "log": "npx firebase-logging --project=common-dev-dea4e --freq=1500 --n=10 --func ",
     "deploy-functions": "firebase deploy --only functions",
     "deploy-firestore": "firebase deploy --only firestore",
+    "deploy": "firebase deploy",
     "prepare:hooks": "husky install"
   },
   "author": "",
