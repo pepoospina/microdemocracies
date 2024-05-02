@@ -3,12 +3,17 @@ import { PropsWithChildren, createContext, useContext, useEffect, useState } fro
 import { useTranslation } from 'react-i18next'
 
 import { getPublicIdentity } from '../firestore/getters'
-import { AppPublicIdentity } from '../shared/types'
+import { AppPublicIdentity, HexStr } from '../shared/types'
 import { getControlMessage } from '../shared/utils/identity.utils'
 import { postIdentity } from '../utils/statements'
 import { useAccountContext } from '../wallet/AccountContext'
 import { useAppSigner } from '../wallet/SignerContext'
 import { useLoadingContext } from './LoadingContext'
+
+interface IdentityStored {
+  privateKey: string
+  aaAddress: HexStr
+}
 
 export type SemaphoreContextType = {
   publicId?: string
@@ -18,6 +23,8 @@ export type SemaphoreContextType = {
   disconnect: () => void
   isConnected: boolean
 }
+
+const DEBUG = true
 
 const SemaphoreContextValue = createContext<SemaphoreContextType | undefined>(undefined)
 
@@ -39,6 +46,8 @@ export const SemaphoreContext = (props: PropsWithChildren) => {
   useEffect(() => {
     if (isAccountConnected && identity) {
       const _publicId = identity.commitment.toString()
+      if (DEBUG) console.log('setPublicId', { _publicId, identity })
+
       setPublicId(_publicId)
       setIsConnected(true)
       setLoading(false)
@@ -56,7 +65,12 @@ export const SemaphoreContext = (props: PropsWithChildren) => {
       let create: boolean = false
 
       if (identityStr != null) {
-        const identity = JSON.parse(identityStr)
+        const identity = JSON.parse(identityStr) as IdentityStored
+
+        if (!identity.privateKey) {
+          console.error('Invalid identity stored- loggedout')
+          disconnect()
+        }
 
         const verify = await getPublicIdentity(identity.aaAddress)
         if (verify === undefined) {
@@ -64,6 +78,10 @@ export const SemaphoreContext = (props: PropsWithChildren) => {
         }
 
         if (identity.aaAddress === aaAddress) {
+          if (DEBUG)
+            console.log('setIdentity - from localStorage', {
+              privateKey: identity.privateKey,
+            })
           setIdentity(new Identity(identity.privateKey))
         } else {
           create = true
@@ -79,13 +97,15 @@ export const SemaphoreContext = (props: PropsWithChildren) => {
 
         setSubtitle(t('waitingIdentitySignature'))
 
-        console.log('creating publiId', { address, aaAddress })
+        if (DEBUG) console.log('creating publicId', { address, aaAddress })
 
         setIsCreatingPublicId(true)
 
         const secret = await signMessage('Prepare anonymous identity')
 
         setSubtitle(t('preparingIdentity'))
+        if (DEBUG) console.log('setIdentity - secret', { secret })
+
         const _identity = new Identity(secret)
         const _publicId = _identity.commitment.toString()
 
@@ -110,15 +130,20 @@ export const SemaphoreContext = (props: PropsWithChildren) => {
             signature,
           }
 
-          console.log('posting public identity', { details })
+          if (DEBUG) console.log('posting public identity', { details })
           await postIdentity(details)
         }
 
         // store the secret identity on this device (so we dont have to ask for a signature with metamask from now on)
-        localStorage.setItem(
-          'identity',
-          JSON.stringify({ privatekey: _identity.privateKey, aaAddress }),
-        )
+        console.log('setIdentity - store localStorage', {
+          privatekey: _identity.privateKey,
+          aaAddress,
+        })
+
+        const stored: IdentityStored = { privateKey: _identity.privateKey, aaAddress }
+        localStorage.setItem('identity', JSON.stringify(stored))
+
+        if (DEBUG) console.log('setIdentity - from create', stored)
         setIdentity(_identity)
       }
 
