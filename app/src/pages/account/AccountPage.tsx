@@ -51,7 +51,7 @@ export const AccountPage = () => {
       nav={
         <AppBottomButton
           icon={<FormPrevious />}
-          label={t([I18Keys.projectMembers])}
+          label={t([I18Keys.backToMembers])}
           onClick={() =>
             navigate(AbsoluteRoutes.ProjectMembers((projectId as number).toString()))
           }

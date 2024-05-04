@@ -155,7 +155,7 @@ export const ProjectHomePage = (props: IProjectHome) => {
             <Box style={{ position: 'relative', flexShrink: 0 }}>
               <ProjectCard
                 project={project}
-                statementStyle={{ paddingBottom: '28px' }}
+                statementStyle={{ paddingBottom: '36px' }}
               ></ProjectCard>
               <Box
                 direction="row"

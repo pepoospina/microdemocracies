@@ -6,6 +6,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 
 import { useAppContainer } from '../../components/app/AppContainer'
 import { ViewportPage } from '../../components/app/Viewport'
+import { useNavigateHelpers } from '../../components/app/navigate.helpers'
 import { useMember } from '../../contexts/MemberContext'
 import { useProjectContext } from '../../contexts/ProjectContext'
 import { I18Keys } from '../../i18n/kyel.list'
@@ -18,7 +19,7 @@ import { VouchMemberWidget } from './VouchMemberWidget'
 
 export const InviteAccountPage = () => {
   const { t, i18n } = useTranslation()
-  const navigate = useNavigate()
+  const { navigate } = useNavigateHelpers()
   const { hash } = useParams()
   const { setTitle } = useAppContainer()
   const { projectId } = useProjectContext()
@@ -77,8 +78,10 @@ export const InviteAccountPage = () => {
       }
       nav={
         <AppBottomButton
-          onClick={() => navigate(-1)}
-          label={t([I18Keys.back])}
+          onClick={() =>
+            navigate(AbsoluteRoutes.ProjectMembers((projectId as number).toString()))
+          }
+          label={t([I18Keys.backToMembers])}
           icon={<FormPrevious />}
         ></AppBottomButton>
       }

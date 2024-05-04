@@ -157,7 +157,7 @@ export const CreateProject = () => {
       <Box pad={{ vertical: 'large' }} style={{ flexShrink: 0 }}>
         <AppCard>
           <Text>
-            <Trans i18nKey={'tryoutMsg'} components={{ Bold: <Bold></Bold> }}></Trans>
+            <Trans i18nKey={I18Keys.tryoutMsg} components={{ Bold: <Bold></Bold> }}></Trans>
           </Text>
         </AppCard>
       </Box>
@@ -174,7 +174,7 @@ export const CreateProject = () => {
         ></StatementEditable>
       </Box>
       <Text style={{ margin: '12px 0px 0px 0px' }}>
-        <Trans i18nKey="examplesWho" components={{ Bold: <Bold></Bold> }}></Trans>
+        <Trans i18nKey={I18Keys.examplesWho} components={{ Bold: <Bold></Bold> }}></Trans>
       </Text>
     </Box>,
 

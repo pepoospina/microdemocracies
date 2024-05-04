@@ -173,7 +173,7 @@ export const translation: Record<I18Keys, string> = {
   [I18Keys.loadingProfile]: '',
   [I18Keys.projectHome]: '',
   [I18Keys.appHome]: '',
-  [I18Keys.projectMembers]: '',
+  [I18Keys.backToMembers]: '',
   [I18Keys.exit]: '',
   [I18Keys.alreadyBacked]: '',
   [I18Keys.cannotPublishStatement]: '',
@@ -181,4 +181,5 @@ export const translation: Record<I18Keys, string> = {
   [I18Keys.done]: '',
   [I18Keys.language]: '',
   [I18Keys.errorGeneratingProof]: '',
+  [I18Keys.pleaseSignInToSee]: '',
 }

@@ -155,7 +155,7 @@ export enum I18Keys {
   loadingProfile = 's0154',
   projectHome = 's0155',
   appHome = 's0156',
-  projectMembers = 's0157',
+  backToMembers = 's0157',
   exit = 's0158',
   alreadyBacked = 's0159',
   cannotPublishStatement = 's0160',
@@ -163,4 +163,5 @@ export enum I18Keys {
   done = 's0162',
   language = 's0163',
   errorGeneratingProof = 's0164',
+  pleaseSignInToSee = 's0165',
 }

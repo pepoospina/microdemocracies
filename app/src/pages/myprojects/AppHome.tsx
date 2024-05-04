@@ -1,9 +1,10 @@
 import { Box, Button, Text } from 'grommet'
-import { Add } from 'grommet-icons'
+import { Add, AddCircle } from 'grommet-icons'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
+import { useThemeContext } from '../../components/app'
 import { AppConnectButton } from '../../components/app/AppConnectButton'
 import { useAppContainer } from '../../components/app/AppContainer'
 import { ViewportPage } from '../../components/app/Viewport'
@@ -18,6 +19,7 @@ import { Loading } from '../common/Loading'
 import { ProjectCard } from '../project/ProjectCard'
 
 export const AppHome = (props: {}) => {
+  const { constants } = useThemeContext()
   const { aaAddress } = useAccountContext()
   const { isConnected } = useSemaphoreContext()
   const { setTitle } = useAppContainer()
@@ -39,7 +41,7 @@ export const AppHome = (props: {}) => {
       return (
         <Box pad="large">
           <AppCard margin={{ bottom: 'large' }}>
-            <Text>Please sign in to see your microdemocracies</Text>
+            <Text>{t(I18Keys.pleaseSignInToSee)}</Text>
           </AppCard>
           <AppConnectButton></AppConnectButton>
         </Box>
@@ -88,8 +90,8 @@ export const AppHome = (props: {}) => {
       content={projectsContent}
       nav={
         <AppBottomButton
+          primary
           onClick={() => navigate(AbsoluteRoutes.Start)}
-          icon={<Add></Add>}
           label={t([I18Keys.startNew])}
         ></AppBottomButton>
       }
