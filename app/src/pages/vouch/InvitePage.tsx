@@ -10,6 +10,7 @@ import { AppConnectButton } from '../../components/app/AppConnectButton'
 import { useAppContainer } from '../../components/app/AppContainer'
 import { ViewportPage } from '../../components/app/Viewport'
 import { useProjectContext } from '../../contexts/ProjectContext'
+import { I18Keys } from '../../i18n/kyel.list'
 import { AbsoluteRoutes, RouteNames } from '../../route.names'
 import { AppButton, AppCard, AppHeading } from '../../ui-components'
 import { useCopyToClipboard } from '../../utils/copy.clipboard'
@@ -31,7 +32,7 @@ export const InvitePage = (): JSX.Element => {
   const { setTitle } = useAppContainer()
 
   useEffect(() => {
-    setTitle({ prefix: cap(t('inviteNew')), main: t('members') })
+    setTitle({ prefix: cap(t([I18Keys.inviteNew])), main: t([I18Keys.members]) })
   }, [i18n.language])
 
   const [showLink, setShowLink] = useState<boolean>(false)
@@ -47,7 +48,7 @@ export const InvitePage = (): JSX.Element => {
     if (navigator.share) {
       navigator.share({
         url: inviteLink,
-        text: t('joinOurMsg'),
+        text: t([I18Keys.joinOurMsg]),
       })
     } else {
       copy(inviteLink)
@@ -61,10 +62,13 @@ export const InvitePage = (): JSX.Element => {
       return (
         <Box align="center" style={{ flexShrink: 0 }}>
           <Box pad={{ vertical: 'large' }} style={{ width: '100%' }}>
-            <AppButton onClick={() => setShowLink(false)} label={t('close')}></AppButton>
+            <AppButton
+              onClick={() => setShowLink(false)}
+              label={t([I18Keys.close])}
+            ></AppButton>
           </Box>
 
-          <AppHeading level="3">{t('shareToInvite')}</AppHeading>
+          <AppHeading level="3">{t([I18Keys.shareToInvite])}</AppHeading>
 
           <Box pad={{ vertical: 'medium' }}>
             <AppQRCode input={inviteLink}></AppQRCode>
@@ -90,13 +94,13 @@ export const InvitePage = (): JSX.Element => {
     return (
       <Box style={{ flexShrink: 0 }}>
         <AppCard margin={{ bottom: 'medium' }}>
-          <Text>{t('shareLinkMsg')}</Text>
+          <Text>{t([I18Keys.shareLinkMsg])}</Text>
         </AppCard>
         <AppButton
           reverse
           icon={copied ? <StatusGood></StatusGood> : <Send></Send>}
           disabled={inviteId === undefined}
-          label={copied ? t('linkCopied') : t('shareLink')}
+          label={copied ? t([I18Keys.linkCopied]) : t([I18Keys.shareLink])}
           primary
           onClick={() => share()}
         ></AppButton>
@@ -112,35 +116,35 @@ export const InvitePage = (): JSX.Element => {
         </Box>
 
         <AppHeading level="3" style={{ marginTop: '64px' }}>
-          {t('orUseQR')}
+          {t([I18Keys.orUseQR])}
         </AppHeading>
         <AppButton
           reverse
           icon={<Square color="black"></Square>}
           disabled={aaAddress === undefined || projectId === undefined}
-          label={t('showQr')}
+          label={t([I18Keys.showQr])}
           onClick={() => setShowLink(true)}
           margin={{ vertical: 'medium' }}
         ></AppButton>
         <AppButton
           reverse
           icon={<Camera></Camera>}
-          label={!scan ? t('scanQr') : t('cancel')}
+          label={!scan ? t([I18Keys.scanQr]) : t([I18Keys.cancel])}
           onClick={() => setScan(!scan)}
           style={{ marginBottom: '16px' }}
         ></AppButton>
 
         <AppHeading level="3" style={{ marginTop: '24px' }}>
-          {t('resetLink')}
+          {t([I18Keys.resetLink])}
         </AppHeading>
         <Box>
           <AppCard margin={{ vertical: 'medium' }}>
-            <Text>{t('resettingMsg')}</Text>
+            <Text>{t([I18Keys.resettingMsg])}</Text>
           </AppCard>
           <AppButton
             margin={{ bottom: 'large' }}
             onClick={() => resetLink()}
-            label={resettingLink ? t('resetting') : t('reset')}
+            label={resettingLink ? t([I18Keys.resetting]) : t([I18Keys.reset])}
             disabled={resettingLink}
           ></AppButton>
         </Box>
@@ -154,7 +158,9 @@ export const InvitePage = (): JSX.Element => {
         <Box fill pad={{ horizontal: 'large' }}>
           <Box style={{ flexShrink: 0 }} margin={{ bottom: 'large' }}>
             <Box>
-              <Text style={{ marginBottom: '16px' }}>{t('rememberInviteMsg')}:</Text>
+              <Text style={{ marginBottom: '16px' }}>
+                {t([I18Keys.rememberInviteMsg])}:
+              </Text>
               <StatementEditable value={project?.whoStatement}></StatementEditable>
             </Box>
           </Box>
@@ -165,7 +171,7 @@ export const InvitePage = (): JSX.Element => {
       nav={
         <AppBottomButton
           icon={<FormPrevious />}
-          label={t('projectMembers')}
+          label={t([I18Keys.projectMembers])}
           onClick={() =>
             navigate(AbsoluteRoutes.ProjectMembers((projectId as number).toString()))
           }

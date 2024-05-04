@@ -3,6 +3,7 @@ import { StatusGood } from 'grommet-icons'
 import { useTranslation } from 'react-i18next'
 
 import { useSemaphoreContext } from '../../contexts/SemaphoreContext'
+import { I18Keys } from '../../i18n/kyel.list'
 import { Loading } from '../../pages/common/Loading'
 import { AppButton, AppHeading } from '../../ui-components'
 import { useAccountContext } from '../../wallet/AccountContext'
@@ -16,7 +17,7 @@ export const AppConnectButton = (props: { label?: string } & BoxExtendedProps) =
     <AppButton
       style={{ ...props.style }}
       onClick={() => connect()}
-      label={t('connectWalletBtn')}
+      label={t([I18Keys.connectWalletBtn])}
     ></AppButton>
   )
 }
@@ -35,7 +36,7 @@ export const AppConnectWidget = () => {
     return (
       <>
         <AppHeading level="3" style={{ marginBottom: '18px' }}>
-          {t('connectAccount')}
+          {t([I18Keys.connectAccount])}
         </AppHeading>
         {isLoading ? <Loading></Loading> : <AppConnectButton></AppConnectButton>}
       </>
@@ -45,7 +46,7 @@ export const AppConnectWidget = () => {
   return (
     <>
       <AppHeading level="3" style={{ marginBottom: '18px' }}>
-        {t('accountReady')}
+        {t([I18Keys.accountReady])}
       </AppHeading>
       <StatusGood size="48px" />
     </>

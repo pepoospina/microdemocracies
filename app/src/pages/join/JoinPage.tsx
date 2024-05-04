@@ -10,6 +10,7 @@ import { AppConnectWidget } from '../../components/app/AppConnectButton'
 import { useAppContainer } from '../../components/app/AppContainer'
 import { ViewportPage } from '../../components/app/Viewport'
 import { useProjectContext } from '../../contexts/ProjectContext'
+import { I18Keys } from '../../i18n/kyel.list'
 import { AbsoluteRoutes } from '../../route.names'
 import { DetailsAndPlatforms, PAP } from '../../shared/types'
 import { AppCard } from '../../ui-components'
@@ -54,27 +55,27 @@ export const JoinPage = () => {
   useEffect(() => {
     switch (pageIx) {
       case 0:
-        setTitle({ prefix: t('joinA'), main: t('project') })
+        setTitle({ prefix: t([I18Keys.joinA]), main: t([I18Keys.project]) })
         break
 
       case 1:
         setTitle({
-          prefix: t('personalDetailsPre'),
-          main: t('personalDetailsMain'),
+          prefix: t([I18Keys.personalDetailsPre]),
+          main: t([I18Keys.personalDetailsMain]),
         })
         break
 
       case 2:
         setTitle({
-          prefix: t('reviewApplicationPre'),
-          main: t('reviewApplicationMain'),
+          prefix: t([I18Keys.reviewApplicationPre]),
+          main: t([I18Keys.reviewApplicationMain]),
         })
         break
 
       case 3:
         setTitle({
-          prefix: t('applicationSentPre'),
-          main: t('applicationSentMain'),
+          prefix: t([I18Keys.applicationSentPre]),
+          main: t([I18Keys.applicationSentMain]),
         })
         break
     }
@@ -141,7 +142,7 @@ export const JoinPage = () => {
         <Box>
           <Box pad="large">
             <Box margin={{ bottom: 'small' }}>
-              <Text>{t('whoTitle')}:</Text>
+              <Text>{t([I18Keys.whoTitle])}:</Text>
             </Box>
             <StatementEditable value={project?.whoStatement}></StatementEditable>
           </Box>
@@ -153,13 +154,13 @@ export const JoinPage = () => {
       nav={
         <AppBottomButtons
           left={{
-            label: t('exit'),
+            label: t([I18Keys.exit]),
             primary: false,
             action: () =>
               navigate(AbsoluteRoutes.ProjectHome(projectId?.toString() as string)),
           }}
           right={{
-            label: t('next'),
+            label: t([I18Keys.next]),
             primary: true,
             action: nextPage,
           }}
@@ -208,9 +209,9 @@ export const JoinPage = () => {
       }
       nav={
         <AppBottomButtons
-          left={{ label: t('back'), primary: false, action: prevPage }}
+          left={{ label: t([I18Keys.back]), primary: false, action: prevPage }}
           right={{
-            label: t('send'),
+            label: t([I18Keys.send]),
             primary: true,
             action: send,
           }}
@@ -222,7 +223,7 @@ export const JoinPage = () => {
       content={
         <Box style={{ flexShrink: 0 }} pad={{ horizontal: 'large' }}>
           <AppCard pad={{ vertical: 'small' }} style={{ flexShrink: 0 }}>
-            <Text>{t('applicationReceived')}</Text>
+            <Text>{t([I18Keys.applicationReceived])}</Text>
           </AppCard>
 
           <PAPShare cid={cid}></PAPShare>
@@ -230,7 +231,7 @@ export const JoinPage = () => {
       }
       nav={
         <AppBottomButton
-          label={t('done')}
+          label={t([I18Keys.done])}
           icon={<FormPrevious></FormPrevious>}
           onClick={() =>
             navigate(AbsoluteRoutes.ProjectHome(projectId?.toString() as string))

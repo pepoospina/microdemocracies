@@ -4,6 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 
 import { useThemeContext } from '../../components/app'
 import { useMember } from '../../contexts/MemberContext'
+import { I18Keys } from '../../i18n/kyel.list'
 import { AbsoluteRoutes } from '../../route.names'
 import { AppProjectMember } from '../../shared/types'
 import { AppButton } from '../../ui-components'
@@ -42,7 +43,7 @@ export const MemberCard = (props: { member?: AppProjectMember }): JSX.Element =>
       >
         <Text>
           <b>
-            {t('member')} #{props.member?.tokenId}
+            {t([I18Keys.member])} #{props.member?.tokenId}
           </b>
         </Text>
         {!accountPap ? <LoadingDiv></LoadingDiv> : getPapShortname(accountPap.object)}

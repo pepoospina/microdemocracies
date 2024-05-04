@@ -8,6 +8,8 @@ import { AppConnectButton } from '../../components/app/AppConnectButton'
 import { useAppContainer } from '../../components/app/AppContainer'
 import { ViewportPage } from '../../components/app/Viewport'
 import { useSemaphoreContext } from '../../contexts/SemaphoreContext'
+import { I18Keys } from '../../i18n/kyel.list'
+import { AbsoluteRoutes } from '../../route.names'
 import { AppCard } from '../../ui-components'
 import { useAccountContext } from '../../wallet/AccountContext'
 import { useAccountDataContext } from '../../wallet/AccountDataContext'
@@ -25,7 +27,7 @@ export const AppHome = (props: {}) => {
   const { t, i18n } = useTranslation()
 
   useEffect(() => {
-    setTitle({ prefix: t('your'), main: t('appName') })
+    setTitle({ prefix: t([I18Keys.your]), main: t([I18Keys.appName]) })
   }, [i18n.language])
 
   const projectClicked = (projectId: number) => {
@@ -45,12 +47,13 @@ export const AppHome = (props: {}) => {
     if (!aaAddress) {
       return <Loading></Loading>
     }
-    if (projects === undefined) return <Loading label={t('loadingProjects')}></Loading>
+    if (projects === undefined)
+      return <Loading label={t([I18Keys.loadingProjects])}></Loading>
     if (projects.length === 0)
       return (
         <Box pad="medium">
           <AppCard>
-            <Text>{t('noProjects')}</Text>
+            <Text>{t([I18Keys.noProjects])}</Text>
           </AppCard>
         </Box>
       )
@@ -85,9 +88,9 @@ export const AppHome = (props: {}) => {
       content={projectsContent}
       nav={
         <AppBottomButton
-          onClick={() => navigate('/start')}
+          onClick={() => navigate(AbsoluteRoutes.Start)}
           icon={<Add></Add>}
-          label={t('startNew')}
+          label={t([I18Keys.startNew])}
         ></AppBottomButton>
       }
     ></ViewportPage>

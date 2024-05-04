@@ -14,6 +14,7 @@ import { WalletClient } from 'viem'
 import { useDisconnect, useWalletClient } from 'wagmi'
 
 import { useLoadingContext } from '../contexts/LoadingContext'
+import { I18Keys } from '../i18n/kyel.list'
 import { HexStr } from '../shared/types'
 import { cap } from '../utils/general'
 import { createMagicSigner, magic } from './magic.signer'
@@ -60,8 +61,8 @@ export const SignerContext = (props: PropsWithChildren) => {
     if (hadMagic !== null && hadMagic === 'true') {
       setLoading(true)
       setUserCanClose(false)
-      setTitle(cap(t('loadingProfile')))
-      setSubtitle(t('justAMoment'))
+      setTitle(cap(t([I18Keys.loadingProfile])))
+      setSubtitle(t([I18Keys.justAMoment]))
 
       magic.user.isLoggedIn().then((res) => {
         if (res && !magicSigner) {
@@ -111,8 +112,8 @@ export const SignerContext = (props: PropsWithChildren) => {
   const connect = () => {
     setLoading(true)
     setUserCanClose(false)
-    setTitle(t('connectingUser'))
-    setSubtitle(t('connectWallet'))
+    setTitle(t([I18Keys.connectingUser]))
+    setSubtitle(t([I18Keys.connectWallet]))
 
     try {
       if (hasInjected) {

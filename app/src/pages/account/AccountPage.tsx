@@ -8,6 +8,7 @@ import { useAppContainer } from '../../components/app/AppContainer'
 import { ViewportPage } from '../../components/app/Viewport'
 import { useMember } from '../../contexts/MemberContext'
 import { useProjectContext } from '../../contexts/ProjectContext'
+import { I18Keys } from '../../i18n/kyel.list'
 import { AbsoluteRoutes } from '../../route.names'
 import { cap } from '../../utils/general'
 import { AccountChallenge } from '../challenges/AccountChallenge'
@@ -25,7 +26,7 @@ export const AccountPage = () => {
   const { projectId } = useProjectContext()
 
   useEffect(() => {
-    setTitle({ prefix: t('project'), main: cap(t('member')) })
+    setTitle({ prefix: t([I18Keys.project]), main: cap(t([I18Keys.member])) })
   }, [i18n.language])
 
   if (!tokenId) {
@@ -50,7 +51,7 @@ export const AccountPage = () => {
       nav={
         <AppBottomButton
           icon={<FormPrevious />}
-          label={t('projectMembers')}
+          label={t([I18Keys.projectMembers])}
           onClick={() =>
             navigate(AbsoluteRoutes.ProjectMembers((projectId as number).toString()))
           }

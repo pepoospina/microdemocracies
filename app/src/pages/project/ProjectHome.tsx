@@ -13,6 +13,7 @@ import { useConnectedMember } from '../../contexts/ConnectedAccountContext'
 import { useLoadingContext } from '../../contexts/LoadingContext'
 import { useProjectContext } from '../../contexts/ProjectContext'
 import { StatementContext } from '../../contexts/StatementContext'
+import { I18Keys } from '../../i18n/kyel.list'
 import { AbsoluteRoutes, RouteNames } from '../../route.names'
 import { Address, AppButton, AppCard, AppHeading } from '../../ui-components'
 import { BoxCentered } from '../../ui-components/BoxCentered'
@@ -43,14 +44,14 @@ export const ProjectHomePage = (props: IProjectHome) => {
   }
 
   useEffect(() => {
-    setTitle({ prefix: '', main: t('project') })
+    setTitle({ prefix: '', main: t([I18Keys.project]) })
   }, [i18n.language])
 
-  const newStr = mobile ? cap(t('propose')) : cap(t('proposeNew'))
+  const newStr = mobile ? cap(t([I18Keys.propose])) : cap(t([I18Keys.proposeNew]))
 
   useEffect(() => {
     if (!project) {
-      setSubtitle(t('loadingProject'))
+      setSubtitle(t([I18Keys.loadingProject]))
     } else {
       /** finally close the project create modal if it was on */
       setLoading(false)
@@ -60,7 +61,7 @@ export const ProjectHomePage = (props: IProjectHome) => {
   if (project === undefined) {
     return (
       <BoxCentered fill>
-        <Text>{t('loadingProject')}</Text>
+        <Text>{t([I18Keys.loadingProject])}</Text>
         <Spinner></Spinner>
       </BoxCentered>
     )
@@ -70,7 +71,7 @@ export const ProjectHomePage = (props: IProjectHome) => {
     return (
       <BoxCentered fill>
         <AppCard>
-          <Text>{t('projectNotFound')}</Text>
+          <Text>{t([I18Keys.projectNotFound])}</Text>
         </AppCard>
       </BoxCentered>
     )
@@ -85,7 +86,7 @@ export const ProjectHomePage = (props: IProjectHome) => {
     if (statements !== undefined && statements.length === 0) {
       return (
         <AppCard>
-          <Text>{t('noStatements')}</Text>
+          <Text>{t([I18Keys.noStatements])}</Text>
         </AppCard>
       )
     }
@@ -113,7 +114,7 @@ export const ProjectHomePage = (props: IProjectHome) => {
       >
         <Box style={{ flexShrink: 0 }} pad={{ right: 'medium' }}>
           <Box margin={{ vertical: 'large' }}>
-            <AppHeading level="3">{t('communityVoice')}:</AppHeading>
+            <AppHeading level="3">{t([I18Keys.communityVoice])}:</AppHeading>
           </Box>
         </Box>
         <Box style={{ flexShrink: 0 }} pad={{ right: 'medium' }}>
@@ -208,7 +209,7 @@ export const ProjectHomePage = (props: IProjectHome) => {
                   dropContent={
                     <Box pad="20px" gap="small">
                       <Box margin={{ bottom: 'small' }}>
-                        <Text>{cap(t('projectAddress'))}</Text>
+                        <Text>{cap(t([I18Keys.projectAddress]))}</Text>
                         <Address
                           addressType="token"
                           address={project?.address}
@@ -222,7 +223,9 @@ export const ProjectHomePage = (props: IProjectHome) => {
                         onClick={() => leave()}
                         style={{ textTransform: 'none', paddingTop: '6px' }}
                       >
-                        <Text style={{ fontWeight: 'bold' }}>{cap(t('leave'))}</Text>
+                        <Text style={{ fontWeight: 'bold' }}>
+                          {cap(t([I18Keys.leave]))}
+                        </Text>
                       </AppButton>
                     </Box>
                   }
@@ -248,7 +251,7 @@ export const ProjectHomePage = (props: IProjectHome) => {
         <AppBottomButtons
           left={{
             action: () => navigate(AbsoluteRoutes.Projects),
-            label: t('appHome'),
+            label: t([I18Keys.appHome]),
             icon: <FormPrevious />,
           }}
           right={{

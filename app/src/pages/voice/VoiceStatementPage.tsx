@@ -10,6 +10,7 @@ import { useNavigateHelpers } from '../../components/app/navigate.helpers'
 import { MIN_LIKES_PUBLIC } from '../../config/appConfig'
 import { useProjectContext } from '../../contexts/ProjectContext'
 import { useStatementContext } from '../../contexts/StatementContext'
+import { I18Keys } from '../../i18n/kyel.list'
 import { AbsoluteRoutes } from '../../route.names'
 import { AppButton, AppCard, AppHeading } from '../../ui-components'
 import { useCopyToClipboard } from '../../utils/copy.clipboard'
@@ -34,7 +35,7 @@ export const VoiceStatementPage = (): JSX.Element => {
     if (navigator.share) {
       navigator.share({
         url: link,
-        text: t('askSupport'),
+        text: t([I18Keys.askSupport]),
       })
     } else {
       copy(link)
@@ -42,7 +43,7 @@ export const VoiceStatementPage = (): JSX.Element => {
   }
 
   useEffect(() => {
-    setTitle({ prefix: t('project'), main: t('statement') })
+    setTitle({ prefix: t([I18Keys.project]), main: t([I18Keys.statement]) })
   }, [])
 
   if (!project || !statementId) {
@@ -69,14 +70,14 @@ export const VoiceStatementPage = (): JSX.Element => {
             <Box margin={{ top: 'large' }}>
               <AppHeading level="3" style={{ textAlign: 'center' }}>
                 {!isShown
-                  ? t('likesNeeded', { nLikes: MIN_LIKES_PUBLIC - nBackingDef })
-                  : t('noLikesNeeded')}
+                  ? t([I18Keys.likesNeeded], { nLikes: MIN_LIKES_PUBLIC - nBackingDef })
+                  : t([I18Keys.noLikesNeeded])}
               </AppHeading>
               {!isShown ? (
                 <Box>
                   <AppCard margin={{ vertical: 'large' }}>
                     <Text>
-                      {t('likesNeededDetailed', {
+                      {t([I18Keys.likesNeededDetailed], {
                         nLikes: MIN_LIKES_PUBLIC - (nBacking ? nBacking : 0),
                       })}
                     </Text>
@@ -102,7 +103,7 @@ export const VoiceStatementPage = (): JSX.Element => {
       nav={
         <AppBottomButton
           onClick={() => backToProject(projectId)}
-          label={t('projectHome')}
+          label={t([I18Keys.projectHome])}
           icon={<FormPrevious></FormPrevious>}
         ></AppBottomButton>
       }

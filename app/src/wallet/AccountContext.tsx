@@ -19,6 +19,7 @@ import { usePublicClient, useReadContract } from 'wagmi'
 
 import { ALCHEMY_GAS_POLICY_ID, ALCHEMY_RPC_URL } from '../config/appConfig'
 import { useLoadingContext } from '../contexts/LoadingContext'
+import { I18Keys } from '../i18n/kyel.list'
 import { HexStr } from '../shared/types'
 import { getAccountAddress } from '../shared/utils/aa-sdk'
 import {
@@ -137,7 +138,7 @@ export const AccountContext = (props: PropsWithChildren) => {
       if (_userOps.length === 0 || !aaAddress) return
       if (!alchemyClientAA) throw new Error('undefined alchemyClientAA')
 
-      setSubtitle(t('waitingSignature1'))
+      setSubtitle(t([I18Keys.waitingSignature1]))
       if (hasInjected) {
         setPause(true)
       }
@@ -157,7 +158,7 @@ export const AccountContext = (props: PropsWithChildren) => {
       if (hasInjected) {
         setPause(true)
       }
-      setSubtitle(t('waitingSignature2'))
+      setSubtitle(t([I18Keys.waitingSignature2]))
 
       const res = await alchemyClientAA.sendUserOperation({
         uo: _userOps,
@@ -167,7 +168,7 @@ export const AccountContext = (props: PropsWithChildren) => {
       if (DEBUG) console.log('waiting')
 
       setPause(false)
-      setSubtitle(t('waitingTransaction'))
+      setSubtitle(t([I18Keys.waitingTransaction]))
 
       const txHash = await alchemyClientAA.waitForUserOperationTransaction({
         hash: res.hash,
@@ -215,7 +216,7 @@ export const AccountContext = (props: PropsWithChildren) => {
 
       console.log({ events })
 
-      setSubtitle(t('operationSuccessful'))
+      setSubtitle(t([I18Keys.operationSuccessful]))
 
       setIsSuccess(true)
       setIsSending(false)

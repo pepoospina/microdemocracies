@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { I18Keys } from '../../i18n/kyel.list'
 import {
   DetailsAndPlatforms,
   PersonDetails,
@@ -54,7 +55,7 @@ export const DetailsForm = (props: {
       {props.selected?.personal.firstName ? (
         <AppFormField
           name="firstName"
-          label={<FieldLabel label={t('firstName')}></FieldLabel>}
+          label={<FieldLabel label={t([I18Keys.firstName])}></FieldLabel>}
           style={{ marginBottom: localConstants.marginBottom }}
         >
           <AppInput name="firstName" placeholder=""></AppInput>
@@ -66,7 +67,7 @@ export const DetailsForm = (props: {
       {props.selected?.personal.lastName ? (
         <AppFormField
           name="lastName"
-          label={<FieldLabel label={t('lastName')}></FieldLabel>}
+          label={<FieldLabel label={t([I18Keys.lastName])}></FieldLabel>}
           style={{ marginBottom: localConstants.marginBottom }}
         >
           <AppInput name="lastName" placeholder=""></AppInput>
@@ -78,7 +79,7 @@ export const DetailsForm = (props: {
       {props.selected?.personal.nationalID ? (
         <AppFormField
           name="nationalID"
-          label={<FieldLabel label={t('IDNumberLong')}></FieldLabel>}
+          label={<FieldLabel label={t([I18Keys.IDNumberLong])}></FieldLabel>}
           style={{ marginBottom: localConstants.marginBottom }}
         >
           <AppInput name="nationalID" placeholder=""></AppInput>
@@ -94,7 +95,11 @@ export const DetailsForm = (props: {
           return (
             <AppFormField
               name={platformId}
-              label={<FieldLabel label={`${platform.name} ${t('username')}`}></FieldLabel>}
+              label={
+                <FieldLabel
+                  label={`${platform.name} ${t([I18Keys.username])}`}
+                ></FieldLabel>
+              }
               style={{ marginBottom: localConstants.marginBottom }}
             >
               <AppInput name={platformId} placeholder=""></AppInput>

@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next'
 
 import { CHAIN_ID } from '../../config/appConfig'
 import { useSemaphoreContext } from '../../contexts/SemaphoreContext'
+import { I18Keys } from '../../i18n/kyel.list'
 import { LanguageSelector } from '../../pages/account/LanguageSelector'
 import { Loading } from '../../pages/common/Loading'
 import { Address, AppButton, AppCircleDropButton } from '../../ui-components'
@@ -51,11 +52,11 @@ export const ConnectedUser = (props: {}) => {
         dropContent={
           <Box pad="20px" gap="small">
             <Box margin={{ bottom: 'small' }}>
-              <Text>{cap(t('connectedAs'))}</Text>
+              <Text>{cap(t([I18Keys.connectedAs]))}</Text>
               <Address address={address} chainId={CHAIN_ID}></Address>
             </Box>
             <Box margin={{ bottom: 'small' }}>
-              <Text margin={{ bottom: '3px' }}>{cap(t('language'))}</Text>
+              <Text margin={{ bottom: '3px' }}>{cap(t([I18Keys.language]))}</Text>
               <LanguageSelector></LanguageSelector>
             </Box>
 
@@ -64,7 +65,7 @@ export const ConnectedUser = (props: {}) => {
               onClick={() => disconnect()}
               style={{ textTransform: 'none', paddingTop: '6px' }}
             >
-              <Text style={{ fontWeight: 'bold' }}>{cap(t('logout'))}</Text>
+              <Text style={{ fontWeight: 'bold' }}>{cap(t([I18Keys.logout]))}</Text>
             </AppButton>
           </Box>
         }

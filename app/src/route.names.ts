@@ -17,6 +17,7 @@ export const RouteNames = {
 
 export const AbsoluteRoutes = {
   App: '/',
+  Start: `/${RouteNames.Start}`,
   Projects: `/${RouteNames.AppHome}`,
   ProjectHome: (projectId: string) => `/${RouteNames.ProjectHome}/${projectId}`,
   ProjectMembers: (projectId: string) =>

@@ -6,6 +6,7 @@ import { AppConnectButton, AppConnectWidget } from '../../components/app/AppConn
 import { useChallengeRead } from '../../contexts/ChallengeContextRead'
 import { useChallengeWrite } from '../../contexts/ChallengeContextWrite'
 import { useConnectedMember } from '../../contexts/ConnectedAccountContext'
+import { I18Keys } from '../../i18n/kyel.list'
 import { AppAccount } from '../../shared/types'
 import { AppButton, AppCard, AppHeading, AppRemainingTime } from '../../ui-components'
 import { BoxCentered } from '../../ui-components/BoxCentered'
@@ -122,7 +123,9 @@ export const AccountChallenge = (props: IAccountChallenge) => {
 
         <Box direction="row" align="center" justify="between">
           <Text>
-            {nVoted !== undefined ? t('votedNofMEligible', { nVoted, totalVoters }) : ''}
+            {nVoted !== undefined
+              ? t([I18Keys.votedNofMEligible], { nVoted, totalVoters })
+              : ''}
           </Text>
         </Box>
 
@@ -159,7 +162,7 @@ export const AccountChallenge = (props: IAccountChallenge) => {
       return (
         <Box style={{ marginTop: '16px' }}>
           <Text>
-            {t('member')} #{tokenId} can't vote
+            {t([I18Keys.member])} #{tokenId} can't vote
           </Text>
         </Box>
       )
@@ -210,7 +213,10 @@ export const AccountChallenge = (props: IAccountChallenge) => {
   const notChallengedContent = (
     <Box>
       <Text>
-        {accountRead?.valid ? t('accountValidatedNotChallenged') : t('accountInvalidated')}.
+        {accountRead?.valid
+          ? t([I18Keys.accountValidatedNotChallenged])
+          : t([I18Keys.accountInvalidated])}
+        .
       </Text>
       {error ? (
         <AppCard style={{ marginBottom: '16px', overflow: 'hidden' }}>
@@ -226,10 +232,13 @@ export const AccountChallenge = (props: IAccountChallenge) => {
           isSending ? (
             <WaitingTransaction></WaitingTransaction>
           ) : (
-            <AppButton label={t('challenge')} onClick={() => challenge()}></AppButton>
+            <AppButton
+              label={t([I18Keys.challenge])}
+              onClick={() => challenge()}
+            ></AppButton>
           )
         ) : (
-          <Text>{t('cantChallenge')}.</Text>
+          <Text>{t([I18Keys.cantChallenge])}.</Text>
         )}
       </Box>
     </Box>
