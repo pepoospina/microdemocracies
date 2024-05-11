@@ -129,16 +129,16 @@ export const translation: Record<I18Keys, string> = {
   [I18Keys.applicationAcceptedAs]: 'Miembro aceptado como',
   [I18Keys.important]: 'Importante!',
   [I18Keys.atLeastNMembers]:
-    'Debe] haber al menos {{nMembers}} miembros para proponer una declaración',
+    'Debe haber al menos {{nMembers}} miembros para proponer una declaración',
   [I18Keys.canBackN]:
-    'Únicamente] los {{nMembers}} miembros actuales podrán apoyar esta declaración',
+    'Únicamente los {{nMembers}} miembros actuales podrán apoyar esta declaración',
   [I18Keys.aStatementNeeds]:
-    'Una] declaración necesita {{nLikes}} like más para aparecer en la página de la microdemocracia',
+    'Una declaración necesita {{nLikes}} like más para aparecer en la página de la microdemocracia',
   [I18Keys.ownedBy]: 'Controlada por',
   [I18Keys.send]: 'Enviar',
   [I18Keys.likesNeeded]: 'Hacen falta {{nLikes}} apoyos más para que sea público!',
   [I18Keys.likesNeededDetailed]:
-    'Esta] declaración necesita {{nLikes}} likes más para aparecer en la página de la microdemocracia. Compártela directamente con otros miembros para que la apoyen.',
+    'Esta declaración necesita {{nLikes}} likes más para aparecer en la página de la microdemocracia. Compártela directamente con otros miembros para que la apoyen.',
   [I18Keys.joinA]: 'Únete a una',
   [I18Keys.projectAddress]: 'Cuenta del proyecto',
   [I18Keys.leave]: 'Abandonar',
@@ -147,7 +147,7 @@ export const translation: Record<I18Keys, string> = {
   [I18Keys.cantChallenge]: 'No puedes denunciarla',
   [I18Keys.pendingApplicationBy]: 'Solicitud de miembro por parte de {{by}}',
   [I18Keys.votedNofMEligible]:
-    'Han] votado: {{nVoted}} de {{totalVoters}} miembros con derecho a voto',
+    'Han votado: {{nVoted}} de {{totalVoters}} miembros con derecho a voto',
   [I18Keys.preparingData]: 'Preparando los datos a enviar a la red...',
   [I18Keys.approvingNewMember]: 'Aprobando a un nuevo miembro',
   [I18Keys.connectingUser]: 'Connecting user',
@@ -191,4 +191,6 @@ export const translation: Record<I18Keys, string> = {
   [I18Keys.voteNow]: 'Vota ahora',
   [I18Keys.alreadyVoted]: 'Ya has votado',
   [I18Keys.accountStatus]: 'Estado de la cuenta',
+  [I18Keys.theFollowingStatementProposed]: 'La siguiente declaración fue propuesta:',
+  [I18Keys.forTheProject]: 'Para la microdemocracia',
 }

@@ -171,4 +171,6 @@ export enum I18Keys {
   voteNow = 's0169',
   alreadyVoted = 's0170',
   accountStatus = 's0171',
+  theFollowingStatementProposed = 's0172',
+  forTheProject = 's0173',
 }

@@ -189,4 +189,6 @@ export const translation: Record<I18Keys, string> = {
   [I18Keys.voteNow]: 'Vote now',
   [I18Keys.alreadyVoted]: 'Already voted',
   [I18Keys.accountStatus]: 'Account status',
+  [I18Keys.theFollowingStatementProposed]: 'The following statemet  was proposed',
+  [I18Keys.forTheProject]: 'for the microdemocracy',
 }

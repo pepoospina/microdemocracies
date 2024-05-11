@@ -58,11 +58,13 @@ export const VoiceStatementPage = (): JSX.Element => {
       content={
         <Box pad="medium">
           <Box>
-            <Text margin={{ vertical: 'small' }}>The following statement was proposed</Text>
+            <Text margin={{ vertical: 'small' }}>
+              {t(I18Keys.theFollowingStatementProposed)}
+            </Text>
             <StatementCard></StatementCard>
           </Box>
           <Box margin={{ vertical: 'medium' }}>
-            <Text margin={{ vertical: 'small' }}>For the microdemocracy:</Text>
+            <Text margin={{ vertical: 'small' }}>{t(I18Keys.forTheProject)}:</Text>
             <ProjectCard project={project}></ProjectCard>
           </Box>
 
