@@ -21,13 +21,13 @@ export const translation: Record<I18Keys, string> = {
   [I18Keys.carousel01sub]: 'Desafía a otros a cambiarlo, <Bold>juntos</Bold>',
   [I18Keys.carousel02]: 'Habla <Bold>sin miedo</Bold>',
   [I18Keys.carousel02sub]:
-    'Publica] <Bold>anónimamente</Bold> en el tablón de la comunidad, pero sólo si eres miembro',
+    'Publica <Bold>anónimamente</Bold> en el tablón de la comunidad, pero sólo si eres miembro',
   [I18Keys.carousel03]: 'Amplifica tu <Bold>voz</Bold>',
   [I18Keys.carousel03sub]:
-    'Apoya] <Bold>anónimamente</Bold> las declaraciones con las que estés de acuerdo',
+    'Apoya <Bold>anónimamente</Bold> las declaraciones con las que estés de acuerdo',
   [I18Keys.carousel04]: 'Recauda y gasta fondos de manera <Bold>transparente</Bold>',
   [I18Keys.carousel04sub]:
-    'Controla] <Bold>colectivamente</Bold> los fondos de la comunidad, no se necesitan bancos. (próximamente)',
+    'Controla <Bold>colectivamente</Bold> los fondos de la comunidad, no se necesitan bancos. (próximamente)',
   [I18Keys.connectWallet]: 'Conectate',
   [I18Keys.connectWalletBtn]: 'Entrar',
   [I18Keys.notFound]: 'no encontrado',

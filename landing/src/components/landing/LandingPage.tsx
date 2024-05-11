@@ -13,6 +13,7 @@ import { LanguageSelector } from '../../@app/pages/account/LanguageSelector';
 
 import { APP_ORIGIN } from '../../config';
 import { LearnMoreItem } from './LearnMoreItem';
+import { I18Keys } from '../../@app/i18n/kyel.list';
 
 const N_SLIDES = 3;
 
@@ -25,8 +26,8 @@ export const LandingPage = () => {
   const [activeSlideIndex, setActiveSlideIndex] = useState(0);
 
   const btnText = (() => {
-    if (activeSlideIndex === N_SLIDES - 1) return t('startNow');
-    return t('next');
+    if (activeSlideIndex === N_SLIDES - 1) return t(I18Keys.startNow);
+    return t(I18Keys.next);
   })();
 
   const btnClick = () => {
@@ -112,7 +113,7 @@ export const LandingPage = () => {
           <></>
         )}
         <Text size={logoSize} weight="bold" style={{ marginTop: '3vh' }}>
-          {t('appName')}
+          {t(I18Keys.appName)}
         </Text>
       </Box>
 
@@ -162,12 +163,12 @@ export const LandingPage = () => {
                 <LearnMoreItem
                   mainText={
                     <Trans
-                      i18nKey="carousel01"
+                      i18nKey={t(I18Keys.carousel01)}
                       components={{ Bold: <Bold /> }}></Trans>
                   }
                   secondaryText={
                     <Trans
-                      i18nKey="carousel01sub"
+                      i18nKey={t(I18Keys.carousel01sub)}
                       components={{ Bold: <Bold /> }}></Trans>
                   }></LearnMoreItem>
               </Box>
@@ -176,12 +177,12 @@ export const LandingPage = () => {
                 <LearnMoreItem
                   mainText={
                     <Trans
-                      i18nKey="carousel02"
+                      i18nKey={t(I18Keys.carousel02)}
                       components={{ Bold: <Bold /> }}></Trans>
                   }
                   secondaryText={
                     <Trans
-                      i18nKey="carousel02sub"
+                      i18nKey={t(I18Keys.carousel02sub)}
                       components={{ Bold: <Bold /> }}></Trans>
                   }></LearnMoreItem>
               </Box>
@@ -190,12 +191,12 @@ export const LandingPage = () => {
                 <LearnMoreItem
                   mainText={
                     <Trans
-                      i18nKey="carousel03"
+                      i18nKey={t(I18Keys.carousel03)}
                       components={{ Bold: <Bold /> }}></Trans>
                   }
                   secondaryText={
                     <Trans
-                      i18nKey="carousel03sub"
+                      i18nKey={t(I18Keys.carousel03sub)}
                       components={{ Bold: <Bold /> }}></Trans>
                   }></LearnMoreItem>
               </Box>
