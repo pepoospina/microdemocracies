@@ -212,7 +212,7 @@ export const LandingPage = () => {
         {showOpenApp ? (
           <AppButton
             onClick={goApp}
-            label={t('openApp')}
+            label={t(I18Keys.openApp)}
             style={{ margin: '12px 0px', width: '220px' }}
           />
         ) : (
