@@ -161,7 +161,7 @@ export const translation: Record<I18Keys, string> = {
   [I18Keys.applicationSentPre]: 'Aplicación',
   [I18Keys.applicationSentMain]: 'enviada',
   [I18Keys.maxStatementsPerPeriod]:
-    'Cara miembro solo puede publicar una declaración por semana',
+    'Cada miembro puede publicar una declaración por semana',
   [I18Keys.errorCreatingProject]: 'Error creando la microdemocracia',
   [I18Keys.waitingSignature1]: 'Esperando firma 1/2...',
   [I18Keys.waitingSignature2]: 'Esperando firma 2/2...',
