@@ -122,7 +122,7 @@ export const VouchMemberWidget = (props: { pap: Entity<PAP> }) => {
     if (isConnected) {
       return (
         <AppButton
-          label="accept"
+          label={t(I18Keys.accept)}
           onClick={() => vouch()}
           disabled={!sendVouch && isConnected}
           primary

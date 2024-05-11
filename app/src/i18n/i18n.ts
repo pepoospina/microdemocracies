@@ -5,6 +5,8 @@ import { translation as translationCat } from './translation.cat'
 import { translation as translationEng } from './translation.eng'
 import { translation as translationSpa } from './translation.spa'
 
+const preferred = localStorage.getItem('language')
+
 i18n.use(initReactI18next).init({
   resources: {
     ENG: {
@@ -17,7 +19,7 @@ i18n.use(initReactI18next).init({
       translation: translationCat,
     },
   },
-  lng: 'ENG', // default language
+  lng: preferred && preferred !== null ? preferred : 'ENG', // default language
   fallbackLng: 'ENG',
 
   interpolation: {

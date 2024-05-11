@@ -8,6 +8,7 @@ export enum I18Keys {
   prev = 's0007',
   review = 's0008',
   create = 's0009',
+  accept = 's000901',
   openApp = 's0010',
   invite = 's0011',
   inviteNew = 's0012',
@@ -138,7 +139,7 @@ export enum I18Keys {
   votedNofMEligible = 's0137',
   preparingData = 's0138',
   approvingNewMember = 's0139',
-  finish = 's0140',
+
   justAMoment = 's0141',
   errorCreatingProject = 's0142',
   connectingUser = 's0143',
@@ -164,4 +165,10 @@ export enum I18Keys {
   language = 's0163',
   errorGeneratingProof = 's0164',
   pleaseSignInToSee = 's0165',
+  connectAndVote = 's0166',
+  votedToRemove = 's0167',
+  accountChallenged = 's0168',
+  voteNow = 's0169',
+  alreadyVoted = 's0170',
+  accountStatus = 's0171',
 }

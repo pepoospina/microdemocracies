@@ -107,7 +107,7 @@ export const AccountChallenge = (props: IAccountChallenge) => {
     ) : (
       <Box style={{ flexShrink: 0 }}>
         <Box direction="row" align="center" justify="between">
-          <Text>Account challenged! </Text>
+          <Text>{t(I18Keys.accountChallenged)}</Text>
           {duration ? (
             <>
               <AppRemainingTime
@@ -130,7 +130,7 @@ export const AccountChallenge = (props: IAccountChallenge) => {
         </Box>
 
         <Box>
-          <ProgressBar label="voted to remove" ratio={ratio}></ProgressBar>
+          <ProgressBar label={t(I18Keys.votedToRemove)} ratio={ratio}></ProgressBar>
         </Box>
       </Box>
     )
@@ -143,7 +143,7 @@ export const AccountChallenge = (props: IAccountChallenge) => {
     if (!isConnected) {
       return (
         <AppConnectButton
-          label="Connect and vote"
+          label={t(I18Keys.connectAndVote)}
           style={{ margin: '16px 0 8px 0' }}
         ></AppConnectButton>
       )
@@ -172,7 +172,7 @@ export const AccountChallenge = (props: IAccountChallenge) => {
 
     return sendVote ? (
       <Box style={{ marginTop: '16px' }}>
-        <AppHeading level="3">Vote now:</AppHeading>
+        <AppHeading level="3">{t(I18Keys.voteNow)}:</AppHeading>
         {!alreadyVoted ? (
           isSending ? (
             <WaitingTransaction></WaitingTransaction>
@@ -192,7 +192,7 @@ export const AccountChallenge = (props: IAccountChallenge) => {
           )
         ) : (
           <Box direction="row" style={{ margin: '8px 0' }} gap="16px">
-            <Text>You already voted</Text>
+            <Text>{t(I18Keys.alreadyVoted)}You already voted</Text>
           </Box>
         )}
       </Box>
@@ -260,7 +260,7 @@ export const AccountChallenge = (props: IAccountChallenge) => {
   return (
     <Box style={{ ...props.cardStyle, flexShrink: 0 }}>
       <>
-        <AppHeading level="3">Account Status</AppHeading>
+        <AppHeading level="3">{t(I18Keys.accountStatus)}</AppHeading>
         <Box pad={{ vertical: 'small' }}>{content}</Box>
       </>
     </Box>

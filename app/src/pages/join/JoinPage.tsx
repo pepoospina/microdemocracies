@@ -181,9 +181,9 @@ export const JoinPage = () => {
       nav={
         <AppBottomButtons
           popUp={!account ? 'You need to connect to join' : undefined}
-          left={{ label: 'back', primary: false, action: prevPage }}
+          left={{ label: t(I18Keys.back), primary: false, action: prevPage }}
           right={{
-            label: 'review',
+            label: t(I18Keys.review),
             primary: true,
             action: review,
             disabled: !account,
