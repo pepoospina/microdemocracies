@@ -1,8 +1,9 @@
 import { Box, Text } from 'grommet'
-import { Trans } from 'react-i18next'
+import { useTranslation } from 'react-i18next'
 
+import { useThemeContext } from '../../components/app'
+import { I18Keys } from '../../i18n/kyel.list'
 import { AppProject } from '../../shared/types'
-import { Bold } from '../../ui-components/Bold'
 import { StatementEditable } from '../voice/StatementEditable'
 
 export const ProjectCard = (props: {
@@ -10,11 +11,18 @@ export const ProjectCard = (props: {
   containerStyle?: React.CSSProperties
   statementStyle?: React.CSSProperties
 }) => {
+  const { constants } = useThemeContext()
+  const { t } = useTranslation()
+
   return (
     <Box style={{ position: 'relative', ...props.containerStyle }}>
       <Box style={{ position: 'absolute', left: '12px', top: '4px' }}>
-        <Text color="#919191" style={{ fontSize: '14px' }}>
-          <Trans i18nKey={'anyoneWho'} components={{ Bold: <Bold></Bold> }}></Trans>:
+        <Text
+          color={constants.colors.textOnPrimary}
+          style={{ fontSize: '14px' }}
+          weight="bold"
+        >
+          {t(I18Keys.anyoneWho)}...
         </Text>
       </Box>
       <StatementEditable

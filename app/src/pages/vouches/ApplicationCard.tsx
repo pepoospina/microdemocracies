@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import { useProjectContext } from '../../contexts/ProjectContext'
+import { I18Keys } from '../../i18n/kyel.list'
 import { RouteNames } from '../../route.names'
 import { AppApplication } from '../../shared/types'
 import { AppButton, AppCard, AppCircleButton } from '../../ui-components'
@@ -42,7 +43,7 @@ export const ApplicationCard = (props: { application?: AppApplication }): JSX.El
             style={{ textTransform: 'none', padding: '16px 24px', flexGrow: 1 }}
             onClick={() => clicked()}
           >
-            <Text>{t('pendingApplicationBy', { by: label })}</Text>
+            <Text>{t([I18Keys.pendingApplicationBy], { by: label })}</Text>
           </AppButton>
 
           <AppButton

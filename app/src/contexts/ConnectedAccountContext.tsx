@@ -36,9 +36,10 @@ export const ConnectedMemberContext = (props: ConnectedMemberContextProps) => {
     error: errorWithTokenId,
   } = useQuery({
     queryKey: ['tokenId', projectId, aaAddress],
-    queryFn: () => {
+    queryFn: async () => {
       if (projectId && aaAddress) {
-        return getTokenIdOfAddress(projectId, aaAddress)
+        const tokenId = await getTokenIdOfAddress(projectId, aaAddress)
+        return tokenId ? tokenId : null
       }
       return null
     },

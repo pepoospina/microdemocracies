@@ -2,6 +2,7 @@ import { Box, BoxExtendedProps, Spinner, Text } from 'grommet'
 import React, { CSSProperties } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { I18Keys } from '../../i18n/kyel.list'
 import { HexStr, PAP } from '../../shared/types'
 import { cap } from '../../utils/general'
 import { platforms } from '../../utils/platforms'
@@ -50,11 +51,17 @@ export const AccountPerson = (props: IAccountPerson) => {
       <Box>
         <DetailField
           boxStyle={fieldStyle}
-          field={{ label: t('firstName'), value: props.pap.person?.personal?.firstName }}
+          field={{
+            label: t([I18Keys.firstName]),
+            value: props.pap.person?.personal?.firstName,
+          }}
         ></DetailField>
         <DetailField
           boxStyle={fieldStyle}
-          field={{ label: t('lastName'), value: props.pap.person?.personal?.lastName }}
+          field={{
+            label: t([I18Keys.lastName]),
+            value: props.pap.person?.personal?.lastName,
+          }}
         ></DetailField>
         <DetailField
           boxStyle={fieldStyle}
@@ -74,7 +81,7 @@ export const AccountPerson = (props: IAccountPerson) => {
         <DetailField
           boxStyle={fieldStyle}
           field={{
-            label: t('IDNumberLong'),
+            label: t([I18Keys.IDNumberLong]),
             value: props.pap.person?.personal?.nationalID,
           }}
         ></DetailField>
@@ -93,7 +100,7 @@ export const AccountPerson = (props: IAccountPerson) => {
         })}
       </Box>
       <Box style={fieldStyle}>
-        <Text style={{ fontWeight: 'bold' }}>{cap(t('account'))}:</Text>
+        <Text style={{ fontWeight: 'bold' }}>{cap(t([I18Keys.account]))}:</Text>
         <AccountAddress
           showAccount={props.showAccount}
           account={props.pap.account as HexStr}

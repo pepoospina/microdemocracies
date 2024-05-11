@@ -6,24 +6,26 @@ import { useNavigate, useParams } from 'react-router-dom'
 
 import { useAppContainer } from '../../components/app/AppContainer'
 import { ViewportPage } from '../../components/app/Viewport'
+import { useNavigateHelpers } from '../../components/app/navigate.helpers'
 import { useMember } from '../../contexts/MemberContext'
 import { useProjectContext } from '../../contexts/ProjectContext'
+import { I18Keys } from '../../i18n/kyel.list'
 import { AbsoluteRoutes } from '../../route.names'
 import { Entity, PAP } from '../../shared/types'
 import { getEntity } from '../../utils/store'
 import { AccountPerson } from '../account/AccountPerson'
-import { AppBottomButtons } from '../common/BottomButtons'
+import { AppBottomButton, AppBottomButtons } from '../common/BottomButtons'
 import { VouchMemberWidget } from './VouchMemberWidget'
 
 export const InviteAccountPage = () => {
   const { t, i18n } = useTranslation()
-  const navigate = useNavigate()
+  const { navigate } = useNavigateHelpers()
   const { hash } = useParams()
   const { setTitle } = useAppContainer()
   const { projectId } = useProjectContext()
 
   useEffect(() => {
-    setTitle({ prefix: t('approveNew'), main: t('member') })
+    setTitle({ prefix: t([I18Keys.approveNew]), main: t([I18Keys.member]) })
   }, [i18n.language])
 
   /** convert hash into pap and send to VouchWidget */
@@ -67,7 +69,7 @@ export const InviteAccountPage = () => {
         <>
           <Box justify="center" align="center" style={{ flexShrink: '0', height: '50px' }}>
             <Text size="22px" weight="bold">
-              {t('appName')}
+              {t([I18Keys.appName])}
             </Text>
           </Box>
 
@@ -75,19 +77,13 @@ export const InviteAccountPage = () => {
         </>
       }
       nav={
-        <AppBottomButtons
-          left={{
-            action: () => navigate(-1),
-            label: t('back'),
-            icon: <FormPrevious />,
-          }}
-          right={{
-            primary: true,
-            action: () =>
-              navigate(`${AbsoluteRoutes.ProjectHome(projectId?.toString() as string)}`),
-            label: t('finish'),
-          }}
-        ></AppBottomButtons>
+        <AppBottomButton
+          onClick={() =>
+            navigate(AbsoluteRoutes.ProjectMembers((projectId as number).toString()))
+          }
+          label={t([I18Keys.backToMembers])}
+          icon={<FormPrevious />}
+        ></AppBottomButton>
       }
     ></ViewportPage>
   )

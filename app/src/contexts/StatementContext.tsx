@@ -3,6 +3,7 @@ import { t } from 'i18next'
 import { createContext, useContext, useEffect, useState } from 'react'
 
 import { countStatementBackings, getStatement } from '../firestore/getters'
+import { I18Keys } from '../i18n/kyel.list'
 import { useBackingSend } from '../pages/voice/useBackingSend'
 import { StatementRead } from '../shared/types'
 import { useConnectedMember } from './ConnectedAccountContext'
@@ -87,7 +88,7 @@ export const StatementContext = (props: IStatementContext) => {
     if (errorBacking) {
       setIsBacking(false)
       const message = errorBacking.includes('already posted')
-        ? t('alreadyBacked')
+        ? t([I18Keys.alreadyBacked])
         : errorBacking
       show({ title: 'Error', message })
     }

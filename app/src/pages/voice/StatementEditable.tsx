@@ -5,6 +5,7 @@ import ReactQuill, { Quill } from 'react-quill'
 import 'react-quill/dist/quill.bubble.css'
 
 import { useThemeContext } from '../../components/app'
+import { I18Keys } from '../../i18n/kyel.list'
 import './statements.css'
 
 export interface IStatementEditable {
@@ -91,7 +92,7 @@ export const StatementEditable = (props: IStatementEditable) => {
             size="small"
             style={{ textAlign: 'center', color: constants.colors.primaryLight }}
           >
-            {t('helpEditable')}
+            {t([I18Keys.helpEditable])}
           </Text>
         </Box>
       ) : (

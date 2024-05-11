@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 
 import { AppQRCode } from '../../components/AppQRCode'
 import { useProjectContext } from '../../contexts/ProjectContext'
+import { I18Keys } from '../../i18n/kyel.list'
 import { RouteNames } from '../../route.names'
 import { AppButton } from '../../ui-components'
 import { useCopyToClipboard } from '../../utils/copy.clipboard'
@@ -25,7 +26,7 @@ export const PAPShare = (props: IPAPShare) => {
     if (navigator.share) {
       navigator.share({
         url: link,
-        text: t('askJoin'),
+        text: t([I18Keys.askJoin]),
       })
     } else {
       copy(link)

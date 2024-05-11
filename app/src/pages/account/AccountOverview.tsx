@@ -1,6 +1,7 @@
 import { Anchor, Box, Spinner, Text } from 'grommet'
 import { useTranslation } from 'react-i18next'
 
+import { I18Keys } from '../../i18n/kyel.list'
 import { AppAccount, Entity, PAP } from '../../shared/types'
 import { AppCard } from '../../ui-components'
 import { BoxCentered } from '../../ui-components/BoxCentered'
@@ -30,7 +31,7 @@ export const AccountOverview = (props: {
       {accountRead && !accountRead.valid ? (
         <AppCard style={{ marginBottom: '36px' }}>
           <Text>
-            <b>{t('accountInvalidated')}!</b>
+            <b>{t([I18Keys.accountInvalidated])}!</b>
           </Text>
         </AppCard>
       ) : (
@@ -43,7 +44,7 @@ export const AccountOverview = (props: {
       {accountRead ? (
         <Box style={{ marginTop: '8px' }}>
           <Text style={{ fontWeight: 'bold' }}>
-            {isFounder ? cap(t('founder')) : cap(t('invitedBy'))}
+            {isFounder ? cap(t([I18Keys.founder])) : cap(t([I18Keys.invitedBy]))}
           </Text>
           {isFounder ? (
             <></>

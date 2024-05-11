@@ -11,6 +11,7 @@ import { useProjectContext } from '../../contexts/ProjectContext'
 import { useSemaphoreContext } from '../../contexts/SemaphoreContext'
 import { useToast } from '../../contexts/ToastsContext'
 import { useVouch } from '../../contexts/VouchContext'
+import { I18Keys } from '../../i18n/kyel.list'
 import { AbsoluteRoutes } from '../../route.names'
 import { Entity, PAP } from '../../shared/types'
 import { AppButton, AppCard } from '../../ui-components'
@@ -92,8 +93,8 @@ export const VouchMemberWidget = (props: { pap: Entity<PAP> }) => {
       setSending(true)
       setLoading(true)
       setExpectedLoadingTime(15000)
-      setTitleToLoading(t('approvingNewMember'))
-      setSubtitle(t('preparingData'))
+      setTitleToLoading(t([I18Keys.approvingNewMember]))
+      setSubtitle(t([I18Keys.preparingData]))
       sendVouch()
     }
   }
@@ -104,7 +105,7 @@ export const VouchMemberWidget = (props: { pap: Entity<PAP> }) => {
     if (isConnected && (!account || !account.valid)) {
       return (
         <AppCard style={{ marginBottom: '16px' }}>
-          <Text>{t('onlyMembersCanInvite')}.</Text>
+          <Text>{t([I18Keys.onlyMembersCanInvite])}.</Text>
         </AppCard>
       )
     }
@@ -121,7 +122,7 @@ export const VouchMemberWidget = (props: { pap: Entity<PAP> }) => {
     if (isConnected) {
       return (
         <AppButton
-          label="accept"
+          label={t(I18Keys.accept)}
           onClick={() => vouch()}
           disabled={!sendVouch && isConnected}
           primary
@@ -140,7 +141,7 @@ export const VouchMemberWidget = (props: { pap: Entity<PAP> }) => {
     <Box>
       <AppCard>
         <Text>
-          {t('applicationAcceptedAs')}{' '}
+          {t([I18Keys.applicationAcceptedAs])}{' '}
           <Anchor
             onClick={() => {
               if (vouchedTokenId && projectId) {
@@ -153,7 +154,7 @@ export const VouchMemberWidget = (props: { pap: Entity<PAP> }) => {
               }
             }}
           >
-            {t('member')} #{vouchedTokenId}
+            {t([I18Keys.member])} #{vouchedTokenId}
           </Anchor>
         </Text>
       </AppCard>

@@ -6,6 +6,7 @@ import { useLoadingContext } from '../../contexts/LoadingContext'
 import { useProjectContext } from '../../contexts/ProjectContext'
 import { useSemaphoreContext } from '../../contexts/SemaphoreContext'
 import { useToast } from '../../contexts/ToastsContext'
+import { I18Keys } from '../../i18n/kyel.list'
 import { AppStatementCreate } from '../../shared/types'
 import { generateReactionProof, generateStatementProof } from '../../utils/statement.utils'
 import { postStatement } from '../../utils/statements'
@@ -51,9 +52,9 @@ export const useStatementSend = (): VoiceSendContextType => {
               setStatementId(id)
             } else {
               show({
-                title: t('cannotPublishStatement'),
+                title: t([I18Keys.cannotPublishStatement]),
                 message: error.includes('already posted')
-                  ? t('cannotPublishStatementPeriod')
+                  ? t([I18Keys.cannotPublishStatementPeriod])
                   : error,
                 status: 'critical',
                 time: 5000,

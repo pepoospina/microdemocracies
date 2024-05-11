@@ -1,13 +1,16 @@
 import { Box, Button, Text } from 'grommet'
-import { Add } from 'grommet-icons'
+import { Add, AddCircle } from 'grommet-icons'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
+import { useThemeContext } from '../../components/app'
 import { AppConnectButton } from '../../components/app/AppConnectButton'
 import { useAppContainer } from '../../components/app/AppContainer'
 import { ViewportPage } from '../../components/app/Viewport'
 import { useSemaphoreContext } from '../../contexts/SemaphoreContext'
+import { I18Keys } from '../../i18n/kyel.list'
+import { AbsoluteRoutes } from '../../route.names'
 import { AppCard } from '../../ui-components'
 import { useAccountContext } from '../../wallet/AccountContext'
 import { useAccountDataContext } from '../../wallet/AccountDataContext'
@@ -16,6 +19,7 @@ import { Loading } from '../common/Loading'
 import { ProjectCard } from '../project/ProjectCard'
 
 export const AppHome = (props: {}) => {
+  const { constants } = useThemeContext()
   const { aaAddress } = useAccountContext()
   const { isConnected } = useSemaphoreContext()
   const { setTitle } = useAppContainer()
@@ -25,7 +29,7 @@ export const AppHome = (props: {}) => {
   const { t, i18n } = useTranslation()
 
   useEffect(() => {
-    setTitle({ prefix: t('your'), main: t('appName') })
+    setTitle({ prefix: t([I18Keys.your]), main: t([I18Keys.appName]) })
   }, [i18n.language])
 
   const projectClicked = (projectId: number) => {
@@ -37,7 +41,7 @@ export const AppHome = (props: {}) => {
       return (
         <Box pad="large">
           <AppCard margin={{ bottom: 'large' }}>
-            <Text>Please sign in to see your microdemocracies</Text>
+            <Text>{t(I18Keys.pleaseSignInToSee)}</Text>
           </AppCard>
           <AppConnectButton></AppConnectButton>
         </Box>
@@ -45,12 +49,13 @@ export const AppHome = (props: {}) => {
     if (!aaAddress) {
       return <Loading></Loading>
     }
-    if (projects === undefined) return <Loading label={t('loadingProjects')}></Loading>
+    if (projects === undefined)
+      return <Loading label={t([I18Keys.loadingProjects])}></Loading>
     if (projects.length === 0)
       return (
         <Box pad="medium">
           <AppCard>
-            <Text>{t('noProjects')}</Text>
+            <Text>{t([I18Keys.noProjects])}</Text>
           </AppCard>
         </Box>
       )
@@ -85,9 +90,9 @@ export const AppHome = (props: {}) => {
       content={projectsContent}
       nav={
         <AppBottomButton
-          onClick={() => navigate('/start')}
-          icon={<Add></Add>}
-          label={t('startNew')}
+          primary
+          onClick={() => navigate(AbsoluteRoutes.Start)}
+          label={t([I18Keys.startNew])}
         ></AppBottomButton>
       }
     ></ViewportPage>

@@ -7,6 +7,7 @@ import { useAppContainer } from '../../components/app/AppContainer'
 import { ViewportPage } from '../../components/app/Viewport'
 import { useNavigateHelpers } from '../../components/app/navigate.helpers'
 import { useProjectContext } from '../../contexts/ProjectContext'
+import { I18Keys } from '../../i18n/kyel.list'
 import { AppButton } from '../../ui-components'
 import { AppBottomButton } from '../common/BottomButtons'
 import { ApplicationCard } from './ApplicationCard'
@@ -19,7 +20,7 @@ export const MembersPage = (): JSX.Element => {
   const { setTitle } = useAppContainer()
 
   useEffect(() => {
-    setTitle({ prefix: t('listOf'), main: t('members') })
+    setTitle({ prefix: t([I18Keys.listOf]), main: t([I18Keys.members]) })
   }, [i18n.language])
 
   return (
@@ -30,7 +31,7 @@ export const MembersPage = (): JSX.Element => {
             margin={{ bottom: 'medium' }}
             primary
             icon={<Add />}
-            label={t('invite')}
+            label={t([I18Keys.invite])}
             onClick={() => navigate('../invite')}
           ></AppButton>
 
@@ -54,7 +55,7 @@ export const MembersPage = (): JSX.Element => {
       nav={
         <AppBottomButton
           icon={<FormPrevious />}
-          label={t('projectHome')}
+          label={t([I18Keys.projectHome])}
           onClick={() => backToProject(projectId)}
         ></AppBottomButton>
       }

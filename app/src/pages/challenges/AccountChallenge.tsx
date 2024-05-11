@@ -6,6 +6,7 @@ import { AppConnectButton, AppConnectWidget } from '../../components/app/AppConn
 import { useChallengeRead } from '../../contexts/ChallengeContextRead'
 import { useChallengeWrite } from '../../contexts/ChallengeContextWrite'
 import { useConnectedMember } from '../../contexts/ConnectedAccountContext'
+import { I18Keys } from '../../i18n/kyel.list'
 import { AppAccount } from '../../shared/types'
 import { AppButton, AppCard, AppHeading, AppRemainingTime } from '../../ui-components'
 import { BoxCentered } from '../../ui-components/BoxCentered'
@@ -106,7 +107,7 @@ export const AccountChallenge = (props: IAccountChallenge) => {
     ) : (
       <Box style={{ flexShrink: 0 }}>
         <Box direction="row" align="center" justify="between">
-          <Text>Account challenged! </Text>
+          <Text>{t(I18Keys.accountChallenged)}</Text>
           {duration ? (
             <>
               <AppRemainingTime
@@ -122,12 +123,14 @@ export const AccountChallenge = (props: IAccountChallenge) => {
 
         <Box direction="row" align="center" justify="between">
           <Text>
-            {nVoted !== undefined ? t('votedNofMEligible', { nVoted, totalVoters }) : ''}
+            {nVoted !== undefined
+              ? t([I18Keys.votedNofMEligible], { nVoted, totalVoters })
+              : ''}
           </Text>
         </Box>
 
         <Box>
-          <ProgressBar label="voted to remove" ratio={ratio}></ProgressBar>
+          <ProgressBar label={t(I18Keys.votedToRemove)} ratio={ratio}></ProgressBar>
         </Box>
       </Box>
     )
@@ -140,7 +143,7 @@ export const AccountChallenge = (props: IAccountChallenge) => {
     if (!isConnected) {
       return (
         <AppConnectButton
-          label="Connect and vote"
+          label={t(I18Keys.connectAndVote)}
           style={{ margin: '16px 0 8px 0' }}
         ></AppConnectButton>
       )
@@ -159,7 +162,7 @@ export const AccountChallenge = (props: IAccountChallenge) => {
       return (
         <Box style={{ marginTop: '16px' }}>
           <Text>
-            {t('member')} #{tokenId} can't vote
+            {t([I18Keys.member])} #{tokenId} can't vote
           </Text>
         </Box>
       )
@@ -169,7 +172,7 @@ export const AccountChallenge = (props: IAccountChallenge) => {
 
     return sendVote ? (
       <Box style={{ marginTop: '16px' }}>
-        <AppHeading level="3">Vote now:</AppHeading>
+        <AppHeading level="3">{t(I18Keys.voteNow)}:</AppHeading>
         {!alreadyVoted ? (
           isSending ? (
             <WaitingTransaction></WaitingTransaction>
@@ -189,7 +192,7 @@ export const AccountChallenge = (props: IAccountChallenge) => {
           )
         ) : (
           <Box direction="row" style={{ margin: '8px 0' }} gap="16px">
-            <Text>You already voted</Text>
+            <Text>{t(I18Keys.alreadyVoted)}You already voted</Text>
           </Box>
         )}
       </Box>
@@ -210,7 +213,10 @@ export const AccountChallenge = (props: IAccountChallenge) => {
   const notChallengedContent = (
     <Box>
       <Text>
-        {accountRead?.valid ? t('accountValidatedNotChallenged') : t('accountInvalidated')}.
+        {accountRead?.valid
+          ? t([I18Keys.accountValidatedNotChallenged])
+          : t([I18Keys.accountInvalidated])}
+        .
       </Text>
       {error ? (
         <AppCard style={{ marginBottom: '16px', overflow: 'hidden' }}>
@@ -226,10 +232,13 @@ export const AccountChallenge = (props: IAccountChallenge) => {
           isSending ? (
             <WaitingTransaction></WaitingTransaction>
           ) : (
-            <AppButton label={t('challenge')} onClick={() => challenge()}></AppButton>
+            <AppButton
+              label={t([I18Keys.challenge])}
+              onClick={() => challenge()}
+            ></AppButton>
           )
         ) : (
-          <Text>{t('cantChallenge')}.</Text>
+          <Text>{t([I18Keys.cantChallenge])}.</Text>
         )}
       </Box>
     </Box>
@@ -251,7 +260,7 @@ export const AccountChallenge = (props: IAccountChallenge) => {
   return (
     <Box style={{ ...props.cardStyle, flexShrink: 0 }}>
       <>
-        <AppHeading level="3">Account Status</AppHeading>
+        <AppHeading level="3">{t(I18Keys.accountStatus)}</AppHeading>
         <Box pad={{ vertical: 'small' }}>{content}</Box>
       </>
     </Box>

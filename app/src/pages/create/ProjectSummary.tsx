@@ -1,6 +1,7 @@
 import { Box, Text } from 'grommet'
 import { useTranslation } from 'react-i18next'
 
+import { I18Keys } from '../../i18n/kyel.list'
 import { PAP, SelectedDetails } from '../../shared/types'
 import { AppCard, AppHeading } from '../../ui-components'
 import { AccountPerson } from '../account/AccountPerson'
@@ -28,7 +29,7 @@ export const ProjectSummary = (props: {
                 flexShrink: 0,
               }}
             >
-              <AppHeading level="3">{t('canJoin')}:</AppHeading>
+              <AppHeading level="3">{t([I18Keys.canJoin])}:</AppHeading>
             </Box>
             <Box>
               <StatementEditable value={props.whoStatement}></StatementEditable>
@@ -37,7 +38,7 @@ export const ProjectSummary = (props: {
         ) : (
           <>
             <AppCard>
-              <Text>{t('notWhoGiven')}.</Text>
+              <Text>{t([I18Keys.notWhoGiven])}.</Text>
             </AppCard>
           </>
         )}
@@ -45,13 +46,13 @@ export const ProjectSummary = (props: {
 
       <Box style={{ marginTop: '36px', flexShrink: 0 }}>
         <AppHeading level="3" style={{ marginBottom: '12px' }}>
-          {t('toJoinMsg2')}:
+          {t([I18Keys.toJoinMsg2])}:
         </AppHeading>
         <DetailsSelectedSummary selected={props.selectedDetails}></DetailsSelectedSummary>
       </Box>
 
       <Box style={{ marginTop: '36px', flexShrink: 0 }}>
-        <AppHeading level="3">{t('yourDetails')}:</AppHeading>
+        <AppHeading level="3">{t([I18Keys.yourDetails])}:</AppHeading>
         <AccountPerson
           cardStyle={{ margin: '16px 0px 32px 0px' }}
           pap={props.founderPap}

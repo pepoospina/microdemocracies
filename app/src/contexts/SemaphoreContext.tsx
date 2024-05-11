@@ -3,6 +3,7 @@ import { PropsWithChildren, createContext, useContext, useEffect, useState } fro
 import { useTranslation } from 'react-i18next'
 
 import { getPublicIdentity } from '../firestore/getters'
+import { I18Keys } from '../i18n/kyel.list'
 import { AppPublicIdentity, HexStr } from '../shared/types'
 import { getControlMessage } from '../shared/utils/identity.utils'
 import { postIdentity } from '../utils/statements'
@@ -95,7 +96,7 @@ export const SemaphoreContext = (props: PropsWithChildren) => {
         if (!aaAddress) return
         if (!signMessage) return
 
-        setSubtitle(t('waitingIdentitySignature'))
+        setSubtitle(t([I18Keys.waitingIdentitySignature]))
 
         if (DEBUG) console.log('creating publicId', { address, aaAddress })
 
@@ -103,7 +104,7 @@ export const SemaphoreContext = (props: PropsWithChildren) => {
 
         const secret = await signMessage('Prepare anonymous identity')
 
-        setSubtitle(t('preparingIdentity'))
+        setSubtitle(t([I18Keys.preparingIdentity]))
         if (DEBUG) console.log('setIdentity - secret', { secret })
 
         const _identity = new Identity(secret)
@@ -120,7 +121,7 @@ export const SemaphoreContext = (props: PropsWithChildren) => {
 
         // if not found, store the identity
         if (identity === undefined) {
-          setSubtitle(t('waitingIdentityOwnership'))
+          setSubtitle(t([I18Keys.waitingIdentityOwnership]))
 
           const signature = await signMessage(getControlMessage(_publicId))
           const details: AppPublicIdentity = {

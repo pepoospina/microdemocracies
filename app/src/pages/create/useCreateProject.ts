@@ -8,6 +8,7 @@ import { PENDING_PERIOD, QUIET_ENDING_PERIOD, VOTING_PERIOD } from '../../config
 import { useLoadingContext } from '../../contexts/LoadingContext'
 import { useToast } from '../../contexts/ToastsContext'
 import { registryABI, registryFactoryABI } from '../../contracts/abis'
+import { I18Keys } from '../../i18n/kyel.list'
 import { DetailsAndPlatforms, HexStr, PAP, SelectedDetails } from '../../shared/types'
 import { getFactoryAddress } from '../../utils/contracts.json'
 import { postMember, postProject } from '../../utils/project'
@@ -110,7 +111,11 @@ export const useCreateProject = (): CreateProjectStatus => {
         },
       ])
     } catch (e: any) {
-      show({ title: t('errorCreatingProject'), message: e.message, status: 'critical' })
+      show({
+        title: t([I18Keys.errorCreatingProject]),
+        message: e.message,
+        status: 'critical',
+      })
       close()
 
       setIsCreating(false)
@@ -136,7 +141,7 @@ export const useCreateProject = (): CreateProjectStatus => {
 
       if (!selectedDetails) throw new Error('selectedDetails undefined')
 
-      setSubtitle(t('registeringProject'))
+      setSubtitle(t([I18Keys.registeringProject]))
 
       /** sign the "what" of the project */
       await postProject({

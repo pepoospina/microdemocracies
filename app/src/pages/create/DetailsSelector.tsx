@@ -4,6 +4,7 @@ import { t } from 'i18next'
 import { useEffect, useState } from 'react'
 
 import { useResponsive, useThemeContext } from '../../components/app'
+import { I18Keys } from '../../i18n/kyel.list'
 import { PlatformId, SelectedDetails } from '../../shared/types'
 import { AppButton, AppHeading } from '../../ui-components'
 import { cap } from '../../utils/general'
@@ -65,8 +66,8 @@ export const DetailsSelector = (props: {
     [],
   )
   const platformsSelectedText = platformsSelected.length
-    ? platformsSelected.join(` ${t('and')} `)
-    : t('social')
+    ? platformsSelected.join(` ${t([I18Keys.and])} `)
+    : t([I18Keys.social])
 
   useEffect(() => {
     if (props.onChanged) {
@@ -104,19 +105,19 @@ export const DetailsSelector = (props: {
     setShowSelectPlatform(false)
   }
 
-  const idNumberStr = mobile ? t('IDNumber') : t('IDNumberLong')
+  const idNumberStr = mobile ? t([I18Keys.IDNumber]) : t([I18Keys.IDNumberLong])
 
   return (
     <>
       <Box style={{ marginBottom: '12px', fontSize: '10px', fontWeight: '300' }}>
-        <Text style={{ margin: '12px 0px 0px 0px' }}>{t('selectMsgOpts')}.</Text>
+        <Text style={{ margin: '12px 0px 0px 0px' }}>{t([I18Keys.selectMsgOpts])}.</Text>
       </Box>
 
       <Box direction="row" align="center" style={{ marginBottom: '12px' }}>
         <Box style={{ flexGrow: 1 }}>
           <AppButton
             primary={nameAndLastname}
-            label={t('nameAndLastName')}
+            label={t([I18Keys.nameAndLastName])}
             onClick={() => select(Options.NameAndLastame)}
           ></AppButton>
         </Box>
@@ -133,7 +134,7 @@ export const DetailsSelector = (props: {
         <Box style={{ flexGrow: 1 }}>
           <AppButton
             primary={platformSelected}
-            label={showSelectPlatform ? t('hideList') : `${platformsSelectedText}`}
+            label={showSelectPlatform ? t([I18Keys.hideList]) : `${platformsSelectedText}`}
             onClick={() => setShowSelectPlatform(!showSelectPlatform)}
           ></AppButton>
         </Box>
@@ -151,7 +152,7 @@ export const DetailsSelector = (props: {
             <Box
               style={{ margin: '22px 0px 8px 0px', fontSize: '10px', fontWeight: '300' }}
             >
-              <Text>{t('choosePlatformsMsg')}.</Text>
+              <Text>{t([I18Keys.choosePlatformsMsg])}.</Text>
             </Box>
             <Box style={{ marginBottom: '32px' }}>
               {Object.keys(platforms).map((platformID) => {

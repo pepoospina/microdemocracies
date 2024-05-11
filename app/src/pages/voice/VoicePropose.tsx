@@ -14,6 +14,7 @@ import { useProjectContext } from '../../contexts/ProjectContext'
 import { useSemaphoreContext } from '../../contexts/SemaphoreContext'
 import { useToast } from '../../contexts/ToastsContext'
 import { i18n } from '../../i18n/i18n'
+import { I18Keys } from '../../i18n/kyel.list'
 import { RouteNames } from '../../route.names'
 import { AppButton, AppCard, AppHeading } from '../../ui-components'
 import { BoxCentered } from '../../ui-components/BoxCentered'
@@ -43,14 +44,14 @@ export const VoicePropose = (): JSX.Element => {
   const { open, close } = useLoadingContext()
 
   useEffect(() => {
-    setTitle({ prefix: cap(t('proposeNew')), main: t('statement') })
+    setTitle({ prefix: cap(t([I18Keys.proposeNew])), main: t([I18Keys.statement]) })
   }, [i18n.language])
 
   const [input, setInput] = useState<string>()
 
   const _proposeStatement = async (input: string) => {
     if (proposeStatement) {
-      open({ title: t('sendingProposal'), subtitle: t('preparingData') })
+      open({ title: t([I18Keys.sendingProposal]), subtitle: t([I18Keys.preparingData]) })
       setIsProposing(true)
 
       proposeStatement(input)
@@ -62,7 +63,7 @@ export const VoicePropose = (): JSX.Element => {
           setIsProposing(false)
           close()
           show({
-            title: t('errorGeneratingProof'),
+            title: t([I18Keys.errorGeneratingProof]),
             message: e.message,
             status: 'critical',
           })
@@ -88,13 +89,13 @@ export const VoicePropose = (): JSX.Element => {
       return (
         <BoxCentered pad={{ horizontal: 'medium' }}>
           <AppCard margin={{ vertical: 'medium' }}>
-            <Text>{t('atLeastNMembers', { nMembers: MIN_MEMBERS })}.</Text>
+            <Text>{t([I18Keys.atLeastNMembers], { nMembers: MIN_MEMBERS })}.</Text>
           </AppCard>
           <AppButton
             margin={{ bottom: 'medium' }}
             primary
             icon={<Add />}
-            label={t('invite')}
+            label={t([I18Keys.invite])}
             onClick={() => navigate('../../invite')}
           ></AppButton>
         </BoxCentered>
@@ -110,34 +111,36 @@ export const VoicePropose = (): JSX.Element => {
                 onChanged={(value?: string) => {
                   if (value) setInput(value)
                 }}
-                placeholder={`${t('newStatement')}...`}
+                placeholder={`${t([I18Keys.newStatement])}...`}
               ></StatementEditable>
             </Box>
 
             <AppHeading level="3" style={{ textAlign: 'center' }}>
-              {t('important')}
+              {t([I18Keys.important])}
             </AppHeading>
 
             <AppCard pad="small" margin={{ vertical: 'medium' }}>
               <BulletList
                 elements={[
-                  <Text>{t('canBackN', { nMembers })}.</Text>,
-                  <Text>{t('aStatementNeeds', { nLikes: MIN_LIKES_PUBLIC - 1 })}.</Text>,
-                  <Text>{t('maxStatementsPerPeriod')}.</Text>,
+                  <Text>{t([I18Keys.canBackN], { nMembers })}.</Text>,
+                  <Text>
+                    {t([I18Keys.aStatementNeeds], { nLikes: MIN_LIKES_PUBLIC - 1 })}.
+                  </Text>,
+                  <Text>{t([I18Keys.maxStatementsPerPeriod])}.</Text>,
                 ]}
               ></BulletList>
             </AppCard>
 
             <Box justify="center" style={{ margin: '36px 0', width: '100%' }}>
               {!isConnected ? (
-                <AppConnectButton label={t('connectToPropose')}></AppConnectButton>
+                <AppConnectButton label={t([I18Keys.connectToPropose])}></AppConnectButton>
               ) : (
                 <></>
               )}
             </Box>
           </>
         ) : (
-          <AppCard>{t('statementProposed')}!</AppCard>
+          <AppCard>{t([I18Keys.statementProposed])}!</AppCard>
         )}
       </Box>
     )
@@ -149,12 +152,12 @@ export const VoicePropose = (): JSX.Element => {
       nav={
         <AppBottomButtons
           left={{
-            label: t('project'),
+            label: t([I18Keys.project]),
             icon: <FormPrevious></FormPrevious>,
             action: () => backToProject(projectId),
           }}
           right={{
-            label: t('propose'),
+            label: t([I18Keys.propose]),
             icon: <Add></Add>,
             action: () => {
               if (input) _proposeStatement(input)

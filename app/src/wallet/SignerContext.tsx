@@ -1,4 +1,4 @@
-import { useWeb3Modal } from '@web3modal/wagmi/react'
+import { useWeb3Modal, useWeb3ModalEvents } from '@web3modal/wagmi/react'
 import { use } from 'i18next'
 import {
   PropsWithChildren,
@@ -14,6 +14,7 @@ import { WalletClient } from 'viem'
 import { useDisconnect, useWalletClient } from 'wagmi'
 
 import { useLoadingContext } from '../contexts/LoadingContext'
+import { I18Keys } from '../i18n/kyel.list'
 import { HexStr } from '../shared/types'
 import { cap } from '../utils/general'
 import { createMagicSigner, magic } from './magic.signer'
@@ -35,8 +36,9 @@ const HAD_MAGIC_KEY = 'hadMagic'
 
 export const SignerContext = (props: PropsWithChildren) => {
   const { t } = useTranslation()
-  const { setLoading, setTitle, setSubtitle, setUserCanClose } = useLoadingContext()
+  const { open: openLoading, close: closeLoading } = useLoadingContext()
   const { open: openConnectModal } = useWeb3Modal()
+  const modalEvents = useWeb3ModalEvents()
 
   const [address, setAddress] = useState<HexStr>()
   const [magicSigner, setMagicSigner] = useState<WalletClient>()
@@ -58,17 +60,17 @@ export const SignerContext = (props: PropsWithChildren) => {
 
     /** try to restate magic*/
     if (hadMagic !== null && hadMagic === 'true') {
-      setLoading(true)
-      setUserCanClose(false)
-      setTitle(cap(t('loadingProfile')))
-      setSubtitle(t('justAMoment'))
+      openLoading({
+        title: t([I18Keys.loadingProfile]),
+        subtitle: t([I18Keys.justAMoment]),
+      })
 
       magic.user.isLoggedIn().then((res) => {
         if (res && !magicSigner) {
           console.log('Autoconnecting Magic')
           connectMagic()
         } else {
-          setLoading(false)
+          closeLoading()
         }
       })
     }
@@ -106,13 +108,20 @@ export const SignerContext = (props: PropsWithChildren) => {
     openConnectModal()
   }
 
+  useEffect(() => {
+    console.log(modalEvents.data.event)
+    if (modalEvents.data.event === 'MODAL_CLOSE') {
+      closeLoading()
+    }
+  }, [modalEvents])
+
   const hasInjected = (window as any).ethereum !== undefined
 
   const connect = () => {
-    setLoading(true)
-    setUserCanClose(false)
-    setTitle(t('connectingUser'))
-    setSubtitle(t('connectWallet'))
+    openLoading({
+      title: t([I18Keys.connectingUser]),
+      subtitle: t([I18Keys.connectWallet]),
+    })
 
     try {
       if (hasInjected) {

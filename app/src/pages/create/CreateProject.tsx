@@ -9,6 +9,7 @@ import { useAppContainer } from '../../components/app/AppContainer'
 import { ViewportPage } from '../../components/app/Viewport'
 import { useLoadingContext } from '../../contexts/LoadingContext'
 import { useToast } from '../../contexts/ToastsContext'
+import { I18Keys } from '../../i18n/kyel.list'
 import { AbsoluteRoutes } from '../../route.names'
 import { AppCard, AppHeading } from '../../ui-components'
 import { Bold } from '../../ui-components/Bold'
@@ -60,13 +61,17 @@ export const CreateProject = () => {
   }, [navigate, projectId])
 
   useEffect(() => {
-    setTitle({ prefix: t('startA'), main: t('project') })
+    setTitle({ prefix: t([I18Keys.startA]), main: t([I18Keys.project]) })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [setTitle, i18n.language])
 
   useEffect(() => {
     if (error) {
-      show({ title: t('errorCreatingProject'), message: error.message, status: 'critical' })
+      show({
+        title: t([I18Keys.errorCreatingProject]),
+        message: error.message,
+        status: 'critical',
+      })
     }
   }, [error])
 
@@ -87,8 +92,8 @@ export const CreateProject = () => {
     if (pageIx === NPAGES - 1) {
       /** Loading modal shown */
       setLoading(true)
-      setTitleToLoading(t('creatingProject'))
-      setSubtitle(t('preparingData'))
+      setTitleToLoading(t([I18Keys.creatingProject]))
+      setSubtitle(t([I18Keys.preparingData]))
       setExpectedLoadingTime(17000)
       createProject()
     }
@@ -108,22 +113,22 @@ export const CreateProject = () => {
   }
 
   const prevStr = (() => {
-    if (pageIx === 0) return t('back')
-    return t('prev')
+    if (pageIx === 0) return t([I18Keys.back])
+    return t([I18Keys.prev])
   })()
 
   const nextStr = (() => {
-    if (pageIx === 1) return t('next')
+    if (pageIx === 1) return t([I18Keys.next])
     if (pageIx === 2) {
       if (aaAddress) {
-        return t('review')
+        return t([I18Keys.review])
       } else {
-        return t('next')
+        return t([I18Keys.next])
       }
     }
-    if (pageIx === 3) return t('review')
-    if (pageIx === 4) return t('create')
-    return t('next')
+    if (pageIx === 3) return t([I18Keys.review])
+    if (pageIx === 4) return t([I18Keys.create])
+    return t([I18Keys.next])
   })()
 
   const nextPrimary = (() => {
@@ -141,7 +146,7 @@ export const CreateProject = () => {
   if (isCreating) {
     return (
       <BoxCentered fill>
-        <Text>{t('creatingProject')}</Text>
+        <Text>{t([I18Keys.creatingProject])}</Text>
         <Spinner></Spinner>
       </BoxCentered>
     )
@@ -152,12 +157,12 @@ export const CreateProject = () => {
       <Box pad={{ vertical: 'large' }} style={{ flexShrink: 0 }}>
         <AppCard>
           <Text>
-            <Trans i18nKey={'tryoutMsg'} components={{ Bold: <Bold></Bold> }}></Trans>
+            <Trans i18nKey={I18Keys.tryoutMsg} components={{ Bold: <Bold></Bold> }}></Trans>
           </Text>
         </AppCard>
       </Box>
       <AppHeading level="3" style={{ marginBottom: '24px' }}>
-        {t('whoTitle')}
+        {t([I18Keys.whoTitle])}
       </AppHeading>
       <Box>
         <StatementEditable
@@ -165,24 +170,24 @@ export const CreateProject = () => {
             if (value) setWhoStatement(value)
           }}
           editable
-          placeholder={`${t('wantsTo')}...`}
+          placeholder={`${t([I18Keys.wantsTo])}...`}
         ></StatementEditable>
       </Box>
       <Text style={{ margin: '12px 0px 0px 0px' }}>
-        <Trans i18nKey="examplesWho" components={{ Bold: <Bold></Bold> }}></Trans>
+        <Trans i18nKey={I18Keys.examplesWho} components={{ Bold: <Bold></Bold> }}></Trans>
       </Text>
     </Box>,
 
     <Box style={boxStyle} pad="large">
       <AppHeading level="3" style={{ marginBottom: '18px' }}>
-        {t('toJoinMsg')}
+        {t([I18Keys.toJoinMsg])}
       </AppHeading>
       <DetailsSelector onChanged={(details) => setDetails(details)}></DetailsSelector>
     </Box>,
 
     <Box style={boxStyle} pad="large">
       <AppHeading level="3" style={{ marginBottom: '18px' }}>
-        {t('yourDetails')}
+        {t([I18Keys.yourDetails])}
       </AppHeading>
       <DetailsForm
         selected={selectedDetails}
@@ -196,7 +201,7 @@ export const CreateProject = () => {
 
     <Box style={boxStyle} pad="large">
       <AppHeading level="3" style={{ marginBottom: '18px' }}>
-        {t('projectSummary')}
+        {t([I18Keys.projectSummary])}
       </AppHeading>
       <ProjectSummary
         selectedDetails={selectedDetails}

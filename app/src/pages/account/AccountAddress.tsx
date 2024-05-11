@@ -5,6 +5,7 @@ import { useReadContract } from 'wagmi'
 
 import { CHAIN_ID } from '../../config/appConfig'
 import { getAccountOwner } from '../../firestore/getters'
+import { I18Keys } from '../../i18n/kyel.list'
 import { HexStr } from '../../shared/types'
 import { Address } from '../../ui-components'
 import { LoadingDiv } from '../../ui-components/LoadingDiv'
@@ -39,7 +40,7 @@ export const AccountAddress = (props: { account?: HexStr; showAccount?: boolean 
     if (owner) {
       return (
         <Box direction="row">
-          <Text style={{ marginRight: '4px' }}>{t('ownedBy')}</Text>
+          <Text style={{ marginRight: '4px' }}>{t([I18Keys.ownedBy])}</Text>
           <Address digits={4} address={owner} chainId={CHAIN_ID}></Address>
         </Box>
       )
