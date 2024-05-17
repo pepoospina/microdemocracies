@@ -5155,38 +5155,38 @@
     "@noble/hashes" "~1.3.2"
     "@scure/base" "~1.1.4"
 
-"@semaphore-protocol/group@^4.0.0-beta.8":
-  version "4.0.0-beta.8"
-  resolved "https://registry.yarnpkg.com/@semaphore-protocol/group/-/group-4.0.0-beta.8.tgz#9908c3537164f8563daa1f532eb6e8cfc37dd378"
-  integrity sha512-wm6THV/fbFM/0Lf2BYGyAH92VgiKFhzZqkuY82aQET/CZKgIdumFVUmpbM09tlBtOrvjwbP2HoY1Bf4fjJTFPA==
+"@semaphore-protocol/group@4.0.0-beta.10":
+  version "4.0.0-beta.10"
+  resolved "https://registry.yarnpkg.com/@semaphore-protocol/group/-/group-4.0.0-beta.10.tgz#61eef57d531dfde4f78dca63c78c78cdbcaca62f"
+  integrity sha512-5Qa5I7pXRAuWA+ixqFhlVZzPzTUcT7Pe7fIE3jTfPSvpW0+2QFmYf0dSO0d/Fb/P0dr27TDIL+LZqDFHI1c4mw==
   dependencies:
-    "@zk-kit/imt" "2.0.0-beta.2"
-    "@zk-kit/utils" "1.0.0-beta"
+    "@zk-kit/imt" "2.0.0-beta.4"
+    "@zk-kit/utils" "1.0.0-beta.4"
 
-"@semaphore-protocol/identity@^4.0.0-beta.8":
-  version "4.0.0-beta.8"
-  resolved "https://registry.yarnpkg.com/@semaphore-protocol/identity/-/identity-4.0.0-beta.8.tgz#882b16edcd7af6aefe6c005ec9d4c522f7779590"
-  integrity sha512-ToVvhMPGEkagJdyRVFMdWa8fgy95gX9M63dISSwRnWFQQYybSe1NyRHqkxOLwny7Df8BcNzEDgdMgamzIxfEvA==
+"@semaphore-protocol/identity@4.0.0-beta.10":
+  version "4.0.0-beta.10"
+  resolved "https://registry.yarnpkg.com/@semaphore-protocol/identity/-/identity-4.0.0-beta.10.tgz#20ab42ad513fd9ad122dfbf5c65318756ef8ad27"
+  integrity sha512-xCLRgtmvZOOd8236XdPmT6V3onioi/f7T7DXre4Tv/bGlT2mWvD4QHZG0dRSWU95MYecCYm1mz6wagOr2VIzqw==
   dependencies:
-    "@zk-kit/baby-jubjub" "0.3.0"
-    "@zk-kit/eddsa-poseidon" "0.10.0"
-    "@zk-kit/utils" "0.8.1"
+    "@zk-kit/baby-jubjub" "1.0.0"
+    "@zk-kit/eddsa-poseidon" "1.0.0"
+    "@zk-kit/utils" "1.0.0-beta.4"
     poseidon-lite "0.2.0"
 
-"@semaphore-protocol/proof@^4.0.0-beta.8":
-  version "4.0.0-beta.8"
-  resolved "https://registry.yarnpkg.com/@semaphore-protocol/proof/-/proof-4.0.0-beta.8.tgz#ba96f8946a304d1308af42ec865d745ffd86bad9"
-  integrity sha512-FzPxprWUGRg9ClI6jJMSXLfNkWgLhnm3tyNppmjVW2DNizVb3EXLzhisdb29/9TLTqbGtTDt4VnQoIyhq184uQ==
+"@semaphore-protocol/proof@4.0.0-beta.10":
+  version "4.0.0-beta.10"
+  resolved "https://registry.yarnpkg.com/@semaphore-protocol/proof/-/proof-4.0.0-beta.10.tgz#4f8ed73e62814e08ac81e384ec1b644f193c885f"
+  integrity sha512-kuuqrdE8Ct+pwrODfY6jAocKcEgwTaB6MMbr1kE2+HyhZ2iU/G57/wuaxC1IO7p6tTLdFVWjusDENQugeYmHtQ==
   dependencies:
-    "@semaphore-protocol/utils" "4.0.0-beta.8"
+    "@semaphore-protocol/utils" "4.0.0-beta.10"
     "@zk-kit/utils" "1.0.0-beta.4"
     ethers "6.10.0"
     snarkjs "0.7.4"
 
-"@semaphore-protocol/utils@4.0.0-beta.8":
-  version "4.0.0-beta.8"
-  resolved "https://registry.yarnpkg.com/@semaphore-protocol/utils/-/utils-4.0.0-beta.8.tgz#63db9bdcc77a9860eb63bc5ac4831210b5d1ac6d"
-  integrity sha512-NpzgT16UnOdrJMSLSJcubN9a8aAoPjsg0lMDX7q6l/BCbJLMCfYZnrDyvv0ajOSVwMpStPns4e2kzIRF/ZuT5Q==
+"@semaphore-protocol/utils@4.0.0-beta.10":
+  version "4.0.0-beta.10"
+  resolved "https://registry.yarnpkg.com/@semaphore-protocol/utils/-/utils-4.0.0-beta.10.tgz#96eca08e9329cbb3a8a979f941da59d1140d1474"
+  integrity sha512-9BaQnR3zMx8fs/61tA1DCdjAyZGAF/v+ALbF67YertH28r6qSzw9phWPDlA5CcpewKAW95zI8L1NLjn5K4DHkg==
   dependencies:
     ethers "^6.11.1"
 
@@ -7709,40 +7709,33 @@
   dependencies:
     "@zxing/library" "^0.20.0"
 
-"@zk-kit/baby-jubjub@0.3.0":
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/@zk-kit/baby-jubjub/-/baby-jubjub-0.3.0.tgz#78b8d3226670dd02dc8ced713aec64d6bb2a6e62"
-  integrity sha512-mA3/M/+4C2vDtc0SpXf/q/nsvwBh+s42ou176sgDzqIBQD/u/N+LaLGorDh+X5AD3dVMHb8rheFpnnrJmjsqdA==
+"@zk-kit/baby-jubjub@1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@zk-kit/baby-jubjub/-/baby-jubjub-1.0.0.tgz#2dc20d21774841f6a4a77e15ce6bde03bdf0ee2b"
+  integrity sha512-cPXeMEB9zC8NZTrcLfSQqmUbxW28WjerZnnBZLamfjJOPu0LYZL+I+i7QD6Vh3kfsDnYqfyYWdouNhshS4WMQA==
   dependencies:
-    "@zk-kit/utils" "0.6.0"
+    "@zk-kit/utils" "1.0.0-beta.4"
 
-"@zk-kit/eddsa-poseidon@0.10.0":
-  version "0.10.0"
-  resolved "https://registry.yarnpkg.com/@zk-kit/eddsa-poseidon/-/eddsa-poseidon-0.10.0.tgz#3911ec364d9a286e9eca0d45a31c42db2e33f3f0"
-  integrity sha512-vfHupJeoj0YojulF+SUbeOD6MOamWV6uU/HVFwB7sJNA0N7gnzcjaN1aC5OYr0+5PHui/SYebzKA0LNCL+7M9g==
+"@zk-kit/baby-jubjub@1.0.0-beta":
+  version "1.0.0-beta"
+  resolved "https://registry.yarnpkg.com/@zk-kit/baby-jubjub/-/baby-jubjub-1.0.0-beta.tgz#35781f5607d28113582cc218c33dee4cc78b9ac5"
+  integrity sha512-frJtw6XCObIhsZrJ3cWMzGt426U0++OIW7rUwAJ2dHL6wkELiehVTyBSsiPQZzT6A8XZYqsgleLvwGrf2UE0KA==
   dependencies:
-    "@zk-kit/baby-jubjub" "0.3.0"
-    "@zk-kit/utils" "0.8.1"
+    "@zk-kit/utils" "1.0.0-beta"
+
+"@zk-kit/eddsa-poseidon@1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@zk-kit/eddsa-poseidon/-/eddsa-poseidon-1.0.0.tgz#b3352146812c3ccd5f86ec9eff81ccf14ca23117"
+  integrity sha512-TkT4JMVC4d0PQZLk1NABiyd0ONZOWm1zyw2VHLL6lb2henZA2W0xriyOK954J4VqP5xfTgUZBPe5n4HqoZ4GnQ==
+  dependencies:
+    "@zk-kit/baby-jubjub" "1.0.0-beta"
+    "@zk-kit/utils" "1.0.0-beta.4"
     buffer "6.0.3"
 
-"@zk-kit/imt@2.0.0-beta.2":
-  version "2.0.0-beta.2"
-  resolved "https://registry.yarnpkg.com/@zk-kit/imt/-/imt-2.0.0-beta.2.tgz#6d95ff186cda57acfddce007d1ef3beea56d1da1"
-  integrity sha512-pTzGNW7SWNASwXGMOxvgNtlweX0Gak9IT5Bb4Xff7kJgQG1/CQy2GPwK74T+vCcpElJ3xQHgX+XJUyj7TeJRMg==
-
-"@zk-kit/utils@0.6.0":
-  version "0.6.0"
-  resolved "https://registry.yarnpkg.com/@zk-kit/utils/-/utils-0.6.0.tgz#30124e98df8e29f7af31e19ce4dc6302f178c0a4"
-  integrity sha512-sUF1yVjlGmm7/NIN/+d+N8WOcI77bTzgV5+vZmp/S7lXcy4fmO+5TdHERRsDbs8Ep8K33EOC6V+U+JXzmjSe5A==
-  dependencies:
-    buffer "^6.0.3"
-
-"@zk-kit/utils@0.8.1":
-  version "0.8.1"
-  resolved "https://registry.yarnpkg.com/@zk-kit/utils/-/utils-0.8.1.tgz#9d358542e6b223dde35f32f3e161d1d3a41b0644"
-  integrity sha512-m5cvnYo5IBZQCO8H5X0Mw3rGRGEoSqlYXVVF1+4M9IT3olDWcJHLPRqtYGF9zNf+vXV/21srpZ0hX3X2Lzp1TQ==
-  dependencies:
-    buffer "^6.0.3"
+"@zk-kit/imt@2.0.0-beta.4":
+  version "2.0.0-beta.4"
+  resolved "https://registry.yarnpkg.com/@zk-kit/imt/-/imt-2.0.0-beta.4.tgz#35bc4e3dfac7fa78d7b82f4227d6ed59b8e85222"
+  integrity sha512-JIPH8s/cjxDqfkKIZK7JFtynxU2CDSdIrrVb4/QHqO1a4pELLuaGdpRvLvQPgvNpUg9yP3DaFXwicWxBSXkA1A==
 
 "@zk-kit/utils@1.0.0-beta":
   version "1.0.0-beta"
