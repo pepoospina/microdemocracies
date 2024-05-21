@@ -65,12 +65,19 @@ export const SignerContext = (props: PropsWithChildren) => {
         subtitle: t([I18Keys.justAMoment]),
       })
 
-      magic.user.isLoggedIn().then((res) => {
+      magic.user.isLoggedIn().then((res: any) => {
+        console.log('Magic is logged in', { res })
         if (res && !magicSigner) {
           console.log('Autoconnecting Magic')
-          connectMagic()
+          connectMagic(false)
         } else {
           closeLoading()
+        }
+      })
+
+      magic.user.onUserLoggedOut((isLoggedOut: boolean) => {
+        if (isLoggedOut) {
+          setMagicSigner(undefined)
         }
       })
     }
@@ -93,10 +100,10 @@ export const SignerContext = (props: PropsWithChildren) => {
 
   const { disconnect: disconnectInjected } = useDisconnect()
 
-  const connectMagic = () => {
+  const connectMagic = (useUI: boolean) => {
     console.log('connecting magic signer', { signer })
     setIsConnecting(true)
-    createMagicSigner().then((signer) => {
+    createMagicSigner(useUI).then((signer) => {
       console.log('connected magic signer', { signer })
       setIsConnecting(false)
       setMagicSigner(signer)
@@ -129,7 +136,7 @@ export const SignerContext = (props: PropsWithChildren) => {
         return
       }
 
-      connectMagic()
+      connectMagic(true)
       return
     } catch (error) {
       console.log(error)
