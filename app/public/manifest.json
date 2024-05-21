@@ -7,17 +7,12 @@
   "background_color": "#ffffff",
   "icons": [
     {
-      "src": "logomr2.png",
-      "sizes": "64x64 32x32 24x24 16x16",
-      "type": "image/x-icon"
-    },
-    {
-      "src": "logomr2.png",
+      "src": "logomr2-192.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "logomr2.png",
+      "src": "logomr2-512.png",
       "type": "image/png",
       "sizes": "512x512"
     }
