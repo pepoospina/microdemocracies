@@ -23,6 +23,7 @@ const isLocalhost = Boolean(
 type Config = {
   onSuccess?: (registration: ServiceWorkerRegistration) => void
   onUpdate?: (registration: ServiceWorkerRegistration) => void
+  onUpdateReady?: (registration: ServiceWorkerRegistration) => void
 }
 
 export function register(config?: Config) {
@@ -63,6 +64,13 @@ function registerValidSW(swUrl: string, config?: Config) {
   navigator.serviceWorker
     .register(swUrl)
     .then((registration) => {
+      if (registration.waiting) {
+        console.log('New version available! Ready to update.')
+        if (config && config.onUpdateReady) {
+          config.onUpdateReady(registration)
+        }
+      }
+
       registration.onupdatefound = () => {
         const installingWorker = registration.installing
         if (installingWorker == null) {

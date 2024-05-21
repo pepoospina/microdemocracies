@@ -17,30 +17,32 @@ function App() {
   console.log('window.history', window.history)
   return (
     <div className="App">
-      <I18nextProvider i18n={i18n}>
-        <AppLanguage>
-          <ThemedApp>
-            <ToastsContext>
-              <LoadingContext>
-                <ConnectedWallet>
-                  <SignerContext>
-                    <AccountContext>
-                      <SemaphoreContext>
-                        <GlobalStyles />
-                        <ResponsiveApp>
-                          <BrowserRouter>
-                            <AppContainer></AppContainer>
-                          </BrowserRouter>
-                        </ResponsiveApp>
-                      </SemaphoreContext>
-                    </AccountContext>
-                  </SignerContext>
-                </ConnectedWallet>
-              </LoadingContext>
-            </ToastsContext>
-          </ThemedApp>
-        </AppLanguage>
-      </I18nextProvider>
+      <ServiceWorker>
+        <I18nextProvider i18n={i18n}>
+          <AppLanguage>
+            <ThemedApp>
+              <ToastsContext>
+                <LoadingContext>
+                  <ConnectedWallet>
+                    <SignerContext>
+                      <AccountContext>
+                        <SemaphoreContext>
+                          <GlobalStyles />
+                          <ResponsiveApp>
+                            <BrowserRouter>
+                              <AppContainer></AppContainer>
+                            </BrowserRouter>
+                          </ResponsiveApp>
+                        </SemaphoreContext>
+                      </AccountContext>
+                    </SignerContext>
+                  </ConnectedWallet>
+                </LoadingContext>
+              </ToastsContext>
+            </ThemedApp>
+          </AppLanguage>
+        </I18nextProvider>
+      </ServiceWorker>
     </div>
   )
 }
