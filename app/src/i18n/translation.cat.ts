@@ -190,4 +190,8 @@ export const translation: Record<I18Keys, string> = {
   [I18Keys.accountStatus]: '',
   [I18Keys.theFollowingStatementProposed]: '',
   [I18Keys.forTheProject]: '',
+  [I18Keys.updateAvailable]: '',
+  [I18Keys.updateNow]: '',
+  [I18Keys.installPrompt]: '',
+  [I18Keys.installNow]: '',
 }

@@ -7,6 +7,7 @@ import { AppLanguage } from './components/app/AppLanguage'
 import { GlobalStyles } from './components/styles/GlobalStyles'
 import { LoadingContext } from './contexts/LoadingContext'
 import { SemaphoreContext } from './contexts/SemaphoreContext'
+import { ServiceWorker } from './contexts/ServiceWorkerContext'
 import { ToastsContext } from './contexts/ToastsContext'
 import { i18n } from './i18n/i18n'
 import { AccountContext } from './wallet/AccountContext'
@@ -17,30 +18,32 @@ function App() {
   console.log('window.history', window.history)
   return (
     <div className="App">
-      <I18nextProvider i18n={i18n}>
-        <AppLanguage>
-          <ThemedApp>
-            <ToastsContext>
-              <LoadingContext>
-                <ConnectedWallet>
-                  <SignerContext>
-                    <AccountContext>
-                      <SemaphoreContext>
-                        <GlobalStyles />
-                        <ResponsiveApp>
-                          <BrowserRouter>
-                            <AppContainer></AppContainer>
-                          </BrowserRouter>
-                        </ResponsiveApp>
-                      </SemaphoreContext>
-                    </AccountContext>
-                  </SignerContext>
-                </ConnectedWallet>
-              </LoadingContext>
-            </ToastsContext>
-          </ThemedApp>
-        </AppLanguage>
-      </I18nextProvider>
+      <ServiceWorker>
+        <I18nextProvider i18n={i18n}>
+          <AppLanguage>
+            <ThemedApp>
+              <ToastsContext>
+                <LoadingContext>
+                  <ConnectedWallet>
+                    <SignerContext>
+                      <AccountContext>
+                        <SemaphoreContext>
+                          <GlobalStyles />
+                          <ResponsiveApp>
+                            <BrowserRouter>
+                              <AppContainer></AppContainer>
+                            </BrowserRouter>
+                          </ResponsiveApp>
+                        </SemaphoreContext>
+                      </AccountContext>
+                    </SignerContext>
+                  </ConnectedWallet>
+                </LoadingContext>
+              </ToastsContext>
+            </ThemedApp>
+          </AppLanguage>
+        </I18nextProvider>
+      </ServiceWorker>
     </div>
   )
 }

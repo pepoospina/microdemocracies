@@ -173,4 +173,8 @@ export enum I18Keys {
   accountStatus = 's0171',
   theFollowingStatementProposed = 's0172',
   forTheProject = 's0173',
+  updateAvailable = 's0174',
+  updateNow = 's0175',
+  installPrompt = 's0176',
+  installNow = 's0177',
 }

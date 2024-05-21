@@ -193,4 +193,8 @@ export const translation: Record<I18Keys, string> = {
   [I18Keys.accountStatus]: 'Estado de la cuenta',
   [I18Keys.theFollowingStatementProposed]: 'La siguiente declaración fue propuesta:',
   [I18Keys.forTheProject]: 'Para la microdemocracia',
+  [I18Keys.updateAvailable]: 'Actualización disponible, ',
+  [I18Keys.updateNow]: 'actualizar',
+  [I18Keys.installPrompt]: 'Instala esta app',
+  [I18Keys.installNow]: 'instalar',
 }
