@@ -33,7 +33,7 @@ import { AccountDataContext } from './AccountDataContext'
 import { chain } from './ConnectedWalletContext'
 import { useAppSigner } from './SignerContext'
 
-const DEBUG = true
+const DEBUG = false
 
 /** Account Abstraction Manager */
 export type AccountContextType = {

@@ -1,7 +1,12 @@
-export const DEBUG = true
-
 export const WALLETCONNECT_PROJECT_ID = process.env.WALLETCONNECT_PROJECT_ID as string
 export const MAGIC_API_KEY = process.env.MAGIC_API_KEY
+export const CACHE_URLS_AND_PATHS: { origin: string; paths?: string[] }[] = [
+  { origin: 'https://assets.auth.magic.link', paths: ['static', 'i18n'] },
+  { origin: 'fonts.gstatic.com' },
+  { origin: 'https://fonts.googleapis.com' },
+  { origin: 'https://api.web3modal.com', paths: ['public'] },
+  { origin: 'https://auth.magic.link', paths: ['_next/static'] },
+]
 
 export const ALCHEMY_KEY = process.env.ALCHEMY_KEY
 export const ALCHEMY_KEY_ENS = process.env.ALCHEMY_KEY_ENS

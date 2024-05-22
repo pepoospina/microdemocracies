@@ -11,7 +11,11 @@ import { clientsClaim } from 'workbox-core'
 import { ExpirationPlugin } from 'workbox-expiration'
 import { createHandlerBoundToURL, precacheAndRoute } from 'workbox-precaching'
 import { registerRoute } from 'workbox-routing'
-import { StaleWhileRevalidate } from 'workbox-strategies'
+import { CacheFirst, StaleWhileRevalidate } from 'workbox-strategies'
+
+import { CACHE_URLS_AND_PATHS } from './config/appConfig'
+
+const DEBUG = false
 
 declare const self: ServiceWorkerGlobalScope
 
@@ -65,6 +69,49 @@ registerRoute(
       // least-recently used images are removed.
       new ExpirationPlugin({ maxEntries: 50 }),
     ],
+  }),
+)
+
+// An example runtime caching route for requests that aren't handled by the
+// precache, in this case same-origin .png requests like those from in public/
+registerRoute(
+  // Add in any other file extensions or routing criteria as needed.
+  ({ url }) => {
+    if (DEBUG) console.log('check url', url)
+    const origins = CACHE_URLS_AND_PATHS.map((o) => o.origin)
+
+    if (origins.includes(url.origin)) {
+      const config = CACHE_URLS_AND_PATHS.find((o) => o.origin === url.origin)
+
+      if (!config) throw new Error('Undexpected')
+
+      if (DEBUG) console.log(`origin matched ${config.origin}`, { config })
+
+      if (!config.paths) {
+        if (DEBUG) console.log(`not paths provided, caching this origin ${config.origin}`)
+        return true
+      } else {
+        const includes = config.paths
+          .map((path) => {
+            const matched = url.pathname.startsWith(`/${path}/`)
+            if (DEBUG)
+              console.log(
+                `path tested origin: ${config.origin}. path:${path}. Path matched: ${matched}`,
+              )
+            return matched
+          })
+          .includes(true)
+
+        if (DEBUG)
+          console.log(
+            `paths checked for origin: ${config.origin}. A path matched: ${includes}`,
+          )
+        return includes
+      }
+    }
+  },
+  new CacheFirst({
+    cacheName: 'magic-assets',
   }),
 )
 
