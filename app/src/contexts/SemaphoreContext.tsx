@@ -25,7 +25,7 @@ export type SemaphoreContextType = {
   isConnected: boolean
 }
 
-const DEBUG = true
+const DEBUG = false
 
 const SemaphoreContextValue = createContext<SemaphoreContextType | undefined>(undefined)
 

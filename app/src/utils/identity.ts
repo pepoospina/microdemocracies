@@ -73,6 +73,10 @@ export const generateProof = async (
     signal,
     scope,
     treePass.depth,
+    {
+      wasm: `${window.location.origin}/semaphore-static/semaphore-${treePass.depth}.wasm`,
+      zkey: `${window.location.origin}/semaphore-static/semaphore-${treePass.depth}.zkey`,
+    },
   )
 
   /** Return the generated proof and the associated tree root */
