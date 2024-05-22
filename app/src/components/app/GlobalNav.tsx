@@ -8,8 +8,10 @@ import { AbsoluteRoutes } from '../../route.names'
 import { AppButton } from '../../ui-components'
 import { SetPageTitleType } from './AppContainer'
 import { ConnectedUser } from './ConnectedUser'
+import { useThemeContext } from './ThemedApp'
 
 export const GlobalNav = (props: { title?: SetPageTitleType }) => {
+  const { constants } = useThemeContext()
   const navigate = useNavigate()
   const { hasUpdate, needsInstall, updateApp, install } = useServiceWorker()
 
@@ -28,33 +30,23 @@ export const GlobalNav = (props: { title?: SetPageTitleType }) => {
     )
   })()
 
-  const updater = (() => {
-    if (hasUpdate) {
-      return (
-        <Box direction="row" align="center" gap="4px">
-          <Text style={{ fontSize: '14px' }}>{t(I18Keys.updateAvailable)}</Text>
-          <Anchor onClick={() => updateApp()}>
-            <Text style={{ fontSize: '14px' }}>{t(I18Keys.updateNow)}</Text>
-          </Anchor>
-        </Box>
-      )
-    }
-    return <></>
-  })()
+  const updater = (
+    <AppButton
+      style={{ flexGrow: 1, borderRadius: '0px' }}
+      onClick={() => updateApp()}
+      label={t(I18Keys.updateNow)}
+      primary
+    ></AppButton>
+  )
 
-  const installer = (() => {
-    if (needsInstall) {
-      return (
-        <Box direction="row" align="center" gap="4px">
-          <Text style={{ fontSize: '14px' }}>{t(I18Keys.installPrompt)}</Text>
-          <Anchor onClick={() => install()}>
-            <Text style={{ fontSize: '14px' }}>{t(I18Keys.installNow)}</Text>
-          </Anchor>
-        </Box>
-      )
-    }
-    return <></>
-  })()
+  const installer = (
+    <AppButton
+      style={{ flexGrow: 1, borderRadius: '0px' }}
+      onClick={() => install()}
+      label={t(I18Keys.installNow)}
+      primary
+    ></AppButton>
+  )
 
   const titleClicked = () => {
     navigate(AbsoluteRoutes.App)
@@ -62,9 +54,27 @@ export const GlobalNav = (props: { title?: SetPageTitleType }) => {
 
   return (
     <>
-      {installer}
-      {updater}
-      <Box direction="row" justify="between" align="center">
+      <Box
+        width="100%"
+        justify="between"
+        direction="row"
+        gap={needsInstall && hasUpdate ? '2px' : '0px'}
+        style={{
+          flexShrink: 0,
+          borderBottom: '1px solid',
+          borderColor: constants.colors.primary,
+        }}
+        elevation="small"
+      >
+        {needsInstall ? installer : <></>}
+        {hasUpdate ? updater : <></>}
+      </Box>
+      <Box
+        direction="row"
+        justify="between"
+        align="center"
+        pad={{ horizontal: 'medium', vertical: 'large' }}
+      >
         <AppButton plain onClick={() => titleClicked()}>
           {title}
         </AppButton>

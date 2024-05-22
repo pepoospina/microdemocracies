@@ -42,13 +42,7 @@ export const AppContainer = (props: React.PropsWithChildren) => {
   return (
     <AppContainerContextValue.Provider value={{ setTitle }}>
       <ViewportContainer style={{ maxWidth: MAX_WIDTH_APP }}>
-        <Box
-          pad={{ horizontal: 'medium', vertical: 'large' }}
-          style={{ flexShrink: 0 }}
-          justify="center"
-        >
-          <GlobalNav title={title} />
-        </Box>
+        <GlobalNav title={title} />
         <Box style={{ flexGrow: 1 }}>
           <Routes>
             {/* Landing and project create */}

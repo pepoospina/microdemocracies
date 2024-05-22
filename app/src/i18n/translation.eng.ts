@@ -194,5 +194,5 @@ export const translation: Record<I18Keys, string> = {
   [I18Keys.updateAvailable]: 'An update is available, ',
   [I18Keys.updateNow]: 'update now',
   [I18Keys.installPrompt]: 'Please install this app: ',
-  [I18Keys.installNow]: 'install',
+  [I18Keys.installNow]: 'install app',
 }
