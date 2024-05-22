@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect } from 'react';
-import { Box, Text } from 'grommet';
+import { Anchor, Box, Text } from 'grommet';
 import { FormNext, FormPrevious } from 'grommet-icons';
 import { Trans, useTranslation } from 'react-i18next';
 
@@ -208,22 +208,21 @@ export const LandingPage = () => {
       <Box
         justify="center"
         align="center"
-        style={{ flexShrink: '0', marginBottom: '6vh' }}>
-        {showOpenApp ? (
-          <AppButton
-            onClick={goApp}
-            label={t(I18Keys.openApp)}
-            style={{ margin: '12px 0px', width: '220px' }}
-          />
-        ) : (
-          <></>
-        )}
+        style={{ flexShrink: '0', marginBottom: '6vh' }} gap='small'>
         <AppButton
           primary={btnPrimary}
           onClick={btnClick}
           label={btnText}
           style={{ margin: '12px 0px', width: '220px' }}
         />
+        {showOpenApp ? (
+          <AppButton 
+          label={t(I18Keys.openApp)}
+            onClick={goApp}
+          ></AppButton>
+        ) : (
+          <></>
+        )}
       </Box>
     </Box>
   );

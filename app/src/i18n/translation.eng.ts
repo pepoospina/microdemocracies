@@ -3,7 +3,7 @@ import { I18Keys } from './kyel.list'
 export const translation: Record<I18Keys, string> = {
   [I18Keys.appName]: 'microdemocracies',
   [I18Keys.project]: 'microdemocracy',
-  [I18Keys.startNow]: 'start now',
+  [I18Keys.startNow]: 'create a microdemocracy',
   [I18Keys.startNew]: 'create a microdemocracy',
   [I18Keys.back]: 'back',
   [I18Keys.next]: 'next',
