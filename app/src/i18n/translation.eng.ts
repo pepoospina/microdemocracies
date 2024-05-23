@@ -26,7 +26,7 @@ export const translation: Record<I18Keys, string> = {
   [I18Keys.carousel03sub]: 'Anonymously <Bold>back</Bold> the statements you agree with',
   [I18Keys.carousel04]: '<Bold>Guaranteed and unbreakable</Bold> anonymity',
   [I18Keys.carousel04sub]:
-    '<Bold>No one</Bold>, not even us!, can break the anonymity of your statements, post or react on someones behalf, or add or remove members to the microdemocracy',
+    '<Bold>No one</Bold>, not even us!, can break the anonymity of your statements, post or react on someones behalf, or add or remove members from the microdemocracy',
   [I18Keys.connectWallet]: 'Connecting your identity',
   [I18Keys.connectWalletBtn]: 'Sign in',
   [I18Keys.notFound]: 'not found',
