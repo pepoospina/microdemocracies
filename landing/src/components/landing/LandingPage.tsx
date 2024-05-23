@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect } from 'react';
 import { Anchor, Box, Text } from 'grommet';
-import { FormNext, FormPrevious } from 'grommet-icons';
+import { Add, FormNext, FormPrevious } from 'grommet-icons';
 import { Trans, useTranslation } from 'react-i18next';
 
 import { RouteNames } from '../../@app/route.names';
@@ -14,10 +14,12 @@ import { LanguageSelector } from '../../@app/pages/account/LanguageSelector';
 import { APP_ORIGIN } from '../../config';
 import { LearnMoreItem } from './LearnMoreItem';
 import { I18Keys } from '../../@app/i18n/kyel.list';
+import { useThemeContext } from '../../@app/components/app';
 
-const N_SLIDES = 3;
+const N_SLIDES = 4;
 
 export const LandingPage = () => {
+  const { constants } = useThemeContext();
   const { mobile } = useResponsive();
   const { t } = useTranslation();
 
@@ -37,6 +39,13 @@ export const LandingPage = () => {
     }
     nextSlide();
   };
+
+  const btnIcon = (() => {
+    if (activeSlideIndex === N_SLIDES - 1) {
+      return <Add color={constants.colors.textOnPrimary}></Add>;
+    }
+    return undefined;
+  })();
 
   const btnPrimary = (() => {
     if (activeSlideIndex === N_SLIDES - 1) return true;
@@ -200,6 +209,20 @@ export const LandingPage = () => {
                       components={{ Bold: <Bold /> }}></Trans>
                   }></LearnMoreItem>
               </Box>
+
+              <Box style={boxStyle}>
+                <LearnMoreItem
+                  mainText={
+                    <Trans
+                      i18nKey={t(I18Keys.carousel04)}
+                      components={{ Bold: <Bold /> }}></Trans>
+                  }
+                  secondaryText={
+                    <Trans
+                      i18nKey={t(I18Keys.carousel04sub)}
+                      components={{ Bold: <Bold /> }}></Trans>
+                  }></LearnMoreItem>
+              </Box>
             </AppCarousel>
           </Box>
         </Box>
@@ -208,18 +231,19 @@ export const LandingPage = () => {
       <Box
         justify="center"
         align="center"
-        style={{ flexShrink: '0', marginBottom: '6vh' }} gap='small'>
+        style={{ flexShrink: '0', marginBottom: '6vh' }}
+        gap="small">
         <AppButton
           primary={btnPrimary}
           onClick={btnClick}
           label={btnText}
-          style={{ margin: '12px 0px', width: '220px' }}
+          icon={btnIcon}
+          style={{ margin: '12px 0px', minWidth: '220px' }}
         />
         {showOpenApp ? (
-          <AppButton 
-          label={t(I18Keys.openApp)}
-            onClick={goApp}
-          ></AppButton>
+          <Anchor color={constants.colors.primary} onClick={goApp}>
+            <Text>{t(I18Keys.openApp)}</Text>
+          </Anchor>
         ) : (
           <></>
         )}

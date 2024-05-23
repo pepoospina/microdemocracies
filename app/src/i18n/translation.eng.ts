@@ -11,7 +11,7 @@ export const translation: Record<I18Keys, string> = {
   [I18Keys.review]: 'review',
   [I18Keys.accept]: 'accept',
   [I18Keys.create]: 'create',
-  [I18Keys.openApp]: 'open app',
+  [I18Keys.openApp]: 'or open app',
   [I18Keys.invite]: 'invite',
   [I18Keys.inviteNew]: 'invite new',
   [I18Keys.listOf]: 'List of',
@@ -21,12 +21,12 @@ export const translation: Record<I18Keys, string> = {
   [I18Keys.carousel01sub]: 'Dare others to change it, <Bold>together</Bold>',
   [I18Keys.carousel02]: 'Talk <Bold>without fear</Bold>',
   [I18Keys.carousel02sub]:
-    'Post] <Bold>anonymously</Bold> into the community board, but only if you are a member',
+    'Post <Bold>anonymously</Bold> into the community board, but only if you are a member',
   [I18Keys.carousel03]: 'Amplify your <Bold>voice</Bold>',
   [I18Keys.carousel03sub]: 'Anonymously <Bold>back</Bold> the statements you agree with',
-  [I18Keys.carousel04]: 'Raise and spend funds <Bold>transparently</Bold>',
+  [I18Keys.carousel04]: '<Bold>Guaranteed and unbreakable</Bold> anonymity',
   [I18Keys.carousel04sub]:
-    '<]Bold>Collectively</Bold> control the community funds, no banks need. (coming soon)',
+    '<Bold>No one</Bold>, not even us!, can break the anonymity of your statements, post or react on someones behalf, or add or remove members to the microdemocracy',
   [I18Keys.connectWallet]: 'Connecting your identity',
   [I18Keys.connectWalletBtn]: 'Sign in',
   [I18Keys.notFound]: 'not found',
@@ -50,7 +50,7 @@ export const translation: Record<I18Keys, string> = {
   [I18Keys.statementProposed]: 'Statement Proposed',
   [I18Keys.connectToPropose]: 'Connect to propose',
   [I18Keys.proposeInfo]:
-    'Propose] an anonymous statement and see how many members of the community back it. Only existing members will be able to support your statement. Make sure you invite them before posting.',
+    'Propose an anonymous statement and see how many members of the community back it. Only existing members will be able to support your statement. Make sure you invite them before posting.',
   [I18Keys.newStatement]: 'new statement',
   [I18Keys.sendingProposal]: 'sending anonymous proposal',
   [I18Keys.onlyMembersCanInvite]: 'Only existing members can invite new ones',
@@ -59,14 +59,14 @@ export const translation: Record<I18Keys, string> = {
   [I18Keys.accountInvalidated]: 'Account invalidated',
   [I18Keys.creatingProject]: 'Creating your microdemocracy',
   [I18Keys.examplesWho]:
-    '<]Bold>Good examples are sentences starting like:</Bold> "WANTS TO...",   "LIVES IN...", "STUDIES AT...", etc.',
+    '<Bold>Good examples are sentences starting like:</Bold> "WANTS TO...",   "LIVES IN...", "STUDIES AT...", etc.',
   [I18Keys.wantsTo]: 'Wants to',
   [I18Keys.whoTitle]: 'This microdemocracy is for anyone who',
   [I18Keys.yourDetails]: 'Your details',
   [I18Keys.connectAccount]: 'Connect Account',
   [I18Keys.startA]: 'Start a',
   [I18Keys.tryoutMsg]:
-    '<]Bold>TRYOUT ONLY!</Bold> This app is currenty under development. Plase do not use it to create real communities just yet.',
+    '<Bold>TRYOUT ONLY!</Bold> This app is currenty under development. Plase do not use it to create real communities just yet.',
   [I18Keys.IDNumber]: 'ID Number',
   [I18Keys.IDNumberLong]: 'ID Number (Last 4 digits)',
   [I18Keys.toJoinMsg]: 'To join, participants should give their',
@@ -91,7 +91,7 @@ export const translation: Record<I18Keys, string> = {
   [I18Keys.close]: 'Close',
   [I18Keys.shareToInvite]: 'Share to invite',
   [I18Keys.resettingMsg]:
-    'Re]-setting the link will invalidate the invitations sent with previous links',
+    'Re-setting the link will invalidate the invitations sent with previous links',
   [I18Keys.reset]: 'Reset link',
   [I18Keys.resetting]: 'Resetting...',
   [I18Keys.shareLinkMsg]: 'Share link with new members or show them a QR they can scan.',
@@ -124,7 +124,7 @@ export const translation: Record<I18Keys, string> = {
   [I18Keys.applicationSentPre]: 'Application',
   [I18Keys.applicationSentMain]: 'done',
   [I18Keys.applicationReceived]:
-    'Your] application was received. Wait for it to be accepted by the person who invited you, or share the QR or the link below with an existing member and ask them to accept your application.',
+    'Your application was received. Wait for it to be accepted by the person who invited you, or share the QR or the link below with an existing member and ask them to accept your application.',
   [I18Keys.projectSummary]: 'Summary of your microdemocracy',
   [I18Keys.your]: 'Your',
   [I18Keys.approveNew]: 'Approve new',
@@ -132,17 +132,17 @@ export const translation: Record<I18Keys, string> = {
   [I18Keys.applicationAcceptedAs]: 'Member accepted as',
   [I18Keys.important]: 'Important!',
   [I18Keys.atLeastNMembers]:
-    'There] must be at least {{nMembers}} members to propose a statement',
+    'There must be at least {{nMembers}} members to propose a statement',
   [I18Keys.canBackN]:
-    'Only] the existing {{nMembers}} members will be able to back this statement',
+    'Only the existing {{nMembers}} members will be able to back this statement',
   [I18Keys.aStatementNeeds]:
-    'A] statement needs {{nLikes}} like more to appear on the microdemocracy home page',
+    'A statement needs {{nLikes}} like more to appear on the microdemocracy home page',
   [I18Keys.maxStatementsPerPeriod]: 'Each member can only publish one statement per week',
   [I18Keys.ownedBy]: 'Owned by',
   [I18Keys.send]: 'Send',
   [I18Keys.likesNeeded]: '{{nLikes}} more likes needed to be public!',
   [I18Keys.likesNeededDetailed]:
-    'This] statement needs {{nLikes}} more likes to appear on the microdemocracy home page. Share it with others to get their support.',
+    'This statement needs {{nLikes}} more likes to appear on the microdemocracy home page. Share it with others to get their support.',
   [I18Keys.joinA]: 'Join a',
   [I18Keys.projectAddress]: 'Project address',
   [I18Keys.leave]: 'Leave project',

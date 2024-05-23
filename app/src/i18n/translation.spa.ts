@@ -3,7 +3,7 @@ import { I18Keys } from './kyel.list'
 export const translation: Record<I18Keys, string> = {
   [I18Keys.appName]: 'microdemocracias',
   [I18Keys.project]: 'microdemocracia',
-  [I18Keys.startNow]: 'iniciar una',
+  [I18Keys.startNow]: 'crear microdemocracia',
   [I18Keys.startNew]: 'crear microdemocracia',
   [I18Keys.back]: 'atrás',
   [I18Keys.next]: 'siguiente',
@@ -11,7 +11,7 @@ export const translation: Record<I18Keys, string> = {
   [I18Keys.review]: 'revisar',
   [I18Keys.accept]: 'aprobar',
   [I18Keys.create]: 'crear',
-  [I18Keys.openApp]: 'abrir app',
+  [I18Keys.openApp]: 'o abrir app',
   [I18Keys.invite]: 'invitar',
   [I18Keys.inviteNew]: 'invitas nuevoss',
   [I18Keys.listOf]: 'Lista de',
@@ -25,9 +25,9 @@ export const translation: Record<I18Keys, string> = {
   [I18Keys.carousel03]: 'Amplifica tu <Bold>voz</Bold>',
   [I18Keys.carousel03sub]:
     'Apoya <Bold>anónimamente</Bold> las declaraciones con las que estés de acuerdo',
-  [I18Keys.carousel04]: 'Recauda y gasta fondos de manera <Bold>transparente</Bold>',
+  [I18Keys.carousel04]: 'Anonimidad <Bold>garantizada</Bold>',
   [I18Keys.carousel04sub]:
-    'Controla <Bold>colectivamente</Bold> los fondos de la comunidad, no se necesitan bancos. (próximamente)',
+    ' <Bold>Nadie</Bold>, ni siquiera nosostro mismos!, podemos romper la anonimidad de una propuesta, publicar o dar like en nombre de otro miembro, o añadir o remover miembros de la microdemocracia.',
   [I18Keys.connectWallet]: 'Conectate',
   [I18Keys.connectWalletBtn]: 'Entrar',
   [I18Keys.notFound]: 'no encontrado',
@@ -79,7 +79,7 @@ export const translation: Record<I18Keys, string> = {
   [I18Keys.social]: 'Red social',
   [I18Keys.account]: 'cuenta',
   [I18Keys.choosePlatformsMsg]:
-    'Elige] la(s) cuenta(s) de la(s) plataforma(s) que se pedirá a los participantes',
+    'Elige la(s) cuenta(s) de la(s) plataforma(s) que se pedirá a los participantes',
   [I18Keys.firstName]: 'Nombre',
   [I18Keys.lastName]: 'Apellido',
   [I18Keys.username]: 'nombre de usuario',
@@ -92,11 +92,11 @@ export const translation: Record<I18Keys, string> = {
   [I18Keys.close]: 'Cerrar',
   [I18Keys.shareToInvite]: 'Compartir para invitar',
   [I18Keys.resettingMsg]:
-    'Resetear] el enlace invalidará las invitaciones enviadas con enlaces anteriores',
+    'Resetear el enlace invalidará las invitaciones enviadas con enlaces anteriores',
   [I18Keys.reset]: 'resetear enlace',
   [I18Keys.resetting]: 'reseteando...',
   [I18Keys.shareLinkMsg]:
-    'Comparte] el enlace con nuevos miembros o pídeles que escaneen el codigo QR',
+    'Comparte el enlace con nuevos miembros o pídeles que escaneen el codigo QR',
   [I18Keys.linkCopied]: '¡enlace copiado!',
   [I18Keys.shareLink]: 'compartir enlace',
   [I18Keys.showQr]: 'mostrar QR',
